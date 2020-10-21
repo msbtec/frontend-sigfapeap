@@ -6,14 +6,7 @@ import React, { useEffect } from 'react';
 import { CardDashboard, Card } from '~/components/Card';
 import { Table } from '~/components/Table';
 
-import { getToken } from '~/services/auth';
 import { FiEdit, FiInfo, FiTrash } from 'react-icons/fi';
-
-const config = {
-    headers: {
-        'Authorization': `Bearer ${getToken}`
-    }
-};
 
 let array = [
     {

@@ -13,9 +13,6 @@ export const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    /*height: 100vh; 
-    padding: 0 20px; */
-    
 `;
 
 export const Form = styled.form`
@@ -60,7 +57,6 @@ export const Form = styled.form`
         }
 
         &:focus {
-            /* border: 2px solid #b20710; */
             box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
         }
 
@@ -75,7 +71,6 @@ export const Form = styled.form`
     }
 
     button{
-        /* background-color: #b20710; */
         cursor: pointer;
         color: #fff;
         font-size: 16px;
@@ -91,7 +86,7 @@ export const Form = styled.form`
     button:hover{
         opacity: 0.98;
         box-shadow: 0 1px 6px 0 #b20710;
-        
+
     }
 
     hr{
@@ -103,7 +98,6 @@ export const Form = styled.form`
 
     a{
         font-size: 14px;
-        // font-weight: bold;
         color: #999;
         text-decoration: none;
         transition: all 0.2s;

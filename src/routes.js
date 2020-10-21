@@ -1,25 +1,29 @@
-import React, { Suspense, lazy } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { Provider } from 'react-redux';
 import store from '~/store';
 
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
 import './global.css';
-import { isAuthenticated } from './services/auth.js';
+import { useAuth } from './hooks/auth';
 
 const SignIn = lazy(() => import('./pages/SignIn'));
 
 const Sis = lazy(() => import('./pages/Sis'));
 
-const PrivateRoute = ({ component: Component, ...rest}) => (
-    <Route {...rest} render={props => (
-        isAuthenticated() ? (
-            <Component {...props} />
-        ) : (
-            <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
-        )
-    )} />
-);
+const PrivateRoute = ({ component: Component, ...rest}) => {
+    const { signed } = useAuth();
+
+    return (
+        <Route {...rest} render={props => (
+            signed ? (
+                <Component {...props} />
+            ) : (
+                <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+            )
+        )} />
+    )
+} ;
 
 
 

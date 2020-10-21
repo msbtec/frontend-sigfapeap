@@ -26,7 +26,7 @@ export default function Sis() {
                 <NavBar>
                     {/* <FiMenu className="toggle" style={{ marginLeft: drag ? 145 : 0}} onClick={(e) => drag ? setDrag(false) : setDrag(true)} /> */}
                     <FiMenu className="toggle" style={{ marginLeft: drag ? 170 : 0}} onClick={(e) => drag ? setDrag(false) : setDrag(true)} />
-                    <span>Olá, <span className="name">{ 'Luis Otávio' }</span></span>
+                    <span>Olá, <span className="name">{ 'Adolfo Colares' }</span></span>
                 </NavBar>
                 <div className="content">
                     <div className="row">

@@ -5,7 +5,8 @@ export const Side = styled.div`
     background: #1e1e2d;
 
     .logo {
-        background: #1b1b28;
+        /* background: #1b1b28; */
+        background: #fff;
         padding: 10px !important;
         width: 100%;
         min-height: 70px;

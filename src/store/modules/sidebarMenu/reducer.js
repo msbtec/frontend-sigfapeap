@@ -15,30 +15,69 @@ const INITIAL_STATE = {
             path: '/'
         },
         {
-            name: 'Tables',
+            name: 'Servidores',
             icon: <FiGrid />,
             path: '/tables'
         },
         {
-            name: 'Buttons',
-            icon: <FiAperture />,
-            path: '/buttons'
+            name: 'Cargos',
+            icon: <FiGrid />,
+            path: '/tables'
         },
         {
-            name: 'Cards',
-            icon: <FiBookmark />,
-            path: '/cards'
+            name: 'Perfis de acesso',
+            icon: <FiGrid />,
+            path: '/tables'
         },
+        {
+            name: 'Área de pesquisa',
+            icon: <FiGrid />,
+            path: '/tables'
+        },
+        {
+            name: 'Instituição de pesquisa',
+            icon: <FiGrid />,
+            path: '/tables'
+        },
+        {
+            name: 'Programas',
+            icon: <FiGrid />,
+            path: '/tables'
+        },
+        {
+            name: 'Avaliadores',
+            icon: <FiGrid />,
+            path: '/tables'
+        },
+        {
+            name: 'Pesquisadores',
+            icon: <FiGrid />,
+            path: '/tables'
+        },
+
+
+
+
+        // {
+        //     name: 'Buttons',
+        //     icon: <FiAperture />,
+        //     path: '/buttons'
+        // },
+        // {
+        //     name: 'Cards',
+        //     icon: <FiBookmark />,
+        //     path: '/cards'
+        // },
         {
             name: 'Forms',
             icon: <FiPhoneForwarded />,
             path: '/forms'
         },
-        {
-            name: 'Alerts',
-            icon: <FiInfo />,
-            path: '/alerts'
-        },
+        // {
+        //     name: 'Alerts',
+        //     icon: <FiInfo />,
+        //     path: '/alerts'
+        // },
         {
             name: 'Modals',
             icon: <FiBookOpen />,

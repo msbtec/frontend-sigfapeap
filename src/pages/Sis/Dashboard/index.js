@@ -6,14 +6,6 @@ import { FiCalendar, FiMessageCircle, FiLogOut, FiUsers } from 'react-icons/fi';
 import { CardDashboard, Card } from '~/components/Card';
 import { Table } from '~/components/Table';
 
-import { getToken } from '~/services/auth';
-
-const config = {
-    headers: {
-        'Authorization': `Bearer ${getToken}`
-    }
-};
-
 let array = [
     {
         id: 1,

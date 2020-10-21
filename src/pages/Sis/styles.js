@@ -35,6 +35,7 @@ export const NavBar = styled.div`
     padding: 0 30px;
     height: 70px;
     background: #fff;
+    /* background: #1b1b28; */
 
     display: flex;
     justify-content: flex-end;
