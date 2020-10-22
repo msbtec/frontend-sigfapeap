@@ -26,9 +26,14 @@
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "camelcase": "off",
+        "no-param-reassign": "off",
+        "react/button-has-type": "off",
+        "jsx-a11y/label-has-associated-control": "off",
+        "no-unreachable": "off",
         "no-unused-vars": "warn",
         "react/prop-types": "off",
         "eqeqeq": "off",
+        "quotes": "off",
         "react/jsx-filename-extension": [
             1,
             {

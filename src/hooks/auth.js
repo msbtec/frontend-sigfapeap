@@ -7,15 +7,12 @@ import React, {
 } from 'react';
 
 import { store } from 'react-notifications-component';
-import { useHistory } from 'react-router-dom';
 
 import api from '../services/api';
 
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
-  const history = useHistory();
-
   const [loading, setLoading] = useState(false);
   const [auth, setAuth] = useState(() => {
     const token = localStorage.getItem('@sigfapeap:token');
@@ -54,7 +51,7 @@ export const AuthProvider = ({ children }) => {
     setAuth((oldData) => ({ ...oldData, user }));
   }, []);
 
-  const signIn = useCallback(async ({ login, password }) => {
+  const signIn = useCallback(async ({ cpf, password }) => {
     setLoading(true);
 
     try {
@@ -66,7 +63,9 @@ export const AuthProvider = ({ children }) => {
       // const { user, token } = response.data;
 
       const token = 'lkgjrgrtggrt';
-      const user = { id: 'lkgjrgrtggrt' };
+      const user = {
+        id: 'lkgjrgrtggrt', name: 'Adolfo Colares', cpf, password,
+      };
 
       api.defaults.headers.authorization = `Bearer ${token}`;
 
@@ -99,12 +98,28 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
+  const recovery = useCallback(async (email) => {
+    store.addNotification({
+      message: `Uma solicitação de recuperação de senha foi enviada para o e-mail: ${email}`,
+      type: 'success',
+      insert: 'top',
+      container: 'top-right',
+      animationIn: ['animate__animated', 'animate__fadeIn'],
+      animationOut: ['animate__animated', 'animate__fadeOut'],
+      dismiss: {
+        duration: 5000,
+        onScreen: true,
+      },
+    });
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
         user: auth.user,
         loading,
         signIn,
+        recovery,
         signOut,
         refreshUser,
         token: auth.token,

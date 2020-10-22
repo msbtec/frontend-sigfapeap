@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense, lazy } from 'react';
+import React, {  Suspense, lazy } from 'react';
 import { Provider } from 'react-redux';
 import store from '~/store';
 
@@ -7,7 +7,9 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import './global.css';
 import { useAuth } from './hooks/auth';
 
-const SignIn = lazy(() => import('./pages/SignIn'));
+const SignIn = lazy(() => import('./pages/public/SignIn'));
+const SignUp = lazy(() => import('./pages/public/SignUp'));
+const RecoveryPassword = lazy(() => import('./pages/public/RecoveryPassword'));
 
 const Sis = lazy(() => import('./pages/Sis'));
 
@@ -28,7 +30,6 @@ const PrivateRoute = ({ component: Component, ...rest}) => {
 
 
 export default function Routes(){
-
     return (
         <Router>
             <Suspense fallback={
@@ -38,6 +39,8 @@ export default function Routes(){
             }>
                 <Switch>
                     <Route path="/login" component={SignIn} />
+                    <Route path="/cadastro" component={SignUp} />
+                    <Route path="/recuperacao-senha" component={RecoveryPassword} />
                     <Provider store={store}>
                         <PrivateRoute path="/" component={Sis}/>
                     </Provider>

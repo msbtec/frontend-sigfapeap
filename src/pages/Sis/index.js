@@ -1,8 +1,10 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
+import { useAuth } from '../../hooks/auth';
+
 // Icons
-import { FiMenu, FiUser, FiLogOut } from 'react-icons/fi';
+import { FiMenu } from 'react-icons/fi';
 
 // Styled Components
 import Sidebar from './Sidebar';
@@ -18,15 +20,16 @@ const Modals = lazy(() => import('./Modals'));
 
 export default function Sis() {
 
+    const { user } = useAuth();
+
     const [ drag, setDrag ] = useState(false);
     return (
         <Wrap>
             <Sidebar drag={drag} />
             <Main>
                 <NavBar>
-                    {/* <FiMenu className="toggle" style={{ marginLeft: drag ? 145 : 0}} onClick={(e) => drag ? setDrag(false) : setDrag(true)} /> */}
                     <FiMenu className="toggle" style={{ marginLeft: drag ? 170 : 0}} onClick={(e) => drag ? setDrag(false) : setDrag(true)} />
-                    <span>Olá, <span className="name">{ 'Adolfo Colares' }</span></span>
+                    <span>Olá, <span className="name">{user.name}</span></span>
                 </NavBar>
                 <div className="content">
                     <div className="row">
@@ -35,7 +38,6 @@ export default function Sis() {
                                 <div className="loader"></div>
                             </div>
                         }>
-                            {/* Your pages */}
                             <Switch>
                                 <Route exact path='/' component={Dashboard} />
                                 <Route path='/tables' component={Tables}/>
