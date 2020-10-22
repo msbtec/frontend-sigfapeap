@@ -32,6 +32,7 @@
         "no-unreachable": "off",
         "no-unused-vars": "warn",
         "react/prop-types": "off",
+        "react/jsx-props-no-spreading": "off",
         "eqeqeq": "off",
         "quotes": "off",
         "react/jsx-filename-extension": [

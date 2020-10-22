@@ -2,7 +2,7 @@ import React from 'react';
 
 // Icons
 import {
-  FiHome, FiGrid, FiPhoneForwarded,
+  FiHome, FiGrid,
 } from 'react-icons/fi';
 
 const INITIAL_STATE = {
@@ -20,7 +20,7 @@ const INITIAL_STATE = {
     {
       name: 'Servidores',
       icon: <FiGrid />,
-      path: '/tables',
+      path: '/servidores',
     },
     {
       name: 'Cargos',

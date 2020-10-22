@@ -1,9 +1,12 @@
 import React, { useState, memo, useRef } from 'react';
 import Modal from 'styled-react-modal';
+import { Form as Unform } from '@unform/web';
 
 import { FiCheckCircle, FiX } from 'react-icons/fi';
 import { Form } from '../../../components/Form';
 import Alert from '../../../components/Alert';
+
+import Input from '../../../components/Input';
 
 const StyledModal = Modal.styled`
     max-width: 600px;
@@ -111,6 +114,7 @@ const StyledModal = Modal.styled`
 function ModalExperience({ isOpen, toggleModal, submit }) {
   const [error, setError] = useState(false);
   const reference = useRef(null);
+  const formRef = useRef(null);
 
   const [data, setData] = useState({
     office: '',
@@ -130,8 +134,6 @@ function ModalExperience({ isOpen, toggleModal, submit }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    // alert(JSON.stringify(data))
-
     submit();
   }
 
@@ -142,17 +144,24 @@ function ModalExperience({ isOpen, toggleModal, submit }) {
       onBackgroundClick={toggleModal}
       onEscapeKeydown={toggleModal}
     >
+
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">Modal Form</h5>
+        <h5 className="modal-title" id="exampleModalLabel">Cadastrar servidor</h5>
         <button type="button" className="close" onClick={toggleModal}>
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+
       <Form onSubmit={handleSubmit}>
         <div className="modal-body" ref={reference}>
           {error === 1 && <Alert className="danger" text="Por favor, preencha todos os campos obrigatórios" />}
           {error === 2 && <Alert className="danger" text="Por favor, preencha todos os campos obrigatórios" />}
           {error === 3 && <Alert className="danger" text="Por favor, selecione uma data válida" />}
+
+          <Unform ref={formRef} onSubmit={handleSubmit}>
+            <Input name="name" title="Nome completo" />
+          </Unform>
+
           <div className="input-block">
             <label className="required">
               Office
@@ -163,33 +172,10 @@ function ModalExperience({ isOpen, toggleModal, submit }) {
               name="office"
               type="text"
               placeholder="Ex: Gerente de vendas..."
-                            // value={}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="input-block">
-            <label className="required">
-              Business
-              {' '}
-              <sup>*</sup>
-            </label>
-            <input
-              name="org"
-              type="text"
-              placeholder="Ex: Microsoft..."
               onChange={handleInputChange}
             />
           </div>
 
-          <div className="input-block">
-            <label>Location</label>
-            <input
-              name="location"
-              type="text"
-              placeholder="Ex: Rio de Janeiro..."
-              onChange={handleInputChange}
-            />
-          </div>
           <div className="input-block">
             <label>Description</label>
             <textarea
@@ -198,18 +184,18 @@ function ModalExperience({ isOpen, toggleModal, submit }) {
               onChange={handleInputChange}
             />
           </div>
-
         </div>
+
         <div className="modal-footer">
           <button type="button" className="close" onClick={toggleModal}>
             <FiX />
             {' '}
-            Close
+            Fechar
           </button>
           <button type="submit" className="submit">
             <FiCheckCircle />
             {' '}
-            Submit
+            Salvar
           </button>
         </div>
       </Form>

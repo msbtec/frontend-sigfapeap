@@ -11,6 +11,8 @@ import Sidebar from './Sidebar';
 import { Wrap, Main, NavBar } from './styles';
 
 const Dashboard = lazy(() => import('./Dashboard'));
+const Server = lazy(() => import('../private/Server'));
+
 const Tables = lazy(() => import('./Tables'));
 const Buttons = lazy(() => import('./Buttons'));
 const Cards = lazy(() => import('./Cards'));
@@ -40,6 +42,7 @@ export default function Sis() {
                         }>
                             <Switch>
                                 <Route exact path='/' component={Dashboard} />
+                                <Route exact path='/servidores' component={Server} />
                                 <Route path='/tables' component={Tables}/>
                                 <Route path='/buttons' component={Buttons}/>
                                 <Route path='/cards' component={Cards}/>

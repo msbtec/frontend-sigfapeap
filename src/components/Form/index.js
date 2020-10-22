@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Form = styled.form`
+export const Form = styled.div`
     margin: 0 auto;
     /* background: #fff; */
     /* box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; */
