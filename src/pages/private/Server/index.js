@@ -5,30 +5,49 @@ import React, {
 import { ModalProvider } from 'styled-react-modal';
 
 // Icons
-import { FiEdit, FiInfo, FiTrash } from 'react-icons/fi';
+import { FiEdit, FiTrash } from 'react-icons/fi';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
+import { Button } from '../../../components/Button';
 
 import { servidores } from '../../../utils/data';
 
+import { useAuth } from '../../../hooks/auth'
+
 let ModalForm = () => <></>;
+let ModalConfirm = () => <></>;
 
 export default function Servidores() {
   const [OpenForm, setOpenForm] = useState(false);
+  const [OpenConfirm, setOpenConfirm] = useState(false);
+  const [selected,setSelected] = useState(null);
+
+  const { deleteUser } = useAuth();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Servidores';
   }, []);
 
-  async function toggleModalForm(e) {
+  async function toggleModalForm() {
     ModalForm = await lazy(() => import("./Form"));
 
     setOpenForm(!OpenForm);
   }
 
+  async function toggleModalConfirm() {
+    ModalConfirm = await lazy(() => import("../../../components/Confirm"));
+
+    setOpenConfirm(!OpenConfirm);
+  }
+
   function submitModalForm() {
     setOpenForm(!OpenForm);
+  }
+
+  function submitModalConfirm() {
+    deleteUser(selected)
+    setOpenConfirm(!OpenConfirm);
   }
 
   return (
@@ -40,6 +59,12 @@ export default function Servidores() {
         <Card className="red">
           <div className="card-title">
             <h3>Listagem de servidores</h3>
+          </div>
+          <div className="card-title">
+            <Button onClick={() => {
+                setSelected(null);
+                toggleModalForm();
+            }} className="primary">Cadastrar servidor</Button>
           </div>
           <div className="card-body">
             <Table>
@@ -56,14 +81,20 @@ export default function Servidores() {
                 {servidores.map((item, index) => (
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.nome_reduzido }</td>
+                    <td style={{ textAlign: 'center' }}>{ item.name_mini }</td>
                     <td style={{ textAlign: 'center' }}>{ item.email }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.cargo }</td>
+                    <td style={{ textAlign: 'center' }}>{ item.office }</td>
                     <td style={{ textAlign: 'center' }}>
-                      <button onClick={toggleModalForm} className="edit">
+                      <button onClick={() => {
+                          setSelected(item);
+                          toggleModalForm();
+                      }} className="edit">
                         <FiEdit />
                       </button>
-                      <button className="eraser">
+                      <button onClick={() => {
+                          setSelected(item);
+                          toggleModalConfirm();
+                      }} className="eraser">
                         <FiTrash />
                       </button>
                     </td>
@@ -77,7 +108,8 @@ export default function Servidores() {
 
       <Suspense fallback={null}>
         <ModalProvider>
-          <ModalForm isOpen={OpenForm} toggleModal={toggleModalForm} submit={submitModalForm} />
+          <ModalForm isOpen={OpenForm} toggleModal={toggleModalForm} item={selected} submit={submitModalForm} />
+          <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
         </ModalProvider>
       </Suspense>
     </>

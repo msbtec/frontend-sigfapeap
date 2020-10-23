@@ -8,15 +8,20 @@ import { FiCheckCircle, FiX } from 'react-icons/fi';
 import * as Yup from 'yup';
 import { Form } from '../../../../components/Form';
 
+import { useAuth } from '../../../../hooks/auth';
+
 import getValidationErrors from '../../../../utils/getValidationErrors';
 
 import Input from '../../../../components/Input';
 
 import { StyledModal } from './styles';
 
-function ModalForm({ isOpen, toggleModal, submit }) {
+function ModalForm({
+  isOpen, toggleModal, item, submit,
+}) {
   const reference = useRef(null);
   const formRef = useRef(null);
+  const { signUp, updateUser } = useAuth();
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -25,11 +30,22 @@ function ModalForm({ isOpen, toggleModal, submit }) {
 
         const schema = Yup.object().shape({
           name: Yup.string().required('Campo obrigatório'),
+          name_mini: Yup.string().required('Campo obrigatório'),
+          cpf: Yup.string().required('Campo obrigatório'),
+          email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
+          office: Yup.string().required('Campo obrigatório'),
+          perfil: Yup.string().required('Campo obrigatório'),
         });
 
         await schema.validate(data, {
           abortEarly: false,
         });
+
+        if (item) {
+          updateUser(data);
+        } else {
+          signUp(data);
+        }
 
         submit();
       } catch (error) {
@@ -40,7 +56,7 @@ function ModalForm({ isOpen, toggleModal, submit }) {
         }
       }
     },
-    [submit],
+    [signUp, updateUser, submit],
   );
 
   return (
@@ -52,31 +68,27 @@ function ModalForm({ isOpen, toggleModal, submit }) {
     >
 
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">Cadastrar servidor</h5>
+        <h5 className="modal-title" id="exampleModalLabel">{item ? 'Cadastrar servidor' : 'Atualizar servidor'}</h5>
         <button type="button" className="close" onClick={toggleModal}>
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
 
-      <Unform ref={formRef} onSubmit={handleSubmit}>
+      <Unform initialData={item} ref={formRef} onSubmit={handleSubmit}>
 
         <Form>
           <div className="modal-body" ref={reference}>
-            <Input formRef={formRef} name="name" original title="Nome completo" />
+            <Input formRef={formRef} name="name" required original title="Nome completo" />
 
-            <div className="input-block">
-              <label>Selecione seu cargo/função</label>
-              <select>
-                <option value="">Servidor</option>
-                <option value="">Bolsita</option>
-              </select>
-            </div>
+            <Input formRef={formRef} name="name_mini" required original title="Nome reduzido" />
 
-            {/* <Input name="name_mini" title="Nome reduzido" />
-            <Input name="cpf" title="CPF" />
-            <Input name="email" title="E-mail" />
-            <Input name="office" title="Cargo/Funçao" />
-            <Input name="perfil" title="Perfil" /> */}
+            <Input formRef={formRef} name="cpf" required original title="CPF" />
+
+            <Input formRef={formRef} name="email" required original title="E-mail" />
+
+            <Input formRef={formRef} name="office" select={["Servidor", "Bolsista", "Pesquisador"]} required original title="Selecione seu cargo/função" />
+
+            <Input formRef={formRef} name="perfil" select={["Administrador", "Servidor"]} required original title="Perfil" />
           </div>
 
           <div className="modal-footer">

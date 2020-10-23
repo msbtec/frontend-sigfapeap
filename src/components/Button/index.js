@@ -16,7 +16,7 @@ export const Button = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: ${props => props.margin ? props.margin : ''};
+    margin: ${(props) => (props.margin ? props.margin : '')};
 
     &.primary {
         color: #fff;

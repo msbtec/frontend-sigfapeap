@@ -51,6 +51,21 @@ export const AuthProvider = ({ children }) => {
     setAuth((oldData) => ({ ...oldData, user }));
   }, []);
 
+  const signUp = useCallback(async (data) => {
+    store.addNotification({
+      message: `Usuário salvo com sucesso!`,
+      type: 'success',
+      insert: 'top',
+      container: 'top-right',
+      animationIn: ['animate__animated', 'animate__fadeIn'],
+      animationOut: ['animate__animated', 'animate__fadeOut'],
+      dismiss: {
+        duration: 5000,
+        onScreen: true,
+      },
+    });
+  }, []);
+
   const signIn = useCallback(async ({ cpf, password }) => {
     setLoading(true);
 
@@ -98,9 +113,39 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
+  const updateUser = useCallback(async (data) => {
+    store.addNotification({
+      message: `Usuário atualizado com sucesso!`,
+      type: 'success',
+      insert: 'top',
+      container: 'top-right',
+      animationIn: ['animate__animated', 'animate__fadeIn'],
+      animationOut: ['animate__animated', 'animate__fadeOut'],
+      dismiss: {
+        duration: 5000,
+        onScreen: true,
+      },
+    });
+  }, []);
+
   const recovery = useCallback(async (email) => {
     store.addNotification({
       message: `Uma solicitação de recuperação de senha foi enviada para o e-mail: ${email}`,
+      type: 'success',
+      insert: 'top',
+      container: 'top-right',
+      animationIn: ['animate__animated', 'animate__fadeIn'],
+      animationOut: ['animate__animated', 'animate__fadeOut'],
+      dismiss: {
+        duration: 5000,
+        onScreen: true,
+      },
+    });
+  }, []);
+
+  const deleteUser = useCallback(async (data) => {
+    store.addNotification({
+      message: `Usuário deletado com sucesso!`,
       type: 'success',
       insert: 'top',
       container: 'top-right',
@@ -118,10 +163,13 @@ export const AuthProvider = ({ children }) => {
       value={{
         user: auth.user,
         loading,
+        signUp,
         signIn,
         recovery,
         signOut,
         refreshUser,
+        deleteUser,
+        updateUser,
         token: auth.token,
         signed,
       }}
