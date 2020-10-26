@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 
 import { useField } from '@unform/core';
+import SelectMultiple from "react-select";
 
 import {
   cpfMask, mtel, moeda, data,
@@ -14,7 +15,7 @@ import {
 import { Container, Title } from './styles';
 
 function Input({
-  formRef, original = false, required, select, name, title, ...rest
+  formRef, original = false, multi = true, access, required, select, name, title, ...rest
 }) {
   const inputRef = useRef(null);
 
@@ -111,6 +112,55 @@ function Input({
             </div>
           )}
         </>
+      ) : multi ? (
+        <div className="input-block">
+          <label className="required">
+            {title}
+            {' '}
+            {required && <sup>*</sup>}
+          </label>
+          <SelectMultiple
+            maxMenuHeight={150}
+            isMulti
+            menuIsOpen
+            className="basic-multi-select"
+            classNamePrefix="select"
+            placeholder="Todos os acessos"
+            value={defaultValue}
+            noOptionsMessage={({ inputValue }) => "Sem opções"}
+            options={access}
+            ref={inputRef}
+            {...rest}
+            onChange={(values) => {
+              inputRef.current.value = values;
+              formRef.current.setFieldValue('access', values);
+            }}
+            theme={(theme) => ({
+              ...theme,
+              borderRadius: 5,
+              colors: {
+                ...theme.colors,
+                primary25: "#080",
+                primary: "#dee2e6",
+              },
+            })}
+            styles={{
+              option: (provided, state) => ({
+                ...provided,
+                color: state.isSelected ? "#fff" : "rgb(102,102,102)",
+                backgroundColor: state.isSelected ? "rgb(102,102,102)" : "#fff",
+
+                ":active": {
+                  ...provided[":active"],
+                  backgroundColor: !state.isDisabled && "#dee2e6",
+                },
+              }),
+            }}
+          />
+          <sup style={{ color: '#c53030', marginTop: 170 }}>
+            {error && error}
+          </sup>
+        </div>
       ) : (
         <>
           <Title>{title}</Title>

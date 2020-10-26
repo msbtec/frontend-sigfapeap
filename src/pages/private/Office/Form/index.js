@@ -8,7 +8,7 @@ import { FiCheckCircle, FiX } from 'react-icons/fi';
 import * as Yup from 'yup';
 import { Form } from '../../../../components/Form';
 
-import { useAuth } from '../../../../hooks/auth';
+import { useOffice } from '../../../../hooks/office';
 
 import getValidationErrors from '../../../../utils/getValidationErrors';
 
@@ -21,7 +21,7 @@ function ModalForm({
 }) {
   const reference = useRef(null);
   const formRef = useRef(null);
-  const { signUp, updateUser } = useAuth();
+  const { insertOffice, updateOffice } = useOffice();
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -30,11 +30,6 @@ function ModalForm({
 
         const schema = Yup.object().shape({
           name: Yup.string().required('Campo obrigatório'),
-          name_mini: Yup.string().required('Campo obrigatório'),
-          cpf: Yup.string().required('Campo obrigatório'),
-          email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
-          office: Yup.string().required('Campo obrigatório'),
-          perfil: Yup.string().required('Campo obrigatório'),
         });
 
         await schema.validate(data, {
@@ -42,9 +37,9 @@ function ModalForm({
         });
 
         if (item) {
-          updateUser(data);
+          updateOffice(data);
         } else {
-          signUp(data);
+          insertOffice(data);
         }
 
         submit();
@@ -56,7 +51,7 @@ function ModalForm({
         }
       }
     },
-    [signUp, updateUser, item, submit],
+    [insertOffice, updateOffice, item, submit],
   );
 
   return (
@@ -68,7 +63,7 @@ function ModalForm({
     >
 
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar servidor' : 'Atualizar servidor'}</h5>
+        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar cargo' : 'Atualizar cargo'}</h5>
         <button type="button" className="close" onClick={toggleModal}>
           <span aria-hidden="true">&times;</span>
         </button>
@@ -78,17 +73,7 @@ function ModalForm({
 
         <Form>
           <div className="modal-body" ref={reference}>
-            <Input formRef={formRef} name="name" required original title="Nome completo" />
-
-            <Input formRef={formRef} name="name_mini" required original title="Nome reduzido" />
-
-            <Input formRef={formRef} name="cpf" required original title="CPF" />
-
-            <Input formRef={formRef} name="email" required original title="E-mail" />
-
-            <Input formRef={formRef} name="office" select={["Servidor", "Bolsista", "Pesquisador"]} required original title="Selecione seu cargo/função" />
-
-            <Input formRef={formRef} name="perfil" select={["Administrador", "Servidor"]} required original title="Perfil" />
+            <Input formRef={formRef} name="name" required original title="Nome do cargo" />
           </div>
 
           <div className="modal-footer">

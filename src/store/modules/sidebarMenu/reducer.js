@@ -25,12 +25,12 @@ const INITIAL_STATE = {
     {
       name: 'Cargos',
       icon: <FiGrid />,
-      path: '/tables',
+      path: '/cargos',
     },
     {
       name: 'Perfis de acesso',
       icon: <FiGrid />,
-      path: '/tables',
+      path: '/perfis',
     },
     {
       name: 'Área de pesquisa',

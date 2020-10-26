@@ -1,17 +1,17 @@
 import React, {  Suspense, lazy } from 'react';
 import { Provider } from 'react-redux';
-import store from '~/store';
+import store from '../store';
 
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
-import './global.css';
-import { useAuth } from './hooks/auth';
+import '../styles/global.css';
+import { useAuth } from '../hooks/auth';
 
-const SignIn = lazy(() => import('./pages/public/SignIn'));
-const SignUp = lazy(() => import('./pages/public/SignUp'));
-const RecoveryPassword = lazy(() => import('./pages/public/RecoveryPassword'));
+const SignIn = lazy(() => import('../pages/public/SignIn'));
+const SignUp = lazy(() => import('../pages/public/SignUp'));
+const RecoveryPassword = lazy(() => import('../pages/public/RecoveryPassword'));
 
-const Sis = lazy(() => import('./pages/Sis'));
+const Sis = lazy(() => import('../pages/Sis'));
 
 const PrivateRoute = ({ component: Component, ...rest}) => {
     const { signed } = useAuth();

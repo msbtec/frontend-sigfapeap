@@ -1,5 +1,5 @@
 import React, {
-  memo, useRef, useCallback,
+  useState, memo, useRef, useCallback,
 } from 'react';
 import { Form as Unform } from '@unform/web';
 
@@ -8,11 +8,13 @@ import { FiCheckCircle, FiX } from 'react-icons/fi';
 import * as Yup from 'yup';
 import { Form } from '../../../../components/Form';
 
-import { useAuth } from '../../../../hooks/auth';
+import { useProfile } from '../../../../hooks/profile';
 
 import getValidationErrors from '../../../../utils/getValidationErrors';
 
 import Input from '../../../../components/Input';
+
+import { access } from '../../../../utils/data';
 
 import { StyledModal } from './styles';
 
@@ -21,7 +23,7 @@ function ModalForm({
 }) {
   const reference = useRef(null);
   const formRef = useRef(null);
-  const { signUp, updateUser } = useAuth();
+  const { insertProfile, updateProfile } = useProfile();
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -30,11 +32,7 @@ function ModalForm({
 
         const schema = Yup.object().shape({
           name: Yup.string().required('Campo obrigatório'),
-          name_mini: Yup.string().required('Campo obrigatório'),
-          cpf: Yup.string().required('Campo obrigatório'),
-          email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
-          office: Yup.string().required('Campo obrigatório'),
-          perfil: Yup.string().required('Campo obrigatório'),
+          access: Yup.string().required('Pelo menos um acesso deve ser submetido'),
         });
 
         await schema.validate(data, {
@@ -42,9 +40,9 @@ function ModalForm({
         });
 
         if (item) {
-          updateUser(data);
+          updateProfile(data);
         } else {
-          signUp(data);
+          insertProfile(data);
         }
 
         submit();
@@ -56,7 +54,7 @@ function ModalForm({
         }
       }
     },
-    [signUp, updateUser, item, submit],
+    [insertProfile, updateProfile, item, submit],
   );
 
   return (
@@ -68,7 +66,7 @@ function ModalForm({
     >
 
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar servidor' : 'Atualizar servidor'}</h5>
+        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar perfil' : 'Atualizar perfil'}</h5>
         <button type="button" className="close" onClick={toggleModal}>
           <span aria-hidden="true">&times;</span>
         </button>
@@ -77,18 +75,9 @@ function ModalForm({
       <Unform initialData={item} ref={formRef} onSubmit={handleSubmit}>
 
         <Form>
-          <div className="modal-body" ref={reference}>
-            <Input formRef={formRef} name="name" required original title="Nome completo" />
-
-            <Input formRef={formRef} name="name_mini" required original title="Nome reduzido" />
-
-            <Input formRef={formRef} name="cpf" required original title="CPF" />
-
-            <Input formRef={formRef} name="email" required original title="E-mail" />
-
-            <Input formRef={formRef} name="office" select={["Servidor", "Bolsista", "Pesquisador"]} required original title="Selecione seu cargo/função" />
-
-            <Input formRef={formRef} name="perfil" select={["Administrador", "Servidor"]} required original title="Perfil" />
+          <div className="modal-body" style={{ height: 400 }} ref={reference}>
+            <Input formRef={formRef} name="name" required original title="Nome do perfil" />
+            <Input formRef={formRef} name="access" required multi access={access} title="Acessos" />
           </div>
 
           <div className="modal-footer">
