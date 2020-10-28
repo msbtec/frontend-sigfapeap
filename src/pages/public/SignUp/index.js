@@ -1,74 +1,85 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, {
+  useEffect, useRef, useCallback,
+} from 'react';
 
-import Logo from '~/assets/img/logo.jpg';
+import { Form as Unform } from '@unform/web';
+import * as Yup from 'yup';
+import { Form } from '../../../components/Form';
+import getValidationErrors from '../../../utils/getValidationErrors';
+import Input from '../../../components/Input';
 
-import { Form, Container } from './styles';
+import Logo from '../../../assets/img/logo.jpg';
 
-import { useAuth } from '~/hooks/auth';
+import { Container, Content } from './styles';
 
-const SignIn = () => {
-  const history = useHistory();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [email_err, setEmailErr] = useState('');
-  const [password_err, setPasswordErr] = useState('');
-  const [error, setError] = useState('');
-
-  const { signIn } = useAuth();
+const SignUp = () => {
+  const formRef = useRef(null);
 
   useEffect(() => {
-    document.title = 'SIGFAPEAP - Login';
+    document.title = 'SIGFAPEAP - Cadastro';
   }, []);
 
-  async function handleSignIn(e) {
-    e.preventDefault();
+  const handleSubmit = useCallback(
+    async (data) => {
+      try {
+        formRef.current.setErrors({});
 
-    if (email.length == 0) {
-      setEmailErr('Campo Obrigatório');
-    }
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Campo obrigatório'),
+          name_mini: Yup.string().required('Campo obrigatório'),
+          cpf: Yup.string().required('Campo obrigatório'),
+          email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
+          office: Yup.string().required('Campo obrigatório'),
+          perfil: Yup.string().required('Campo obrigatório'),
+        });
 
-    if (password.length == 0) {
-      setPasswordErr('Campo Obrigatório');
-    }
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
 
-    if (!email || !password) {
-      setError('Preencha todos os campos para entrar ');
-    } else {
-      signIn({ login: email, password });
-    }
-  }
+          formRef.current.setErrors(errors);
+        }
+      }
+    },
+    [],
+  );
 
   return (
-    <>
-      <Container style={{ height: '100vh', padding: '0 10px' }}>
-        <Form autoComplete="off" onSubmit={handleSignIn}>
-          <img src={Logo} alt="Airbnb" />
-          {error && <p>{error}</p>}
-          <input
-            type="email"
-            name="email"
-            placeholder="Seu Email.."
-            onChange={(e) => { setEmail(e.target.value); setEmailErr(''); }}
-            value={email}
-            className={email_err != '' ? 'invalid' : ''}
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Sua Senha Secreta.."
-            onChange={(e) => { setPassword(e.target.value); setPasswordErr(''); }}
-            value={password}
-            className={password_err != '' ? 'invalid' : ''}
-          />
-          <button type="submit">Entrar</button>
-          <hr />
-          <Link to="/login">Esqueceu sua senha?</Link>
-          <Link to="/login">Não tem uma Conta? Cadastre-se!</Link>
-        </Form>
-      </Container>
-    </>
+    <Container>
+      <Content>
+        <Unform ref={formRef} onSubmit={handleSubmit}>
+          <div style={{ display: "flex", flexDirection: "column", marginBottom: 40 }}>
+            <label>Cadastro de Pesquisador</label>
+            <label>Preencha corretamente os campos abaixo para fazer parte da comunidade de pesquisadores da FAPEAP.</label>
+          </div>
+
+          <Form>
+            <Input formRef={formRef} name="name" required original title="Nome completo" />
+
+            <Input formRef={formRef} name="name_mini" required original title="Nome reduzido" />
+
+            <Input formRef={formRef} name="cpf" required original title="CPF" />
+
+            <Input formRef={formRef} name="email" required original title="E-mail" />
+
+            <Input formRef={formRef} name="office" select={["Servidor", "Bolsista", "Pesquisador"]} required original title="Selecione seu cargo/função" />
+
+            <Input formRef={formRef} name="perfil" select={["Administrador", "Servidor"]} required original title="Perfil" />
+
+            <div style={{ display: "flex", justifyContent: 'center', alignItems: "center" }}>
+              <button type="submit" className="submit">
+                Enviar cadastro
+              </button>
+            </div>
+          </Form>
+
+        </Unform>
+      </Content>
+    </Container>
   );
 };
 
-export default SignIn;
+export default SignUp;

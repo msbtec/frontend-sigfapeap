@@ -69,7 +69,7 @@ const SignIn = () => {
           <button type="submit">Entrar</button>
           <hr />
           <Link to="/recuperacao-senha">Esqueceu sua senha?</Link>
-          <Link to="/login">Não tem uma Conta? Cadastre-se!</Link>
+          <Link to="/cadastro">Não tem uma Conta? Cadastre-se!</Link>
         </Form>
       </Container>
     </>

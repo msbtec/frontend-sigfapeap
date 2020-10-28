@@ -113,12 +113,20 @@ function Input({
           )}
         </>
       ) : multi ? (
-        <div className="input-block">
-          <label className="required">
+        <div>
+          <label
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: '#626262',
+            }}
+            className="required"
+          >
             {title}
             {' '}
-            {required && <sup>*</sup>}
+            {required && <sup style={{ color: "#f00" }}>*</sup>}
           </label>
+          <div style={{ marginBottom: 5 }} />
           <SelectMultiple
             maxMenuHeight={150}
             isMulti
@@ -126,15 +134,15 @@ function Input({
             className="basic-multi-select"
             classNamePrefix="select"
             placeholder="Todos os acessos"
-            value={defaultValue}
+            defaultValue={defaultValue}
             noOptionsMessage={({ inputValue }) => "Sem opções"}
             options={access}
             ref={inputRef}
-            {...rest}
             onChange={(values) => {
               inputRef.current.value = values;
               formRef.current.setFieldValue('access', values);
             }}
+            {...rest}
             theme={(theme) => ({
               ...theme,
               borderRadius: 5,
