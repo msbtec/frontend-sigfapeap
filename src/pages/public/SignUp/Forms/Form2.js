@@ -3,7 +3,7 @@ import React from 'react';
 import { Form } from '../../../../components/Form';
 import Input from '../../../../components/Input';
 
-const SignUp = ({ formRef }) => (
+const Form2 = ({ formRef }) => (
   <Form>
     <Input formRef={formRef} name="zipcode" required original title="CEP" />
 
@@ -11,7 +11,7 @@ const SignUp = ({ formRef }) => (
 
     <Input formRef={formRef} name="number_street" required original title="Número" />
 
-    <Input formRef={formRef} name="complete_street" required original title="Complemento" />
+    <Input formRef={formRef} name="complete_street" original title="Complemento" />
 
     <Input formRef={formRef} name="neighborhood" required original title="Bairro" />
 
@@ -21,10 +21,10 @@ const SignUp = ({ formRef }) => (
 
     <Input formRef={formRef} name="municipality" select={["Macapá", "Oiapoque"]} required original title="Município" />
 
-    <Input formRef={formRef} name="phone" required original title="Telefone" />
+    <Input formRef={formRef} name="phone" original title="Telefone" />
 
-    <Input formRef={formRef} name="phone_cell" required original title="Celular" />
+    <Input formRef={formRef} name="phone_cell" original title="Celular" />
   </Form>
 );
 
-export default SignUp;
+export default Form2;

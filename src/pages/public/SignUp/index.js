@@ -44,17 +44,22 @@ const SignUp = () => {
             email: Yup.string().required('Campo obrigatório'),
             perfil: Yup.string().required('Campo obrigatório'),
             birthday: Yup.string().required('Campo obrigatório'),
-            race: Yup.string().required('Campo obrigatório'),
             mother_name: Yup.string().required('Campo obrigatório'),
-            father_name: Yup.string().required('Campo obrigatório'),
             curriculum: Yup.string().required('Campo obrigatório'),
             school: Yup.string().required('Campo obrigatório'),
-            area_knowledge: Yup.string().required('Campo obrigatório'),
           });
 
           await schema.validate(data, {
             abortEarly: false,
           });
+
+          //   const schemaForeign = Yup.object().shape({
+          //     rg_foreign: Yup.string().required('Campo obrigatório'),
+          //   });
+
+          //   await schemaForeign.validate(data, {
+          //     abortEarly: false,
+          //   });
 
           setStep(2);
         } else if (step === 2) {
@@ -62,13 +67,10 @@ const SignUp = () => {
             zipcode: Yup.string().required('Campo obrigatório'),
             street: Yup.string().required('Campo obrigatório'),
             number_street: Yup.string().required('Campo obrigatório'),
-            complete_street: Yup.string().required('Campo obrigatório'),
             neighborhood: Yup.string().required('Campo obrigatório'),
             country: Yup.string().required('Campo obrigatório'),
             state: Yup.string().required('Campo obrigatório'),
             municipality: Yup.string().required('Campo obrigatório'),
-            phone: Yup.string().required('Campo obrigatório'),
-            phone_cell: Yup.string().required('Campo obrigatório'),
           });
 
           await schema.validate(data, {
@@ -100,7 +102,7 @@ const SignUp = () => {
             </label>
           </div>
 
-          {step === 0 && <Form3 formRef={formRef} />}
+          {step === 0 && <Form1 formRef={formRef} isForeign={formRef.current?.getFieldValue("type_personal") === 'Pesquisador estrangeiro'} />}
 
           {step === 1 && <Form1 formRef={formRef} />}
           {step === 2 && <Form2 formRef={formRef} />}
