@@ -31,6 +31,21 @@ function data(v) {
   return v;
 }
 
+function Cep(v) {
+  v = v.replace(/D/g, "");
+  v = v.replace(/^(\d{5})(\d)/, "$1-$2");
+  return v;
+}
+
+function Cnpj(v) {
+  v = v.replace(/\D/g, "");
+  v = v.replace(/^(\d{2})(\d)/, "$1.$2");
+  v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+  v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
+  v = v.replace(/(\d{4})(\d)/, "$1-$2");
+  return v;
+}
+
 export {
-  cpfMask, mtel, moeda, data,
+  cpfMask, mtel, moeda, data, Cep, Cnpj,
 };

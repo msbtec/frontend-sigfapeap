@@ -8,8 +8,10 @@ import React, {
 import { useField } from '@unform/core';
 import SelectMultiple from "react-select";
 
+import Axios from 'axios';
+
 import {
-  cpfMask, mtel, moeda, data,
+  cpfMask, mtel, moeda, data, Cep, Cnpj,
 } from '../../utils/validations';
 
 import { Container, Title } from './styles';
@@ -42,6 +44,22 @@ function Input({
     setIsFocused(false);
 
     setIsFilled(!!inputRef.current.value);
+  }, []);
+
+  const handleCEP = useCallback((cep) => {
+    if (cep.length === 9) {
+      Axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+        .then((response) => {
+          const { logradouro, bairro, uf } = response.data;
+          // formRef.current?.setFieldValue('street', logradouro);
+          // formRef.current?.setFieldValue('neighborhood', bairro);
+        })
+        .catch(() => {
+          alert('Cuidado', 'Você informou um CEP inválido ');
+          // formRef.current?.setFieldValue('logradouro', '');
+          // formRef.current?.setFieldValue('bairro', '');
+        });
+    }
   }, []);
 
   return (
@@ -88,18 +106,31 @@ function Input({
                     const formatted = cpfMask(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('cpf', formatted);
+                  } else if (name === 'cnpj') {
+                    const formatted = Cnpj(value.target.value);
+                    inputRef.current.value = String(formatted);
+                    formRef.current.setFieldValue('cnpj', formatted);
                   } else if (name === 'phone') {
                     const formatted = mtel(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('phone', formatted);
+                  } else if (name === 'phone_cell') {
+                    const formatted = mtel(value.target.value);
+                    inputRef.current.value = String(formatted);
+                    formRef.current.setFieldValue('phone_cell', formatted);
                   } else if (name === 'price') {
                     const formatted = moeda(value.target.value);
                     inputRef.current.value = String(formatted);
-                    formRef.current.setFieldValue('phone', formatted);
+                    formRef.current.setFieldValue('price', formatted);
                   } else if (name === 'time') {
                     const formatted = data(value.target.value);
                     inputRef.current.value = String(formatted);
-                    formRef.current.setFieldValue('phone', formatted);
+                    formRef.current.setFieldValue('time', formatted);
+                  } else if (name === 'zipcode') {
+                    const formatted = Cep(value.target.value);
+                    inputRef.current.value = String(formatted);
+                    formRef.current.setFieldValue('zipcode', formatted);
+                    handleCEP(formatted);
                   } else {
                     inputRef.current.value = String(value.target.value);
                   }
@@ -126,6 +157,9 @@ function Input({
             {' '}
             {required && <sup style={{ color: "#f00" }}>*</sup>}
           </label>
+          <sup style={{ color: '#c53030' }}>
+            {error && error}
+          </sup>
           <div style={{ marginBottom: 5 }} />
           <SelectMultiple
             maxMenuHeight={150}
@@ -165,9 +199,6 @@ function Input({
               }),
             }}
           />
-          <sup style={{ color: '#c53030', marginTop: 170 }}>
-            {error && error}
-          </sup>
         </div>
       ) : (
         <>
@@ -183,18 +214,31 @@ function Input({
                   const formatted = cpfMask(value.target.value);
                   inputRef.current.value = String(formatted);
                   formRef.current.setFieldValue('cpf', formatted);
+                } else if (name === 'cnpj') {
+                  const formatted = Cnpj(value.target.value);
+                  inputRef.current.value = String(formatted);
+                  formRef.current.setFieldValue('cnpj', formatted);
                 } else if (name === 'phone') {
                   const formatted = mtel(value.target.value);
                   inputRef.current.value = String(formatted);
                   formRef.current.setFieldValue('phone', formatted);
+                } else if (name === 'phone_cell') {
+                  const formatted = mtel(value.target.value);
+                  inputRef.current.value = String(formatted);
+                  formRef.current.setFieldValue('phone_cell', formatted);
                 } else if (name === 'price') {
                   const formatted = moeda(value.target.value);
                   inputRef.current.value = String(formatted);
-                  formRef.current.setFieldValue('phone', formatted);
+                  formRef.current.setFieldValue('price', formatted);
                 } else if (name === 'time') {
                   const formatted = data(value.target.value);
                   inputRef.current.value = String(formatted);
-                  formRef.current.setFieldValue('phone', formatted);
+                  formRef.current.setFieldValue('time', formatted);
+                } else if (name === 'zipcode') {
+                  const formatted = Cep(value.target.value);
+                  inputRef.current.value = String(formatted);
+                  formRef.current.setFieldValue('zipcode', formatted);
+                  handleCEP(formatted);
                 } else {
                   inputRef.current.value = String(value.target.value);
                 }

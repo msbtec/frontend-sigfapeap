@@ -18,9 +18,11 @@ import Form5 from './Forms/Form5';
 import Form6 from './Forms/Form6';
 import Form7 from './Forms/Form7';
 
+const Recaptcha = require('react-recaptcha');
+
 const SignUp = () => {
   const formRef = useRef(null);
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Cadastro';
@@ -31,8 +33,6 @@ const SignUp = () => {
       try {
         formRef.current.setErrors({});
 
-        console.log(data);
-
         if (step === 1) {
           const schema = Yup.object().shape({
             type_personal: Yup.string().required('Campo obrigatório'),
@@ -41,25 +41,18 @@ const SignUp = () => {
             orger_emitter: Yup.string().required('Campo obrigatório'),
             uf: Yup.string().required('Campo obrigatório'),
             date_emitter: Yup.string().required('Campo obrigatório'),
-            email: Yup.string().required('Campo obrigatório'),
+            email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
             perfil: Yup.string().required('Campo obrigatório'),
             birthday: Yup.string().required('Campo obrigatório'),
             mother_name: Yup.string().required('Campo obrigatório'),
             curriculum: Yup.string().required('Campo obrigatório'),
             school: Yup.string().required('Campo obrigatório'),
+            rg_foreign: Yup.string().required('Campo obrigatório'),
           });
 
           await schema.validate(data, {
             abortEarly: false,
           });
-
-          //   const schemaForeign = Yup.object().shape({
-          //     rg_foreign: Yup.string().required('Campo obrigatório'),
-          //   });
-
-          //   await schemaForeign.validate(data, {
-          //     abortEarly: false,
-          //   });
 
           setStep(2);
         } else if (step === 2) {
@@ -90,6 +83,10 @@ const SignUp = () => {
     [step],
   );
 
+  const verifyCallback = function (response) {
+    console.log(response);
+  };
+
   return (
     <Container>
       <Content>
@@ -101,8 +98,6 @@ const SignUp = () => {
               comunidade de pesquisadores da FAPEAP.
             </label>
           </div>
-
-          {step === 0 && <Form1 formRef={formRef} isForeign={formRef.current?.getFieldValue("type_personal") === 'Pesquisador estrangeiro'} />}
 
           {step === 1 && <Form1 formRef={formRef} />}
           {step === 2 && <Form2 formRef={formRef} />}
@@ -135,6 +130,11 @@ const SignUp = () => {
               <Dots isFilled={step === 7} />
             </DotsContainer>
           </Footer>
+
+          <Recaptcha
+            sitekey="fmewkrifgjnoierjngoruetg"
+            render="explicit"
+          />
 
           <div style={{ display: "flex", justifyContent: 'center', alignItems: "center" }}>
             <button type="submit" className="submit">

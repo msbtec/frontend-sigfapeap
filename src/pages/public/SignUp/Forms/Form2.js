@@ -5,11 +5,11 @@ import Input from '../../../../components/Input';
 
 const Form2 = ({ formRef }) => (
   <Form>
-    <Input formRef={formRef} name="zipcode" required original title="CEP" />
+    <Input formRef={formRef} name="zipcode" maxLength={9} required original title="CEP" />
 
     <Input formRef={formRef} name="street" required original title="Logradouro" />
 
-    <Input formRef={formRef} name="number_street" required original title="Número" />
+    <Input formRef={formRef} name="number_street" type="number" required original title="Número" />
 
     <Input formRef={formRef} name="complete_street" original title="Complemento" />
 
@@ -21,9 +21,9 @@ const Form2 = ({ formRef }) => (
 
     <Input formRef={formRef} name="municipality" select={["Macapá", "Oiapoque"]} required original title="Município" />
 
-    <Input formRef={formRef} name="phone" original title="Telefone" />
+    <Input formRef={formRef} name="phone" maxLength={15} original title="Telefone" />
 
-    <Input formRef={formRef} name="phone_cell" original title="Celular" />
+    <Input formRef={formRef} name="phone_cell" maxLength={15} original title="Celular" />
   </Form>
 );
 

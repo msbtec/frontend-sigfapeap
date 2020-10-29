@@ -13,7 +13,10 @@ import { Wrap, Main, NavBar } from './styles';
 const Dashboard = lazy(() => import('./Dashboard'));
 const Server = lazy(() => import('../private/Server'));
 const Office = lazy(() => import('../private/Office'));
-const Profile = lazy(() => import('../private/Profiles'));
+const Profile = lazy(() => import('../private/Profile'));
+const SearchArea = lazy(() => import('../private/SearchArea'));
+const Foundation = lazy(() => import('../private/Foundation'));
+const Program = lazy(() => import('../private/Program'));
 
 const Tables = lazy(() => import('./Tables'));
 const Buttons = lazy(() => import('./Buttons'));
@@ -47,6 +50,9 @@ export default function Sis() {
                                 <Route exact path='/servidores' component={Server} />
                                 <Route exact path='/cargos' component={Office} />
                                 <Route exact path='/perfis' component={Profile} />
+                                <Route exact path='/areas' component={SearchArea} />
+                                <Route exact path='/instituicoes' component={Foundation} />
+                                <Route exact path='/programas' component={Program} />
 
                                 <Route path='/tables' component={Tables}/>
                                 <Route path='/buttons' component={Buttons}/>

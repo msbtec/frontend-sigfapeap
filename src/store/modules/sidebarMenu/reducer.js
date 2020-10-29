@@ -35,17 +35,17 @@ const INITIAL_STATE = {
     {
       name: 'Área de pesquisa',
       icon: <FiGrid />,
-      path: '/tables',
+      path: '/areas',
     },
     {
       name: 'Instituição de pesquisa',
       icon: <FiGrid />,
-      path: '/tables',
+      path: '/instituicoes',
     },
     {
       name: 'Programas',
       icon: <FiGrid />,
-      path: '/tables',
+      path: '/programas',
     },
     {
       name: 'Avaliadores',
