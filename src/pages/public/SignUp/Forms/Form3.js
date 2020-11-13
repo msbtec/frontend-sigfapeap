@@ -1,40 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Form } from '../../../../components/Form';
 import Input from '../../../../components/Input';
 
-const SignUp = ({ formRef }) => (
-  <Form>
-    <Input formRef={formRef} name="type_personal" select={["Pesquisador", "Pesquisador estrangeiro"]} required original title="Tipo Pessoa" />
+const Form3 = ({ formRef }) => {
+  const [isConnection, setIsConnection] = useState(true);
+  const [isGenerate_connection, setIsGenerate_connection] = useState(true);
 
-    <Input formRef={formRef} name="name" required original title="Nome completo" />
+  return (
+    <Form>
+      <Input formRef={formRef} name="connection" setIsConnection={setIsConnection} select={["Sim", "Não"]} required original title="Tem Vínculo Institucional?" />
 
-    <Input formRef={formRef} name="rg" required original title="RG" />
+      {isConnection && (
+      <>
+        <Input formRef={formRef} name="institution" required original title="Instituição/Empresa" />
 
-    <Input formRef={formRef} name="orger_emitter" required original title="Orgão Emissor" />
+        <Input formRef={formRef} name="connection_institution" select={["CLT", "Cooperativo", "Bolsista", "Estagiário"]} required original title="Vínculo Institucional" />
 
-    <Input formRef={formRef} name="uf" select={["AP", "PA"]} required original title="UF" />
+        <Input formRef={formRef} name="generate_connection" setIsGenerate_connection={setIsGenerate_connection} select={["Sim", "Não"]} required original title="Gera Vínculo Empregatício?" />
 
-    <Input formRef={formRef} name="date_emitter" required original title="Data de Emissão" />
+        <Input formRef={formRef} name="service_time" required={isGenerate_connection} original title="Tempo de Serviço" />
 
-    <Input formRef={formRef} name="email" required original title="E-mail" />
+        <Input formRef={formRef} name="regime_work" select={["Dedicação exclusiva", "Tempo integral", "Outro"]} required={isGenerate_connection} original title="Regime de Trabalho" />
 
-    <Input formRef={formRef} name="perfil" select={["Masculino", "Feminino", "Não declarar"]} required original title="Sexo" />
+        <Input formRef={formRef} name="office" required={isGenerate_connection} original title="Função/Cargo Atual" />
 
-    <Input formRef={formRef} name="birthday" required original title="Data de Nascimento" />
+        <Input formRef={formRef} name="office_time" required={isGenerate_connection} original title="Tempo na Função" />
+      </>
+      )}
+    </Form>
+  );
+};
 
-    <Input formRef={formRef} name="race" select={["Amarela", "Branca", "Indígena", "Não declarada", "Parda", "Preta"]} required original title="Raça" />
-
-    <Input formRef={formRef} name="mother_name" required original title="Nome da Mãe" />
-
-    <Input formRef={formRef} name="father_name" required original title="Nome do Pai" />
-
-    <Input formRef={formRef} name="curriculum" required original title="Link Currículo Lattes" />
-
-    <Input formRef={formRef} name="school" select={["Ensino Fundamental", "Ensino Médio", "Ensino Superior", "Especialização", "Mestrado", "Doutorado", "Pós-doutorado"]} required original title="Nível Acadêmico" />
-
-    <Input formRef={formRef} name="area_knowledge" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} required original title="Área de Conhecimento" />
-  </Form>
-);
-
-export default SignUp;
+export default Form3;

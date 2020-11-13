@@ -8,8 +8,6 @@ import React, {
 import { useField } from '@unform/core';
 import SelectMultiple from "react-select";
 
-import Axios from 'axios';
-
 import {
   cpfMask, mtel, moeda, data, Cep, Cnpj,
 } from '../../utils/validations';
@@ -17,7 +15,9 @@ import {
 import { Container, Title } from './styles';
 
 function Input({
-  formRef, original = false, multi = true, access, required, select, name, title, ...rest
+  formRef, original = false, setIsForeign, disabled, handleCEP, multi = true, access,
+  setIsConnection, setIsGenerate_connection, institutions, setInstitutions,
+  password, required, select, name, title, ...rest
 }) {
   const inputRef = useRef(null);
 
@@ -46,22 +46,6 @@ function Input({
     setIsFilled(!!inputRef.current.value);
   }, []);
 
-  const handleCEP = useCallback((cep) => {
-    if (cep.length === 9) {
-      Axios.get(`https://viacep.com.br/ws/${cep}/json/`)
-        .then((response) => {
-          const { logradouro, bairro, uf } = response.data;
-          // formRef.current?.setFieldValue('street', logradouro);
-          // formRef.current?.setFieldValue('neighborhood', bairro);
-        })
-        .catch(() => {
-          alert('Cuidado', 'Você informou um CEP inválido ');
-          // formRef.current?.setFieldValue('logradouro', '');
-          // formRef.current?.setFieldValue('bairro', '');
-        });
-    }
-  }, []);
-
   return (
     <>
       {original ? (
@@ -81,6 +65,10 @@ function Input({
                 onChange={(value) => {
                   inputRef.current.value = String(value.target.value);
                   formRef.current.setFieldValue(name, value.target.value);
+
+                  if (name == 'type_personal') { setIsForeign(value.target.value === 'Pesquisador estrangeiro'); }
+                  if (name == 'connection') { setIsConnection(value.target.value === 'Sim'); }
+                  if (name == 'generate_connection') { setIsGenerate_connection(value.target.value === 'Sim'); }
                 }}
               >
                 {select.map((item) => (
@@ -101,6 +89,18 @@ function Input({
                 onBlur={handleInputBlur}
                 defaultValue={defaultValue}
                 ref={inputRef}
+                type={!password ? 'text' : 'password'}
+                disabled={disabled}
+                onKeyPress={(e) => {
+                  if (e.charCode == 13) {
+                    if (name == 'another_institutions') {
+                      const formatted = e.target.value;
+                      inputRef.current.value = String(e.target.value);
+                      formRef.current.setFieldValue('another_institutions', formatted);
+                      setInstitutions([...institutions, formatted]);
+                    }
+                  }
+                }}
                 onChange={(value) => {
                   if (name === 'cpf') {
                     const formatted = cpfMask(value.target.value);
@@ -238,7 +238,6 @@ function Input({
                   const formatted = Cep(value.target.value);
                   inputRef.current.value = String(formatted);
                   formRef.current.setFieldValue('zipcode', formatted);
-                  handleCEP(formatted);
                 } else {
                   inputRef.current.value = String(value.target.value);
                 }

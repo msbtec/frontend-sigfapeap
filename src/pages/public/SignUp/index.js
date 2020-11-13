@@ -24,6 +24,8 @@ const SignUp = () => {
   const formRef = useRef(null);
   const [step, setStep] = useState(1);
 
+  const [form, setForm] = useState({});
+
   useEffect(() => {
     document.title = 'SIGFAPEAP - Cadastro';
   }, []);
@@ -33,26 +35,47 @@ const SignUp = () => {
       try {
         formRef.current.setErrors({});
 
+        console.log(data);
+
         if (step === 1) {
-          const schema = Yup.object().shape({
-            type_personal: Yup.string().required('Campo obrigatório'),
-            name: Yup.string().required('Campo obrigatório'),
-            rg: Yup.string().required('Campo obrigatório'),
-            orger_emitter: Yup.string().required('Campo obrigatório'),
-            uf: Yup.string().required('Campo obrigatório'),
-            date_emitter: Yup.string().required('Campo obrigatório'),
-            email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
-            perfil: Yup.string().required('Campo obrigatório'),
-            birthday: Yup.string().required('Campo obrigatório'),
-            mother_name: Yup.string().required('Campo obrigatório'),
-            curriculum: Yup.string().required('Campo obrigatório'),
-            school: Yup.string().required('Campo obrigatório'),
-            rg_foreign: Yup.string().required('Campo obrigatório'),
-          });
+          let schema;
+          if (data.type_personal == 'Pesquisador') {
+            schema = Yup.object().shape({
+              type_personal: Yup.string().required('Campo obrigatório'),
+              name: Yup.string().required('Campo obrigatório'),
+              rg: Yup.string().required('Campo obrigatório'),
+              orger_emitter: Yup.string().required('Campo obrigatório'),
+              uf: Yup.string().required('Campo obrigatório'),
+              date_emitter: Yup.string().required('Campo obrigatório'),
+              email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
+              birthday: Yup.string().required('Campo obrigatório'),
+              mother_name: Yup.string().required('Campo obrigatório'),
+              curriculum: Yup.string().required('Campo obrigatório'),
+              school: Yup.string().required('Campo obrigatório'),
+            });
+          } else {
+            schema = Yup.object().shape({
+              type_personal: Yup.string().required('Campo obrigatório'),
+              name: Yup.string().required('Campo obrigatório'),
+              rg: Yup.string().required('Campo obrigatório'),
+              orger_emitter: Yup.string().required('Campo obrigatório'),
+              uf: Yup.string().required('Campo obrigatório'),
+              date_emitter: Yup.string().required('Campo obrigatório'),
+              email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
+              perfil: Yup.string().required('Campo obrigatório'),
+              birthday: Yup.string().required('Campo obrigatório'),
+              mother_name: Yup.string().required('Campo obrigatório'),
+              curriculum: Yup.string().required('Campo obrigatório'),
+              school: Yup.string().required('Campo obrigatório'),
+              rg_foreign: Yup.string().required('Campo obrigatório'),
+            });
+          }
 
           await schema.validate(data, {
             abortEarly: false,
           });
+
+          setForm({ ...form, data });
 
           setStep(2);
         } else if (step === 2) {
@@ -70,7 +93,57 @@ const SignUp = () => {
             abortEarly: false,
           });
 
+          setForm({ ...form, data });
+
           setStep(3);
+        } else if (step === 3) {
+          let schema;
+
+          if (data.connection == 'Sim' && data.generate_connection == 'Sim') {
+            schema = Yup.object().shape({
+              institution: Yup.string().required('Campo obrigatório'),
+              service_time: Yup.string().required('Campo obrigatório'),
+              office: Yup.string().required('Campo obrigatório'),
+              office_time: Yup.string().required('Campo obrigatório'),
+            });
+          } else if (data.connection == 'Sim' && data.generate_connection == 'Não') {
+            schema = Yup.object().shape({
+              institution: Yup.string().required('Campo obrigatório'),
+            });
+          }
+
+          await schema.validate(data, {
+            abortEarly: false,
+          });
+
+          setForm({ ...form, data });
+
+          setStep(4);
+        } else if (step === 4) {
+          setForm({ ...form, data });
+          setStep(5);
+        } else if (step === 5) {
+          setForm({ ...form, data });
+          setStep(6);
+        } else if (step === 6) {
+          setForm({ ...form, data });
+          setStep(7);
+        } else if (step === 7) {
+          const schema = Yup.object().shape({
+            cpf: Yup.string().required('Campo obrigatório'),
+            password: Yup.string()
+              .min(6, 'Mínimo de 6 caracteres')
+              .when('oldPassword', (oldPassword, field) => (oldPassword ? field.required() : field)),
+            confirmation_password: Yup.string().when('password', (password, field) => (password ? field.required().oneOf([Yup.ref('password')], 'Senhas não coincidem') : field)),
+          });
+
+          await schema.validate(data, {
+            abortEarly: false,
+          });
+
+          setForm({ ...form, data });
+
+          alert('Submeter formulário');
         }
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
@@ -80,12 +153,8 @@ const SignUp = () => {
         }
       }
     },
-    [step],
+    [step, form],
   );
-
-  const verifyCallback = function (response) {
-    console.log(response);
-  };
 
   return (
     <Container>
@@ -131,10 +200,12 @@ const SignUp = () => {
             </DotsContainer>
           </Footer>
 
+          {step === 7 && (
           <Recaptcha
             sitekey="fmewkrifgjnoierjngoruetg"
             render="explicit"
           />
+          )}
 
           <div style={{ display: "flex", justifyContent: 'center', alignItems: "center" }}>
             <button type="submit" className="submit">

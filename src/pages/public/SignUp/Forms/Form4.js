@@ -1,40 +1,54 @@
 import React from 'react';
 
+import Axios from 'axios';
+
 import { Form } from '../../../../components/Form';
 import Input from '../../../../components/Input';
 
-const SignUp = ({ formRef }) => (
-  <Form>
-    <Input formRef={formRef} name="type_personal" select={["Pesquisador", "Pesquisador estrangeiro"]} required original title="Tipo Pessoa" />
+const Form4 = ({ formRef }) => {
+  function handleCEP(cep) {
+    if (cep.length === 9) {
+      Axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+        .then((response) => {
+          const {
+            logradouro, bairro, uf, cidade, pais,
+          } = response.data;
+          formRef.current.setFieldValue('street', logradouro);
+          formRef.current.setFieldValue('neighborhood', bairro);
+          formRef.current.setFieldValue('country', pais);
+          formRef.current.setFieldValue('state', uf);
+          formRef.current.setFieldValue('municipality', cidade);
+        })
+        .catch(() => {});
+    }
+  }
 
-    <Input formRef={formRef} name="name" required original title="Nome completo" />
+  return (
+    <Form>
+      <Input formRef={formRef} name="professional_zipcode" handleCEP={handleCEP} maxLength={9} original title="CEP" />
 
-    <Input formRef={formRef} name="rg" required original title="RG" />
+      <Input formRef={formRef} name="professional_street" disabled original title="Logradouro" />
 
-    <Input formRef={formRef} name="orger_emitter" required original title="Orgão Emissor" />
+      <Input formRef={formRef} name="professional_number_street" type="number" original title="Número" />
 
-    <Input formRef={formRef} name="uf" select={["AP", "PA"]} required original title="UF" />
+      <Input formRef={formRef} name="professional_complete_street" original title="Complemento" />
 
-    <Input formRef={formRef} name="date_emitter" required original title="Data de Emissão" />
+      <Input formRef={formRef} name="professional_neighborhood" disabled original title="Bairro" />
 
-    <Input formRef={formRef} name="email" required original title="E-mail" />
+      <Input formRef={formRef} name="professional_country" select={["Brasil", "outro"]} original title="País" />
 
-    <Input formRef={formRef} name="perfil" select={["Masculino", "Feminino", "Não declarar"]} required original title="Sexo" />
+      <Input formRef={formRef} name="professional_state" select={["Amapá", "Pará"]} original title="Estado" />
 
-    <Input formRef={formRef} name="birthday" required original title="Data de Nascimento" />
+      <Input formRef={formRef} name="professional_municipality" select={["Macapá", "Oiapoque"]} original title="Município" />
 
-    <Input formRef={formRef} name="race" select={["Amarela", "Branca", "Indígena", "Não declarada", "Parda", "Preta"]} required original title="Raça" />
+      <Input formRef={formRef} name="professional_phone" maxLength={15} original title="Telefone" />
 
-    <Input formRef={formRef} name="mother_name" required original title="Nome da Mãe" />
+      <Input formRef={formRef} name="professional_phone_cell" maxLength={15} original title="Celular" />
 
-    <Input formRef={formRef} name="father_name" required original title="Nome do Pai" />
+      <Input formRef={formRef} name="professional_fax" original title="Fax" />
 
-    <Input formRef={formRef} name="curriculum" required original title="Link Currículo Lattes" />
+    </Form>
+  );
+};
 
-    <Input formRef={formRef} name="school" select={["Ensino Fundamental", "Ensino Médio", "Ensino Superior", "Especialização", "Mestrado", "Doutorado", "Pós-doutorado"]} required original title="Nível Acadêmico" />
-
-    <Input formRef={formRef} name="area_knowledge" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} required original title="Área de Conhecimento" />
-  </Form>
-);
-
-export default SignUp;
+export default Form4;

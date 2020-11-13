@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import { FiFile } from 'react-icons/fi';
 
 import { Form } from '../../../../components/Form';
 import Input from '../../../../components/Input';
@@ -6,19 +8,53 @@ import Input from '../../../../components/Input';
 const Form1 = ({ formRef }) => {
   const [isForeign, setIsForeign] = React.useState(false);
 
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [errorFile, setErrorFile] = useState('');
+
   return (
     <Form>
-      <Input formRef={formRef} name="type_personal" select={["Pesquisador", "Pesquisador estrangeiro"]} required original title="Tipo Pessoa" />
+
+      <div className="input-block">
+        <label htmlFor="email">
+          Foto
+          {' '}
+          <sup style={{ color: "#f00" }}>*</sup>
+        </label>
+        <div style={{ marginBottom: 5 }} />
+        <label className="file-input">
+          <input
+            type="file"
+            placeholder="Arquivo"
+            accept=".pdf"
+            onChange={(e) => setSelectedFile(e.target.files[0])}
+          />
+          <div className="text">
+            { selectedFile ? selectedFile.name : 'Selecione uma foto de perfil' }
+          </div>
+          <div className="icon">
+            <FiFile />
+          </div>
+        </label>
+        <sup style={{ color: '#c53030', marginTop: 5 }}>
+          {errorFile}
+        </sup>
+      </div>
+
+      <Input formRef={formRef} name="type_personal" setIsForeign={setIsForeign} select={["Pesquisador", "Pesquisador estrangeiro"]} required original title="Tipo Pessoa" />
 
       <Input formRef={formRef} name="name" required original title="Nome completo" />
 
-      <Input formRef={formRef} name="rg" type="number" required original title="RG" />
+      {!isForeign && (
+      <>
+        <Input formRef={formRef} name="rg" type="number" required original title="RG" />
 
-      <Input formRef={formRef} name="orger_emitter" required original title="Orgão Emissor" />
+        <Input formRef={formRef} name="orger_emitter" required original title="Orgão Emissor" />
 
-      <Input formRef={formRef} name="uf" select={["AP", "PA"]} required original title="UF" />
+        <Input formRef={formRef} name="uf" select={["AP", "PA"]} required original title="UF" />
 
-      <Input formRef={formRef} name="date_emitter" type="date" required original title="Data de Emissão" />
+        <Input formRef={formRef} name="date_emitter" type="date" required original title="Data de Emissão" />
+      </>
+      )}
 
       <Input formRef={formRef} name="email" required original title="E-mail" />
 
@@ -36,9 +72,13 @@ const Form1 = ({ formRef }) => {
 
       <Input formRef={formRef} name="school" select={["Ensino Fundamental", "Ensino Médio", "Ensino Superior", "Especialização", "Mestrado", "Doutorado", "Pós-doutorado"]} required original title="Nível Acadêmico" />
 
-      <Input formRef={formRef} name="passport" original title="Passaporte" />
+      {isForeign && (
+      <>
+        <Input formRef={formRef} name="passport" original title="Passaporte" />
 
-      <Input formRef={formRef} name="rg_foreign" type="number" required original title="Rg de Estrangeiro" />
+        <Input formRef={formRef} name="rg_foreign" type="number" required original title="Rg de Estrangeiro" />
+      </>
+      )}
 
       <Input formRef={formRef} name="area_knowledge1" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} original title="Área de Conhecimento 1" />
 
