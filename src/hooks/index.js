@@ -6,6 +6,7 @@ import { ProfileProvider } from "./profile";
 import { SearchProvider } from "./search";
 import { FoundationProvider } from "./foundation";
 import { ProgramProvider } from "./program";
+import { EvaluatorProvider } from "./evaluators";
 
 const AppProvider = ({ children }) => (
   <AuthProvider>
@@ -14,7 +15,9 @@ const AppProvider = ({ children }) => (
         <SearchProvider>
           <FoundationProvider>
             <ProgramProvider>
-              {children}
+              <EvaluatorProvider>
+                {children}
+              </EvaluatorProvider>
             </ProgramProvider>
           </FoundationProvider>
         </SearchProvider>

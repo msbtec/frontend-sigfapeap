@@ -17,6 +17,7 @@ const Profile = lazy(() => import('../private/Profile'));
 const SearchArea = lazy(() => import('../private/SearchArea'));
 const Foundation = lazy(() => import('../private/Foundation'));
 const Program = lazy(() => import('../private/Program'));
+const Evaluator = lazy(() => import('../private/Evaluator'));
 
 const Tables = lazy(() => import('./Tables'));
 const Buttons = lazy(() => import('./Buttons'));
@@ -53,6 +54,7 @@ export default function Sis() {
                                 <Route exact path='/areas' component={SearchArea} />
                                 <Route exact path='/instituicoes' component={Foundation} />
                                 <Route exact path='/programas' component={Program} />
+                                <Route exact path='/avaliadores' component={Evaluator} />
 
                                 <Route path='/tables' component={Tables}/>
                                 <Route path='/buttons' component={Buttons}/>

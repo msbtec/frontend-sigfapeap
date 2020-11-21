@@ -50,7 +50,7 @@ const INITIAL_STATE = {
     {
       name: 'Avaliadores',
       icon: <FiGrid />,
-      path: '/tables',
+      path: '/avaliadores',
     },
     {
       name: 'Pesquisadores',

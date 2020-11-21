@@ -134,6 +134,23 @@ const programas = [
   },
 ];
 
+const usuarios = [
+  {
+    cpf: '041.746.580-72',
+    email: 'mail@mail.com',
+    name: 'Adolfo Oliveira Colares',
+    name_mini: 'Adolfo Colares',
+    avaliador: true,
+  },
+  {
+    cpf: '041.746.580-72',
+    email: 'mail@mail.com',
+    name: 'Leonardo Oliverira',
+    name_mini: 'Leozartino',
+    avaliador: false,
+  },
+];
+
 export {
-  servidores, cargos, access, perfis, areas, instituicoes, evaluators, programas,
+  servidores, cargos, access, perfis, areas, instituicoes, evaluators, programas, usuarios,
 };
