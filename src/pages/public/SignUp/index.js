@@ -26,6 +26,16 @@ const SignUp = () => {
 
   const [form, setForm] = useState({});
 
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [errorFile, setErrorFile] = useState('');
+
+  const [knowledgeArea, setKnowledgeArea] = useState(false);
+  const [knowledgesArea, setKnowledgesArea] = useState({
+    one: '',
+    two: '',
+    three: '',
+  });
+
   useEffect(() => {
     document.title = 'SIGFAPEAP - Cadastro';
   }, []);
@@ -35,7 +45,16 @@ const SignUp = () => {
       try {
         formRef.current.setErrors({});
 
-        console.log(data);
+        console.log({
+          ...data,
+          file: selectedFile,
+        });
+
+        if (!selectedFile) {
+          setErrorFile('Campo obrigatório');
+        } else {
+          setErrorFile('');
+        }
 
         if (step === 1) {
           let schema;
@@ -153,7 +172,7 @@ const SignUp = () => {
         }
       }
     },
-    [step, form],
+    [step, form, selectedFile],
   );
 
   return (
@@ -168,7 +187,16 @@ const SignUp = () => {
             </label>
           </div>
 
-          {step === 1 && <Form1 formRef={formRef} />}
+          {step === 1 && (
+          <Form1
+            formRef={formRef}
+            selectedFile={selectedFile}
+            setSelectedFile={setSelectedFile}
+            errorFile={errorFile}
+            knowledgeArea={knowledgeArea}
+            setKnowledgeArea={setKnowledgeArea}
+          />
+          )}
           {step === 2 && <Form2 formRef={formRef} />}
           {step === 3 && <Form3 formRef={formRef} />}
           {step === 4 && <Form4 formRef={formRef} />}

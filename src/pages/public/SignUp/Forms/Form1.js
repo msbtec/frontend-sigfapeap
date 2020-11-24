@@ -1,18 +1,38 @@
-import React, { useState } from 'react';
+import React, { Suspense,useState,lazy } from 'react';
+
+import { ModalProvider } from 'styled-react-modal';
 
 import { FiFile } from 'react-icons/fi';
 
 import { Form } from '../../../../components/Form';
 import Input from '../../../../components/Input';
 
-const Form1 = ({ formRef }) => {
+let ModalForm = () => <></>;
+
+const Form1 = ({
+  formRef, selectedFile, setSelectedFile, errorFile,
+  setKnowledgeArea, knowledgeArea,
+}) => {
   const [isForeign, setIsForeign] = React.useState(false);
 
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [errorFile, setErrorFile] = useState('');
+  const [OpenForm, setOpenForm] = useState(false);
+
+  async function toggleModalForm() {
+    ModalForm = await lazy(() => import("./Modal"));
+
+    setOpenForm(!OpenForm);
+  }
+
+  function submitModalForm() {
+    setOpenForm(!OpenForm);
+  }
 
   return (
     <Form>
+
+      <Input formRef={formRef} name="type_personal" setIsForeign={setIsForeign} select={["Pesquisador", "Pesquisador estrangeiro"]} required original title="Tipo Pessoa" />
+
+      <Input formRef={formRef} name="name" required original title="Nome completo" />
 
       <div className="input-block">
         <label htmlFor="email">
@@ -21,11 +41,11 @@ const Form1 = ({ formRef }) => {
           <sup style={{ color: "#f00" }}>*</sup>
         </label>
         <div style={{ marginBottom: 5 }} />
-        <label className="file-input">
+        <label className="file-input" style={{ borderColor: errorFile ? '#b20710' : '#dee2e6' }}>
           <input
             type="file"
             placeholder="Arquivo"
-            accept=".pdf"
+            accept="image/*"
             onChange={(e) => setSelectedFile(e.target.files[0])}
           />
           <div className="text">
@@ -39,10 +59,6 @@ const Form1 = ({ formRef }) => {
           {errorFile}
         </sup>
       </div>
-
-      <Input formRef={formRef} name="type_personal" setIsForeign={setIsForeign} select={["Pesquisador", "Pesquisador estrangeiro"]} required original title="Tipo Pessoa" />
-
-      <Input formRef={formRef} name="name" required original title="Nome completo" />
 
       {!isForeign && (
       <>
@@ -80,11 +96,28 @@ const Form1 = ({ formRef }) => {
       </>
       )}
 
-      <Input formRef={formRef} name="area_knowledge1" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} original title="Área de Conhecimento 1" />
+      <div style={{ marginTop: 20 }}>
+        <button type="button" onClick={() => {
+            toggleModalForm()
+            setKnowledgeArea(!knowledgeArea)
+        }}>
+          {knowledgeArea ? '-' : '+'}
+          {' '}
+          área de conhecimento
+        </button>
+      </div>
 
-      <Input formRef={formRef} name="area_knowledge2" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} original title="Área de Conhecimento 2" />
+      {/* {knowledgeArea && <Input formRef={formRef} name="area_knowledge1" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} original title="Área de Conhecimento 1" />}
 
-      <Input formRef={formRef} name="area_knowledge3" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} original title="Área de Conhecimento 3" />
+      {knowledgeArea && <Input formRef={formRef} name="area_knowledge2" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} original title="Área de Conhecimento 2" />}
+
+      {knowledgeArea && <Input formRef={formRef} name="area_knowledge3" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} original title="Área de Conhecimento 3" />} */}
+
+      <Suspense fallback={null}>
+        <ModalProvider>
+          <ModalForm isOpen={OpenForm} toggleModal={toggleModalForm} submit={submitModalForm} />
+        </ModalProvider>
+      </Suspense>
     </Form>
   );
 };

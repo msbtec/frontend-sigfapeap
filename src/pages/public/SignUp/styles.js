@@ -7,9 +7,11 @@ export const Container = styled.div`
     flex:1;
     justify-content:center;
     align-items:center;
+    /* background: rgb(47, 52, 55); */
 `;
 
 export const Content = styled.div`
+    /* background: #fff; */
     padding: 50px;
     border-radius: 10px;
     box-shadow: 1px 1px 20px 10px #dcdcdc;
