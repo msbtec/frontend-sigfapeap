@@ -29,7 +29,6 @@ const SignUp = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorFile, setErrorFile] = useState('');
 
-  const [knowledgeArea, setKnowledgeArea] = useState(false);
   const [knowledgesArea, setKnowledgesArea] = useState({
     one: '',
     two: '',
@@ -193,8 +192,8 @@ const SignUp = () => {
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
             errorFile={errorFile}
-            knowledgeArea={knowledgeArea}
-            setKnowledgeArea={setKnowledgeArea}
+            knowledgesArea={knowledgesArea}
+            setKnowledgesArea={setKnowledgesArea}
           />
           )}
           {step === 2 && <Form2 formRef={formRef} />}

@@ -11,7 +11,7 @@ let ModalForm = () => <></>;
 
 const Form1 = ({
   formRef, selectedFile, setSelectedFile, errorFile,
-  setKnowledgeArea, knowledgeArea,
+  knowledgesArea, setKnowledgesArea
 }) => {
   const [isForeign, setIsForeign] = React.useState(false);
 
@@ -99,23 +99,16 @@ const Form1 = ({
       <div style={{ marginTop: 20 }}>
         <button type="button" onClick={() => {
             toggleModalForm()
-            setKnowledgeArea(!knowledgeArea)
         }}>
-          {knowledgeArea ? '-' : '+'}
-          {' '}
-          área de conhecimento
+          + área de conhecimento
         </button>
       </div>
 
-      {/* {knowledgeArea && <Input formRef={formRef} name="area_knowledge1" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} original title="Área de Conhecimento 1" />}
-
-      {knowledgeArea && <Input formRef={formRef} name="area_knowledge2" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} original title="Área de Conhecimento 2" />}
-
-      {knowledgeArea && <Input formRef={formRef} name="area_knowledge3" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} original title="Área de Conhecimento 3" />} */}
+      <h1>{JSON.stringify(knowledgesArea)}</h1>
 
       <Suspense fallback={null}>
         <ModalProvider>
-          <ModalForm isOpen={OpenForm} toggleModal={toggleModalForm} submit={submitModalForm} />
+          <ModalForm knowledgesArea={knowledgesArea} setKnowledgesArea={setKnowledgesArea} isOpen={OpenForm} toggleModal={toggleModalForm} submit={submitModalForm} />
         </ModalProvider>
       </Suspense>
     </Form>

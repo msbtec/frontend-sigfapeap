@@ -1,107 +1,150 @@
 import React, {
-  memo, useRef, useCallback,
+  memo, useRef, useState,
 } from 'react';
-import { Form as Unform } from '@unform/web';
 
 import { FiCheckCircle, FiX } from 'react-icons/fi';
 
-import * as Yup from 'yup';
 import { Form } from '../../../../../components/Form';
-
-import { useAuth } from '../../../../../hooks/auth';
-
-import getValidationErrors from '../../../../../utils/getValidationErrors';
-
-import Input from '../../../../../components/Input';
 
 import { StyledModal } from './styles';
 
 function ModalForm({
-  isOpen, toggleModal, item, submit,
+  isOpen, toggleModal, knowledgesArea, setKnowledgesArea,
 }) {
   const reference = useRef(null);
-  const formRef = useRef(null);
-  const { signUp, updateUser } = useAuth();
 
-  const handleSubmit = useCallback(
-    async (data) => {
-      try {
-        formRef.current.setErrors({});
+  const [sub1, setSub1] = useState(false);
+  const [sub2, setSub2] = useState(false);
+  const [sub3, setSub3] = useState(false);
 
-        const schema = Yup.object().shape({
-          name: Yup.string().required('Campo obrigatório'),
-          name_mini: Yup.string().required('Campo obrigatório'),
-          cpf: Yup.string().required('Campo obrigatório'),
-          email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
-          office: Yup.string().required('Campo obrigatório'),
-          perfil: Yup.string().required('Campo obrigatório'),
-        });
-
-        await schema.validate(data, {
-          abortEarly: false,
-        });
-
-        if (item) {
-          updateUser(data);
-        } else {
-          signUp(data);
-        }
-
-        submit();
-      } catch (error) {
-        if (error instanceof Yup.ValidationError) {
-          const errors = getValidationErrors(error);
-
-          formRef.current.setErrors(errors);
-        }
-      }
-    },
-    [signUp, updateUser, item, submit],
-  );
+  const [knoledges_areas, setKnoledges_areas] = useState({
+    main: '',
+    sub1: '',
+    sub2: '',
+    sub3: '',
+  });
 
   return (
-
     <StyledModal
       isOpen={isOpen}
       onBackgroundClick={toggleModal}
       onEscapeKeydown={toggleModal}
     >
-
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar servidor' : 'Atualizar servidor'}</h5>
+        <h5 className="modal-title" id="exampleModalLabel">Adicionar área de conhecimento</h5>
         <button type="button" className="close" onClick={toggleModal}>
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
 
-      <Unform initialData={item} ref={formRef} onSubmit={handleSubmit}>
+      <Form>
+        <div className="modal-body" ref={reference}>
 
-        <Form>
-          <div className="modal-body" ref={reference}>
-            <Input formRef={formRef} name="area_knowledge1" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} original title="Área de Conhecimento 1" />
-
-            <Input formRef={formRef} name="area_knowledge1" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} original title="Área de Conhecimento 1" />
-
-            <Input formRef={formRef} name="area_knowledge1" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} original title="Área de Conhecimento 1" />
-
-            <Input formRef={formRef} name="area_knowledge1" select={["Ciências Exatas e da Terra", "Engenharias", "Ciências Humanas"]} original title="Área de Conhecimento 1" />
+          <div className="input-block">
+            <label>
+              Área de conhecimento
+            </label>
+            <select onChange={(e) => {
+              if (e.target.value !== 'Selecionar área') {
+                setSub1(true);
+                setKnoledges_areas({ ...knoledges_areas, main: e.target.value });
+              } else {
+                setSub1(false);
+                setKnoledges_areas({ ...knoledges_areas, main: '' });
+              }
+            }}
+            >
+              {["Selecionar área", "Ciências sociais", "Ciências exatas"].map((item) => (
+                <option value={item}>{item}</option>
+              ))}
+            </select>
           </div>
 
-          <div className="modal-footer">
-            <button type="button" className="close" onClick={toggleModal}>
-              <FiX />
-              {' '}
-              Fechar
-            </button>
-            <button type="submit" className="submit">
-              <FiCheckCircle />
-              {' '}
-              Salvar
-            </button>
+          {sub1 && (
+          <div className="input-block">
+            <label>
+              Área de conhecimento
+            </label>
+            <select onChange={(e) => {
+              if (e.target.value !== 'Selecionar área') {
+                setSub2(true);
+                setKnoledges_areas({ ...knoledges_areas, sub1: e.target.value });
+              } else {
+                setSub2(false);
+                setKnoledges_areas({ ...knoledges_areas, sub1: '' });
+              }
+            }}
+            >
+              {["Selecionar área", "Ciências sociais", "Ciências exatas"].map((item) => (
+                <option value={item}>{item}</option>
+              ))}
+            </select>
           </div>
-        </Form>
-      </Unform>
+          )}
 
+          {sub2 && (
+          <div className="input-block">
+            <label>
+              Área de conhecimento
+            </label>
+            <select onChange={(e) => {
+              if (e.target.value !== 'Selecionar área') {
+                setSub3(true);
+                setKnoledges_areas({ ...knoledges_areas, sub2: e.target.value });
+              } else {
+                setSub3(false);
+                setKnoledges_areas({ ...knoledges_areas, sub2: '' });
+              }
+            }}
+            >
+              {["Selecionar área", "Ciências sociais", "Ciências exatas"].map((item) => (
+                <option value={item}>{item}</option>
+              ))}
+            </select>
+          </div>
+          )}
+
+          {sub3 && (
+          <div className="input-block">
+            <label>
+              Área de conhecimento
+            </label>
+            <select onChange={(e) => {
+              if (e.target.value !== 'Selecionar área') {
+                setKnoledges_areas({ ...knoledges_areas, sub3: e.target.value });
+              } else {
+                setKnoledges_areas({ ...knoledges_areas, sub3: '' });
+              }
+            }}
+            >
+              {["Selecionar área", "Ciências sociais", "Ciências exatas"].map((item) => (
+                <option value={item}>{item}</option>
+              ))}
+            </select>
+          </div>
+          )}
+
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className="modal-footer">
+          <button style={{ margin: 20 }} type="button" onClick={toggleModal}>
+            <FiX />
+            {' '}
+            Fechar
+          </button>
+          <button
+            style={{ margin: 20 }}
+            type="button"
+            onClick={() => {
+              setKnowledgesArea({ ...knoledges_areas, one: knoledges_areas });
+            }}
+          >
+            <FiCheckCircle />
+            {' '}
+            Salvar
+          </button>
+        </div>
+      </Form>
     </StyledModal>
   );
 }
