@@ -1,4 +1,4 @@
-import React, { Suspense,useState,lazy } from 'react';
+import React, { Suspense, useState, lazy } from 'react';
 
 import { ModalProvider } from 'styled-react-modal';
 
@@ -11,11 +11,13 @@ let ModalForm = () => <></>;
 
 const Form1 = ({
   formRef, selectedFile, setSelectedFile, errorFile,
-  knowledgesArea, setKnowledgesArea
+  knowledgesArea, setKnowledgesArea,
 }) => {
   const [isForeign, setIsForeign] = React.useState(false);
 
   const [OpenForm, setOpenForm] = useState(false);
+
+  const [type, setType] = useState(1);
 
   async function toggleModalForm() {
     ModalForm = await lazy(() => import("./Modal"));
@@ -96,19 +98,103 @@ const Form1 = ({
       </>
       )}
 
-      <div style={{ marginTop: 20 }}>
-        <button type="button" onClick={() => {
-            toggleModalForm()
-        }}>
-          + área de conhecimento
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        flexDirection: 'row',
+        marginTop: 20,
+      }}
+      >
+        <div className="input-block">
+          <label className="required">
+            Área de conhecimento 1
+          </label>
+          <input
+            value={JSON.stringify(Object.keys(knowledgesArea.one).map((key, index) => knowledgesArea.one[key]))}
+          />
+        </div>
+
+        <button
+          style={{ marginTop: 20, marginLeft: 20 }}
+          type="button"
+          onClick={() => {
+            toggleModalForm();
+            setType(1);
+          }}
+        >
+          selecionar área(s)
         </button>
       </div>
 
-      <h1>{JSON.stringify(knowledgesArea)}</h1>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        flexDirection: 'row',
+        marginTop: 20,
+      }}
+      >
+        <div className="input-block">
+          <label className="required">
+            Área de conhecimento 1
+          </label>
+          <input
+            value={JSON.stringify(Object.keys(knowledgesArea.two).map((key, index) => knowledgesArea.two[key]))}
+          />
+        </div>
+
+        <button
+          style={{ marginTop: 20, marginLeft: 20 }}
+          type="button"
+          onClick={() => {
+            toggleModalForm();
+            setType(2);
+          }}
+        >
+          selecionar área(s)
+        </button>
+      </div>
+
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        flexDirection: 'row',
+        marginTop: 20,
+      }}
+      >
+        <div className="input-block">
+          <label className="required">
+            Área de conhecimento 1
+          </label>
+          <input
+            value={JSON.stringify(Object.keys(knowledgesArea.three).map((key, index) => knowledgesArea.three[key]))}
+          />
+        </div>
+
+        <button
+          style={{ marginTop: 20, marginLeft: 20 }}
+          type="button"
+          onClick={() => {
+            toggleModalForm();
+            setType(3);
+          }}
+        >
+          selecionar área(s)
+        </button>
+      </div>
 
       <Suspense fallback={null}>
         <ModalProvider>
-          <ModalForm knowledgesArea={knowledgesArea} setKnowledgesArea={setKnowledgesArea} isOpen={OpenForm} toggleModal={toggleModalForm} submit={submitModalForm} />
+          <ModalForm
+            knowledgesArea={knowledgesArea}
+            setKnowledgesArea={setKnowledgesArea}
+            isOpen={OpenForm}
+            toggleModal={toggleModalForm}
+            submit={submitModalForm}
+            type={type}
+          />
         </ModalProvider>
       </Suspense>
     </Form>

@@ -9,7 +9,7 @@ import { Form } from '../../../../../components/Form';
 import { StyledModal } from './styles';
 
 function ModalForm({
-  isOpen, toggleModal, knowledgesArea, setKnowledgesArea,
+  isOpen, toggleModal, knowledgesArea, setKnowledgesArea, type,
 }) {
   const reference = useRef(null);
 
@@ -32,9 +32,6 @@ function ModalForm({
     >
       <div className="modal-header">
         <h5 className="modal-title" id="exampleModalLabel">Adicionar área de conhecimento</h5>
-        <button type="button" className="close" onClick={toggleModal}>
-          <span aria-hidden="true">&times;</span>
-        </button>
       </div>
 
       <Form>
@@ -136,7 +133,14 @@ function ModalForm({
             style={{ margin: 20 }}
             type="button"
             onClick={() => {
-              setKnowledgesArea({ ...knoledges_areas, one: knoledges_areas });
+              toggleModal();
+              if (type == 1) {
+                setKnowledgesArea({ ...knowledgesArea, one: knoledges_areas });
+              } else if (type == 2) {
+                setKnowledgesArea({ ...knowledgesArea, two: knoledges_areas });
+              } else {
+                setKnowledgesArea({ ...knowledgesArea, three: knoledges_areas });
+              }
             }}
           >
             <FiCheckCircle />

@@ -228,10 +228,12 @@ const SignUp = () => {
           </Footer>
 
           {step === 7 && (
-          <Recaptcha
-            sitekey="fmewkrifgjnoierjngoruetg"
-            render="explicit"
-          />
+          <div style={{ marginBottom: 20 }}>
+            <Recaptcha
+              sitekey="fmewkrifgjnoierjngoruetg"
+              render="explicit"
+            />
+          </div>
           )}
 
           <div style={{ display: "flex", justifyContent: 'center', alignItems: "center" }}>
