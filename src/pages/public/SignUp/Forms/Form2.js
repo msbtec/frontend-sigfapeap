@@ -11,13 +11,16 @@ const Form2 = ({ formRef }) => {
       Axios.get(`https://viacep.com.br/ws/${cep}/json/`)
         .then((response) => {
           const {
-            logradouro, bairro, uf, cidade, pais,
+            logradouro, bairro, uf, localidade, pais,
           } = response.data;
+
+          console.log(response.data);
+
           formRef.current.setFieldValue('street', logradouro);
           formRef.current.setFieldValue('neighborhood', bairro);
           formRef.current.setFieldValue('country', pais);
           formRef.current.setFieldValue('state', uf);
-          formRef.current.setFieldValue('municipality', cidade);
+          formRef.current.setFieldValue('municipality', localidade);
         })
         .catch(() => {});
     }
@@ -35,11 +38,11 @@ const Form2 = ({ formRef }) => {
 
       <Input formRef={formRef} name="neighborhood" disabled required original title="Bairro" />
 
-      <Input formRef={formRef} name="country" select={["Brasil", "outro"]} required original title="País" />
+      <Input formRef={formRef} name="country" select={["Brasil"]} required original title="País" />
 
-      <Input formRef={formRef} name="state" select={["Amapá", "Pará"]} required original title="Estado" />
+      <Input formRef={formRef} name="state" disabled required original title="Estado" />
 
-      <Input formRef={formRef} name="municipality" select={["Macapá", "Oiapoque"]} required original title="Município" />
+      <Input formRef={formRef} name="municipality" disabled required original title="Município" />
 
       <Input formRef={formRef} name="phone" maxLength={15} original title="Telefone" />
 

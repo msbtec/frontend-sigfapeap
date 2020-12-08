@@ -4,6 +4,8 @@ import React, {
 
 import { Form as Unform } from '@unform/web';
 import * as Yup from 'yup';
+import { useResearcher } from '../../../hooks/researcher';
+import { useAuth } from '../../../hooks/auth';
 import getValidationErrors from '../../../utils/getValidationErrors';
 
 import {
@@ -21,6 +23,9 @@ import Form7 from './Forms/Form7';
 const Recaptcha = require('react-recaptcha');
 
 const SignUp = () => {
+  const { create } = useResearcher();
+  const { signIn } = useAuth();
+
   const formRef = useRef(null);
   const [step, setStep] = useState(1);
 
@@ -29,6 +34,7 @@ const SignUp = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorFile, setErrorFile] = useState('');
 
+  const [institutions, setInstitutions] = useState([]);
   const [knowledgesArea, setKnowledgesArea] = useState({
     one: '',
     two: '',
@@ -43,17 +49,6 @@ const SignUp = () => {
     async (data) => {
       try {
         formRef.current.setErrors({});
-
-        console.log({
-          ...data,
-          file: selectedFile,
-        });
-
-        if (!selectedFile) {
-          setErrorFile('Campo obrigatório');
-        } else {
-          setErrorFile('');
-        }
 
         if (step === 1) {
           let schema;
@@ -93,9 +88,13 @@ const SignUp = () => {
             abortEarly: false,
           });
 
-          setForm({ ...form, data });
-
-          setStep(2);
+          if (!selectedFile) {
+            setErrorFile('Campo obrigatório');
+          } else {
+            setForm({ ...data, knowledgesArea, avatar: selectedFile });
+            setStep(2);
+            setErrorFile('');
+          }
         } else if (step === 2) {
           const schema = Yup.object().shape({
             zipcode: Yup.string().required('Campo obrigatório'),
@@ -111,7 +110,7 @@ const SignUp = () => {
             abortEarly: false,
           });
 
-          setForm({ ...form, data });
+          setForm({ ...form, ...data });
 
           setStep(3);
         } else if (step === 3) {
@@ -128,23 +127,27 @@ const SignUp = () => {
             schema = Yup.object().shape({
               institution: Yup.string().required('Campo obrigatório'),
             });
+          } else {
+            schema = Yup.object().shape({
+              connection: Yup.string().required('Campo obrigatório'),
+            });
           }
 
           await schema.validate(data, {
             abortEarly: false,
           });
 
-          setForm({ ...form, data });
+          setForm({ ...form, ...data });
 
           setStep(4);
         } else if (step === 4) {
-          setForm({ ...form, data });
-          setStep(5);
+          setForm({ ...form, ...data });
+          setStep(6);
         } else if (step === 5) {
-          setForm({ ...form, data });
+          setForm({ ...form, ...data });
           setStep(6);
         } else if (step === 6) {
-          setForm({ ...form, data });
+          setForm({ ...form, ...data });
           setStep(7);
         } else if (step === 7) {
           const schema = Yup.object().shape({
@@ -159,9 +162,11 @@ const SignUp = () => {
             abortEarly: false,
           });
 
-          setForm({ ...form, data });
+          create({
+            ...form, ...data, avatar: window.URL.createObjectURL(form.avatar), evaluator: false,
+          });
 
-          alert('Submeter formulário');
+          signIn(data);
         }
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
@@ -171,18 +176,116 @@ const SignUp = () => {
         }
       }
     },
-    [step, form, selectedFile],
+    [signIn, create, step, form, selectedFile, knowledgesArea],
   );
+
+  function title(step) {
+    if (step == 1) {
+      return 'Dados pessoais';
+    } if (step == 2) {
+      return 'Endereço Residencial';
+    } if (step == 3) {
+      return 'Vínculo Institucional';
+    } if (step == 4) {
+      return 'Endereço Profissional';
+    } if (step == 5) {
+      return 'Vincular Outras Instituições';
+    } if (step == 6) {
+      return 'Correspondência';
+    }
+    return 'Acesso SIGFAPEAP';
+  }
 
   return (
     <Container>
       <Content>
-        <Unform ref={formRef} onSubmit={handleSubmit}>
+        <Unform
+          ref={formRef}
+          onSubmit={handleSubmit}
+          initialData={{
+            address_mail: "Residencial",
+            avatar: "https://pixinvent.com/materialize-material-design-admin-template/app-assets/images/user/12.jpg",
+            birthday: "1998-10-18",
+            complete_street: "casa",
+            confirmation_password: "password",
+            connection: "Sim",
+            connection_institution: "CLT",
+            country: "Brasil",
+            cpf: "094.384.098-50",
+            curriculum: "https://github.com/typicode/json-server",
+            date_emitter: "2008-10-21",
+            email: "math.cs.ceil@gmail.com",
+            father_name: "Rosilvado Ribeiro da Silva Filho",
+            generate_connection: "Sim",
+            institution: "MSB",
+            knowledgesArea: {
+              one: {
+                main: "Ciências sociais",
+                sub1: "Ciências exatas",
+                sub2: "Ciências sociais",
+                sub3: "Ciências exatas",
+              },
+              two: {
+                main: "Ciências sociais",
+                sub1: "Ciências exatas",
+                sub2: "Ciências sociais",
+                sub3: "Ciências exatas",
+              },
+              three: {
+                main: "Ciências sociais",
+                sub1: "Ciências exatas",
+                sub2: "Ciências sociais",
+                sub3: "Ciências exatas",
+              },
+            },
+            mother_name: "Neusa Reis da Costa",
+            municipality: "Macapá",
+            name: "Matheus Costa Silva",
+            neighborhood: "Araxá",
+            number_street: "89979",
+            office: "Dev",
+            office_time: "1 ano",
+            orger_emitter: "POLITEC",
+            password: "password",
+            phone: "(96) 99999-9999",
+            phone_cell: "(96) 88888-8888",
+            professional_complete_street: "casa",
+            professional_country: "Brasil",
+            professional_fax: "",
+            professional_municipality: "Macapá",
+            professional_neighborhood: "Araxá",
+            professional_number_street: "48035",
+            professional_phone: "",
+            professional_phone_cell: "",
+            professional_state: "AP",
+            professional_street: "Travessa Oitava da Setentrional",
+            professional_zipcode: "68903-777",
+            race: "Amarela",
+            received_informations: "Sim",
+            regime_work: "Tempo integral",
+            rg: "488009",
+            school: "Ensino Superior",
+            service_time: "1 ano",
+            sex: "Masculino",
+            state: "AP",
+            street: "Travessa Oitava da Setentrional",
+            type_personal: "Pesquisador",
+            uf: "AP",
+            zipcode: "68903-777",
+          }}
+        >
           <div style={{ display: "flex", flexDirection: "column", marginBottom: 40 }}>
             <label style={{ fontSize: 21, fontWeight: 'bold', color: '#626262' }}>Cadastro de Pesquisador</label>
             <label style={{ fontSize: 14, color: '#626262' }}>
               Preencha corretamente os campos abaixo para fazer parte da
               comunidade de pesquisadores da FAPEAP.
+            </label>
+
+            <label style={{
+              marginTop: 30, fontSize: 21, fontWeight: 'bold', color: '#626262',
+            }}
+            >
+              {title(step)}
             </label>
           </div>
 
@@ -199,7 +302,13 @@ const SignUp = () => {
           {step === 2 && <Form2 formRef={formRef} />}
           {step === 3 && <Form3 formRef={formRef} />}
           {step === 4 && <Form4 formRef={formRef} />}
-          {step === 5 && <Form5 formRef={formRef} />}
+          {/* {step === 5 && (
+          <Form5
+            institutions={institutions}
+            setInstitutions={setInstitutions}
+            formRef={formRef}
+          />
+          )} */}
           {step === 6 && <Form6 formRef={formRef} />}
           {step === 7 && <Form7 formRef={formRef} />}
 

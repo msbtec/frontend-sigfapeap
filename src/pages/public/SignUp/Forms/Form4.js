@@ -11,13 +11,13 @@ const Form4 = ({ formRef }) => {
       Axios.get(`https://viacep.com.br/ws/${cep}/json/`)
         .then((response) => {
           const {
-            logradouro, bairro, uf, cidade, pais,
+            logradouro, bairro, uf, localidade, pais,
           } = response.data;
-          formRef.current.setFieldValue('street', logradouro);
-          formRef.current.setFieldValue('neighborhood', bairro);
-          formRef.current.setFieldValue('country', pais);
-          formRef.current.setFieldValue('state', uf);
-          formRef.current.setFieldValue('municipality', cidade);
+          formRef.current.setFieldValue('professional_street', logradouro);
+          formRef.current.setFieldValue('professional_neighborhood', bairro);
+          formRef.current.setFieldValue('professional_state', pais);
+          formRef.current.setFieldValue('professional_state', uf);
+          formRef.current.setFieldValue('professional_municipality', localidade);
         })
         .catch(() => {});
     }
@@ -35,11 +35,11 @@ const Form4 = ({ formRef }) => {
 
       <Input formRef={formRef} name="professional_neighborhood" disabled original title="Bairro" />
 
-      <Input formRef={formRef} name="professional_country" select={["Brasil", "outro"]} original title="País" />
+      <Input formRef={formRef} name="professional_country" select={["Brasil"]} original title="País" />
 
-      <Input formRef={formRef} name="professional_state" select={["Amapá", "Pará"]} original title="Estado" />
+      <Input formRef={formRef} name="professional_state" disabled original title="Estado" />
 
-      <Input formRef={formRef} name="professional_municipality" select={["Macapá", "Oiapoque"]} original title="Município" />
+      <Input formRef={formRef} name="professional_municipality" disabled original title="Município" />
 
       <Input formRef={formRef} name="professional_phone" maxLength={15} original title="Telefone" />
 

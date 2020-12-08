@@ -5,15 +5,23 @@ import React, {
   useContext,
 } from 'react';
 
+import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
 
 const OfficeContext = createContext({});
 
 export const OfficeProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [offices, setOffices] = useState();
+  const [offices, setOffices] = useState([
+    {
+      id: uuid(),
+      name: "Programador",
+    },
+  ]);
 
-  const insertOffice = useCallback(async (email) => {
+  const create = useCallback(async (data) => {
+    setLoading(true);
+    setOffices([...offices, { id: uuid(), ...data }]);
     store.addNotification({
       message: `Cargo inserido com sucesso!`,
       type: 'success',
@@ -26,9 +34,12 @@ export const OfficeProvider = ({ children }) => {
         onScreen: true,
       },
     });
-  }, []);
+    setLoading(false);
+  }, [offices]);
 
-  const updateOffice = useCallback(async (data) => {
+  const update = useCallback(async (data) => {
+    setLoading(true);
+    setOffices(offices.map((item) => (item.id === data.id ? data : item)));
     store.addNotification({
       message: `Cargo atualizado com sucesso!`,
       type: 'success',
@@ -41,9 +52,12 @@ export const OfficeProvider = ({ children }) => {
         onScreen: true,
       },
     });
-  }, []);
+    setLoading(false);
+  }, [offices]);
 
-  const deleteOffice = useCallback(async (email) => {
+  const erase = useCallback(async (data) => {
+    setLoading(true);
+    setOffices(offices.filter((item) => (item.id !== data.id)));
     store.addNotification({
       message: `Cargo deletado com sucesso!`,
       type: 'success',
@@ -56,14 +70,17 @@ export const OfficeProvider = ({ children }) => {
         onScreen: true,
       },
     });
-  }, []);
+    setLoading(false);
+  }, [offices]);
 
   return (
     <OfficeContext.Provider
       value={{
-        insertOffice,
-        updateOffice,
-        deleteOffice,
+        loading,
+        offices,
+        create,
+        update,
+        erase,
       }}
     >
       {children}

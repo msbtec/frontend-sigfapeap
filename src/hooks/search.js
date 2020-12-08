@@ -5,15 +5,39 @@ import React, {
   useContext,
 } from 'react';
 
+import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
 
 const SearchContext = createContext({});
 
 export const SearchProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [search, setSearches] = useState();
+  const [searches, setSearches] = useState([
+    {
+      id: uuid(),
+      name: "Ciências Sociais",
+      connection: "",
+    },
+    {
+      id: uuid(),
+      name: "Ciências Exatas",
+      connection: "",
+    },
+    {
+      id: uuid(),
+      name: "Filosofia",
+      connection: "Ciências Sociais",
+    },
+    {
+      id: uuid(),
+      name: "Matemática",
+      connection: "Ciências Exatas",
+    },
+  ]);
 
-  const insertSearch = useCallback(async (email) => {
+  const create = useCallback(async (data) => {
+    setLoading(true);
+    setSearches([...searches, { id: uuid(), ...data }]);
     store.addNotification({
       message: `Área de pesquisa inserida com sucesso!`,
       type: 'success',
@@ -26,9 +50,11 @@ export const SearchProvider = ({ children }) => {
         onScreen: true,
       },
     });
-  }, []);
+  }, [searches]);
 
-  const updateSearch = useCallback(async (data) => {
+  const update = useCallback(async (data) => {
+    setLoading(true);
+    setSearches(searches.map((item) => (item.id === data.id ? data : item)));
     store.addNotification({
       message: `Área de pesquisa atualizada com sucesso!`,
       type: 'success',
@@ -41,9 +67,12 @@ export const SearchProvider = ({ children }) => {
         onScreen: true,
       },
     });
-  }, []);
+    setLoading(false);
+  }, [searches]);
 
-  const deleteSearch = useCallback(async (email) => {
+  const erase = useCallback(async (data) => {
+    setLoading(true);
+    setSearches(searches.filter((item) => (item.id !== data.id)));
     store.addNotification({
       message: `Área de pesquisa deletada com sucesso!`,
       type: 'success',
@@ -56,14 +85,17 @@ export const SearchProvider = ({ children }) => {
         onScreen: true,
       },
     });
-  }, []);
+    setLoading(false);
+  }, [searches]);
 
   return (
     <SearchContext.Provider
       value={{
-        insertSearch,
-        updateSearch,
-        deleteSearch,
+        searches,
+        loading,
+        create,
+        update,
+        erase,
       }}
     >
       {children}

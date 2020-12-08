@@ -21,7 +21,7 @@ function ModalForm({
 }) {
   const reference = useRef(null);
   const formRef = useRef(null);
-  const { insertSearch, updateSearch } = useSearch();
+  const { searches, create, update } = useSearch();
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -37,9 +37,9 @@ function ModalForm({
         });
 
         if (item) {
-          updateSearch(data);
+          update({ id: item.id, connection: data.connection_area, ...data });
         } else {
-          insertSearch(data);
+          create({ connection: data.connection_area, ...data });
         }
 
         submit();
@@ -51,7 +51,7 @@ function ModalForm({
         }
       }
     },
-    [insertSearch, updateSearch, item, submit],
+    [create, update, item, submit],
   );
 
   return (
@@ -75,7 +75,7 @@ function ModalForm({
           <div className="modal-body" ref={reference}>
             <Input formRef={formRef} name="name" required original title="Nome da área de pesquisa" />
 
-            <Input formRef={formRef} name="connection" select={["Ciências Exatas", "Ciências Sociais"]} required original title="Área vinculada" />
+            <Input formRef={formRef} name="connection_area" select={searches.map((search) => search.name)} required original title="Área vinculada" />
           </div>
 
           <div className="modal-footer">

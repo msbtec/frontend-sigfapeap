@@ -1,36 +1,21 @@
 import React, { useEffect } from 'react';
 
-// Icons
-import {
-  FiCalendar, FiMessageCircle, FiUsers,
-} from 'react-icons/fi';
+import { FiMessageCircle, FiUsers } from 'react-icons/fi';
 
 import { useAuth } from '../../../hooks/auth';
+import { useUser } from '../../../hooks/user';
+import { useResearcher } from '../../../hooks/researcher';
+import { useProgram } from '../../../hooks/program';
+import { useEvaluator } from '../../../hooks/evaluators';
 
-import { CardDashboard, Card } from '../../../components/Card';
-import { Table } from '../../../components/Table';
-
-const array = [
-  {
-    id: 1,
-    name: 'Luis Otávio',
-  },
-  {
-    id: 2,
-    name: 'Fernando Moreira',
-  },
-  {
-    id: 3,
-    name: 'José Augusto',
-  },
-  {
-    id: 2,
-    name: 'Jonathan Moreira',
-  },
-];
+import { CardDashboard } from '../../../components/Card';
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { users } = useUser();
+  const { users: researches } = useResearcher();
+  const { programs } = useProgram();
+  const { evaluators } = useEvaluator();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Dashboard';
@@ -42,7 +27,7 @@ export default function Dashboard() {
         <h1>
           Olá, Bem vindo
           {' '}
-          {user.name}
+          {user.name_mini}
           !
         </h1>
       </div>
@@ -51,11 +36,11 @@ export default function Dashboard() {
           <div className="card-body">
             <div className="row">
               <div className="col">
-                <div className="title">Card One</div>
-                <div className="number pulsate">34</div>
+                <div className="title">Usuários</div>
+                <div className="number pulsate">{users.length}</div>
               </div>
               <div className="col-auto">
-                <FiCalendar size="3em" />
+                <FiUsers size="3em" />
               </div>
             </div>
           </div>
@@ -66,11 +51,11 @@ export default function Dashboard() {
           <div className="card-body">
             <div className="row">
               <div className="col">
-                <div className="title">Card Two</div>
-                <div className="number pulsate">0</div>
+                <div className="title">Pesquisadores</div>
+                <div className="number pulsate">{researches.length}</div>
               </div>
               <div className="col-auto">
-                <FiMessageCircle size="3em" />
+                <FiUsers size="3em" />
               </div>
             </div>
           </div>
@@ -81,8 +66,8 @@ export default function Dashboard() {
           <div className="card-body">
             <div className="row">
               <div className="col">
-                <div className="title">Mensagens</div>
-                <div className="number pulsate">0</div>
+                <div className="title">Programas</div>
+                <div className="number pulsate">{programs.length}</div>
               </div>
               <div className="col-auto">
                 <FiMessageCircle size="3em" />
@@ -96,8 +81,8 @@ export default function Dashboard() {
           <div className="card-body">
             <div className="row">
               <div className="col">
-                <div className="title">Users</div>
-                <div className="number pulsate">0</div>
+                <div className="title">Avaliadores</div>
+                <div className="number pulsate">{evaluators.length}</div>
               </div>
               <div className="col-auto">
                 <FiUsers size="3em" />
@@ -106,7 +91,7 @@ export default function Dashboard() {
           </div>
         </CardDashboard>
       </div>
-      <div className="col-12 px-0">
+      {/* <div className="col-12 px-0">
         <Card className="red">
           <div className="card-title">
             <h3>Tables</h3>
@@ -142,7 +127,7 @@ export default function Dashboard() {
             </Table>
           </div>
         </Card>
-      </div>
+      </div> */}
     </>
   );
 }

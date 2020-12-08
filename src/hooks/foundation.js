@@ -5,15 +5,30 @@ import React, {
   useContext,
 } from 'react';
 
+import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
 
 const FoundationContext = createContext({});
 
 export const FoundationProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [foundation, setFoundations] = useState();
+  const [foundations, setFoundations] = useState([
+    {
+      id: uuid(),
+      cnpj: '10.533.202/0001-52',
+      name: 'Universidade Federal do Amapá',
+      social_name: 'UNIFAP',
+      address: 'Rod. Juscelino Kubitschek, km 02 - Jardim Marco Zero, Macapá - AP, 68903-419',
+      site: 'www.unifap.br',
+      phone: '(96) 3312-1700',
+      email: 'suporte@unifap.br',
+      observation: 'The Federal University of Amapá is a Brazilian public institution which is located in Macapá, Brazil.',
+    },
+  ]);
 
-  const insertFoundation = useCallback(async (email) => {
+  const create = useCallback(async (data) => {
+    setLoading(true);
+    setFoundations([...foundations, { id: uuid(), ...data }]);
     store.addNotification({
       message: `Instituição de pesquisa inserida com sucesso!`,
       type: 'success',
@@ -26,9 +41,12 @@ export const FoundationProvider = ({ children }) => {
         onScreen: true,
       },
     });
-  }, []);
+    setLoading(false);
+  }, [foundations]);
 
-  const updateFoundation = useCallback(async (data) => {
+  const update = useCallback(async (data) => {
+    setLoading(true);
+    setFoundations(foundations.map((item) => (item.id === data.id ? data : item)));
     store.addNotification({
       message: `Instituição de pesquisa atualizada com sucesso!`,
       type: 'success',
@@ -41,9 +59,12 @@ export const FoundationProvider = ({ children }) => {
         onScreen: true,
       },
     });
-  }, []);
+    setLoading(false);
+  }, [foundations]);
 
-  const deleteFoundation = useCallback(async (email) => {
+  const erase = useCallback(async (data) => {
+    setLoading(true);
+    setFoundations(foundations.filter((item) => (item.id !== data.id)));
     store.addNotification({
       message: `Instituição de pesquisa deletada com sucesso!`,
       type: 'success',
@@ -56,14 +77,17 @@ export const FoundationProvider = ({ children }) => {
         onScreen: true,
       },
     });
-  }, []);
+    setLoading(false);
+  }, [foundations]);
 
   return (
     <FoundationContext.Provider
       value={{
-        insertFoundation,
-        updateFoundation,
-        deleteFoundation,
+        foundations,
+        loading,
+        create,
+        update,
+        erase,
       }}
     >
       {children}

@@ -9,6 +9,7 @@ import * as Yup from 'yup';
 import { Form } from '../../../../components/Form';
 
 import { useProgram } from '../../../../hooks/program';
+import { useEvaluator } from '../../../../hooks/evaluators';
 
 import getValidationErrors from '../../../../utils/getValidationErrors';
 
@@ -16,14 +17,13 @@ import Input from '../../../../components/Input';
 
 import { StyledModal } from './styles';
 
-import { evaluators } from '../../../../utils/data';
-
 function ModalForm({
   isOpen, toggleModal, item, submit,
 }) {
   const reference = useRef(null);
   const formRef = useRef(null);
-  const { insertProgram, updateProgram } = useProgram();
+  const { create, update } = useProgram();
+  const { evaluators } = useEvaluator();
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorFile, setErrorFile] = useState('');
 
@@ -32,6 +32,12 @@ function ModalForm({
       try {
         formRef.current.setErrors({});
 
+        if (String(data.evaluators) == "undefined") {
+          data = { ...data, evaluators: item.evaluators };
+        } else if (String(data.evaluators) == "null") {
+          data = { ...data, evaluators: "" };
+        }
+
         const schema = Yup.object().shape({
           title: Yup.string().required('Campo obrigatório'),
           description: Yup.string().required('Campo obrigatório'),
@@ -39,7 +45,7 @@ function ModalForm({
           evaluators: Yup.string().required('Pelo menos um avaliador deve ser submetido'),
         });
 
-        if (!selectedFile) {
+        if (!selectedFile && !item) {
           setErrorFile('Campo obrigatório');
         } else {
           setErrorFile('');
@@ -49,11 +55,11 @@ function ModalForm({
           abortEarly: false,
         });
 
-        if (selectedFile) {
+        if (selectedFile || item) {
           if (item) {
-            updateProgram(data);
+            update({ id: item.id, url: item.url, ...data });
           } else {
-            insertProgram(data);
+            create({ url: window.URL.createObjectURL(selectedFile), ...data });
           }
           submit();
         }
@@ -65,11 +71,14 @@ function ModalForm({
         }
       }
     },
-    [insertProgram, selectedFile, updateProgram, item, submit],
+    [create, selectedFile, update, item, submit],
   );
 
-  return (
+  React.useEffect(() => {
+    console.log(evaluators);
+  }, [evaluators]);
 
+  return (
     <StyledModal
       isOpen={isOpen}
       onBackgroundClick={toggleModal}
@@ -98,7 +107,7 @@ function ModalForm({
                 <sup style={{ color: "#f00" }}>*</sup>
               </label>
               <div style={{ marginBottom: 5 }} />
-              <label className="file-input">
+              <label style={{ borderColor: errorFile ? "#f00" : "#dee2e6" }} className="file-input">
                 <input
                   type="file"
                   placeholder="Arquivo"
@@ -119,7 +128,7 @@ function ModalForm({
 
             <Input formRef={formRef} name="avaliation" required original title="Critério de avaliação" />
 
-            <Input formRef={formRef} name="evaluators" required multi access={evaluators} title="Avaliadores" />
+            <Input formRef={formRef} name="evaluators" required multi access={evaluators.map((user) => ({ label: user.name, value: user.name }))} title="Avaliadores" />
           </div>
 
           <div className="modal-footer">

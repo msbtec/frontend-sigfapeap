@@ -8,31 +8,36 @@ import React, {
 import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
 
-const ProgramContext = createContext({});
+const UserContext = createContext({});
 
-export const ProgramProvider = ({ children }) => {
+export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [programs, setPrograms] = useState([
+  const [users, setUsers] = useState([
     {
       id: uuid(),
-      title: 'Quero Açaí',
-      description: 'O calor deu uma leve pausa, o clima ficou um pouco mais fresquinho e a gente já pensa em tomar aquele caldo 😋 Vem pra Quero Açaí que temos caldos quentinhos te esperando ❤🍵',
-      url: 'https://cdnimg.webstaurantstore.com/images/products/large/542714/1977986.jpg',
-      avaliation: '4.5',
-      evaluators: [
-        {
-          label: 'Matheus Costa Silva',
-          value: 'Matheus Costa Silva',
-        },
-      ],
+      cpf: '041.746.580-72',
+      email: 'adolfo@mail.com',
+      name: 'Adolfo Oliveira Colares',
+      name_mini: 'Adolfo Colares',
+      office: 'Programador',
+      perfil: 'Administrador',
+    },
+    {
+      id: uuid(),
+      cpf: '182.440.620-70',
+      email: 'leo@mail.com',
+      name: 'Leonardo Oliveira Colares',
+      name_mini: 'Leonardo Colares',
+      office: 'Programador',
+      perfil: 'Servidor',
     },
   ]);
 
   const create = useCallback(async (data) => {
     setLoading(true);
-    setPrograms([...programs, { id: uuid(), ...data }]);
+    setUsers([...users, { id: uuid(), ...data }]);
     store.addNotification({
-      message: `Programa inserido com sucesso!`,
+      message: `Usuário cadastrado com sucesso!`,
       type: 'success',
       insert: 'top',
       container: 'top-right',
@@ -44,13 +49,13 @@ export const ProgramProvider = ({ children }) => {
       },
     });
     setLoading(false);
-  }, [programs]);
+  }, [users]);
 
   const update = useCallback(async (data) => {
     setLoading(true);
-    setPrograms(programs.map((item) => (item.id === data.id ? data : item)));
+    setUsers(users.map((item) => (item.id === data.id ? data : item)));
     store.addNotification({
-      message: `Programa atualizado com sucesso!`,
+      message: `Usuário atualizado com sucesso!`,
       type: 'success',
       insert: 'top',
       container: 'top-right',
@@ -62,13 +67,13 @@ export const ProgramProvider = ({ children }) => {
       },
     });
     setLoading(false);
-  }, [programs]);
+  }, [users]);
 
   const erase = useCallback(async (data) => {
     setLoading(true);
-    setPrograms(programs.filter((item) => (item.id !== data.id)));
+    setUsers(users.filter((item) => (item.id !== data.id)));
     store.addNotification({
-      message: `Programa deletado com sucesso!`,
+      message: `Usuário deletado com sucesso!`,
       type: 'success',
       insert: 'top',
       container: 'top-right',
@@ -80,12 +85,12 @@ export const ProgramProvider = ({ children }) => {
       },
     });
     setLoading(false);
-  }, [programs]);
+  }, [users]);
 
   return (
-    <ProgramContext.Provider
+    <UserContext.Provider
       value={{
-        programs,
+        users,
         loading,
         create,
         update,
@@ -93,15 +98,15 @@ export const ProgramProvider = ({ children }) => {
       }}
     >
       {children}
-    </ProgramContext.Provider>
+    </UserContext.Provider>
   );
 };
 
-export function useProgram() {
-  const context = useContext(ProgramContext);
+export function useUser() {
+  const context = useContext(UserContext);
 
   if (!context) {
-    throw Error('useProgram must be used within an ProgramProvider');
+    throw Error('useUser must be used within an UserProvider');
   }
 
   return context;

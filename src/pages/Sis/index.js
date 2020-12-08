@@ -18,6 +18,7 @@ const SearchArea = lazy(() => import('../private/SearchArea'));
 const Foundation = lazy(() => import('../private/Foundation'));
 const Program = lazy(() => import('../private/Program'));
 const Evaluator = lazy(() => import('../private/Evaluator'));
+const Researcher = lazy(() => import('../private/Researcher'));
 
 const Tables = lazy(() => import('./Tables'));
 const Buttons = lazy(() => import('./Buttons'));
@@ -37,7 +38,7 @@ export default function Sis() {
             <Main>
                 <NavBar>
                     <FiMenu className="toggle" style={{ marginLeft: drag ? 170 : 0}} onClick={(e) => drag ? setDrag(false) : setDrag(true)} />
-                    <span>Olá, <span className="name">{user.name}</span></span>
+                    <span>Olá, <span className="name">{user.name_mini}</span></span>
                 </NavBar>
                 <div className="content">
                     <div className="row">
@@ -48,13 +49,14 @@ export default function Sis() {
                         }>
                             <Switch>
                                 <Route exact path='/' component={Dashboard} />
-                                <Route exact path='/servidores' component={Server} />
+                                <Route exact path='/usuarios' component={Server} />
                                 <Route exact path='/cargos' component={Office} />
                                 <Route exact path='/perfis' component={Profile} />
                                 <Route exact path='/areas' component={SearchArea} />
                                 <Route exact path='/instituicoes' component={Foundation} />
                                 <Route exact path='/programas' component={Program} />
                                 <Route exact path='/avaliadores' component={Evaluator} />
+                                <Route exact path='/pesquisadores' component={Researcher} />
 
                                 <Route path='/tables' component={Tables}/>
                                 <Route path='/buttons' component={Buttons}/>

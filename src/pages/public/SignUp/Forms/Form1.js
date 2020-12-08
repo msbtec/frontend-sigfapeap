@@ -29,6 +29,25 @@ const Form1 = ({
     setOpenForm(!OpenForm);
   }
 
+  function formartText(a){
+    if (a[0] == "") {
+        const text = Object.keys(a).map((key) => a[key]).join(', ');
+        return text.substring(0, text.length - 6);
+    } else if (a[1] == "") {
+        const text = Object.keys(a).map((key) => a[key]).join(', ');
+        return text.substring(0, text.length - 6);
+    } else if (a[2] == "") {
+        const text = Object.keys(a).map((key) => a[key]).join(', ');
+        return text.substring(0, text.length - 4);
+    } else if (a[3] == "") {
+        const text = Object.keys(a).map((key) => a[key]).join(', ');
+        return text.substring(0, text.length - 2);
+    } else {
+        const text = Object.keys(a).map((key) => a[key]).join(', ');
+        return text;
+    }
+  }
+
   return (
     <Form>
 
@@ -78,7 +97,7 @@ const Form1 = ({
 
       <Input formRef={formRef} name="sex" select={["Masculino", "Feminino", "Não declarar"]} required original title="Sexo" />
 
-      <Input formRef={formRef} name="birthday" type="date" required original title="Data de Nascimento" />
+      <Input formRef={formRef} name="birthday"  type="date" required original title="Data de Nascimento" />
 
       <Input formRef={formRef} name="race" select={["Amarela", "Branca", "Indígena", "Não declarada", "Parda", "Preta"]} original title="Raça" />
 
@@ -111,7 +130,7 @@ const Form1 = ({
             Área de conhecimento 1
           </label>
           <input
-            value={JSON.stringify(Object.keys(knowledgesArea.one).map((key, index) => knowledgesArea.one[key]))}
+            value={formartText(Object.keys(knowledgesArea.one).map((key, index) => knowledgesArea.one[key]))}
           />
         </div>
 
@@ -137,10 +156,10 @@ const Form1 = ({
       >
         <div className="input-block">
           <label className="required">
-            Área de conhecimento 1
+            Área de conhecimento 2
           </label>
           <input
-            value={JSON.stringify(Object.keys(knowledgesArea.two).map((key, index) => knowledgesArea.two[key]))}
+            value={formartText(Object.keys(knowledgesArea.two).map((key, index) => knowledgesArea.two[key]))}
           />
         </div>
 
@@ -166,10 +185,10 @@ const Form1 = ({
       >
         <div className="input-block">
           <label className="required">
-            Área de conhecimento 1
+            Área de conhecimento 3
           </label>
           <input
-            value={JSON.stringify(Object.keys(knowledgesArea.three).map((key, index) => knowledgesArea.three[key]))}
+            value={formartText(Object.keys(knowledgesArea.three).map((key, index) => knowledgesArea.three[key]))}
           />
         </div>
 

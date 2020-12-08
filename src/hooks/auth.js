@@ -6,6 +6,7 @@ import React, {
   useMemo,
 } from 'react';
 
+import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
 
 import api from '../services/api';
@@ -42,6 +43,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const refreshUser = useCallback(async () => {
+    setLoading(true);
     const response = await api.get('/profile');
 
     const user = response.data;
@@ -49,37 +51,22 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('@sigfapeap:user', JSON.stringify(user));
 
     setAuth((oldData) => ({ ...oldData, user }));
-  }, []);
-
-  const signUp = useCallback(async (data) => {
-    store.addNotification({
-      message: `Usuário salvo com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
-    });
+    setLoading(false);
   }, []);
 
   const signIn = useCallback(async ({ cpf, password }) => {
     setLoading(true);
 
     try {
-      // const response = await api.post("sessions", {
-      //     login,
-      //     password
-      // });
-
-      // const { user, token } = response.data;
-
-      const token = 'lkgjrgrtggrt';
+      const token = uuid();
       const user = {
-        id: 'lkgjrgrtggrt', name: 'Adolfo Colares', cpf, password,
+        id: uuid(),
+        cpf: '041.746.580-72',
+        email: 'adolfo@mail.com',
+        name: 'Adolfo Oliveira Colares',
+        name_mini: 'Adolfo Colares',
+        office: 'Programador',
+        perfil: 'Administrador',
       };
 
       api.defaults.headers.authorization = `Bearer ${token}`;
@@ -113,63 +100,14 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const updateUser = useCallback(async (data) => {
-    store.addNotification({
-      message: `Usuário atualizado com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
-    });
-  }, []);
-
-  const recovery = useCallback(async (email) => {
-    store.addNotification({
-      message: `Uma solicitação de recuperação de senha foi enviada para o e-mail: ${email}`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
-    });
-  }, []);
-
-  const deleteUser = useCallback(async (data) => {
-    store.addNotification({
-      message: `Usuário deletado com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
-    });
-  }, []);
-
   return (
     <AuthContext.Provider
       value={{
         user: auth.user,
         loading,
-        signUp,
         signIn,
-        recovery,
         signOut,
         refreshUser,
-        deleteUser,
-        updateUser,
         token: auth.token,
         signed,
       }}

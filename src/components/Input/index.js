@@ -131,6 +131,13 @@ function Input({
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('zipcode', formatted);
                     handleCEP(formatted);
+                  } else if (name === 'professional_zipcode') {
+                    const formatted = Cep(value.target.value);
+                    inputRef.current.value = String(formatted);
+                    formRef.current.setFieldValue('zipcode', formatted);
+                    handleCEP(formatted);
+                  } else if (name === 'name') {
+                    formRef.current.setFieldValue('name_mini', `${value.target.value.split(' ')[0]} ${value.target.value.split(' ')[1]}`);
                   } else {
                     inputRef.current.value = String(value.target.value);
                   }
@@ -167,7 +174,7 @@ function Input({
             menuIsOpen
             className="basic-multi-select"
             classNamePrefix="select"
-            placeholder="Todos os acessos"
+            placeholder={title}
             defaultValue={defaultValue}
             noOptionsMessage={({ inputValue }) => "Sem opções"}
             options={access}

@@ -1,4 +1,5 @@
 import React, {
+  useEffect,
   createContext,
   useCallback,
   useState,
@@ -7,15 +8,29 @@ import React, {
 
 import { store } from 'react-notifications-component';
 
+import { useResearcher } from './researcher';
+
 const EvaluatorContext = createContext({});
 
 export const EvaluatorProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [evaluators, setEvaluators] = useState([]);
 
-  const updateEvaluator = useCallback(async (data) => {
+  const { users, update } = useResearcher();
+
+  const [evaluators, setEvaluators] = useState(
+    users.filter((researche) => researche.evaluator),
+  );
+
+  useEffect(() => {
+    setEvaluators(users.filter((researche) => researche.evaluator));
+  }, [users]);
+
+  const erase = useCallback(async (data) => {
+    setLoading(true);
+    update({ ...data, evaluator: false });
+    setEvaluators(evaluators.filter((evaluator) => evaluator.id != data.id));
     store.addNotification({
-      message: `Usuário atualizado com sucesso!`,
+      message: `Avaliador deletado com sucesso!`,
       type: 'success',
       insert: 'top',
       container: 'top-right',
@@ -26,12 +41,15 @@ export const EvaluatorProvider = ({ children }) => {
         onScreen: true,
       },
     });
-  }, []);
+    setLoading(false);
+  }, [update]);
 
   return (
     <EvaluatorContext.Provider
       value={{
-        updateEvaluator,
+        evaluators,
+        loading,
+        erase,
       }}
     >
       {children}

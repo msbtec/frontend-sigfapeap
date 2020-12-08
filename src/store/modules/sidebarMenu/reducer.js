@@ -18,9 +18,9 @@ const INITIAL_STATE = {
       path: '/',
     },
     {
-      name: 'Servidores',
+      name: 'Usuários',
       icon: <FiGrid />,
-      path: '/servidores',
+      path: '/usuarios',
     },
     {
       name: 'Cargos',
@@ -55,7 +55,7 @@ const INITIAL_STATE = {
     {
       name: 'Pesquisadores',
       icon: <FiGrid />,
-      path: '/tables',
+      path: '/pesquisadores',
     },
   ],
 };
@@ -64,6 +64,9 @@ export default function sidebarMenu(state = INITIAL_STATE, action) {
   switch (action.type) {
     case 'SET_MENU_ACTIVE':
       return { ...state, activeMenu: action.menu };
+      break;
+    case 'SET_MENU_ITEM':
+      return { ...state, itens: action.itens };
       break;
     default:
       return state;

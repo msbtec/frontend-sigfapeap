@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import Logo from '../../../assets/img/logo.jpg';
+import Logo from '../../../assets/img/logo.png';
 
 import { Form, Container } from './styles';
 
@@ -44,7 +44,7 @@ const SignIn = () => {
     <>
       <Container style={{ height: '100vh', padding: '0 10px' }}>
         <Form autoComplete="off" onSubmit={handleSignIn}>
-          <img src={Logo} alt="Airbnb" />
+          <img style={{ width: 200, height: 50 }} src={Logo} alt="Airbnb" />
           {error && <p>{error}</p>}
           <input
             type="text"

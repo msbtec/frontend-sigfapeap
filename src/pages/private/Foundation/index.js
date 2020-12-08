@@ -4,14 +4,11 @@ import React, {
 
 import { ModalProvider } from 'styled-react-modal';
 
-// Icons
 import { FiEdit, FiTrash } from 'react-icons/fi';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
-
-import { instituicoes } from '../../../utils/data';
 
 import { useFoundation } from '../../../hooks/foundation'
 
@@ -23,7 +20,7 @@ export default function Instituicoes() {
   const [OpenConfirm, setOpenConfirm] = useState(false);
   const [selected,setSelected] = useState(null);
 
-  const { deleteFoundation } = useFoundation();
+  const { foundations, erase } = useFoundation();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Instituições de pesquisa';
@@ -46,7 +43,7 @@ export default function Instituicoes() {
   }
 
   function submitModalConfirm() {
-    deleteFoundation(selected)
+    erase(selected)
     setOpenConfirm(!OpenConfirm);
   }
 
@@ -79,7 +76,7 @@ export default function Instituicoes() {
                 </tr>
               </thead>
               <tbody>
-                {instituicoes.map((item, index) => (
+                {foundations.map((item, index) => (
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.name }</td>

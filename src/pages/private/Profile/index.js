@@ -11,8 +11,6 @@ import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
 
-import { perfis } from '../../../utils/data';
-
 import { useProfile } from '../../../hooks/profile'
 
 let ModalForm = () => <></>;
@@ -23,7 +21,7 @@ export default function Perfil() {
   const [OpenConfirm, setOpenConfirm] = useState(false);
   const [selected,setSelected] = useState(null);
 
-  const { deleteProfile } = useProfile();
+  const { profiles, erase } = useProfile();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Perfis';
@@ -46,7 +44,7 @@ export default function Perfil() {
   }
 
   function submitModalConfirm() {
-    deleteProfile(selected)
+    erase(selected)
     setOpenConfirm(!OpenConfirm);
   }
 
@@ -77,7 +75,7 @@ export default function Perfil() {
                 </tr>
               </thead>
               <tbody>
-                {perfis.map((item, index) => (
+                {profiles.map((item, index) => (
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.name }</td>

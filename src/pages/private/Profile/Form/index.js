@@ -1,5 +1,5 @@
 import React, {
-  useState, memo, useRef, useCallback,
+  memo, useRef, useCallback,
 } from 'react';
 import { Form as Unform } from '@unform/web';
 
@@ -14,8 +14,6 @@ import getValidationErrors from '../../../../utils/getValidationErrors';
 
 import Input from '../../../../components/Input';
 
-import { access } from '../../../../utils/data';
-
 import { StyledModal } from './styles';
 
 function ModalForm({
@@ -23,12 +21,18 @@ function ModalForm({
 }) {
   const reference = useRef(null);
   const formRef = useRef(null);
-  const { insertProfile, updateProfile } = useProfile();
+  const { access, create, update } = useProfile();
 
   const handleSubmit = useCallback(
     async (data) => {
       try {
         formRef.current.setErrors({});
+
+        if (String(data.access) == "undefined") {
+          data = { ...data, access: item.access };
+        } else if (String(data.access) == "null") {
+          data = { ...data, access: "" };
+        }
 
         const schema = Yup.object().shape({
           name: Yup.string().required('Campo obrigatório'),
@@ -40,9 +44,9 @@ function ModalForm({
         });
 
         if (item) {
-          updateProfile(data);
+          update({ id: item.id, ...data });
         } else {
-          insertProfile(data);
+          create(data);
         }
 
         submit();
@@ -54,11 +58,10 @@ function ModalForm({
         }
       }
     },
-    [insertProfile, updateProfile, item, submit],
+    [create, update, item, submit],
   );
 
   return (
-
     <StyledModal
       isOpen={isOpen}
       onBackgroundClick={toggleModal}

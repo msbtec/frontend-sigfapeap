@@ -5,13 +5,11 @@ import React, {
 import { ModalProvider } from 'styled-react-modal';
 
 // Icons
-import { FiEdit, FiTrash } from 'react-icons/fi';
+import {FiDownload, FiEdit, FiTrash } from 'react-icons/fi';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
-
-import { programas } from '../../../utils/data';
 
 import { useProgram } from '../../../hooks/program'
 
@@ -23,7 +21,7 @@ export default function Program() {
   const [OpenConfirm, setOpenConfirm] = useState(false);
   const [selected,setSelected] = useState(null);
 
-  const { deleteProgram } = useProgram();
+  const { programs, erase } = useProgram();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Programas';
@@ -46,7 +44,7 @@ export default function Program() {
   }
 
   function submitModalConfirm() {
-    deleteProgram(selected)
+    erase(selected)
     setOpenConfirm(!OpenConfirm);
   }
 
@@ -72,18 +70,20 @@ export default function Program() {
                 <tr>
                   <th className="col-1">#</th>
                   <th className="col-2">Título</th>
-                  <th className="col-5">Descrição</th>
+                  <th className="col-4">Descrição</th>
                   <th className="col-1">Avaliação</th>
+                  <th className="col-1">Anexo</th>
                   <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
-                {programas.map((item, index) => (
+                {programs.map((item, index) => (
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.title }</td>
                     <td style={{ textAlign: 'center' }}>{ item.description }</td>
                     <td style={{ textAlign: 'center' }}>{ item.avaliation }</td>
+                    <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25,width: 25, cursor:'pointer'}} onClick={() => window.open(item.url,'_blank')} /></td>
                     <td style={{ textAlign: 'center' }}>
                       <button onClick={() => {
                           setSelected(item);

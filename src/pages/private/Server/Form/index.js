@@ -8,7 +8,9 @@ import { FiCheckCircle, FiX } from 'react-icons/fi';
 import * as Yup from 'yup';
 import { Form } from '../../../../components/Form';
 
-import { useAuth } from '../../../../hooks/auth';
+import { useUser } from '../../../../hooks/user';
+import { useOffice } from '../../../../hooks/office';
+import { useProfile } from '../../../../hooks/profile';
 
 import getValidationErrors from '../../../../utils/getValidationErrors';
 
@@ -21,7 +23,9 @@ function ModalForm({
 }) {
   const reference = useRef(null);
   const formRef = useRef(null);
-  const { signUp, updateUser } = useAuth();
+  const { create, update } = useUser();
+  const { offices } = useOffice();
+  const { profiles } = useProfile();
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -42,9 +46,9 @@ function ModalForm({
         });
 
         if (item) {
-          updateUser(data);
+          update({ id: item.id, ...data });
         } else {
-          signUp(data);
+          create(data);
         }
 
         submit();
@@ -56,7 +60,7 @@ function ModalForm({
         }
       }
     },
-    [signUp, updateUser, item, submit],
+    [create, update, item, submit],
   );
 
   return (
@@ -68,7 +72,7 @@ function ModalForm({
     >
 
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar servidor' : 'Atualizar servidor'}</h5>
+        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar usuário' : 'Atualizar usuário'}</h5>
         <button type="button" className="close" onClick={toggleModal}>
           <span aria-hidden="true">&times;</span>
         </button>
@@ -86,9 +90,9 @@ function ModalForm({
 
             <Input formRef={formRef} name="email" required original title="E-mail" />
 
-            <Input formRef={formRef} name="office" select={["Servidor", "Bolsista", "Pesquisador"]} required original title="Selecione seu cargo/função" />
+            <Input formRef={formRef} name="office" select={offices.map((office) => office.name)} required original title="Selecione seu cargo/função" />
 
-            <Input formRef={formRef} name="perfil" select={["Administrador", "Servidor"]} required original title="Perfil" />
+            <Input formRef={formRef} name="perfil" select={profiles.map((office) => office.name)} required original title="Perfil" />
           </div>
 
           <div className="modal-footer">

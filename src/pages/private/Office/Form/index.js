@@ -21,7 +21,7 @@ function ModalForm({
 }) {
   const reference = useRef(null);
   const formRef = useRef(null);
-  const { insertOffice, updateOffice } = useOffice();
+  const { create, update } = useOffice();
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -37,9 +37,9 @@ function ModalForm({
         });
 
         if (item) {
-          updateOffice(data);
+          update({ id: item.id, ...data });
         } else {
-          insertOffice(data);
+          create(data);
         }
 
         submit();
@@ -51,7 +51,7 @@ function ModalForm({
         }
       }
     },
-    [insertOffice, updateOffice, item, submit],
+    [create, update, item, submit],
   );
 
   return (

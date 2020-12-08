@@ -5,15 +5,73 @@ import React, {
   useContext,
 } from 'react';
 
+import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
 
 const ProfileContext = createContext({});
 
 export const ProfileProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [profiles, setProfiles] = useState();
+  const [access, setAccess] = useState([
+    {
+      label: 'Dashboard',
+      value: 'Dashboard',
+    },
+    {
+      label: 'Servidores',
+      value: 'Servidores',
+    },
+    {
+      label: 'Cargos',
+      value: 'Cargos',
+    },
+    {
+      label: 'Perfis de acesso',
+      value: 'Perfis de acesso',
+    },
+    {
+      label: 'Área de pesquisa',
+      value: 'Área de pesquisa',
+    },
+    {
+      label: 'Instituição de pesquisa',
+      value: 'Instituição de pesquisa',
+    },
+    {
+      label: 'Programas',
+      value: 'Programas',
+    },
+    {
+      label: 'Avaliadores',
+      value: 'Avaliadores',
+    },
+    {
+      label: 'Pesquisadores',
+      value: 'Pesquisadores',
+    },
+  ]);
 
-  const insertProfile = useCallback(async (email) => {
+  const [profiles, setProfiles] = useState([
+    {
+      id: uuid(),
+      name: 'Administrador',
+      access,
+    },
+    {
+      id: uuid(),
+      name: 'Servidor',
+      access: [
+        {
+          label: 'Pesquisadores',
+          value: 'Pesquisadores',
+        },
+      ],
+    },
+  ]);
+
+  const create = useCallback(async (data) => {
+    setLoading(true);
+    setProfiles([...profiles, { id: uuid(), ...data }]);
     store.addNotification({
       message: `Perfil inserido com sucesso!`,
       type: 'success',
@@ -26,9 +84,12 @@ export const ProfileProvider = ({ children }) => {
         onScreen: true,
       },
     });
-  }, []);
+    setLoading(false);
+  }, [profiles]);
 
-  const updateProfile = useCallback(async (data) => {
+  const update = useCallback(async (data) => {
+    setLoading(true);
+    setProfiles(profiles.map((item) => (item.id === data.id ? data : item)));
     store.addNotification({
       message: `Perfil atualizado com sucesso!`,
       type: 'success',
@@ -41,9 +102,12 @@ export const ProfileProvider = ({ children }) => {
         onScreen: true,
       },
     });
-  }, []);
+    setLoading(false);
+  }, [profiles]);
 
-  const deleteProfile = useCallback(async (email) => {
+  const erase = useCallback(async (data) => {
+    setLoading(true);
+    setProfiles(profiles.filter((item) => (item.id !== data.id)));
     store.addNotification({
       message: `Perfil deletado com sucesso!`,
       type: 'success',
@@ -56,14 +120,18 @@ export const ProfileProvider = ({ children }) => {
         onScreen: true,
       },
     });
-  }, []);
+    setLoading(false);
+  }, [profiles]);
 
   return (
     <ProfileContext.Provider
       value={{
-        insertProfile,
-        updateProfile,
-        deleteProfile,
+        profiles,
+        access,
+        loading,
+        create,
+        update,
+        erase,
       }}
     >
       {children}
