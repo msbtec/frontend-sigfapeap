@@ -21,8 +21,8 @@ export const ProgramProvider = ({ children }) => {
       avaliation: '4.5',
       evaluators: [
         {
-          label: 'Matheus Costa Silva',
-          value: 'Matheus Costa Silva',
+          label: 'Luan Maranhão Roberta',
+          value: 'Luan Maranhão Roberta',
         },
       ],
     },
