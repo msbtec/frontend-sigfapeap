@@ -22,7 +22,9 @@
         "styled-components": "^5.0.1",
         "styled-react-modal": "^2.0.0",
         "uuidv4": "^6.2.5",
-        "yup": "^0.29.3"
+        "yup": "^0.29.3",
+        "react-app-rewired": "^2.1.5",
+        "customize-cra": "^0.9.1"
     },
     "scripts": {
         "start": "react-app-rewired start",
