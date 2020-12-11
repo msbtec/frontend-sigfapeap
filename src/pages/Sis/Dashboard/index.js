@@ -71,7 +71,7 @@ export default function Dashboard() {
           <div className="card-body">
             <div className="row">
               <div className="col">
-                <div className="title">Programas</div>
+                <div className="title">Editais</div>
                 <div className="number pulsate">{programs.length}</div>
               </div>
               <div className="col-auto">

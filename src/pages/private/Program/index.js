@@ -2,10 +2,12 @@ import React, {
   useState, useEffect, Suspense, lazy,
 } from 'react';
 
+import { useHistory } from 'react-router-dom'
+
 import { ModalProvider } from 'styled-react-modal';
 
 // Icons
-import {FiDownload, FiEdit, FiTrash } from 'react-icons/fi';
+import { FiDownload, FiEdit, FiTrash, FiPlus } from 'react-icons/fi';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
@@ -20,6 +22,8 @@ export default function Program() {
   const [OpenForm, setOpenForm] = useState(false);
   const [OpenConfirm, setOpenConfirm] = useState(false);
   const [selected,setSelected] = useState(null);
+
+  const history = useHistory()
 
   const { programs, erase } = useProgram();
 
@@ -85,6 +89,11 @@ export default function Program() {
                     {/* <td style={{ textAlign: 'center' }}>{ item.avaliation }</td> */}
                     <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25,width: 25, cursor:'pointer'}} onClick={() => window.open(item.url,'_blank')} /></td>
                     <td style={{ textAlign: 'center' }}>
+                    <button onClick={() => {
+                         history.push(`/editais/${item.id}`)
+                      }} className="edit">
+                        <FiPlus />
+                      </button>
                       <button onClick={() => {
                           setSelected(item);
                           toggleModalForm();

@@ -9,7 +9,6 @@ import * as Yup from 'yup';
 import { Form } from '../../../../components/Form';
 
 import { useProgram } from '../../../../hooks/program';
-import { useEvaluator } from '../../../../hooks/evaluators';
 
 import getValidationErrors from '../../../../utils/getValidationErrors';
 
@@ -18,12 +17,11 @@ import Input from '../../../../components/Input';
 import { StyledModal } from './styles';
 
 function ModalForm({
-  isOpen, toggleModal, item, submit,
+  isOpen, toggleModal, id, submit,
 }) {
   const reference = useRef(null);
   const formRef = useRef(null);
-  const { create, update } = useProgram();
-  const { evaluators } = useEvaluator();
+  const { addNotice } = useProgram();
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorFile, setErrorFile] = useState('');
 
@@ -32,24 +30,11 @@ function ModalForm({
       try {
         formRef.current.setErrors({});
 
-        if (item) {
-          if (String(data.evaluators) == "undefined") {
-            data = { ...data, evaluators: item.evaluators };
-          } else if (String(data.evaluators) == "null") {
-            data = { ...data, evaluators: [] };
-          }
-        } else if (String(data.evaluators) == "undefined") {
-          data = { ...data, evaluators: [] };
-        } else if (String(data.evaluators) == "null") {
-          data = { ...data, evaluators: [] };
-        }
-
         const schema = Yup.object().shape({
           title: Yup.string().required('Campo obrigatório'),
-          description: Yup.string().required('Campo obrigatório'),
         });
 
-        if (!selectedFile && !item) {
+        if (!selectedFile) {
           setErrorFile('Campo obrigatório');
         } else {
           setErrorFile('');
@@ -59,16 +44,11 @@ function ModalForm({
           abortEarly: false,
         });
 
-        if (selectedFile || item) {
-          if (item) {
-            update({ id: item.id, url: item.url, ...data });
-          } else {
-            create({ url: window.URL.createObjectURL(selectedFile), ...data });
-          }
+        if (selectedFile) {
+          addNotice({ id, url: window.URL.createObjectURL(selectedFile), ...data });
           submit();
         }
       } catch (error) {
-        console.log(error);
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
 
@@ -76,12 +56,8 @@ function ModalForm({
         }
       }
     },
-    [create, selectedFile, update, item, submit],
+    [id, addNotice, selectedFile, submit],
   );
-
-  React.useEffect(() => {
-    console.log(evaluators);
-  }, [evaluators]);
 
   return (
     <StyledModal
@@ -91,19 +67,17 @@ function ModalForm({
     >
 
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar programa' : 'Atualizar programa'}</h5>
+        <h5 className="modal-title" id="exampleModalLabel">Cadastrar edital</h5>
         <button type="button" className="close" onClick={toggleModal}>
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
 
-      <Unform initialData={item} ref={formRef} onSubmit={handleSubmit}>
+      <Unform ref={formRef} onSubmit={handleSubmit}>
 
         <Form>
           <div className="modal-body" ref={reference}>
             <Input formRef={formRef} name="title" maxLength={18} required original title="Título" />
-
-            <Input formRef={formRef} name="description" required original title="Descrição" />
 
             <div style={{ marginBottom: 10 }} className="input-block">
               <label htmlFor="email">
@@ -130,11 +104,6 @@ function ModalForm({
                 {errorFile}
               </sup>
             </div>
-
-            {/* <Input formRef={formRef} name="avaliation"
-            required original title="Critério de avaliação" /> */}
-
-            <Input formRef={formRef} name="evaluators" required multi access={evaluators.map((user) => ({ label: user.name, value: user.name }))} title="Avaliadores" />
           </div>
 
           <div className="modal-footer">

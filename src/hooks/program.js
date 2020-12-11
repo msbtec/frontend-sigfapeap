@@ -19,6 +19,11 @@ export const ProgramProvider = ({ children }) => {
       description: 'O calor deu uma leve pausa, o clima ficou um pouco mais fresquinho e a gente já pensa em tomar aquele caldo 😋 Vem pra Quero Açaí que temos caldos quentinhos te esperando ❤🍵',
       url: 'https://cdnimg.webstaurantstore.com/images/products/large/542714/1977986.jpg',
       avaliation: '4.5',
+      notices: [
+        { id: uuid(), title: 'Abertura', url: 'https://cdnimg.webstaurantstore.com/images/products/large/542714/1977986.jpg' },
+        { id: uuid(), title: 'Retificação', url: 'https://cdnimg.webstaurantstore.com/images/products/large/542714/1977986.jpg' },
+        { id: uuid(), title: 'Final', url: 'https://cdnimg.webstaurantstore.com/images/products/large/542714/1977986.jpg' },
+      ],
       evaluators: [
         {
           label: 'Luan Maranhão Roberta',
@@ -33,6 +38,55 @@ export const ProgramProvider = ({ children }) => {
     setPrograms([...programs, { id: uuid(), ...data }]);
     store.addNotification({
       message: `Programa inserido com sucesso!`,
+      type: 'success',
+      insert: 'top',
+      container: 'top-right',
+      animationIn: ['animate__animated', 'animate__fadeIn'],
+      animationOut: ['animate__animated', 'animate__fadeOut'],
+      dismiss: {
+        duration: 5000,
+        onScreen: true,
+      },
+    });
+    setLoading(false);
+  }, [programs]);
+
+  const addNotice = useCallback(async (data) => {
+    setLoading(true);
+    setPrograms(programs.map((item) => (item.id == data.id ? {
+      ...item,
+      notices: [...item.notices, { id: uuid(), ...data }],
+    } : item)));
+    store.addNotification({
+      message: `Edital inserido com sucesso!`,
+      type: 'success',
+      insert: 'top',
+      container: 'top-right',
+      animationIn: ['animate__animated', 'animate__fadeIn'],
+      animationOut: ['animate__animated', 'animate__fadeOut'],
+      dismiss: {
+        duration: 5000,
+        onScreen: true,
+      },
+    });
+    setLoading(false);
+  }, [programs]);
+
+  const removeNotice = useCallback(async (data) => {
+    setLoading(true);
+
+    console.log(programs);
+    console.log(data);
+
+    const program = programs.map((item) => (item.id == data.idProgram ? {
+      ...item,
+      notices: item.notices.filter((notice) => notice.id != data.id),
+    } : item));
+
+    setPrograms(program);
+
+    store.addNotification({
+      message: `Edital inserido com sucesso!`,
       type: 'success',
       insert: 'top',
       container: 'top-right',
@@ -88,6 +142,8 @@ export const ProgramProvider = ({ children }) => {
         programs,
         loading,
         create,
+        addNotice,
+        removeNotice,
         update,
         erase,
       }}
