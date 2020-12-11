@@ -33,9 +33,14 @@ const INITIAL_STATE = {
       path: '/perfis',
     },
     {
-      name: 'Área de pesquisa',
+      name: 'Linha de pesquisa para vínculo',
       icon: <FiGrid />,
-      path: '/areas',
+      path: '/vinculos',
+    },
+    {
+      name: 'Linha de pesquisa',
+      icon: <FiGrid />,
+      path: '/linhas',
     },
     {
       name: 'Instituição de pesquisa',

@@ -16,6 +16,7 @@ export const FoundationProvider = ({ children }) => {
     {
       id: uuid(),
       cnpj: '10.533.202/0001-52',
+      type_institution: 'Pública',
       name: 'Universidade Federal do Amapá',
       social_name: 'UNIFAP',
       address: 'Rod. Juscelino Kubitschek, km 02 - Jardim Marco Zero, Macapá - AP, 68903-419',

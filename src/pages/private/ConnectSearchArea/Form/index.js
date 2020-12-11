@@ -8,7 +8,8 @@ import { FiCheckCircle, FiX } from 'react-icons/fi';
 import * as Yup from 'yup';
 import { Form } from '../../../../components/Form';
 
-import { useFoundation } from '../../../../hooks/foundation';
+import { useSearch } from '../../../../hooks/search';
+import { useConnectSearch } from '../../../../hooks/connectSearch';
 
 import getValidationErrors from '../../../../utils/getValidationErrors';
 
@@ -21,7 +22,7 @@ function ModalForm({
 }) {
   const reference = useRef(null);
   const formRef = useRef(null);
-  const { create, update } = useFoundation();
+  const { connectSearches, create, update } = useConnectSearch();
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -29,10 +30,7 @@ function ModalForm({
         formRef.current.setErrors({});
 
         const schema = Yup.object().shape({
-          cnpj: Yup.string().required('Campo obrigatório'),
           name: Yup.string().required('Campo obrigatório'),
-          social_name: Yup.string().required('Campo obrigatório'),
-          address: Yup.string().required('Campo obrigatório'),
         });
 
         await schema.validate(data, {
@@ -40,9 +38,9 @@ function ModalForm({
         });
 
         if (item) {
-          update({ id: item.id, ...data });
+          update({ id: item.id, connection: data.connection_area, ...data });
         } else {
-          create(data);
+          create({ connection: data.connection_area, ...data });
         }
 
         submit();
@@ -66,7 +64,7 @@ function ModalForm({
     >
 
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar instituição de pesquisa' : 'Atualizar instituição de pesquisa'}</h5>
+        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar linha de pesquisa para vínculo' : 'Atualizar linha de pesquisa para vínculo'}</h5>
         <button type="button" className="close" onClick={toggleModal}>
           <span aria-hidden="true">&times;</span>
         </button>
@@ -76,23 +74,7 @@ function ModalForm({
 
         <Form>
           <div className="modal-body" ref={reference}>
-            <Input formRef={formRef} name="cnpj" maxLength={18} required original title="CNPJ" />
-
-            <Input formRef={formRef} name="type_institution" select={["Pública", "Privada", "Privada sem Fins Lucrativos", "Instituição de Ciência e Tecnologia – ICT"]} required original title="Tipo de intituição" />
-
-            <Input formRef={formRef} name="name" required original title="Nome da instituição de pesquisa" />
-
-            <Input formRef={formRef} name="social_name" required original title="Razão social da instituição de pesquisa" />
-
-            <Input formRef={formRef} name="address" required original title="Endereço" />
-
-            <Input formRef={formRef} name="site" original title="Site" />
-
-            <Input formRef={formRef} maxLength={15} name="phone" original title="Telefone" />
-
-            <Input formRef={formRef} name="email" original title="E-mail" />
-
-            <Input formRef={formRef} name="observation" original title="Observações" />
+            <Input formRef={formRef} name="name" required original title="Nome da linha de pesquisa para vínculo" />
           </div>
 
           <div className="modal-footer">

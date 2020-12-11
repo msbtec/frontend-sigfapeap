@@ -50,12 +50,12 @@ export default function Instituicoes() {
   return (
     <>
       <div className="col-12 title">
-        <h1>Instituções de pesquisa</h1>
+        <h1>Instituições de pesquisa</h1>
       </div>
       <div className="col-12 px-0">
         <Card className="red">
           <div className="card-title">
-            <h3>Listagem de instituções de pesquisa</h3>
+            <h3>Listagem de instituições de pesquisa</h3>
           </div>
           <div className="card-title">
             <Button onClick={() => {
@@ -69,7 +69,7 @@ export default function Instituicoes() {
                 <tr>
                   <th className="col-1">#</th>
                   <th className="col-2">Nome</th>
-                  <th className="col-2">Razão social</th>
+                  <th className="col-2">Tipo</th>
                   <th className="col-2">Endereço</th>
                   <th className="col-2">E-mail</th>
                   <th>Ações</th>
@@ -80,7 +80,7 @@ export default function Instituicoes() {
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.name }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.social_name }</td>
+                    <td style={{ textAlign: 'center' }}>{ item.type_institution }</td>
                     <td style={{ textAlign: 'center' }}>{ item.address }</td>
                     <td style={{ textAlign: 'center' }}>{ item.email }</td>
                     <td style={{ textAlign: 'center' }}>

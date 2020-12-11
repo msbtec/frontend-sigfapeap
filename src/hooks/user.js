@@ -20,6 +20,8 @@ export const UserProvider = ({ children }) => {
       name: 'Adolfo Oliveira Colares',
       name_mini: 'Adolfo Colares',
       office: 'Programador',
+      address: 'Rod. Juscelino Kubitschek, km 02 - Jardim Marco Zero, Macapá - AP, 68903-419',
+      phone: '(96) 3312-1700',
       perfil: 'Administrador',
     },
     {
@@ -29,6 +31,8 @@ export const UserProvider = ({ children }) => {
       name: 'Leonardo Oliveira Colares',
       name_mini: 'Leonardo Colares',
       office: 'Programador',
+      address: 'Rod. Juscelino Kubitschek, km 02 - Jardim Marco Zero, Macapá - AP, 68903-419',
+      phone: '(96) 3312-1700',
       perfil: 'Servidor',
     },
   ]);

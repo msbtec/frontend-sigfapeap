@@ -70,8 +70,8 @@ export default function Program() {
                 <tr>
                   <th className="col-1">#</th>
                   <th className="col-2">Título</th>
-                  <th className="col-4">Descrição</th>
-                  <th className="col-1">Avaliação</th>
+                  <th className="col-5">Descrição</th>
+                  {/* <th className="col-1">Avaliação</th> */}
                   <th className="col-1">Anexo</th>
                   <th>Ações</th>
                 </tr>
@@ -82,7 +82,7 @@ export default function Program() {
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.title }</td>
                     <td style={{ textAlign: 'center' }}>{ item.description }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.avaliation }</td>
+                    {/* <td style={{ textAlign: 'center' }}>{ item.avaliation }</td> */}
                     <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25,width: 25, cursor:'pointer'}} onClick={() => window.open(item.url,'_blank')} /></td>
                     <td style={{ textAlign: 'center' }}>
                       <button onClick={() => {

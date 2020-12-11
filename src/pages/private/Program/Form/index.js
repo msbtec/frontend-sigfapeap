@@ -32,17 +32,21 @@ function ModalForm({
       try {
         formRef.current.setErrors({});
 
-        if (String(data.evaluators) == "undefined") {
-          data = { ...data, evaluators: item.evaluators };
+        if (item) {
+          if (String(data.evaluators) == "undefined") {
+            data = { ...data, evaluators: item.evaluators };
+          } else if (String(data.evaluators) == "null") {
+            data = { ...data, evaluators: [] };
+          }
+        } else if (String(data.evaluators) == "undefined") {
+          data = { ...data, evaluators: [] };
         } else if (String(data.evaluators) == "null") {
-          data = { ...data, evaluators: "" };
+          data = { ...data, evaluators: [] };
         }
 
         const schema = Yup.object().shape({
           title: Yup.string().required('Campo obrigatório'),
           description: Yup.string().required('Campo obrigatório'),
-          avaliation: Yup.string().required('Campo obrigatório'),
-          evaluators: Yup.string().required('Pelo menos um avaliador deve ser submetido'),
         });
 
         if (!selectedFile && !item) {
@@ -64,6 +68,7 @@ function ModalForm({
           submit();
         }
       } catch (error) {
+        console.log(error);
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
 
@@ -126,7 +131,8 @@ function ModalForm({
               </sup>
             </div>
 
-            <Input formRef={formRef} name="avaliation" required original title="Critério de avaliação" />
+            {/* <Input formRef={formRef} name="avaliation"
+            required original title="Critério de avaliação" /> */}
 
             <Input formRef={formRef} name="evaluators" required multi access={evaluators.map((user) => ({ label: user.name, value: user.name }))} title="Avaliadores" />
           </div>

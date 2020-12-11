@@ -74,6 +74,9 @@ function Input({
                 {select.map((item) => (
                   <option value={item}>{item}</option>
                 ))}
+
+                {(name == 'perfil' || name == 'office') && <option value="Indeifido">Indefinido</option>}
+
               </select>
             </div>
           ) : (

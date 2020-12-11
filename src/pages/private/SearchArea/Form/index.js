@@ -9,6 +9,7 @@ import * as Yup from 'yup';
 import { Form } from '../../../../components/Form';
 
 import { useSearch } from '../../../../hooks/search';
+import { useConnectSearch } from '../../../../hooks/connectSearch';
 
 import getValidationErrors from '../../../../utils/getValidationErrors';
 
@@ -22,6 +23,7 @@ function ModalForm({
   const reference = useRef(null);
   const formRef = useRef(null);
   const { searches, create, update } = useSearch();
+  const { connectSearches } = useConnectSearch();
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -63,7 +65,7 @@ function ModalForm({
     >
 
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar área de pesquisa' : 'Atualizar área de pesquisa'}</h5>
+        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar linha de pesquisa' : 'Atualizar linha de pesquisa'}</h5>
         <button type="button" className="close" onClick={toggleModal}>
           <span aria-hidden="true">&times;</span>
         </button>
@@ -73,9 +75,9 @@ function ModalForm({
 
         <Form>
           <div className="modal-body" ref={reference}>
-            <Input formRef={formRef} name="name" required original title="Nome da área de pesquisa" />
+            <Input formRef={formRef} name="name" required original title="Nome da linha de pesquisa" />
 
-            <Input formRef={formRef} name="connection_area" select={searches.map((search) => search.name)} required original title="Área vinculada" />
+            <Input formRef={formRef} name="connection_area" select={connectSearches.map((search) => search.name)} required original title="Linha vinculada" />
           </div>
 
           <div className="modal-footer">

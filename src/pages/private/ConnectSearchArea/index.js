@@ -10,7 +10,7 @@ import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
 
-import { useSearch } from '../../../hooks/search'
+import { useConnectSearch } from '../../../hooks/connectSearch'
 
 let ModalForm = () => <></>;
 let ModalConfirm = () => <></>;
@@ -20,10 +20,10 @@ export default function Pesquisas() {
   const [OpenConfirm, setOpenConfirm] = useState(false);
   const [selected,setSelected] = useState(null);
 
-  const { searches, erase } = useSearch();
+  const { connectSearches, erase } = useConnectSearch();
 
   useEffect(() => {
-    document.title = 'SIGFAPEAP - Linhas de pesquisa';
+    document.title = 'SIGFAPEAP - Linhas para vínculo';
   }, []);
 
   async function toggleModalForm() {
@@ -50,35 +50,33 @@ export default function Pesquisas() {
   return (
     <>
       <div className="col-12 title">
-        <h1>Linhas de pesquisa</h1>
+        <h1>Linhas de pesquisa para vínculo</h1>
       </div>
       <div className="col-12 px-0">
         <Card className="red">
           <div className="card-title">
-            <h3>Listagem de linhas de pesquisa</h3>
+            <h3>Listagem de linhas de pesquisa para vínculo</h3>
           </div>
           <div className="card-title">
             <Button onClick={() => {
                 setSelected(null);
                 toggleModalForm();
-            }} className="primary">Cadastrar linha de pesquisa</Button>
+            }} className="primary">Cadastrar linha de pesquisa para vínculo</Button>
           </div>
           <div className="card-body">
             <Table>
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className="col-4">Nome</th>
-                  <th className="col-4">Linha vinculada</th>
+                  <th className="col-8">Nome</th>
                   <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
-                {searches.map((item, index) => (
+                {connectSearches.map((item, index) => (
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.name }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.connection || '-' }</td>
                     <td style={{ textAlign: 'center' }}>
                       <button onClick={() => {
                           setSelected(item);

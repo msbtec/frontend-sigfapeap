@@ -11,9 +11,8 @@ export const Back = styled.a`
 
 export const Container = styled.div`
     display: flex;
-    align-items: center;
     justify-content: center;
-    /* background: rgb(47, 52, 55); */
+    flex-direction:column;
 `;
 
 export const Form = styled.form`

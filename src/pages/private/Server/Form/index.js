@@ -90,7 +90,11 @@ function ModalForm({
 
             <Input formRef={formRef} name="email" required original title="E-mail" />
 
-            <Input formRef={formRef} name="office" select={offices.map((office) => office.name)} required original title="Selecione seu cargo/função" />
+            <Input formRef={formRef} name="address" required original title="Endereço" />
+
+            <Input formRef={formRef} maxLength={15} name="phone" original title="Telefone" />
+
+            <Input formRef={formRef} name="office" select={offices.map((office) => office.name)} required original title="Cargo/função" />
 
             <Input formRef={formRef} name="perfil" select={profiles.map((office) => office.name)} required original title="Perfil" />
           </div>

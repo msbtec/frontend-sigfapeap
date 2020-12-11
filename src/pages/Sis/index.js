@@ -15,6 +15,7 @@ const Server = lazy(() => import('../private/Server'));
 const Office = lazy(() => import('../private/Office'));
 const Profile = lazy(() => import('../private/Profile'));
 const SearchArea = lazy(() => import('../private/SearchArea'));
+const ConnectSearchArea = lazy(() => import('../private/ConnectSearchArea'));
 const Foundation = lazy(() => import('../private/Foundation'));
 const Program = lazy(() => import('../private/Program'));
 const Evaluator = lazy(() => import('../private/Evaluator'));
@@ -52,7 +53,8 @@ export default function Sis() {
                                 <Route exact path='/usuarios' component={Server} />
                                 <Route exact path='/cargos' component={Office} />
                                 <Route exact path='/perfis' component={Profile} />
-                                <Route exact path='/areas' component={SearchArea} />
+                                <Route exact path='/linhas' component={SearchArea} />
+                                <Route exact path='/vinculos' component={ConnectSearchArea} />
                                 <Route exact path='/instituicoes' component={Foundation} />
                                 <Route exact path='/programas' component={Program} />
                                 <Route exact path='/avaliadores' component={Evaluator} />

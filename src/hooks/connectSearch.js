@@ -8,28 +8,26 @@ import React, {
 import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
 
-const SearchContext = createContext({});
+const ConnectSearchContext = createContext({});
 
-export const SearchProvider = ({ children }) => {
+export const ConnectSearchProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [searches, setSearches] = useState([
+  const [connectSearches, setConnectSearches] = useState([
     {
       id: uuid(),
-      name: "Filosofia",
-      connection: "Ciências Sociais",
+      name: "Ciências Sociais",
     },
     {
       id: uuid(),
-      name: "Matemática",
-      connection: "Ciências Exatas",
+      name: "Ciências Exatas",
     },
   ]);
 
   const create = useCallback(async (data) => {
     setLoading(true);
-    setSearches([...searches, { id: uuid(), ...data }]);
+    setConnectSearches([...connectSearches, { id: uuid(), ...data }]);
     store.addNotification({
-      message: `Linha de pesquisa inserida com sucesso!`,
+      message: `Linha vínculada inserida com sucesso!`,
       type: 'success',
       insert: 'top',
       container: 'top-right',
@@ -40,13 +38,13 @@ export const SearchProvider = ({ children }) => {
         onScreen: true,
       },
     });
-  }, [searches]);
+  }, [connectSearches]);
 
   const update = useCallback(async (data) => {
     setLoading(true);
-    setSearches(searches.map((item) => (item.id === data.id ? data : item)));
+    setConnectSearches(connectSearches.map((item) => (item.id === data.id ? data : item)));
     store.addNotification({
-      message: `Linha de pesquisa atualizada com sucesso!`,
+      message: `Linha vínculada atualizada com sucesso!`,
       type: 'success',
       insert: 'top',
       container: 'top-right',
@@ -58,13 +56,13 @@ export const SearchProvider = ({ children }) => {
       },
     });
     setLoading(false);
-  }, [searches]);
+  }, [connectSearches]);
 
   const erase = useCallback(async (data) => {
     setLoading(true);
-    setSearches(searches.filter((item) => (item.id !== data.id)));
+    setConnectSearches(connectSearches.filter((item) => (item.id !== data.id)));
     store.addNotification({
-      message: `Linha de pesquisa deletada com sucesso!`,
+      message: `Linha vínculada deletada com sucesso!`,
       type: 'success',
       insert: 'top',
       container: 'top-right',
@@ -76,12 +74,12 @@ export const SearchProvider = ({ children }) => {
       },
     });
     setLoading(false);
-  }, [searches]);
+  }, [connectSearches]);
 
   return (
-    <SearchContext.Provider
+    <ConnectSearchContext.Provider
       value={{
-        searches,
+        connectSearches,
         loading,
         create,
         update,
@@ -89,15 +87,15 @@ export const SearchProvider = ({ children }) => {
       }}
     >
       {children}
-    </SearchContext.Provider>
+    </ConnectSearchContext.Provider>
   );
 };
 
-export function useSearch() {
-  const context = useContext(SearchContext);
+export function useConnectSearch() {
+  const context = useContext(ConnectSearchContext);
 
   if (!context) {
-    throw Error('useSearch must be used within an SearchProvider');
+    throw Error('useSearch must be used within an ConnectSearchProvider');
   }
 
   return context;

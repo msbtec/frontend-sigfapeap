@@ -8,6 +8,8 @@ import { useResearcher } from '../../../hooks/researcher';
 import { useProgram } from '../../../hooks/program';
 import { useEvaluator } from '../../../hooks/evaluators';
 
+import Footer from '../../../components/Footer';
+
 import { CardDashboard } from '../../../components/Card';
 
 export default function Dashboard() {
@@ -31,6 +33,7 @@ export default function Dashboard() {
           !
         </h1>
       </div>
+
       <div className="col-3 px-0">
         <CardDashboard className="red">
           <div className="card-body">
@@ -46,6 +49,7 @@ export default function Dashboard() {
           </div>
         </CardDashboard>
       </div>
+
       <div className="col-3 px-0">
         <CardDashboard className="blue">
           <div className="card-body">
@@ -61,6 +65,7 @@ export default function Dashboard() {
           </div>
         </CardDashboard>
       </div>
+
       <div className="col-3 px-0">
         <CardDashboard className="green">
           <div className="card-body">
@@ -76,6 +81,7 @@ export default function Dashboard() {
           </div>
         </CardDashboard>
       </div>
+
       <div className="col-3 px-0">
         <CardDashboard className="orange">
           <div className="card-body">
@@ -91,43 +97,13 @@ export default function Dashboard() {
           </div>
         </CardDashboard>
       </div>
-      {/* <div className="col-12 px-0">
-        <Card className="red">
-          <div className="card-title">
-            <h3>Tables</h3>
-          </div>
-          <div className="card-body">
-            <Table>
-              <thead>
-                <tr>
-                  <th className="col-1">#</th>
-                  <th className="col-8">Name</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {array.map((item) => (
-                  <tr>
-                    <td style={{ textAlign: 'center' }}>{ item.id }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.name }</td>
-                    <td style={{ textAlign: 'center' }}>
-                      <button className="edit">
-                        Edit
-                      </button>
-                      <button className="info">
-                        Info
-                      </button>
-                      <button className="eraser">
-                        Trash
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          </div>
-        </Card>
-      </div> */}
+
+      <div style={{
+        backgroundColor: '#b20710', width: '82%', position: "absolute", bottom: 0,
+      }}
+      >
+        <Footer />
+      </div>
     </>
   );
 }

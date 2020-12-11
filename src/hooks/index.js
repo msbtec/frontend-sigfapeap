@@ -5,6 +5,7 @@ import { UserProvider } from "./user";
 import { OfficeProvider } from "./office";
 import { ProfileProvider } from "./profile";
 import { SearchProvider } from "./search";
+import { ConnectSearchProvider } from "./connectSearch";
 import { FoundationProvider } from "./foundation";
 import { ProgramProvider } from "./program";
 import { EvaluatorProvider } from "./evaluators";
@@ -15,17 +16,19 @@ const AppProvider = ({ children }) => (
     <UserProvider>
       <OfficeProvider>
         <ProfileProvider>
-          <SearchProvider>
-            <FoundationProvider>
-              <ProgramProvider>
-                <ResearcherProvider>
-                  <EvaluatorProvider>
-                    {children}
-                  </EvaluatorProvider>
-                </ResearcherProvider>
-              </ProgramProvider>
-            </FoundationProvider>
-          </SearchProvider>
+          <ConnectSearchProvider>
+            <SearchProvider>
+              <FoundationProvider>
+                <ProgramProvider>
+                  <ResearcherProvider>
+                    <EvaluatorProvider>
+                      {children}
+                    </EvaluatorProvider>
+                  </ResearcherProvider>
+                </ProgramProvider>
+              </FoundationProvider>
+            </SearchProvider>
+          </ConnectSearchProvider>
         </ProfileProvider>
       </OfficeProvider>
     </UserProvider>

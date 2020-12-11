@@ -38,9 +38,22 @@ function Sidebar({
     if (user.perfil == 'Servidor') {
       dispatch(toggleItem([
         {
+          name: 'Programas',
+          icon: <FiGrid />,
+          path: '/programas',
+        },
+        {
           name: 'Pesquisadores',
           icon: <FiGrid />,
           path: '/pesquisadores',
+        },
+      ]));
+    } else if (user.perfil == 'Pesquisador') {
+      dispatch(toggleItem([
+        {
+          name: 'Programas',
+          icon: <FiGrid />,
+          path: '/programas',
         },
       ]));
     }
