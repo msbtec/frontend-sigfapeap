@@ -18,10 +18,11 @@ import { useProgram } from '../../../hooks/program'
 let ModalConfirm = () => <></>;
 let ModalNotice = () => <></>;
 
-
 export default function Avaliadores() {
   const [OpenConfirm, setOpenConfirm] = useState(false);
   const [selected,setSelected] = useState([]);
+
+  const [notice, setNotice] = useState(null)
 
   const [OpenNotice, setOpenNotice] = useState(false);
 
@@ -55,6 +56,8 @@ export default function Avaliadores() {
 
   function submitModalConfirm() {
     setOpenConfirm(!OpenConfirm);
+
+    removeNotice(notice)
   }
 
   function submitModalNotice() {
@@ -69,7 +72,7 @@ export default function Avaliadores() {
       <div className="col-12 px-0">
         <Card className="red">
           <div className="card-title">
-            <h3>Listagem de editais do programa: {id}</h3>
+            <h3>Listagem de editais do programa: {programs.filter(item => item.id == id)[0].title}</h3>
           </div>
           <div className="card-title">
             <Button onClick={() => {
@@ -94,7 +97,8 @@ export default function Avaliadores() {
                     <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25,width: 25, cursor:'pointer'}} onClick={() => window.open(item.url,'_blank')} /></td>
                     <td style={{ textAlign: 'center' }}>
                       <button onClick={() => {
-                          removeNotice({idProgram: id, ...item});
+                          setNotice({idProgram: id, ...item})
+                          toggleModalConfirm();
                       }} className="eraser">
                         <FiTrash />
                       </button>

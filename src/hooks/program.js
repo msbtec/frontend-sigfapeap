@@ -86,7 +86,7 @@ export const ProgramProvider = ({ children }) => {
     setPrograms(program);
 
     store.addNotification({
-      message: `Edital inserido com sucesso!`,
+      message: `Edital removido com sucesso!`,
       type: 'success',
       insert: 'top',
       container: 'top-right',
