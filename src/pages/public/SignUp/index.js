@@ -16,11 +16,8 @@ import Form1 from './Forms/Form1';
 import Form2 from './Forms/Form2';
 import Form3 from './Forms/Form3';
 import Form4 from './Forms/Form4';
-import Form5 from './Forms/Form5';
 import Form6 from './Forms/Form6';
 import Form7 from './Forms/Form7';
-
-const Recaptcha = require('react-recaptcha');
 
 const SignUp = () => {
   const { create } = useResearcher();
@@ -34,7 +31,7 @@ const SignUp = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorFile, setErrorFile] = useState('');
 
-  const [institutions, setInstitutions] = useState([]);
+  const [emails, setEmails] = useState([]);
   const [knowledgesArea, setKnowledgesArea] = useState({
     one: '',
     two: '',
@@ -50,9 +47,11 @@ const SignUp = () => {
       try {
         formRef.current.setErrors({});
 
+        console.log(data);
+
         if (step === 1) {
           let schema;
-          if (data.type_personal == 'Pesquisador') {
+          if (data.type_personal == 'Pesquisador' || data.type_personal == 'Avaliador') {
             schema = Yup.object().shape({
               type_personal: Yup.string().required('Campo obrigatório'),
               name: Yup.string().required('Campo obrigatório'),
@@ -70,10 +69,6 @@ const SignUp = () => {
             schema = Yup.object().shape({
               type_personal: Yup.string().required('Campo obrigatório'),
               name: Yup.string().required('Campo obrigatório'),
-              rg: Yup.string().required('Campo obrigatório'),
-              orger_emitter: Yup.string().required('Campo obrigatório'),
-              uf: Yup.string().required('Campo obrigatório'),
-              date_emitter: Yup.string().required('Campo obrigatório'),
               email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
               perfil: Yup.string().required('Campo obrigatório'),
               birthday: Yup.string().required('Campo obrigatório'),
@@ -143,9 +138,6 @@ const SignUp = () => {
         } else if (step === 4) {
           setForm({ ...form, ...data });
           setStep(6);
-        } else if (step === 5) {
-          setForm({ ...form, ...data });
-          setStep(6);
         } else if (step === 6) {
           setForm({ ...form, ...data });
           setStep(7);
@@ -202,80 +194,9 @@ const SignUp = () => {
         <Unform
           ref={formRef}
           onSubmit={handleSubmit}
-        //   initialData={{
-        //     address_mail: "Residencial",
-        //     avatar: "https://pixinvent.com/materialize-material-design-admin-template/app-assets/images/user/12.jpg",
-        //     birthday: "1998-10-18",
-        //     complete_street: "casa",
-        //     confirmation_password: "password",
-        //     connection: "Sim",
-        //     connection_institution: "CLT",
-        //     country: "Brasil",
-        //     cpf: "094.384.098-50",
-        //     curriculum: "https://github.com/typicode/json-server",
-        //     date_emitter: "2008-10-21",
-        //     email: "math.cs.ceil@gmail.com",
-        //     father_name: "Roberto Maranhão da Cunha",
-        //     generate_connection: "Sim",
-        //     institution: "MSB",
-        //     knowledgesArea: {
-        //       one: {
-        //         main: "Ciências sociais",
-        //         sub1: "Ciências exatas",
-        //         sub2: "Ciências sociais",
-        //         sub3: "Ciências exatas",
-        //       },
-        //       two: {
-        //         main: "Ciências sociais",
-        //         sub1: "Ciências exatas",
-        //         sub2: "Ciências sociais",
-        //         sub3: "Ciências exatas",
-        //       },
-        //       three: {
-        //         main: "Ciências sociais",
-        //         sub1: "Ciências exatas",
-        //         sub2: "Ciências sociais",
-        //         sub3: "Ciências exatas",
-        //       },
-        //     },
-        //     mother_name: "Lorena Roberta Sophia",
-        //     municipality: "Macapá",
-        //     name: "Luan Maranhão Roberta",
-        //     neighborhood: "Araxá",
-        //     number_street: "89979",
-        //     office: "Dev",
-        //     office_time: "1 ano",
-        //     orger_emitter: "POLITEC",
-        //     password: "password",
-        //     phone: "(96) 99999-9999",
-        //     phone_cell: "(96) 88888-8888",
-        //     professional_complete_street: "casa",
-        //     professional_country: "Brasil",
-        //     professional_fax: "",
-        //     professional_municipality: "Macapá",
-        //     professional_neighborhood: "Araxá",
-        //     professional_number_street: "48035",
-        //     professional_phone: "",
-        //     professional_phone_cell: "",
-        //     professional_state: "AP",
-        //     professional_street: "Travessa Oitava da Setentrional",
-        //     professional_zipcode: "68903-777",
-        //     race: "Amarela",
-        //     received_informations: "Sim",
-        //     regime_work: "Tempo integral",
-        //     rg: "488009",
-        //     school: "Ensino Superior",
-        //     service_time: "1 ano",
-        //     sex: "Masculino",
-        //     state: "AP",
-        //     street: "Travessa Oitava da Setentrional",
-        //     type_personal: "Pesquisador",
-        //     uf: "AP",
-        //     zipcode: "68903-777",
-        //   }}
         >
           <div style={{ display: "flex", flexDirection: "column", marginBottom: 40 }}>
-            <label style={{ fontSize: 21, fontWeight: 'bold', color: '#626262' }}>Cadastro de Pesquisador</label>
+            <label style={{ fontSize: 21, fontWeight: 'bold', color: '#626262' }}>Cadastro</label>
             <label style={{ fontSize: 14, color: '#626262' }}>
               Preencha corretamente os campos abaixo para fazer parte da
               comunidade de pesquisadores da FAPEAP.
@@ -302,13 +223,6 @@ const SignUp = () => {
           {step === 2 && <Form2 formRef={formRef} />}
           {step === 3 && <Form3 formRef={formRef} />}
           {step === 4 && <Form4 formRef={formRef} />}
-          {/* {step === 5 && (
-          <Form5
-            institutions={institutions}
-            setInstitutions={setInstitutions}
-            formRef={formRef}
-          />
-          )} */}
           {step === 6 && <Form6 formRef={formRef} />}
           {step === 7 && <Form7 formRef={formRef} />}
 
@@ -335,15 +249,6 @@ const SignUp = () => {
               <Dots isFilled={step === 7} />
             </DotsContainer>
           </Footer>
-
-          {step === 7 && (
-          <div style={{ marginBottom: 20 }}>
-            <Recaptcha
-              sitekey="fmewkrifgjnoierjngoruetg"
-              render="explicit"
-            />
-          </div>
-          )}
 
           <div style={{ display: "flex", justifyContent: 'center', alignItems: "center" }}>
             <button type="submit" className="submit">

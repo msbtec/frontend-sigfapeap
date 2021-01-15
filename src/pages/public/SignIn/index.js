@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import ReactLoading from "react-loading";
+
 import Footer from '../../../components/Footer';
 
 import Logo from '../../../assets/img/logo.png';
@@ -18,7 +20,7 @@ const SignIn = () => {
   const [password_err, setPasswordErr] = useState('');
   const [error, setError] = useState('');
 
-  const { signIn } = useAuth();
+  const { signIn, loading } = useAuth();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Login';
@@ -71,9 +73,9 @@ const SignIn = () => {
               value={password}
               className={password_err != '' ? 'invalid' : ''}
             />
-            <button type="submit">Entrar</button>
+            {loading ? <ReactLoading type="spin" height="15%" width="15%" color="#b20710" /> : <button type="submit">Entrar</button>}
             <hr />
-            <Link to="/recuperacao-senha">Esqueceu sua senha?</Link>
+            {/* <Link to="/recuperacao-senha">Esqueceu sua senha?</Link> */}
             <Link to="/cadastro">Não tem uma Conta? Cadastre-se!</Link>
           </Form>
         </div>

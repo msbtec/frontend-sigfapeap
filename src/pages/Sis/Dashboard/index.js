@@ -29,7 +29,7 @@ export default function Dashboard() {
         <h1>
           Olá, Bem vindo
           {' '}
-          {user.name_mini}
+          {user.nomeReduzido}
           !
         </h1>
       </div>

@@ -4,7 +4,7 @@ import ReactNotification from 'react-notifications-component';
 import Routes from './routes';
 import 'react-notifications-component/dist/theme.css';
 
-import AppProvider from "./hooks";
+import AppProvider from './hooks';
 
 const App = () => <Routes />;
 

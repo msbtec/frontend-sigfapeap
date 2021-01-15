@@ -33,11 +33,12 @@ function ModalForm({
         formRef.current.setErrors({});
 
         const schema = Yup.object().shape({
-          name: Yup.string().required('Campo obrigatório'),
-          name_mini: Yup.string().required('Campo obrigatório'),
+          nome: Yup.string().required('Campo obrigatório'),
+          nomeReduzido: Yup.string().required('Campo obrigatório'),
           cpf: Yup.string().required('Campo obrigatório'),
           email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
           office: Yup.string().required('Campo obrigatório'),
+          phone: Yup.string().required('Campo obrigatório'),
           perfil: Yup.string().required('Campo obrigatório'),
         });
 
@@ -82,9 +83,9 @@ function ModalForm({
 
         <Form>
           <div className="modal-body" ref={reference}>
-            <Input formRef={formRef} name="name" required original title="Nome completo" />
+            <Input formRef={formRef} name="nome" required original title="Nome completo" />
 
-            <Input formRef={formRef} name="name_mini" required original title="Nome reduzido" />
+            <Input formRef={formRef} name="nomeReduzido" required original title="Nome reduzido" />
 
             <Input formRef={formRef} name="cpf" required original title="CPF" />
 
@@ -92,7 +93,7 @@ function ModalForm({
 
             <Input formRef={formRef} name="address" required original title="Endereço" />
 
-            <Input formRef={formRef} maxLength={15} name="phone" original title="Telefone" />
+            <Input formRef={formRef} maxLength={15} required name="phone" original title="Telefone/WhatsApp" />
 
             <Input formRef={formRef} name="office" select={offices.map((office) => office.name)} required original title="Cargo/função" />
 

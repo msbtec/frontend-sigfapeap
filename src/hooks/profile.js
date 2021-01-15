@@ -1,4 +1,5 @@
 import React, {
+  useEffect,
   createContext,
   useCallback,
   useState,
@@ -7,6 +8,7 @@ import React, {
 
 import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
+import api from '~/services/api';
 
 const ProfileContext = createContext({});
 
@@ -68,6 +70,21 @@ export const ProfileProvider = ({ children }) => {
       ],
     },
   ]);
+
+  useEffect(() => {
+    async function loadProfiles() {
+      api.get(`perfil`).then(({ data }) => {
+        setProfiles(data.map((item) => ({
+          ...item,
+          id: item.idPerfil,
+          name: item.nome,
+          access,
+        })));
+      });
+    }
+
+    loadProfiles();
+  }, [access]);
 
   const create = useCallback(async (data) => {
     setLoading(true);

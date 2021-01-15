@@ -75,7 +75,7 @@ function Input({
                   <option value={item}>{item}</option>
                 ))}
 
-                {(name == 'perfil' || name == 'office') && <option value="Indeifido">Indefinido</option>}
+                {(name == 'perfil' || name == 'office') && <option value="Indefinido">Outros</option>}
 
               </select>
             </div>
@@ -185,6 +185,7 @@ function Input({
             onChange={(values) => {
               inputRef.current.value = values;
               formRef.current.setFieldValue('access', values);
+              formRef.current.setFieldValue('connection_area', values);
             }}
             {...rest}
             theme={(theme) => ({

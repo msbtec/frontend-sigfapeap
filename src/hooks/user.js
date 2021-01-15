@@ -1,4 +1,5 @@
 import React, {
+  useEffect,
   createContext,
   useCallback,
   useState,
@@ -7,35 +8,23 @@ import React, {
 
 import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
+import api from '~/services/api';
 
 const UserContext = createContext({});
 
 export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState([
-    {
-      id: uuid(),
-      cpf: '041.746.580-72',
-      email: 'adolfo@mail.com',
-      name: 'Adolfo Oliveira Colares',
-      name_mini: 'Adolfo Colares',
-      office: 'Programador',
-      address: 'Rod. Juscelino Kubitschek, km 02 - Jardim Marco Zero, Macapá - AP, 68903-419',
-      phone: '(96) 3312-1700',
-      perfil: 'Administrador',
-    },
-    {
-      id: uuid(),
-      cpf: '182.440.620-70',
-      email: 'leo@mail.com',
-      name: 'Leonardo Oliveira Colares',
-      name_mini: 'Leonardo Colares',
-      office: 'Programador',
-      address: 'Rod. Juscelino Kubitschek, km 02 - Jardim Marco Zero, Macapá - AP, 68903-419',
-      phone: '(96) 3312-1700',
-      perfil: 'Servidor',
-    },
-  ]);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    async function loadUsers() {
+      api.get(`usuario`).then(({ data }) => {
+        setUsers(data.filter((item) => item.deletedAt == null));
+      });
+    }
+
+    loadUsers();
+  }, []);
 
   const create = useCallback(async (data) => {
     setLoading(true);

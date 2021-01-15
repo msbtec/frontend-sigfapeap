@@ -40,7 +40,7 @@ export default function Sis() {
             <Main>
                 <NavBar>
                     <FiMenu className="toggle" style={{ marginLeft: drag ? 170 : 0}} onClick={(e) => drag ? setDrag(false) : setDrag(true)} />
-                    <span>Olá, <span className="name">{user.name_mini}</span></span>
+                    <span>Olá, <span className="name">{user.nomeReduzido}</span></span>
                 </NavBar>
                 <div className="content">
                     <div className="row">
@@ -54,7 +54,7 @@ export default function Sis() {
                                 <Route exact path='/usuarios' component={Server} />
                                 <Route exact path='/cargos' component={Office} />
                                 <Route exact path='/perfis' component={Profile} />
-                                <Route exact path='/linhas' component={SearchArea} />
+                                <Route exact path='/areas' component={SearchArea} />
                                 <Route exact path='/vinculos' component={ConnectSearchArea} />
                                 <Route exact path='/instituicoes' component={Foundation} />
                                 <Route exact path='/programas' component={Program} />

@@ -18,9 +18,9 @@ const INITIAL_STATE = {
       path: '/',
     },
     {
-      name: 'Usuários',
+      name: 'Perfis de acesso',
       icon: <FiGrid />,
-      path: '/usuarios',
+      path: '/perfis',
     },
     {
       name: 'Cargos',
@@ -28,19 +28,14 @@ const INITIAL_STATE = {
       path: '/cargos',
     },
     {
-      name: 'Perfis de acesso',
+      name: 'Usuários',
       icon: <FiGrid />,
-      path: '/perfis',
+      path: '/usuarios',
     },
     {
-      name: 'Linha de pesquisa para vínculo',
+      name: 'Área de pesquisa',
       icon: <FiGrid />,
-      path: '/vinculos',
-    },
-    {
-      name: 'Linha de pesquisa',
-      icon: <FiGrid />,
-      path: '/linhas',
+      path: '/areas',
     },
     {
       name: 'Instituição de pesquisa',
@@ -48,9 +43,9 @@ const INITIAL_STATE = {
       path: '/instituicoes',
     },
     {
-      name: 'Programas',
+      name: 'Pesquisadores',
       icon: <FiGrid />,
-      path: '/programas',
+      path: '/pesquisadores',
     },
     {
       name: 'Avaliadores',
@@ -58,9 +53,9 @@ const INITIAL_STATE = {
       path: '/avaliadores',
     },
     {
-      name: 'Pesquisadores',
+      name: 'Programas',
       icon: <FiGrid />,
-      path: '/pesquisadores',
+      path: '/programas',
     },
   ],
 };

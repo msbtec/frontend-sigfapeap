@@ -22,7 +22,7 @@ function ModalForm({
 }) {
   const reference = useRef(null);
   const formRef = useRef(null);
-  const { searches, create, update } = useSearch();
+  const { create, update } = useSearch();
   const { connectSearches } = useConnectSearch();
 
   const handleSubmit = useCallback(
@@ -30,8 +30,15 @@ function ModalForm({
       try {
         formRef.current.setErrors({});
 
+        if (String(data.connection_area) == "undefined") {
+          data = { ...data, connection_area: item.connection_area };
+        } else if (String(data.connection_area) == "null") {
+          data = { ...data, connection_area: "" };
+        }
+
         const schema = Yup.object().shape({
           name: Yup.string().required('Campo obrigatório'),
+          connection_area: Yup.string().required('Pelo menos um acesso deve ser submetido'),
         });
 
         await schema.validate(data, {
@@ -65,19 +72,18 @@ function ModalForm({
     >
 
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar linha de pesquisa' : 'Atualizar linha de pesquisa'}</h5>
+        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar área de pesquisa' : 'Atualizar área de pesquisa'}</h5>
         <button type="button" className="close" onClick={toggleModal}>
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
 
       <Unform initialData={item} ref={formRef} onSubmit={handleSubmit}>
-
         <Form>
-          <div className="modal-body" ref={reference}>
-            <Input formRef={formRef} name="name" required original title="Nome da linha de pesquisa" />
+          <div className="modal-body" style={{ height: 400 }} ref={reference}>
+            <Input formRef={formRef} name="name" required original title="Nome da área de pesquisa" />
 
-            <Input formRef={formRef} name="connection_area" select={connectSearches.map((search) => search.name)} required original title="Linha vinculada" />
+            <Input formRef={formRef} name="connection_area" required multi access={connectSearches.map((search) => ({ value: search.name, label: search.name }))} title="Linhas de pesquisa vinculadas" />
           </div>
 
           <div className="modal-footer">

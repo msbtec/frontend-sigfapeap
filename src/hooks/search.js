@@ -16,12 +16,12 @@ export const SearchProvider = ({ children }) => {
     {
       id: uuid(),
       name: "Filosofia",
-      connection: "Ciências Sociais",
+      connection_area: [{ value: "Ciências Sociais", label: "Ciências Sociais" }],
     },
     {
       id: uuid(),
       name: "Matemática",
-      connection: "Ciências Exatas",
+      connection_area: [{ value: "Ciências Exatas", label: "Ciências Exatas" }],
     },
   ]);
 

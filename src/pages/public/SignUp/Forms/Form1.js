@@ -51,7 +51,7 @@ const Form1 = ({
   return (
     <Form>
 
-      <Input formRef={formRef} name="type_personal" setIsForeign={setIsForeign} select={["Pesquisador", "Pesquisador estrangeiro"]} required original title="Tipo Pessoa" />
+      <Input formRef={formRef} name="type_personal" setIsForeign={setIsForeign} select={["Pesquisador", "Pesquisador estrangeiro", "Avaliador"]} required original title="Tipo Pessoa" />
 
       <Input formRef={formRef} name="name" required original title="Nome completo" />
 

@@ -23,7 +23,7 @@ export default function Pesquisas() {
   const { searches, erase } = useSearch();
 
   useEffect(() => {
-    document.title = 'SIGFAPEAP - Linhas de pesquisa';
+    document.title = 'SIGFAPEAP - Áreas de pesquisa';
   }, []);
 
   async function toggleModalForm() {
@@ -50,18 +50,18 @@ export default function Pesquisas() {
   return (
     <>
       <div className="col-12 title">
-        <h1>Linhas de pesquisa</h1>
+        <h1>Áreas de pesquisa</h1>
       </div>
       <div className="col-12 px-0">
         <Card className="red">
           <div className="card-title">
-            <h3>Listagem de linhas de pesquisa</h3>
+            <h3>Listagem de áreas de pesquisa</h3>
           </div>
           <div className="card-title">
             <Button onClick={() => {
                 setSelected(null);
                 toggleModalForm();
-            }} className="primary">Cadastrar linha de pesquisa</Button>
+            }} className="primary">Cadastrar área de pesquisa</Button>
           </div>
           <div className="card-body">
             <Table>
@@ -69,7 +69,7 @@ export default function Pesquisas() {
                 <tr>
                   <th className="col-1">#</th>
                   <th className="col-4">Nome</th>
-                  <th className="col-4">Linha vinculada</th>
+                  <th className="col-4">Linhas de pesquisa</th>
                   <th>Ações</th>
                 </tr>
               </thead>
@@ -78,7 +78,7 @@ export default function Pesquisas() {
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.name }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.connection || '-' }</td>
+                    <td style={{ textAlign: 'center' }}>{ item.connection_area.map(item => String(item.label)).join(", ") }</td>
                     <td style={{ textAlign: 'center' }}>
                       <button onClick={() => {
                           setSelected(item);

@@ -81,9 +81,9 @@ export default function Servidores() {
                 {users.map((item, index) => (
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.name_mini }</td>
+                    <td style={{ textAlign: 'center' }}>{ item.nomeReduzido }</td>
                     <td style={{ textAlign: 'center' }}>{ item.email }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.office }</td>
+                    <td style={{ textAlign: 'center' }}>{ item.cargo }</td>
                     <td style={{ textAlign: 'center' }}>
                       <button onClick={() => {
                           setSelected(item);

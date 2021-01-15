@@ -6,7 +6,6 @@ import React, {
   useMemo,
 } from 'react';
 
-import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
 
 import api from '../services/api';
@@ -58,13 +57,13 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
 
     try {
-      const token = uuid();
+      const token = "frhtu59t8y54h594ht8547ht58";
       const user = {
-        id: uuid(),
+        id: "frhtu59t8y54h594ht8547ht58",
         cpf: '041.746.580-72',
         email: 'adolfo@mail.com',
-        name: 'Adolfo Oliveira Colares',
-        name_mini: 'Adolfo Colares',
+        nome: 'Adolfo Oliveira Colares',
+        nomeReduzido: 'Adolfo Colares',
         office: 'Programador',
         perfil: 'Administrador',
       };
@@ -77,7 +76,25 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('@sigfapeap:token', token);
 
       window.location.href = '/';
+
+      //   const { data } = await api.post(`/sessao/usuario`, {
+      //     cpf,
+      //     senha: password,
+      //   });
+
+      //   api.defaults.headers.authorization = `Bearer ${data.tokenUsuario}`;
+
+      //   setAuth({ token: data.tokenUsuario, user: data.usuario });
+
+      //   localStorage.setItem('@sigfapeap:user', JSON.stringify(data.usuario));
+      //   localStorage.setItem('@sigfapeap:token', data.tokenUsuario);
+
+      //   setLoading(false);
+
+    //   window.location.href = '/';
     } catch (err) {
+      setLoading(false);
+
       localStorage.removeItem('@sigfapeap:token');
       localStorage.removeItem('@sigfapeap:user');
 
@@ -96,8 +113,6 @@ export const AuthProvider = ({ children }) => {
         },
       });
     }
-
-    setLoading(false);
   }, []);
 
   return (
