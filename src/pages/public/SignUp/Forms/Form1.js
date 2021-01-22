@@ -93,7 +93,7 @@ const Form1 = ({
       </>
       )}
 
-      <Input formRef={formRef} name="email" required original title="E-mail" />
+      <Input formRef={formRef} name="email" required original title="E-mail (use virgulas para separar os endereços de e-mail)" />
 
       <Input formRef={formRef} name="sex" select={["Masculino", "Feminino", "Não declarar"]} required original title="Sexo" />
 

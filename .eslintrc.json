@@ -30,6 +30,7 @@
         "react/button-has-type": "off",
         "jsx-a11y/label-has-associated-control": "off",
         "no-unreachable": "off",
+        "no-throw-literal": "off",
         "no-unused-vars": "warn",
         "react/prop-types": "off",
         "import/no-named-as-default": "off",

@@ -58,15 +58,41 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const token = "frhtu59t8y54h594ht8547ht58";
-      const user = {
-        id: "frhtu59t8y54h594ht8547ht58",
-        cpf: '041.746.580-72',
-        email: 'adolfo@mail.com',
-        nome: 'Adolfo Oliveira Colares',
-        nomeReduzido: 'Adolfo Colares',
-        office: 'Programador',
-        perfil: 'Administrador',
-      };
+      let user = {};
+
+      if (cpf === '138.786.940-08') {
+        user = {
+          id: "frhtu59t8y54h594ht8547ht58",
+          cpf: '138.786.940-08',
+          email: 'adolfo@mail.com',
+          nome: 'Adolfo Administrador',
+          nomeReduzido: 'Adolfo Administrador',
+          office: 'Programador',
+          perfil: 'Administrador',
+        };
+      } else if (cpf === '115.720.330-29') {
+        user = {
+          id: "frhtu59t8y54h594ht8547ht58",
+          cpf: '115.720.330-29',
+          email: 'adolfo@mail.com',
+          nome: 'Adolfo Servidor',
+          nomeReduzido: 'Adolfo Servidor',
+          office: 'Programador',
+          perfil: 'Servidor',
+        };
+      } else if (cpf === '067.303.840-85') {
+        user = {
+          id: "frhtu59t8y54h594ht8547ht58",
+          cpf: '067.303.840-85',
+          email: 'adolfo@mail.com',
+          nome: 'Adolfo Pesquisador',
+          nomeReduzido: 'Adolfo Pesquisador',
+          office: 'Programador',
+          perfil: 'Pesquisador',
+        };
+      } else {
+        throw 'Ocorreu um erro ao fazer login, verifique suas credenciais!';
+      }
 
       api.defaults.headers.authorization = `Bearer ${token}`;
 

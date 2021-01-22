@@ -38,14 +38,19 @@ function Sidebar({
     if (user.perfil == 'Servidor') {
       dispatch(toggleItem([
         {
-          name: 'Programas',
-          icon: <FiGrid />,
-          path: '/programas',
-        },
-        {
           name: 'Pesquisadores',
           icon: <FiGrid />,
           path: '/pesquisadores',
+        },
+        {
+          name: 'Avaliadores',
+          icon: <FiGrid />,
+          path: '/avaliadores',
+        },
+        {
+          name: 'Programas',
+          icon: <FiGrid />,
+          path: '/programas',
         },
       ]));
     } else if (user.perfil == 'Pesquisador') {
