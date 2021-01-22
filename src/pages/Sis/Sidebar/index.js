@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 
 // Styled
-import { FiLogOut, FiGrid } from 'react-icons/fi';
+import { FiLogOut, FiGrid, FiHome } from 'react-icons/fi';
 import { connect } from 'react-redux';
 import { Side } from './styles';
 
@@ -38,6 +38,11 @@ function Sidebar({
     if (user.perfil == 'Servidor') {
       dispatch(toggleItem([
         {
+          name: 'Dashboard',
+          icon: <FiHome />,
+          path: '/',
+        },
+        {
           name: 'Pesquisadores',
           icon: <FiGrid />,
           path: '/pesquisadores',
@@ -55,6 +60,11 @@ function Sidebar({
       ]));
     } else if (user.perfil == 'Pesquisador') {
       dispatch(toggleItem([
+        {
+          name: 'Dashboard',
+          icon: <FiHome />,
+          path: '/',
+        },
         {
           name: 'Programas',
           icon: <FiGrid />,

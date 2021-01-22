@@ -34,6 +34,8 @@ export default function Dashboard() {
         </h1>
       </div>
 
+      {user.perfil === 'Administrador'
+      && (
       <div className="col-3 px-0">
         <CardDashboard className="red">
           <div className="card-body">
@@ -49,7 +51,10 @@ export default function Dashboard() {
           </div>
         </CardDashboard>
       </div>
+      )}
 
+      {user.perfil !== 'Pesquisador'
+      && (
       <div className="col-3 px-0">
         <CardDashboard className="blue">
           <div className="card-body">
@@ -65,6 +70,7 @@ export default function Dashboard() {
           </div>
         </CardDashboard>
       </div>
+      )}
 
       <div className="col-3 px-0">
         <CardDashboard className="green">
