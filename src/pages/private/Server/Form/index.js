@@ -33,13 +33,13 @@ function ModalForm({
         formRef.current.setErrors({});
 
         const schema = Yup.object().shape({
-          nome: Yup.string().required('Campo obrigatório'),
-          nomeReduzido: Yup.string().required('Campo obrigatório'),
+          name: Yup.string().required('Campo obrigatório'),
+          //   nomeReduzido: Yup.string().required('Campo obrigatório'),
           cpf: Yup.string().required('Campo obrigatório'),
           email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
-          office: Yup.string().required('Campo obrigatório'),
+          office_id: Yup.string().required('Campo obrigatório'),
           phone: Yup.string().required('Campo obrigatório'),
-          perfil: Yup.string().required('Campo obrigatório'),
+          profile_id: Yup.string().required('Campo obrigatório'),
         });
 
         await schema.validate(data, {
@@ -83,21 +83,21 @@ function ModalForm({
 
         <Form>
           <div className="modal-body" ref={reference}>
-            <Input formRef={formRef} name="nome" required original title="Nome completo" />
+            <Input formRef={formRef} name="name" required original title="Nome completo" />
 
-            <Input formRef={formRef} name="nomeReduzido" required original title="Nome reduzido" />
+            {/* <Input formRef={formRef} name="name" required original title="Nome reduzido" /> */}
 
             <Input formRef={formRef} name="cpf" required original title="CPF" />
 
             <Input formRef={formRef} name="email" required original title="E-mail" />
 
-            <Input formRef={formRef} name="address" required original title="Endereço" />
+            <Input formRef={formRef} name="address" original title="Endereço" />
 
             <Input formRef={formRef} maxLength={15} required name="phone" original title="Telefone/WhatsApp" />
 
-            <Input formRef={formRef} name="office" select={offices.map((office) => office.name)} required original title="Cargo/função" />
+            <Input formRef={formRef} name="office_id" select={offices} required original title="Cargo/função" />
 
-            <Input formRef={formRef} name="perfil" select={profiles.map((office) => office.name)} required original title="Perfil" />
+            <Input formRef={formRef} name="profile_id" select={profiles} required original title="Perfil" />
           </div>
 
           <div className="modal-footer">

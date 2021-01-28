@@ -1,8 +1,9 @@
 import React, {
-  memo, useRef, useState,
+  useEffect, memo, useRef, useState,
 } from 'react';
 
 import { FiCheckCircle, FiX } from 'react-icons/fi';
+import api from '~/services/api';
 
 import { Form } from '../../../../../components/Form';
 
@@ -16,6 +17,14 @@ function ModalForm({
   const [sub1, setSub1] = useState(false);
   const [sub2, setSub2] = useState(false);
   const [sub3, setSub3] = useState(false);
+
+  const [searchareas, setSearchareas] = useState([]);
+
+  useEffect(() => {
+    api.get(`searchareas`).then(({ data }) => {
+      setSearchareas([{ name: "Selecionar área" }, ...data]);
+    });
+  }, []);
 
   const [knoledges_areas, setKnoledges_areas] = useState({
     main: '',
@@ -51,8 +60,8 @@ function ModalForm({
               }
             }}
             >
-              {["Selecionar área", "Ciências sociais", "Ciências exatas"].map((item) => (
-                <option value={item}>{item}</option>
+              {searchareas.map((item) => (
+                <option value={item.name}>{item.name}</option>
               ))}
             </select>
           </div>
@@ -72,8 +81,8 @@ function ModalForm({
               }
             }}
             >
-              {["Selecionar área", "Ciências sociais", "Ciências exatas"].map((item) => (
-                <option value={item}>{item}</option>
+              {searchareas.map((item) => (
+                <option value={item.name}>{item.name}</option>
               ))}
             </select>
           </div>
@@ -94,8 +103,8 @@ function ModalForm({
               }
             }}
             >
-              {["Selecionar área", "Ciências sociais", "Ciências exatas"].map((item) => (
-                <option value={item}>{item}</option>
+              {searchareas.map((item) => (
+                <option value={item.name}>{item.name}</option>
               ))}
             </select>
           </div>
@@ -114,8 +123,8 @@ function ModalForm({
               }
             }}
             >
-              {["Selecionar área", "Ciências sociais", "Ciências exatas"].map((item) => (
-                <option value={item}>{item}</option>
+              {searchareas.map((item) => (
+                <option value={item.name}>{item.name}</option>
               ))}
             </select>
           </div>

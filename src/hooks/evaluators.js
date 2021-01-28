@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 
 import { store } from 'react-notifications-component';
+import api from '~/services/api';
 
 import { useResearcher } from './researcher';
 
@@ -27,22 +28,30 @@ export const EvaluatorProvider = ({ children }) => {
 
   const erase = useCallback(async (data) => {
     setLoading(true);
-    update({ ...data, evaluator: false });
-    setEvaluators(evaluators.filter((evaluator) => evaluator.id != data.id));
-    store.addNotification({
-      message: `Avaliador deletado com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    const formData = new FormData();
+    formData.append("evaluator", false);
+
+    api.put(`users/${data.id}`, formData).then(({ data: user }) => {
+      update({ ...data, evaluator: false });
+      setEvaluators(evaluators.filter((evaluator) => evaluator.id != data.id));
+    }).finally(() => {
+    //   store.addNotification({
+    //     message: `Avaliador deletado com sucesso!`,
+    //     type: 'success',
+    //     insert: 'top',
+    //     container: 'top-right',
+    //     animationIn: ['animate__animated', 'animate__fadeIn'],
+    //     animationOut: ['animate__animated', 'animate__fadeOut'],
+    //     dismiss: {
+    //       duration: 5000,
+    //       onScreen: true,
+    //     },
+    //   });
+
+      setLoading(false);
     });
-    setLoading(false);
-  }, [update]);
+  }, [evaluators, update]);
 
   return (
     <EvaluatorContext.Provider

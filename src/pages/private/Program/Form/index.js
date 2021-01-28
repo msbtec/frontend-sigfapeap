@@ -32,17 +32,17 @@ function ModalForm({
       try {
         formRef.current.setErrors({});
 
-        if (item) {
-          if (String(data.evaluators) == "undefined") {
-            data = { ...data, evaluators: item.evaluators };
-          } else if (String(data.evaluators) == "null") {
-            data = { ...data, evaluators: [] };
-          }
-        } else if (String(data.evaluators) == "undefined") {
-          data = { ...data, evaluators: [] };
-        } else if (String(data.evaluators) == "null") {
-          data = { ...data, evaluators: [] };
-        }
+        // if (item) {
+        //   if (String(data.evaluators) == "undefined") {
+        //     data = { ...data, evaluators: item.evaluators };
+        //   } else if (String(data.evaluators) == "null") {
+        //     data = { ...data, evaluators: [] };
+        //   }
+        // } else if (String(data.evaluators) == "undefined") {
+        //   data = { ...data, evaluators: [] };
+        // } else if (String(data.evaluators) == "null") {
+        //   data = { ...data, evaluators: [] };
+        // }
 
         const schema = Yup.object().shape({
           title: Yup.string().required('Campo obrigatório'),
@@ -61,14 +61,13 @@ function ModalForm({
 
         if (selectedFile || item) {
           if (item) {
-            update({ id: item.id, url: item.url, ...data });
+            update({ id: item.id, ...data }, selectedFile);
           } else {
-            create({ url: window.URL.createObjectURL(selectedFile), ...data });
+            create(data, selectedFile);
           }
           submit();
         }
       } catch (error) {
-        console.log(error);
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
 
@@ -78,10 +77,6 @@ function ModalForm({
     },
     [create, selectedFile, update, item, submit],
   );
-
-  React.useEffect(() => {
-    console.log(evaluators);
-  }, [evaluators]);
 
   return (
     <StyledModal
@@ -101,7 +96,7 @@ function ModalForm({
 
         <Form>
           <div className="modal-body" ref={reference}>
-            <Input formRef={formRef} name="title" maxLength={18} required original title="Título" />
+            <Input formRef={formRef} name="title" required original title="Título" />
 
             <Input formRef={formRef} name="description" required original title="Descrição" />
 
@@ -134,7 +129,7 @@ function ModalForm({
             {/* <Input formRef={formRef} name="avaliation"
             required original title="Critério de avaliação" /> */}
 
-            <Input formRef={formRef} name="evaluators" required multi access={evaluators.map((user) => ({ label: user.name, value: user.name }))} title="Avaliadores" />
+            {/* <Input formRef={formRef} name="evaluators" required multi access={evaluators.map((user) => ({ label: user.name, value: user.name }))} title="Avaliadores" /> */}
           </div>
 
           <div className="modal-footer">

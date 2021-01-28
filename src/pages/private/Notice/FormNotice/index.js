@@ -45,7 +45,7 @@ function ModalForm({
         });
 
         if (selectedFile) {
-          addNotice({ id, url: window.URL.createObjectURL(selectedFile), ...data });
+          addNotice({ id, ...data }, selectedFile);
           submit();
         }
       } catch (error) {
@@ -77,7 +77,7 @@ function ModalForm({
 
         <Form>
           <div className="modal-body" ref={reference}>
-            <Input formRef={formRef} name="title" maxLength={18} required original title="Título" />
+            <Input formRef={formRef} name="title" required original title="Título" />
 
             <div style={{ marginBottom: 10 }} className="input-block">
               <label htmlFor="email">

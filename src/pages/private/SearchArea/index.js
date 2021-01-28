@@ -78,7 +78,7 @@ export default function Pesquisas() {
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.name }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.connection_area.map(item => String(item.label)).join(", ") }</td>
+                    <td style={{ textAlign: 'center' }}>{ item.connections.map(item => String(item.name)).join(", ") }</td>
                     <td style={{ textAlign: 'center' }}>
                       <button onClick={() => {
                           setSelected(item);

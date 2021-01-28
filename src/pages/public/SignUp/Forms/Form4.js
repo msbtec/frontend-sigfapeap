@@ -35,7 +35,7 @@ const Form4 = ({ formRef }) => {
 
       <Input formRef={formRef} name="professional_neighborhood" disabled original title="Bairro" />
 
-      <Input formRef={formRef} name="professional_country" select={["Brasil"]} original title="País" />
+      <Input formRef={formRef} name="professional_country" select={[{ id: "Brasil", name: "Brasil" }]} original title="País" />
 
       <Input formRef={formRef} name="professional_state" disabled original title="Estado" />
 

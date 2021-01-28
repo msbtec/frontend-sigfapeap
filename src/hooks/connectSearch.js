@@ -1,4 +1,5 @@
 import React, {
+  useEffect,
   createContext,
   useCallback,
   useState,
@@ -7,21 +8,23 @@ import React, {
 
 import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
+import api from '../services/api';
 
 const ConnectSearchContext = createContext({});
 
 export const ConnectSearchProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [connectSearches, setConnectSearches] = useState([
-    {
-      id: uuid(),
-      name: "Ciências Sociais",
-    },
-    {
-      id: uuid(),
-      name: "Ciências Exatas",
-    },
-  ]);
+  const [connectSearches, setConnectSearches] = useState([]);
+
+  useEffect(() => {
+    async function loadConnections() {
+      api.get(`connections`).then(({ data }) => {
+        setConnectSearches(data);
+      });
+    }
+
+    loadConnections();
+  }, []);
 
   const create = useCallback(async (data) => {
     setLoading(true);

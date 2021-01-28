@@ -6,19 +6,14 @@ import React, {
   useContext,
 } from 'react';
 
-import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
-import api from '~/services/api';
+import api from '../services/api';
 
 const ProfileContext = createContext({});
 
 export const ProfileProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [access, setAccess] = useState([
-    {
-      label: 'Dashboard',
-      value: 'Dashboard',
-    },
+  const access = [
     {
       label: 'Servidores',
       value: 'Servidores',
@@ -51,93 +46,104 @@ export const ProfileProvider = ({ children }) => {
       label: 'Pesquisadores',
       value: 'Pesquisadores',
     },
-  ]);
+  ];
 
-  const [profiles, setProfiles] = useState([
-    {
-      id: uuid(),
-      name: 'Administrador',
-      access,
-    },
-    {
-      id: uuid(),
-      name: 'Servidor',
-      access: [
-        {
-          label: 'Pesquisadores',
-          value: 'Pesquisadores',
-        },
-      ],
-    },
-  ]);
+  const [profiles, setProfiles] = useState([]);
 
   useEffect(() => {
     async function loadProfiles() {
-      api.get(`perfil`).then(({ data }) => {
+      api.get(`profiles`).then(({ data }) => {
         setProfiles(data.map((item) => ({
           ...item,
-          id: item.idPerfil,
-          name: item.nome,
-          access,
+          access: JSON.parse(item.access),
         })));
       });
     }
 
     loadProfiles();
-  }, [access]);
+  }, []);
 
   const create = useCallback(async (data) => {
     setLoading(true);
-    setProfiles([...profiles, { id: uuid(), ...data }]);
-    store.addNotification({
-      message: `Perfil inserido com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    api.post(`profiles`, { ...data, access: JSON.stringify(data.access) }).then(({ data: profile }) => {
+      setProfiles([...profiles, { ...profile, access: JSON.parse(profile.access) }]);
+    }).finally(() => {
+      store.addNotification({
+        message: `Perfil inserido com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setLoading(false);
     });
-    setLoading(false);
   }, [profiles]);
 
   const update = useCallback(async (data) => {
     setLoading(true);
-    setProfiles(profiles.map((item) => (item.id === data.id ? data : item)));
-    store.addNotification({
-      message: `Perfil atualizado com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    api.put(`profiles/${data.id}`, { ...data, access: JSON.stringify(data.access) }).then(({ data: profile }) => {
+      setProfiles(profiles.map((item) => (item.id === data.id
+        ? { ...profile, access: JSON.parse(profile.access) } : item)));
+    }).finally(() => {
+      store.addNotification({
+        message: `Perfil atualizado com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setLoading(false);
     });
-    setLoading(false);
   }, [profiles]);
 
   const erase = useCallback(async (data) => {
     setLoading(true);
-    setProfiles(profiles.filter((item) => (item.id !== data.id)));
-    store.addNotification({
-      message: `Perfil deletado com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    api.delete(`profiles/${data.id}`).then(() => {
+      setProfiles(profiles.filter((item) => (item.id !== data.id)));
+
+      store.addNotification({
+        message: `Perfil deletado com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+    }).catch((error) => {
+      store.addNotification({
+        message: error.response.data.message,
+        type: 'danger',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+    }).finally(() => {
+      setLoading(false);
     });
-    setLoading(false);
   }, [profiles]);
 
   return (

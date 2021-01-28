@@ -8,7 +8,7 @@ import React, {
 
 import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
-import api from '~/services/api';
+import api from '../services/api';
 
 const UserContext = createContext({});
 
@@ -18,8 +18,8 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     async function loadUsers() {
-      api.get(`usuario`).then(({ data }) => {
-        setUsers(data.filter((item) => item.deletedAt == null));
+      api.get(`users`).then(({ data }) => {
+        setUsers(data.filter((item) => item.profile.name !== "Pesquisador"));
       });
     }
 
@@ -28,56 +28,83 @@ export const UserProvider = ({ children }) => {
 
   const create = useCallback(async (data) => {
     setLoading(true);
-    setUsers([...users, { id: uuid(), ...data }]);
-    store.addNotification({
-      message: `Usuário cadastrado com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    const formData = new FormData();
+    formData.append("data", JSON.stringify({ ...data, password: 'sigfapeap@2021' }));
+
+    api.post(`auth/register`, formData).then(({ data: user }) => {
+      setUsers([...users, user]);
+    }).finally(() => {
+      store.addNotification({
+        message: `Usuário cadastrado com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setLoading(false);
     });
-    setLoading(false);
   }, [users]);
 
   const update = useCallback(async (data) => {
     setLoading(true);
-    setUsers(users.map((item) => (item.id === data.id ? data : item)));
-    store.addNotification({
-      message: `Usuário atualizado com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("cpf", data.cpf);
+    formData.append("email", data.email);
+    formData.append("address", data.address);
+    formData.append("phone", data.phone);
+    formData.append("office_id", data.office_id);
+    formData.append("profile_id", data.profile_id);
+
+    api.put(`users/${data.id}`, formData).then(({ data: user }) => {
+      setUsers(users.map((item) => (item.id === data.id ? user : item)));
+    }).finally(() => {
+      store.addNotification({
+        message: `Usuário atualizado com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setLoading(false);
     });
-    setLoading(false);
   }, [users]);
 
   const erase = useCallback(async (data) => {
     setLoading(true);
-    setUsers(users.filter((item) => (item.id !== data.id)));
-    store.addNotification({
-      message: `Usuário deletado com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    api.delete(`users/${data.id}`).then(() => {
+      setUsers(users.filter((item) => (item.id !== data.id)));
+    }).finally(() => {
+      store.addNotification({
+        message: `Usuário deletado com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setLoading(false);
     });
-    setLoading(false);
   }, [users]);
 
   return (

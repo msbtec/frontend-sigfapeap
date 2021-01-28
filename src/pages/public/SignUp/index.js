@@ -99,6 +99,7 @@ const SignUp = () => {
             country: Yup.string().required('Campo obrigatório'),
             state: Yup.string().required('Campo obrigatório'),
             municipality: Yup.string().required('Campo obrigatório'),
+            phone: Yup.string().required('Campo obrigatório'),
           });
 
           await schema.validate(data, {
@@ -115,7 +116,7 @@ const SignUp = () => {
             schema = Yup.object().shape({
               institution: Yup.string().required('Campo obrigatório'),
               service_time: Yup.string().required('Campo obrigatório'),
-              office: Yup.string().required('Campo obrigatório'),
+              office_name: Yup.string().required('Campo obrigatório'),
               office_time: Yup.string().required('Campo obrigatório'),
             });
           } else if (data.connection == 'Sim' && data.generate_connection == 'Não') {
@@ -155,10 +156,8 @@ const SignUp = () => {
           });
 
           create({
-            ...form, ...data, avatar: window.URL.createObjectURL(form.avatar), evaluator: false,
-          });
-
-          signIn(data);
+            ...form, ...data, profile_id: 3, type_personal: form.type_personal === 'Avaliador' ? 'Pesquisador' : form.type_personal, evaluator: form.type_personal === 'Avaliador',
+          }, { avatar: form.avatar });
         }
       } catch (error) {
         if (error instanceof Yup.ValidationError) {

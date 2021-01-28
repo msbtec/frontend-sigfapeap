@@ -38,7 +38,7 @@ const Form2 = ({ formRef }) => {
 
       <Input formRef={formRef} name="neighborhood" disabled required original title="Bairro" />
 
-      <Input formRef={formRef} name="country" select={["Brasil"]} required original title="País" />
+      <Input formRef={formRef} name="country" select={[{ id: "Brasil", name: "Brasil" }]} required original title="País" />
 
       <Input formRef={formRef} name="state" disabled required original title="Estado" />
 

@@ -71,9 +71,9 @@ export default function Servidores() {
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className="col-3">Nome</th>
+                  <th className="col-4">Nome</th>
                   <th className="col-3">E-mail</th>
-                  <th className="col-1">Cargo/Função</th>
+                  {/* <th className="col-1">Cargo/Função</th> */}
                   <th className="col-1">Avaliador</th>
                   <th>Ações</th>
                 </tr>
@@ -84,7 +84,7 @@ export default function Servidores() {
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.name }</td>
                     <td style={{ textAlign: 'center' }}>{ item.email }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.office }</td>
+                    {/* <td style={{ textAlign: 'center' }}>{ item.office_name }</td> */}
                     <td style={{ textAlign: 'center' }}>{ item.evaluator ? 'SIM' : 'NÃO' }</td>
                     <td style={{ textAlign: 'center' }}>
                       <button onClick={() => {

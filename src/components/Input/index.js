@@ -72,10 +72,10 @@ function Input({
                 }}
               >
                 {select.map((item) => (
-                  <option value={item}>{item}</option>
+                  <option value={item.id}>{item.name}</option>
                 ))}
 
-                {(name == 'perfil' || name == 'office') && <option value="Indefinido">Outros</option>}
+                {(name == 'perfil' || name == 'office_name') && <option value="null">Outros</option>}
 
               </select>
             </div>

@@ -1,139 +1,155 @@
 import React, {
+  useEffect,
   createContext,
   useCallback,
   useState,
   useContext,
 } from 'react';
 
-import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
+import api from '../services/api';
 
 const ProgramContext = createContext({});
 
 export const ProgramProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [programs, setPrograms] = useState([
-    {
-      id: uuid(),
-      title: 'Quero Açaí',
-      description: 'O calor deu uma leve pausa, o clima ficou um pouco mais fresquinho e a gente já pensa em tomar aquele caldo 😋 Vem pra Quero Açaí que temos caldos quentinhos te esperando ❤🍵',
-      url: 'https://cdnimg.webstaurantstore.com/images/products/large/542714/1977986.jpg',
-      avaliation: '4.5',
-      notices: [
-        { id: uuid(), title: 'Abertura', url: 'https://cdnimg.webstaurantstore.com/images/products/large/542714/1977986.jpg' },
-        { id: uuid(), title: 'Retificação', url: 'https://cdnimg.webstaurantstore.com/images/products/large/542714/1977986.jpg' },
-        { id: uuid(), title: 'Final', url: 'https://cdnimg.webstaurantstore.com/images/products/large/542714/1977986.jpg' },
-      ],
-      evaluators: [
-        {
-          label: 'Luan Maranhão Roberta',
-          value: 'Luan Maranhão Roberta',
+  const [programs, setPrograms] = useState([]);
+
+  useEffect(() => {
+    async function loadPrograms() {
+      api.get(`programs`).then(({ data }) => {
+        setPrograms(data);
+      });
+    }
+
+    loadPrograms();
+  }, []);
+
+  const create = useCallback(async (data, file) => {
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(data));
+    formData.append("file", file);
+
+    api.post(`programs`, formData).then(({ data: program }) => {
+      setPrograms([...programs, program]);
+    }).finally(() => {
+      store.addNotification({
+        message: `Programa inserido com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
         },
-      ],
-    },
-  ]);
+      });
 
-  const create = useCallback(async (data) => {
-    setLoading(true);
-    setPrograms([...programs, { id: uuid(), ...data }]);
-    store.addNotification({
-      message: `Programa inserido com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+      setLoading(false);
     });
-    setLoading(false);
   }, [programs]);
 
-  const addNotice = useCallback(async (data) => {
+  const addNotice = useCallback(async (data, file) => {
     setLoading(true);
-    setPrograms(programs.map((item) => (item.id == data.id ? {
-      ...item,
-      notices: [...item.notices, { id: uuid(), ...data }],
-    } : item)));
-    store.addNotification({
-      message: `Edital inserido com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("program_id", data.id);
+    formData.append("file", file);
+
+    api.post(`files`, formData).then(() => { window.location.reload(); }).finally(() => {
+    //   store.addNotification({
+    //     message: `Edital inserido com sucesso!`,
+    //     type: 'success',
+    //     insert: 'top',
+    //     container: 'top-right',
+    //     animationIn: ['animate__animated', 'animate__fadeIn'],
+    //     animationOut: ['animate__animated', 'animate__fadeOut'],
+    //     dismiss: {
+    //       duration: 5000,
+    //       onScreen: true,
+    //     },
+    //   });
+
+      setLoading(false);
     });
-    setLoading(false);
-  }, [programs]);
+  }, []);
 
   const removeNotice = useCallback(async (data) => {
     setLoading(true);
 
-    console.log(programs);
-    console.log(data);
-
-    const program = programs.map((item) => (item.id == data.idProgram ? {
-      ...item,
-      notices: item.notices.filter((notice) => notice.id != data.id),
-    } : item));
-
-    setPrograms(program);
-
-    store.addNotification({
-      message: `Edital removido com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+    api.delete(`files/${data.id}`).then(() => {}).finally(() => {
+      store.addNotification({
+        message: `Edital removido com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+      setLoading(false);
     });
-    setLoading(false);
-  }, [programs]);
+  }, []);
 
-  const update = useCallback(async (data) => {
+  const update = useCallback(async (data, file) => {
     setLoading(true);
-    setPrograms(programs.map((item) => (item.id === data.id ? data : item)));
-    store.addNotification({
-      message: `Programa atualizado com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+
+    if (file) {
+      formData.append("file", file);
+    }
+
+    api.put(`programs/${data.id}`, formData).then(({ data: program }) => {
+      setPrograms(programs.map((item) => (item.id === data.id ? program : item)));
+    }).finally(() => {
+      store.addNotification({
+        message: `Programa atualizado com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setLoading(false);
     });
-    setLoading(false);
   }, [programs]);
 
   const erase = useCallback(async (data) => {
     setLoading(true);
-    setPrograms(programs.filter((item) => (item.id !== data.id)));
-    store.addNotification({
-      message: `Programa deletado com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    api.delete(`programs/${data.id}`).then(() => {
+      setPrograms(programs.filter((item) => (item.id !== data.id)));
+    }).finally(() => {
+      store.addNotification({
+        message: `Programa deletado com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setLoading(false);
     });
-    setLoading(false);
   }, [programs]);
 
   return (

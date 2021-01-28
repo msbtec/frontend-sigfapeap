@@ -71,9 +71,10 @@ export default function Servidores() {
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className="col-3">Nome</th>
-                  <th className="col-3">E-mail</th>
-                  <th className="col-2">Cargo/Função</th>
+                  <th className="col-4">Nome</th>
+                  <th className="col-2">E-mail</th>
+                  {/* <th className="col-2">Cargo/Função</th> */}
+                  <th className="col-2">Perfil</th>
                   <th>Ações</th>
                 </tr>
               </thead>
@@ -81,9 +82,10 @@ export default function Servidores() {
                 {users.map((item, index) => (
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.nomeReduzido }</td>
+                    <td style={{ textAlign: 'center' }}>{ item.name }</td>
                     <td style={{ textAlign: 'center' }}>{ item.email }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.cargo }</td>
+                    {/* <td style={{ textAlign: 'center' }}>{ item?.office?.name || item.office_name }</td> */}
+                    <td style={{ textAlign: 'center' }}>{ item?.profile?.name }</td>
                     <td style={{ textAlign: 'center' }}>
                       <button onClick={() => {
                           setSelected(item);

@@ -12,23 +12,23 @@ import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
 
-
-import { useProgram } from '../../../hooks/program'
+import { useProgram } from '../../../hooks/program';
+import api from '../../../services/api';
 
 let ModalConfirm = () => <></>;
 let ModalNotice = () => <></>;
 
 export default function Avaliadores() {
   const [OpenConfirm, setOpenConfirm] = useState(false);
-  const [selected,setSelected] = useState([]);
+  const [selected, setSelected] = useState([]);
 
-  const [notice, setNotice] = useState(null)
+  const [notice, setNotice] = useState(null);
 
   const [OpenNotice, setOpenNotice] = useState(false);
 
   const { programs, removeNotice } = useProgram();
 
-  let { id } = useParams();
+  const { id } = useParams();
 
   async function toggleModalNotice() {
     ModalNotice = await lazy(() => import("./FormNotice"));
@@ -36,17 +36,13 @@ export default function Avaliadores() {
     setOpenNotice(!OpenNotice);
   }
 
-
   useEffect(() => {
     document.title = 'SIGFAPEAP - Editais';
 
-    const filter = programs.filter(item => item.id == id);
-
-    if(filter.length > 0){
-        setSelected(filter[0].notices);
-    }
-  }, [programs]);
-
+    api.get(`programs/files/${id}`).then(({ data }) => {
+      setSelected(data);
+    });
+  }, [id, programs]);
 
   async function toggleModalConfirm() {
     ModalConfirm = await lazy(() => import("../../../components/Confirm"));
@@ -57,7 +53,9 @@ export default function Avaliadores() {
   function submitModalConfirm() {
     setOpenConfirm(!OpenConfirm);
 
-    removeNotice(notice)
+    removeNotice(notice);
+
+    setSelected(selected.filter(item => item.id != notice.id));
   }
 
   function submitModalNotice() {
@@ -72,12 +70,20 @@ export default function Avaliadores() {
       <div className="col-12 px-0">
         <Card className="red">
           <div className="card-title">
-            <h3>Listagem de editais do programa: {programs.filter(item => item.id == id)[0].title}</h3>
+            <h3>
+              {programs.length > 0 && programs.filter((item) => item.id == id)[0].title}
+            </h3>
           </div>
           <div className="card-title">
-            <Button onClick={() => {
-                toggleModalNotice()
-            }} className="primary">Cadastrar edital</Button>
+            <Button
+              onClick={() => {
+                toggleModalNotice();
+              }}
+              className="primary"
+            >
+              Cadastrar edital
+
+            </Button>
           </div>
           <div className="card-body">
             <Table>
@@ -94,12 +100,15 @@ export default function Avaliadores() {
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.title }</td>
-                    <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25,width: 25, cursor:'pointer'}} onClick={() => window.open(item.url,'_blank')} /></td>
+                    <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
                     <td style={{ textAlign: 'center' }}>
-                      <button onClick={() => {
-                          setNotice({idProgram: id, ...item})
+                      <button
+                        onClick={() => {
+                          setNotice(item);
                           toggleModalConfirm();
-                      }} className="eraser">
+                        }}
+                        className="eraser"
+                      >
                         <FiTrash />
                       </button>
                     </td>
@@ -113,7 +122,7 @@ export default function Avaliadores() {
 
       <Suspense fallback={null}>
         <ModalProvider>
-          <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm}  submit={submitModalConfirm} />
+          <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
           <ModalNotice isOpen={OpenNotice} toggleModal={toggleModalNotice} id={id} submit={submitModalNotice} />
         </ModalProvider>
       </Suspense>

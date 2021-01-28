@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React, {
   createContext,
   useCallback,
@@ -57,67 +58,21 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
 
     try {
-      const token = "frhtu59t8y54h594ht8547ht58";
-      let user = {};
+      const { data } = await api.post(`auth/login`, {
+        cpf,
+        password,
+      });
 
-      if (cpf === '138.786.940-08') {
-        user = {
-          id: "frhtu59t8y54h594ht8547ht58",
-          cpf: '138.786.940-08',
-          email: 'adolfo@mail.com',
-          nome: 'Adolfo Administrador',
-          nomeReduzido: 'Adolfo Administrador',
-          office: 'Programador',
-          perfil: 'Administrador',
-        };
-      } else if (cpf === '115.720.330-29') {
-        user = {
-          id: "frhtu59t8y54h594ht8547ht58",
-          cpf: '115.720.330-29',
-          email: 'adolfo@mail.com',
-          nome: 'Adolfo Servidor',
-          nomeReduzido: 'Adolfo Servidor',
-          office: 'Programador',
-          perfil: 'Servidor',
-        };
-      } else if (cpf === '067.303.840-85') {
-        user = {
-          id: "frhtu59t8y54h594ht8547ht58",
-          cpf: '067.303.840-85',
-          email: 'adolfo@mail.com',
-          nome: 'Adolfo Pesquisador',
-          nomeReduzido: 'Adolfo Pesquisador',
-          office: 'Programador',
-          perfil: 'Pesquisador',
-        };
-      } else {
-        throw 'Ocorreu um erro ao fazer login, verifique suas credenciais!';
-      }
+      api.defaults.headers.authorization = `Bearer ${data.auth.token}`;
 
-      api.defaults.headers.authorization = `Bearer ${token}`;
+      setAuth({ token: data.auth.token, user: data.user });
 
-      setAuth({ token, user });
+      localStorage.setItem('@sigfapeap:user', JSON.stringify(data.user));
+      localStorage.setItem('@sigfapeap:token', data.auth.token);
 
-      localStorage.setItem('@sigfapeap:user', JSON.stringify(user));
-      localStorage.setItem('@sigfapeap:token', token);
+      setLoading(false);
 
       window.location.href = '/';
-
-      //   const { data } = await api.post(`/sessao/usuario`, {
-      //     cpf,
-      //     senha: password,
-      //   });
-
-      //   api.defaults.headers.authorization = `Bearer ${data.tokenUsuario}`;
-
-      //   setAuth({ token: data.tokenUsuario, user: data.usuario });
-
-      //   localStorage.setItem('@sigfapeap:user', JSON.stringify(data.usuario));
-      //   localStorage.setItem('@sigfapeap:token', data.tokenUsuario);
-
-      //   setLoading(false);
-
-    //   window.location.href = '/';
     } catch (err) {
       setLoading(false);
 

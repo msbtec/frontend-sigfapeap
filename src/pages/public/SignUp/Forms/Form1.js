@@ -51,7 +51,7 @@ const Form1 = ({
   return (
     <Form>
 
-      <Input formRef={formRef} name="type_personal" setIsForeign={setIsForeign} select={["Pesquisador", "Pesquisador estrangeiro", "Avaliador"]} required original title="Tipo Pessoa" />
+      <Input formRef={formRef} name="type_personal" setIsForeign={setIsForeign} select={[{id:"Pesquisador",name:"Pesquisador"}, {id:"Pesquisador estrangeiro",name:"Pesquisador estrangeiro"}, {id:"Avaliador",name:"Avaliador"}]} required original title="Tipo Pessoa" />
 
       <Input formRef={formRef} name="name" required original title="Nome completo" />
 
@@ -87,7 +87,35 @@ const Form1 = ({
 
         <Input formRef={formRef} name="orger_emitter" required original title="Orgão Emissor" />
 
-        <Input formRef={formRef} name="uf" select={["AP", "PA"]} required original title="UF" />
+        <Input formRef={formRef} name="uf" select={[
+            {id:"AC",name:"AC"},
+            {id:"AL",name:"AL"},
+            {id:"AP",name:"AP"},
+            {id:"AM",name:"AM"},
+            {id:"BA",name:"BA"},
+            {id:"CE",name:"CE"},
+            {id:"DF",name:"DF"},
+            {id:"ES",name:"ES"},
+            {id:"GO",name:"GO"},
+            {id:"MA",name:"MA"},
+            {id:"MT",name:"MT"},
+            {id:"MS",name:"MS"},
+            {id:"MG",name:"MG"},
+            {id:"PA",name:"PA"},
+            {id:"PB",name:"PB"},
+            {id:"PR",name:"PR"},
+            {id:"PE",name:"PE"},
+            {id:"PI",name:"PI"},
+            {id:"RJ",name:"RJ"},
+            {id:"RN",name:"RN"},
+            {id:"RS",name:"RS"},
+            {id:"RO",name:"RO"},
+            {id:"RR",name:"RR"},
+            {id:"SC",name:"SC"},
+            {id:"SP",name:"SP"},
+            {id:"SE",name:"SE"},
+            {id:"TO",name:"TO"}
+        ]} required original title="UF" />
 
         <Input formRef={formRef} name="date_emitter" type="date" required original title="Data de Emissão" />
       </>
@@ -95,11 +123,11 @@ const Form1 = ({
 
       <Input formRef={formRef} name="email" required original title="E-mail (use virgulas para separar os endereços de e-mail)" />
 
-      <Input formRef={formRef} name="sex" select={["Masculino", "Feminino", "Não declarar"]} required original title="Sexo" />
+      <Input formRef={formRef} name="sex" select={[{id:"Masculino",name:"Masculino"}, {id:"Feminino",name:"Feminino"}, {id:"Não declarar",name:"Não declarar"}]} required original title="Sexo" />
 
       <Input formRef={formRef} name="birthday"  type="date" required original title="Data de Nascimento" />
 
-      <Input formRef={formRef} name="race" select={["Amarela", "Branca", "Indígena", "Não declarada", "Parda", "Preta"]} original title="Raça" />
+      <Input formRef={formRef} name="race" select={[{id:"Amarela",name:"Amarela"}, {id:"Branca",name:"Branca"}, {id:"Indígena",name:"Indígena"}, {id:"Não declarada",name:"Não declarada"}, {id:"Parda",name:"Parda"}, {id:"Preta",name:"Preta"}]} original title="Raça" />
 
       <Input formRef={formRef} name="mother_name" required original title="Nome da Mãe" />
 
@@ -107,7 +135,7 @@ const Form1 = ({
 
       <Input formRef={formRef} name="curriculum" required original title="Link Currículo Lattes" />
 
-      <Input formRef={formRef} name="school" select={["Ensino Fundamental", "Ensino Médio", "Ensino Superior", "Especialização", "Mestrado", "Doutorado", "Pós-doutorado"]} required original title="Nível Acadêmico" />
+      <Input formRef={formRef} name="school" select={[{id:"Ensino Fundamental",name:"Ensino Fundamental"}, {id:"Ensino Médio",name:"Ensino Médio"}, {id:"Ensino Superior",name:"Ensino Superior"}, {id:"Especialização",name:"Especialização"}, {id:"Mestrado",name:"Mestrado"}, {id:"Doutorado",name:"Doutorado"}, {id:"Pós-doutorado",name:"Pós-doutorado"}]} required original title="Nível Acadêmico" />
 
       {isForeign && (
       <>

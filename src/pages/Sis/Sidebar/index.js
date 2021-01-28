@@ -35,43 +35,117 @@ function Sidebar({
       };
     }
 
-    if (user.perfil == 'Servidor') {
-      dispatch(toggleItem([
-        {
-          name: 'Dashboard',
-          icon: <FiHome />,
-          path: '/',
-        },
-        {
-          name: 'Pesquisadores',
-          icon: <FiGrid />,
-          path: '/pesquisadores',
-        },
-        {
-          name: 'Avaliadores',
-          icon: <FiGrid />,
-          path: '/avaliadores',
-        },
-        {
-          name: 'Programas',
-          icon: <FiGrid />,
-          path: '/programas',
-        },
-      ]));
-    } else if (user.perfil == 'Pesquisador') {
-      dispatch(toggleItem([
-        {
-          name: 'Dashboard',
-          icon: <FiHome />,
-          path: '/',
-        },
-        {
-          name: 'Programas',
-          icon: <FiGrid />,
-          path: '/programas',
-        },
-      ]));
+    const profiles = JSON.parse(user.profile.access).map((item) => String(item.label));
+
+    const my_profiles = [{
+      name: 'Dashboard',
+      icon: <FiHome />,
+      path: '/',
+    }];
+
+    if (profiles.includes('Perfis de acesso')) {
+      my_profiles.push({
+        name: 'Perfis de acesso',
+        icon: <FiGrid />,
+        path: '/perfis',
+      });
     }
+
+    if (profiles.includes('Cargos')) {
+      my_profiles.push({
+        name: 'Cargos',
+        icon: <FiGrid />,
+        path: '/cargos',
+      });
+    }
+
+    if (profiles.includes('Servidores')) {
+      my_profiles.push({
+        name: 'Usuários',
+        icon: <FiGrid />,
+        path: '/usuarios',
+      });
+    }
+
+    if (profiles.includes('Área de pesquisa')) {
+      my_profiles.push({
+        name: 'Área de pesquisa',
+        icon: <FiGrid />,
+        path: '/areas',
+      });
+    }
+
+    if (profiles.includes('Instituição de pesquisa')) {
+      my_profiles.push({
+        name: 'Instituição de pesquisa',
+        icon: <FiGrid />,
+        path: '/instituicoes',
+      });
+    }
+
+    if (profiles.includes('Pesquisadores')) {
+      my_profiles.push({
+        name: 'Pesquisadores',
+        icon: <FiGrid />,
+        path: '/pesquisadores',
+      });
+    }
+
+    if (profiles.includes('Avaliadores')) {
+      my_profiles.push({
+        name: 'Avaliadores',
+        icon: <FiGrid />,
+        path: '/avaliadores',
+      });
+    }
+
+    if (profiles.includes('Programas')) {
+      my_profiles.push({
+        name: 'Programas',
+        icon: <FiGrid />,
+        path: '/programas',
+      });
+    }
+
+    dispatch(toggleItem(my_profiles));
+
+    // if (user.profile.name == 'Servidor') {
+    //   dispatch(toggleItem([
+    //     {
+    //       name: 'Dashboard',
+    //       icon: <FiHome />,
+    //       path: '/',
+    //     },
+    //     {
+    //       name: 'Pesquisadores',
+    //       icon: <FiGrid />,
+    //       path: '/pesquisadores',
+    //     },
+    //     {
+    //       name: 'Avaliadores',
+    //       icon: <FiGrid />,
+    //       path: '/avaliadores',
+    //     },
+    //     {
+    //       name: 'Programas',
+    //       icon: <FiGrid />,
+    //       path: '/programas',
+    //     },
+    //   ]));
+    // } else if (user.profile.name == 'Pesquisador') {
+    //   dispatch(toggleItem([
+    //     {
+    //       name: 'Dashboard',
+    //       icon: <FiHome />,
+    //       path: '/',
+    //     },
+    //     {
+    //       name: 'Programas',
+    //       icon: <FiGrid />,
+    //       path: '/programas',
+    //     },
+    //   ]));
+    // }
   }, [user, dispatch]);
 
   return (

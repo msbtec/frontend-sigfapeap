@@ -45,10 +45,14 @@ function ModalForm({
           abortEarly: false,
         });
 
+        const final = { ...data, connections_area: data.connection_area.map((connection) => String(connection.value)).join(", ") };
+
+        delete final.connection_area;
+
         if (item) {
-          update({ id: item.id, connection: data.connection_area, ...data });
+          update({ id: item.id, ...final });
         } else {
-          create({ connection: data.connection_area, ...data });
+          create(final);
         }
 
         submit();
@@ -83,7 +87,7 @@ function ModalForm({
           <div className="modal-body" style={{ height: 400 }} ref={reference}>
             <Input formRef={formRef} name="name" required original title="Nome da área de pesquisa" />
 
-            <Input formRef={formRef} name="connection_area" required multi access={connectSearches.map((search) => ({ value: search.name, label: search.name }))} title="Linhas de pesquisa vinculadas" />
+            <Input formRef={formRef} name="connection_area" required multi access={connectSearches.map((search) => ({ value: search.id, label: search.name }))} title="Linhas de pesquisa vinculadas" />
           </div>
 
           <div className="modal-footer">

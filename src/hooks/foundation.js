@@ -1,4 +1,5 @@
 import React, {
+  useEffect,
   createContext,
   useCallback,
   useState,
@@ -7,78 +8,91 @@ import React, {
 
 import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
+import api from '../services/api';
 
 const FoundationContext = createContext({});
 
 export const FoundationProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [foundations, setFoundations] = useState([
-    {
-      id: uuid(),
-      cnpj: '10.533.202/0001-52',
-      type_institution: 'Pública',
-      name: 'Universidade Federal do Amapá',
-      social_name: 'UNIFAP',
-      address: 'Rod. Juscelino Kubitschek, km 02 - Jardim Marco Zero, Macapá - AP, 68903-419',
-      site: 'www.unifap.br',
-      phone: '(96) 3312-1700',
-      email: 'suporte@unifap.br',
-      observation: 'The Federal University of Amapá is a Brazilian public institution which is located in Macapá, Brazil.',
-    },
-  ]);
+  const [foundations, setFoundations] = useState([]);
+
+  useEffect(() => {
+    async function loadFoundations() {
+      api.get(`foundations`).then(({ data }) => {
+        setFoundations(data);
+      });
+    }
+
+    loadFoundations();
+  }, []);
 
   const create = useCallback(async (data) => {
     setLoading(true);
-    setFoundations([...foundations, { id: uuid(), ...data }]);
-    store.addNotification({
-      message: `Instituição de pesquisa inserida com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    api.post(`foundations`, data).then(({ data: foundation }) => {
+      setFoundations([...foundations, foundation]);
+    }).finally(() => {
+      store.addNotification({
+        message: `Instituição de pesquisa inserida com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setLoading(false);
     });
-    setLoading(false);
   }, [foundations]);
 
   const update = useCallback(async (data) => {
     setLoading(true);
-    setFoundations(foundations.map((item) => (item.id === data.id ? data : item)));
-    store.addNotification({
-      message: `Instituição de pesquisa atualizada com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    api.put(`foundations/${data.id}`, data).then(({ data: foundation }) => {
+      setFoundations(foundations.map((item) => (item.id === data.id ? foundation : item)));
+    }).finally(() => {
+      store.addNotification({
+        message: `Instituição de pesquisa atualizada com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setLoading(false);
     });
-    setLoading(false);
   }, [foundations]);
 
   const erase = useCallback(async (data) => {
     setLoading(true);
-    setFoundations(foundations.filter((item) => (item.id !== data.id)));
-    store.addNotification({
-      message: `Instituição de pesquisa deletada com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    api.delete(`foundations/${data.id}`).then(() => {
+      setFoundations(foundations.filter((item) => (item.id !== data.id)));
+    }).finally(() => {
+      store.addNotification({
+        message: `Instituição de pesquisa deletada com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setLoading(false);
     });
-    setLoading(false);
   }, [foundations]);
 
   return (

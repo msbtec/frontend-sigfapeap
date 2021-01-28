@@ -1,103 +1,48 @@
 import React, {
+  useEffect,
   createContext,
   useCallback,
   useState,
   useContext,
 } from 'react';
 
-import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
+import api from '../services/api';
+
+import { useAuth } from "./auth";
 
 const ResearcherContext = createContext({});
 
 export const ResearcherProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState([
-    {
-      id: uuid(),
-      address_mail: "Residencial",
-      avatar: "https://pixinvent.com/materialize-material-design-admin-template/app-assets/images/user/12.jpg",
-      birthday: "1998-10-18",
-      complete_street: "casa",
-      confirmation_password: "password",
-      connection: "Sim",
-      connection_institution: "CLT",
-      country: "Brasil",
-      cpf: "094.384.098-50",
-      curriculum: "https://github.com/typicode/json-server",
-      date_emitter: "2008-10-21",
-      email: "matheus@gmail.com",
-      father_name: "Roberto Maranhão da Cunha",
-      generate_connection: "Sim",
-      institution: "MSB",
-      knowledgesArea: {
-        one: {
-          main: "Ciências sociais",
-          sub1: "Ciências exatas",
-          sub2: "Ciências sociais",
-          sub3: "Ciências exatas",
-        },
-        two: {
-          main: "Ciências sociais",
-          sub1: "Ciências exatas",
-          sub2: "Ciências sociais",
-          sub3: "Ciências exatas",
-        },
-        three: {
-          main: "Ciências sociais",
-          sub1: "Ciências exatas",
-          sub2: "Ciências sociais",
-          sub3: "Ciências exatas",
-        },
-      },
-      mother_name: "Lorena Roberta Sophia",
-      municipality: "Macapá",
-      name: "Luan Maranhão Roberta",
-      neighborhood: "Araxá",
-      number_street: "89979",
-      office: "Dev",
-      office_time: "1 ano",
-      orger_emitter: "POLITEC",
-      password: "password",
-      phone: "(96) 99999-9999",
-      phone_cell: "(96) 88888-8888",
-      professional_complete_street: "casa",
-      professional_country: "Brasil",
-      professional_fax: "",
-      professional_municipality: "",
-      professional_neighborhood: "Araxá",
-      professional_number_street: "48035",
-      professional_phone: "",
-      professional_phone_cell: "",
-      professional_state: "AP",
-      professional_street: "Travessa Oitava da Setentrional",
-      professional_zipcode: "68903-777",
-      race: "Amarela",
-      received_informations: "Sim",
-      regime_work: "Tempo integral",
-      rg: "489809",
-      school: "Ensino Superior",
-      service_time: "1 ano",
-      sex: "Masculino",
-      state: "AP",
-      street: "Travessa Oitava da Setentrional",
-      type_personal: "Pesquisador",
-      uf: "AP",
-      zipcode: "68903-777",
-      evaluator: true,
-    },
-  ]);
+  const [users, setUsers] = useState([]);
 
-  React.useEffect(() => {
-    console.log(users);
-  }, [users]);
+  const { signIn } = useAuth();
 
-  const create = useCallback(async (data) => {
+  useEffect(() => {
+    async function loadResearches() {
+      api.get(`users`).then(({ data }) => {
+        setUsers(data.filter((item) => item.profile.name === "Pesquisador"));
+      });
+    }
+
+    loadResearches();
+  }, []);
+
+  const create = useCallback(async (data, avatar) => {
     setLoading(true);
-    setUsers([...users, { id: uuid(), ...data }]);
 
-    // console.log(users);
-    // console.log(data);
+    delete data.confirmation_password;
+
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(data));
+    formData.append("avatar", avatar.avatar);
+
+    api.post(`/auth/register`, formData).then(({ data: user }) => {
+      setUsers([...users, user]);
+
+      signIn({ cpf: user.cpf, password: data.password });
+    });
 
     store.addNotification({
       message: `Pesquisador cadastrado com sucesso!`,
@@ -111,43 +56,60 @@ export const ResearcherProvider = ({ children }) => {
         onScreen: true,
       },
     });
+
     setLoading(false);
   }, [users]);
 
   const update = useCallback(async (data) => {
     setLoading(true);
-    setUsers(users.map((item) => (item.id === data.id ? data : item)));
-    store.addNotification({
-      message: `Pesquisador atualizado com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    const formData = new FormData();
+    formData.append("evaluator", data.evaluator);
+
+    api.put(`users/${data.id}`, formData).then(({ data: user }) => {
+      setUsers(users.map((item) => (item.id === data.id
+        ? {
+          ...user, evaluator: data.evaluator, profile: item.profile, office: item.office,
+        } : item)));
+    }).finally(() => {
+      store.addNotification({
+        message: `Pesquisador atualizado com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setLoading(false);
     });
-    setLoading(false);
   }, [users]);
 
   const erase = useCallback(async (data) => {
     setLoading(true);
-    setUsers(users.filter((item) => (item.id !== data.id)));
-    store.addNotification({
-      message: `Pesquisador deletado com sucesso!`,
-      type: 'success',
-      insert: 'top',
-      container: 'top-right',
-      animationIn: ['animate__animated', 'animate__fadeIn'],
-      animationOut: ['animate__animated', 'animate__fadeOut'],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
+
+    api.delete(`users/${data.id}`).then(() => {
+      setUsers(users.filter((item) => (item.id !== data.id)));
+    }).finally(() => {
+      store.addNotification({
+        message: `Pesquisador deletado com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setLoading(false);
     });
-    setLoading(false);
   }, [users]);
 
   return (

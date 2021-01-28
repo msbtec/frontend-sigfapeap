@@ -73,7 +73,7 @@ function ModalForm({
 
         <Form>
           <div className="modal-body" ref={reference}>
-            <Input formRef={formRef} name="evaluator" select={["SIM", "NÃO"]} required original title="Avaliador" />
+            <Input formRef={formRef} name="evaluator" select={[{ id: "SIM", name: "SIM" }, { id: "NÃO", name: "NÃO" }]} required original title="Avaliador" />
           </div>
 
           <div className="modal-footer">

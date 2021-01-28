@@ -78,7 +78,7 @@ function ModalForm({
           <div className="modal-body" ref={reference}>
             <Input formRef={formRef} name="cnpj" maxLength={18} required original title="CNPJ" />
 
-            <Input formRef={formRef} name="type_institution" select={["Pública", "Privada", "Privada sem Fins Lucrativos", "Instituição de Ciência e Tecnologia – ICT"]} required original title="Tipo de intituição" />
+            <Input formRef={formRef} name="type_institution" select={[{ id: "Pública", name: "Pública" }, { id: "Privada", name: "Privada" }, { id: "Privada sem Fins Lucrativos", name: "Privada sem Fins Lucrativos" }, { id: "Instituição de Ciência e Tecnologia – ICT", name: "Instituição de Ciência e Tecnologia – ICT" }]} required original title="Tipo de intituição" />
 
             <Input formRef={formRef} name="name" required original title="Nome da instituição de pesquisa" />
 
