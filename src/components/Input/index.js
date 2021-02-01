@@ -185,6 +185,7 @@ function Input({
             onChange={(values) => {
               inputRef.current.value = values;
               formRef.current.setFieldValue('access', values);
+              formRef.current.setFieldValue('programs', values);
               formRef.current.setFieldValue('connection_area', values);
             }}
             {...rest}

@@ -31,6 +31,7 @@
         "jsx-a11y/label-has-associated-control": "off",
         "no-unreachable": "off",
         "no-throw-literal": "off",
+        "no-shadow": "off",
         "no-unused-vars": "warn",
         "react/prop-types": "off",
         "import/no-named-as-default": "off",

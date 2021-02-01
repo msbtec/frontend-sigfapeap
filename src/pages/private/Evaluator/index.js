@@ -4,26 +4,28 @@ import React, {
 
 import { ModalProvider } from 'styled-react-modal';
 
-import { FiTrash } from 'react-icons/fi';
+import { FiTrash, FiUserPlus } from 'react-icons/fi';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 
-import { useEvaluator } from '../../../hooks/evaluators'
+import { useEvaluator } from '../../../hooks/evaluators';
+
+const Form = import("./Form");
 
 let ModalConfirm = () => <></>;
+let ModalForm = () => <></>;
 
 export default function Avaliadores() {
   const [OpenForm, setOpenForm] = useState(false);
   const [OpenConfirm, setOpenConfirm] = useState(false);
-  const [selected,setSelected] = useState(null);
+  const [selected, setSelected] = useState(null);
 
   const { evaluators, erase } = useEvaluator();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Avaliadores';
   }, []);
-
 
   async function toggleModalConfirm() {
     ModalConfirm = await lazy(() => import("../../../components/Confirm"));
@@ -32,8 +34,18 @@ export default function Avaliadores() {
   }
 
   function submitModalConfirm() {
-    erase(selected)
+    erase(selected);
     setOpenConfirm(!OpenConfirm);
+  }
+
+  async function toggleModalForm() {
+    ModalForm = await lazy(() => Form);
+
+    setOpenForm(!OpenForm);
+  }
+
+  function submitModalForm() {
+    setOpenForm(!OpenForm);
   }
 
   return (
@@ -71,10 +83,22 @@ export default function Avaliadores() {
                     <td style={{ textAlign: 'center' }}>{ item.cpf }</td>
                     <td style={{ textAlign: 'center' }}>{ item.email }</td>
                     <td style={{ textAlign: 'center' }}>
-                      <button onClick={() => {
+                      <button
+                        onClick={() => {
+                            setSelected(item);
+                            toggleModalForm();
+                        }}
+                        className="edit"
+                      >
+                        <FiUserPlus />
+                      </button>
+                      <button
+                        onClick={() => {
                           setSelected(item);
                           toggleModalConfirm();
-                      }} className="eraser">
+                        }}
+                        className="eraser"
+                      >
                         <FiTrash />
                       </button>
                     </td>
@@ -88,7 +112,13 @@ export default function Avaliadores() {
 
       <Suspense fallback={null}>
         <ModalProvider>
-          <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
+        <ModalForm isOpen={OpenForm} toggleModal={toggleModalForm} item={selected} submit={submitModalForm} />
+
+          <ModalConfirm
+            isOpen={OpenConfirm}
+            toggleModal={toggleModalConfirm}
+            submit={submitModalConfirm}
+          />
         </ModalProvider>
       </Suspense>
     </>

@@ -89,7 +89,9 @@ export default function Program() {
                     {/* <td style={{ textAlign: 'center' }}>{ item.avaliation }</td> */}
                     <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25,width: 25, cursor:'pointer'}} onClick={() => window.open(item.url,'_blank')} /></td>
                     <td style={{ textAlign: 'center' }}>
-                    <button onClick={() => {}} className="edit">
+                    <button onClick={() => {
+                         history.push(`/avaliadores/${item.id}`)
+                      }} className="edit">
                         <FiUserPlus />
                     </button>
                     <button onClick={() => {
