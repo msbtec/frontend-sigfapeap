@@ -26,7 +26,7 @@ export default function Avaliadores() {
 
   const [OpenNotice, setOpenNotice] = useState(false);
 
-  const { programs, removeNotice } = useProgram();
+  const { programs, removeNotice, status } = useProgram();
 
   const { id } = useParams();
 
@@ -42,7 +42,7 @@ export default function Avaliadores() {
     api.get(`programs/files/${id}`).then(({ data }) => {
       setSelected(data);
     });
-  }, [id, programs]);
+  }, [id, programs, status]);
 
   async function toggleModalConfirm() {
     ModalConfirm = await lazy(() => import("../../../components/Confirm"));

@@ -6,7 +6,6 @@ import React, {
   useContext,
 } from 'react';
 
-import { store } from 'react-notifications-component';
 import api from '~/services/api';
 
 import { useResearcher } from './researcher';
@@ -18,12 +17,19 @@ export const EvaluatorProvider = ({ children }) => {
 
   const { users, update } = useResearcher();
 
-  const [evaluators, setEvaluators] = useState(
-    users.filter((researche) => researche.evaluator),
-  );
+  const [evaluators, setEvaluators] = useState([]);
+
+  async function loadEvaluators() {
+    api.get(`evaluators`).then(({ data }) => {
+      setEvaluators(data.map((item) => ({
+        ...item,
+        programs: item.programs.map((program) => ({ label: program.title, value: program.id })),
+      })));
+    });
+  }
 
   useEffect(() => {
-    setEvaluators(users.filter((researche) => researche.evaluator));
+    loadEvaluators();
   }, [users]);
 
   const erase = useCallback(async (data) => {
@@ -59,6 +65,7 @@ export const EvaluatorProvider = ({ children }) => {
         evaluators,
         loading,
         erase,
+        loadEvaluators,
       }}
     >
       {children}

@@ -15,6 +15,8 @@ export const ProgramProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [programs, setPrograms] = useState([]);
 
+  const [status, setStatus] = useState(false);
+
   useEffect(() => {
     async function loadPrograms() {
       api.get(`programs`).then(({ data }) => {
@@ -60,28 +62,30 @@ export const ProgramProvider = ({ children }) => {
     formData.append("program_id", data.id);
     formData.append("file", file);
 
-    api.post(`files`, formData).then(() => { window.location.reload(); }).finally(() => {
-    //   store.addNotification({
-    //     message: `Edital inserido com sucesso!`,
-    //     type: 'success',
-    //     insert: 'top',
-    //     container: 'top-right',
-    //     animationIn: ['animate__animated', 'animate__fadeIn'],
-    //     animationOut: ['animate__animated', 'animate__fadeOut'],
-    //     dismiss: {
-    //       duration: 5000,
-    //       onScreen: true,
-    //     },
-    //   });
+    api.post(`files`, formData).then(() => {
+      store.addNotification({
+        message: `Edital inserido com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
 
+      setStatus(!status);
+    }).finally(() => {
       setLoading(false);
     });
-  }, []);
+  }, [status]);
 
   const removeNotice = useCallback(async (data) => {
     setLoading(true);
 
-    api.delete(`files/${data.id}`).then(() => {}).finally(() => {
+    api.delete(`files/${data.id}`).then(() => { }).finally(() => {
       store.addNotification({
         message: `Edital removido com sucesso!`,
         type: 'success',
@@ -162,6 +166,7 @@ export const ProgramProvider = ({ children }) => {
         removeNotice,
         update,
         erase,
+        status,
       }}
     >
       {children}

@@ -6,7 +6,6 @@ import React, {
   useContext,
 } from 'react';
 
-import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
 import api from '../services/api';
 

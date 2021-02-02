@@ -13,6 +13,8 @@ import getValidationErrors from '../../../../utils/getValidationErrors';
 
 import Input from '../../../../components/Input';
 
+import { useEvaluator } from '../../../../hooks/evaluators';
+
 import { StyledModal } from './styles';
 import api from '~/services/api';
 
@@ -23,6 +25,8 @@ function ModalForm({
   const formRef = useRef(null);
 
   const [programs, setPrograms] = useState([]);
+
+  const { loadEvaluators } = useEvaluator();
 
   useEffect(() => {
     api.get(`programs`).then(({ data }) => {
@@ -36,11 +40,11 @@ function ModalForm({
     });
   }, [item]);
 
-  //   useEffect(() => {
-  //     if (formRef.current) {
-  //       formRef.current.setFieldValue('programs', programs);
-  //     }
-  //   }, [formRef, programs, item]);
+  useEffect(() => {
+    if (formRef.current) {
+      formRef.current.setFieldValue('programs', programs);
+    }
+  }, [formRef, programs, item]);
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -48,7 +52,7 @@ function ModalForm({
         formRef.current.setErrors({});
 
         const schema = Yup.object().shape({
-          programs: Yup.string().required('Campo obrigatório'),
+          programs: Yup.string().required('Campo obrigatório').nullable(),
         });
 
         await schema.validate(data, {
@@ -75,8 +79,10 @@ function ModalForm({
           await api.put(`programs/${ids[i]}`, formData);
         }
 
+        loadEvaluators();
+
         store.addNotification({
-          message: `Programa adicionado com sucesso!`,
+          message: `Programa(s) adicionado(s) com sucesso!`,
           type: 'success',
           insert: 'top',
           container: 'top-right',
@@ -114,9 +120,7 @@ function ModalForm({
         </button>
       </div>
 
-      {/* {programs.length > 0
-      && ( */}
-      <Unform ref={formRef} onSubmit={handleSubmit}>
+      <Unform initialData={item} ref={formRef} onSubmit={handleSubmit}>
         <Form>
           <div className="modal-body" style={{ height: 400 }} ref={reference}>
             <Input
@@ -143,7 +147,6 @@ function ModalForm({
           </div>
         </Form>
       </Unform>
-      {/* )} */}
 
     </StyledModal>
   );

@@ -8,8 +8,12 @@ import { ModalProvider } from 'styled-react-modal';
 
 import { FiLink, FiTrash } from 'react-icons/fi';
 
+import { store } from 'react-notifications-component';
+
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
+
+import { useEvaluator } from "../../../hooks/evaluators";
 
 import { useProgram } from '../../../hooks/program';
 import api from '../../../services/api';
@@ -26,6 +30,8 @@ export default function Avaliadores() {
   const [OpenNotice, setOpenNotice] = useState(false);
 
   const { programs } = useProgram();
+
+  const { loadEvaluators } = useEvaluator();
 
   const { id } = useParams();
 
@@ -62,6 +68,20 @@ export default function Avaliadores() {
 
     api.put(`programs/${selected.id}`,formData).then(({data}) => {
         setSelected(selected.evaluators.filter((item) => item.id != notice.id));
+        loadEvaluators();
+
+        store.addNotification({
+            message: `Usuário deletado com sucesso!`,
+            type: 'success',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+          });
     });
   }
 
