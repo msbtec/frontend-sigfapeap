@@ -167,7 +167,7 @@ const SignUp = () => {
         }
       }
     },
-    [signIn, create, step, form, selectedFile, knowledgesArea],
+    [create, step, form, selectedFile, knowledgesArea],
   );
 
   function title(step) {

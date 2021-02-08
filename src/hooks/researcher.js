@@ -16,6 +16,7 @@ const ResearcherContext = createContext({});
 export const ResearcherProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
+  const [usersAll, setUsersAll] = useState([]);
 
   const { signIn } = useAuth();
 
@@ -23,6 +24,7 @@ export const ResearcherProvider = ({ children }) => {
     async function loadResearches() {
       api.get(`users`).then(({ data }) => {
         setUsers(data.filter((item) => item.profile.name === "Pesquisador"));
+        setUsersAll(data.filter((item) => item.profile.name === "Pesquisador"));
       });
     }
 
@@ -58,7 +60,7 @@ export const ResearcherProvider = ({ children }) => {
     });
 
     setLoading(false);
-  }, [users]);
+  }, [users, signIn]);
 
   const update = useCallback(async (data) => {
     setLoading(true);
@@ -116,6 +118,8 @@ export const ResearcherProvider = ({ children }) => {
     <ResearcherContext.Provider
       value={{
         users,
+        usersAll,
+        setUsers,
         loading,
         create,
         update,

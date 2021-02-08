@@ -27,15 +27,13 @@ export default function Dashboard() {
     <>
       <div className="col-12 title">
         <h1>
-          Olá, Bem vindo
+          Olá, Bem vindo(a)
           {' '}
           {user.name}
           !
         </h1>
       </div>
 
-      {user.profile.name === 'Administrador'
-      && (
       <div className="col-3 px-0">
         <CardDashboard className="red">
           <div className="card-body">
@@ -51,10 +49,7 @@ export default function Dashboard() {
           </div>
         </CardDashboard>
       </div>
-      )}
 
-      {user.profile.name !== 'Pesquisador'
-      && (
       <div className="col-3 px-0">
         <CardDashboard className="blue">
           <div className="card-body">
@@ -70,7 +65,6 @@ export default function Dashboard() {
           </div>
         </CardDashboard>
       </div>
-      )}
 
       <div className="col-3 px-0">
         <CardDashboard className="green">

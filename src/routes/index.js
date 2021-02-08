@@ -10,6 +10,7 @@ import { useAuth } from '../hooks/auth';
 const SignIn = lazy(() => import('../pages/public/SignIn'));
 const SignUp = lazy(() => import('../pages/public/SignUp'));
 const RecoveryPassword = lazy(() => import('../pages/public/RecoveryPassword'));
+const ResetPassword = lazy(() => import('../pages/public/ResetPassword'));
 
 const Sis = lazy(() => import('../pages/Sis'));
 
@@ -41,6 +42,7 @@ export default function Routes(){
                     <Route path="/login" component={SignIn} />
                     <Route path="/cadastro" component={SignUp} />
                     <Route path="/recuperacao-senha" component={RecoveryPassword} />
+                    <Route path="/resetar-senha" component={ResetPassword} />
                     <Provider store={store}>
                         <PrivateRoute path="/" component={Sis}/>
                     </Provider>

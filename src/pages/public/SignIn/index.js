@@ -75,7 +75,7 @@ const SignIn = () => {
             />
             {loading ? <ReactLoading type="spin" height="15%" width="15%" color="#b20710" /> : <button type="submit">Entrar</button>}
             <hr />
-            {/* <Link to="/recuperacao-senha">Esqueceu sua senha?</Link> */}
+            <Link to="/recuperacao-senha">Esqueceu sua senha?</Link>
             <Link to="/cadastro">Não tem uma Conta? Cadastre-se!</Link>
           </Form>
         </div>

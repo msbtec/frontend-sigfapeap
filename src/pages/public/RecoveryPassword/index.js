@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
+import { store } from 'react-notifications-component';
 import Logo from '../../../assets/img/logo.png';
 
 import { Form, Container } from './styles';
-
-import { useAuth } from '../../../hooks/auth';
 
 const RecoveryPassword = () => {
   const [email, setEmail] = useState('');
   const [email_err, setEmailErr] = useState('');
   const [error, setError] = useState('');
-
-  const { recovery } = useAuth();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Recuperação de senha';
@@ -27,7 +24,18 @@ const RecoveryPassword = () => {
     if (!email) {
       setError('Preencha todos os campos para entrar ');
     } else {
-      recovery(email);
+      store.addNotification({
+        message: `Foi enviada uma solicitação de recuperação de senha para: ${email}!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
     }
   }
 

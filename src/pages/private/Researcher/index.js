@@ -12,6 +12,8 @@ import { Button } from '../../../components/Button';
 
 import { useResearcher } from '../../../hooks/researcher'
 
+import Filters from '../../../components/Filters'
+
 const Form = import("./Form");
 const Confirm = import("../../../components/Confirm")
 
@@ -67,6 +69,9 @@ export default function Servidores() {
             }} className="primary">Cadastrar usuário</Button>
           </div> */}
           <div className="card-body">
+
+            <Filters />
+
             <Table>
               <thead>
                 <tr>

@@ -6,9 +6,10 @@ import React, {
   useContext,
 } from 'react';
 
-import { uuid } from 'uuidv4';
 import { store } from 'react-notifications-component';
 import api from '../services/api';
+
+import { useAuth } from './auth';
 
 const UserContext = createContext({});
 
@@ -16,10 +17,12 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
 
+  const { user } = useAuth();
+
   useEffect(() => {
     async function loadUsers() {
       api.get(`users`).then(({ data }) => {
-        setUsers(data.filter((item) => item.profile.name !== "Pesquisador"));
+        setUsers(data.filter((item) => item.profile.name !== "Pesquisador" && item.id !== user?.id));
       });
     }
 
@@ -30,7 +33,7 @@ export const UserProvider = ({ children }) => {
     setLoading(true);
 
     const formData = new FormData();
-    formData.append("data", JSON.stringify({ ...data, password: 'sigfapeap@2021' }));
+    formData.append("data", JSON.stringify({ ...data, name: String(data.name).toUpperCase(), password: 'sigfapeap@2021' }));
 
     api.post(`auth/register`, formData).then(({ data: user }) => {
       setUsers([...users, user]);
@@ -56,7 +59,7 @@ export const UserProvider = ({ children }) => {
     setLoading(true);
 
     const formData = new FormData();
-    formData.append("name", data.name);
+    formData.append("name", String(data.name).toUpperCase());
     formData.append("cpf", data.cpf);
     formData.append("email", data.email);
     formData.append("address", data.address);

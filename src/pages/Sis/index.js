@@ -1,5 +1,5 @@
 import React, { useState, Suspense, lazy } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Link } from 'react-router-dom';
 
 import { useAuth } from '../../hooks/auth';
 
@@ -11,6 +11,7 @@ import Sidebar from './Sidebar';
 import { Wrap, Main, NavBar } from './styles';
 
 const Dashboard = lazy(() => import('./Dashboard'));
+const MyProfile = lazy(() => import('../private/MyProfile'));
 const Server = lazy(() => import('../private/Server'));
 const Office = lazy(() => import('../private/Office'));
 const Profile = lazy(() => import('../private/Profile'));
@@ -41,7 +42,9 @@ export default function Sis() {
             <Main>
                 <NavBar>
                     <FiMenu className="toggle" style={{ marginLeft: drag ? 170 : 0}} onClick={(e) => drag ? setDrag(false) : setDrag(true)} />
-                    <span>Olá, <span className="name">{user.name}</span></span>
+                    <Link to="/perfil">
+                        <span>Olá, <span className="name">{user.name}</span></span>
+                    </Link>
                 </NavBar>
                 <div className="content">
                     <div className="row">
@@ -52,6 +55,7 @@ export default function Sis() {
                         }>
                             <Switch>
                                 <Route exact path='/' component={Dashboard} />
+                                <Route exact path='/perfil' component={MyProfile} />
                                 <Route exact path='/usuarios' component={Server} />
                                 <Route exact path='/cargos' component={Office} />
                                 <Route exact path='/perfis' component={Profile} />
