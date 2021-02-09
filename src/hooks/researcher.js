@@ -18,17 +18,25 @@ export const ResearcherProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
   const [usersAll, setUsersAll] = useState([]);
 
+  const [totalPages, setTotalPages] = useState(0);
+
   const { signIn } = useAuth();
 
-  useEffect(() => {
-    async function loadResearches() {
-      api.get(`users`).then(({ data }) => {
-        setUsers(data.filter((item) => item.profile.name === "Pesquisador"));
-        setUsersAll(data.filter((item) => item.profile.name === "Pesquisador"));
-      });
-    }
+  async function loadResearches(page = 0) {
+    api.get(`users`, {
+      params: {
+        page: page + 1,
+        researcher: true,
+      },
+    }).then(({ data }) => {
+      setTotalPages(data.lastPage);
+      setUsers(data.data);
+      setUsersAll(data.data);
+    });
+  }
 
-    loadResearches();
+  useEffect(() => {
+    loadResearches(0);
   }, []);
 
   const create = useCallback(async (data, avatar) => {
@@ -117,6 +125,9 @@ export const ResearcherProvider = ({ children }) => {
   return (
     <ResearcherContext.Provider
       value={{
+        totalPages,
+        loadResearches,
+        setTotalPages,
         users,
         usersAll,
         setUsers,

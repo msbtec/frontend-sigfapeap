@@ -10,6 +10,8 @@ import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
 
+import ReactPaginate from 'react-paginate';
+
 import { useUser } from '../../../hooks/user'
 
 const Form = import("./Form");
@@ -23,7 +25,7 @@ export default function Servidores() {
   const [OpenConfirm, setOpenConfirm] = useState(false);
   const [selected,setSelected] = useState(null);
 
-  const { users, erase } = useUser();
+  const { users, erase, totalPages, loadUsers } = useUser();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Usuários';
@@ -105,6 +107,20 @@ export default function Servidores() {
               </tbody>
             </Table>
           </div>
+
+          <ReactPaginate
+                previousLabel={"anterior"}
+                nextLabel={"próximo"}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                pageCount={totalPages}
+                marginPagesDisplayed={4}
+                // pageRangeDisplayed={5}
+                onPageChange={(page) => loadUsers(page.selected)}
+                containerClassName={"pagination"}
+                subContainerClassName={"pages pagination"}
+                activeClassName={"active"}
+            />
         </Card>
       </div>
 

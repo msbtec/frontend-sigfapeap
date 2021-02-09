@@ -11,22 +11,16 @@ import { useResearcher } from '../../hooks/researcher';
 import { useSearch } from '../../hooks/search';
 import api from '~/services/api';
 
-function Filters() {
-  const { setUsers } = useResearcher();
+function Filters({ filters, setFilters }) {
+  const { setUsers, setTotalPages } = useResearcher();
   const { searches } = useSearch();
-
-  const [filters, setFilters] = useState({
-    type_personal: null,
-    nameOrCpf: null,
-    school: null,
-    knowledgesArea: null,
-  });
 
   async function search() {
     api.post(`users/search`, {
       params: filters,
     }).then(({ data }) => {
-      setUsers(data);
+      setTotalPages(data.lastPage);
+      setUsers(data.data);
     });
   }
 
@@ -42,7 +36,7 @@ function Filters() {
           type="text"
           placeholder="Buscar por nome ou CPF"
           onChange={(e) => {
-            setFilters({ ...filters, nameOrCpf: String(e.target.value).toUpperCase() });
+            setFilters({ ...filters, page: 1, nameOrCpf: String(e.target.value).toUpperCase() });
           }}
         />
         <div style={{
@@ -57,10 +51,10 @@ function Filters() {
             <select
               style={{ flex: 1, marginRight: 10 }}
               onChange={(e) => {
-                setFilters({ ...filters, type_personal: e.target.value == "Todos" ? null : e.target.value });
+                setFilters({ ...filters, page: 1, type_personal: e.target.value == "Todos" ? null : e.target.value });
               }}
             >
-              {[{ id: null, name: "Todos" }, { id: "Pesquisador", name: "Pesquisador" }, { id: "Pesquisador estrangeiro", name: "Pesquisador estrangeiro" }, { id: "Avaliador", name: "Avaliador" }].map((item) => (
+              {[{ id: null, name: "Todos" }, { id: "Pesquisador", name: "Pesquisador" }, { id: "Pesquisador estrangeiro", name: "Pesquisador estrangeiro" }].map((item) => (
                 <option value={item.id}>{item.name}</option>
               ))}
             </select>
@@ -74,7 +68,7 @@ function Filters() {
             <select
               style={{ flex: 1, marginRight: 10 }}
               onChange={(e) => {
-                setFilters({ ...filters, school: e.target.value == "Todos" ? null : e.target.value });
+                setFilters({ ...filters, page: 1, school: e.target.value == "Todos" ? null : e.target.value });
               }}
             >
               {[{ id: null, name: "Todos" },
@@ -94,7 +88,7 @@ function Filters() {
             <select
               style={{ flex: 1 }}
               onChange={(e) => {
-                setFilters({ ...filters, knowledgesArea: e.target.value == "Todos" ? null : e.target.value });
+                setFilters({ ...filters, page: 1, knowledgesArea: e.target.value == "Todos" ? null : e.target.value });
               }}
             >
               {[{ id: null, name: "Todos" }, ...searches].map((item) => (

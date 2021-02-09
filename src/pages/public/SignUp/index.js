@@ -2,6 +2,8 @@ import React, {
   useState, useEffect, useRef, useCallback,
 } from 'react';
 
+import ReactLoading from "react-loading";
+
 import { Form as Unform } from '@unform/web';
 import * as Yup from 'yup';
 import { useResearcher } from '../../../hooks/researcher';
@@ -20,7 +22,7 @@ import Form6 from './Forms/Form6';
 import Form7 from './Forms/Form7';
 
 const SignUp = () => {
-  const { create } = useResearcher();
+  const { create, loading } = useResearcher();
   const { signIn } = useAuth();
 
   const formRef = useRef(null);
@@ -70,7 +72,6 @@ const SignUp = () => {
               type_personal: Yup.string().required('Campo obrigatório'),
               name: Yup.string().required('Campo obrigatório'),
               email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
-              perfil: Yup.string().required('Campo obrigatório'),
               birthday: Yup.string().required('Campo obrigatório'),
               mother_name: Yup.string().required('Campo obrigatório'),
               curriculum: Yup.string().required('Campo obrigatório'),
@@ -156,7 +157,7 @@ const SignUp = () => {
           });
 
           create({
-            ...form, ...data, profile_id: 3, type_personal: form.type_personal === 'Avaliador' ? 'Pesquisador' : form.type_personal, evaluator: form.type_personal === 'Avaliador',
+            ...form, ...data, name: String(form.name).toUpperCase(), profile_id: 3, type_personal: form.type_personal === 'Avaliador' ? 'Pesquisador' : form.type_personal, evaluator: form.type_personal === 'Avaliador',
           }, { avatar: form.avatar });
         }
       } catch (error) {
@@ -249,11 +250,21 @@ const SignUp = () => {
             </DotsContainer>
           </Footer>
 
-          <div style={{ display: "flex", justifyContent: 'center', alignItems: "center" }}>
+          {loading
+            ? <ReactLoading type="spin" height="15%" width="15%" color="#b20710" />
+            : (
+              <div style={{ display: "flex", justifyContent: 'center', alignItems: "center" }}>
+                <button type="submit" className="submit">
+                  Continuar
+                </button>
+              </div>
+            )}
+
+          {/* <div style={{ display: "flex", justifyContent: 'center', alignItems: "center" }}>
             <button type="submit" className="submit">
               Continuar
             </button>
-          </div>
+          </div> */}
 
         </Unform>
       </Content>

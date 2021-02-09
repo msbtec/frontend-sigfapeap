@@ -10,6 +10,8 @@ import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
 
+import ReactPaginate from 'react-paginate';
+
 import { useResearcher } from '../../../hooks/researcher'
 
 import Filters from '../../../components/Filters'
@@ -25,7 +27,15 @@ export default function Servidores() {
   const [OpenConfirm, setOpenConfirm] = useState(false);
   const [selected,setSelected] = useState(null);
 
-  const { users, erase } = useResearcher();
+  const [filters, setFilters] = useState({
+    page: 1,
+    type_personal: null,
+    nameOrCpf: null,
+    school: null,
+    knowledgesArea: null,
+  });
+
+  const { users, erase, loadResearches, totalPages } = useResearcher();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Pesquisadores';
@@ -70,7 +80,7 @@ export default function Servidores() {
           </div> */}
           <div className="card-body">
 
-            <Filters />
+            <Filters filters={filters} setFilters={setFilters} />
 
             <Table>
               <thead>
@@ -110,6 +120,21 @@ export default function Servidores() {
               </tbody>
             </Table>
           </div>
+
+            <ReactPaginate
+                previousLabel={"anterior"}
+                nextLabel={"próximo"}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                pageCount={totalPages}
+                marginPagesDisplayed={4}
+                pageRangeDisplayed={5}
+                forcePage={filters.page - 1}
+                onPageChange={(page) => { setFilters({...filters, page: page.selected + 1}); /* loadResearches(page.selected); */ }}
+                containerClassName={"pagination"}
+                subContainerClassName={"pages pagination"}
+                activeClassName={"active"}
+            />
         </Card>
       </div>
 

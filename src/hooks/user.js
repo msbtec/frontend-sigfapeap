@@ -17,16 +17,25 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
 
+  const [totalPages, setTotalPages] = useState(0);
+
   const { user } = useAuth();
 
-  useEffect(() => {
-    async function loadUsers() {
-      api.get(`users`).then(({ data }) => {
-        setUsers(data.filter((item) => item.profile.name !== "Pesquisador" && item.id !== user?.id));
-      });
-    }
+  async function loadUsers(page = 0) {
+    api.get(`users`, {
+      params: {
+        page: page + 1,
+        researcher: null,
+      },
+    }).then(({ data }) => {
+      setTotalPages(data.lastPage);
+      setUsers(data.data);
+      // setUsers(data.data.filter((item) => item.id !== user?.id));
+    });
+  }
 
-    loadUsers();
+  useEffect(() => {
+    loadUsers(0);
   }, []);
 
   const create = useCallback(async (data) => {
@@ -113,6 +122,8 @@ export const UserProvider = ({ children }) => {
   return (
     <UserContext.Provider
       value={{
+        totalPages,
+        loadUsers,
         users,
         loading,
         create,
