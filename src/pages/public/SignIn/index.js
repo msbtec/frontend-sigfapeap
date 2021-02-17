@@ -56,7 +56,7 @@ const SignIn = () => {
             <input
               type="text"
               name="cpf"
-              placeholder="CPF"
+              placeholder="CPF (somente números)"
               onChange={(e) => {
                 const formatted = cpfMask(e.target.value);
                 setCPF(formatted);

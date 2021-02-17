@@ -55,7 +55,11 @@ function Input({
               <label>
                 {title}
                 {' '}
-                {required && <sup>*</sup>}
+                {required && (
+                <sup>
+                  *
+                </sup>
+                )}
               </label>
               <select
                 onFocus={handleInputFocus}

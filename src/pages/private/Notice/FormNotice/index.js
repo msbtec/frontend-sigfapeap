@@ -4,6 +4,7 @@ import React, {
 import { Form as Unform } from '@unform/web';
 
 import { FiCheckCircle, FiX, FiFile } from 'react-icons/fi';
+import { store } from 'react-notifications-component';
 
 import * as Yup from 'yup';
 import { Form } from '../../../../components/Form';
@@ -83,7 +84,7 @@ function ModalForm({
               <label htmlFor="email">
                 PDF
                 {' '}
-                <sup style={{ color: "#f00" }}>*</sup>
+                <sup style={{ color: "#f00" }}>* Tamanho máximo 3MB</sup>
               </label>
               <div style={{ marginBottom: 5 }} />
               <label style={{ borderColor: errorFile ? "#f00" : "#dee2e6" }} className="file-input">
@@ -91,7 +92,27 @@ function ModalForm({
                   type="file"
                   placeholder="Arquivo"
                   accept=".pdf"
-                  onChange={(e) => setSelectedFile(e.target.files[0])}
+                  // onChange={(e) => setSelectedFile(e.target.files[0])}
+                  onChange={(e) => {
+                    if (e.target.files.length > 0) {
+                      if (e.target.files[0].size / 1000000 > 3) {
+                        store.addNotification({
+                          message: `Seu arquivo: ${e.target.files[0].name} é muito grande! Max:${3}MB`,
+                          type: 'danger',
+                          insert: 'top',
+                          container: 'top-right',
+                          animationIn: ['animate__animated', 'animate__fadeIn'],
+                          animationOut: ['animate__animated', 'animate__fadeOut'],
+                          dismiss: {
+                            duration: 5000,
+                            onScreen: true,
+                          },
+                        });
+                      } else {
+                        setSelectedFile(e.target.files[0]);
+                      }
+                    }
+                  }}
                 />
                 <div className="text">
                   { selectedFile ? selectedFile.name : 'Selecione um arquivo PDF' }
