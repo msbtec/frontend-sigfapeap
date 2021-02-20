@@ -48,7 +48,7 @@ export const UserProvider = ({ children }) => {
       setUsers([...users, user]);
     }).finally(() => {
       store.addNotification({
-        message: `Usuário cadastrado com sucesso! A senha da conta será enviada por e-mail.`,
+        message: `Usuário cadastrado com sucesso! A informações de acesso da conta será enviada por e-mail.`,
         type: 'success',
         insert: 'top',
         container: 'top-right',

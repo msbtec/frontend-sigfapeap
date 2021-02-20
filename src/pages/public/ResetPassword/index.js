@@ -43,7 +43,7 @@ const RecoveryPassword = props => {
         } else {
           setLoading(true);
           api
-            .post(`password/reset`, { ...password, token })
+            .put(`passwords`, { password: password.password, token })
             .then(({ data }) => {
               store.addNotification({
                 message: `Senha atualizada com sucesso!`,
@@ -57,6 +57,10 @@ const RecoveryPassword = props => {
                   onScreen: true,
                 },
               });
+
+              setTimeout(() => {
+                window.location.href = "/"
+              }, 5000)
             })
             .catch(error => {
               store.addNotification({
