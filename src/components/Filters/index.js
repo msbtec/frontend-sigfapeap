@@ -29,6 +29,57 @@ function Filters({ filters, setFilters }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
+  function download(url, filename) {
+    fetch(url).then((t) => t.blob().then((b) => {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(b);
+      a.setAttribute("download", filename);
+      a.click();
+
+      store.addNotification({
+        message: `Relatório gerado com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+    }));
+  }
+
+  async function generatePDF() {
+    api
+      .post(`/report`, {
+        params: filters,
+      })
+      .then((response) => {
+        download(
+          response.data.url,
+          String(response.data.url)
+            .split("/")
+            .pop(),
+        );
+      })
+      .catch((error) => {
+        store.addNotification({
+          message: error.response.data.message,
+          type: 'danger',
+          insert: 'top',
+          container: 'top-right',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
+      });
+  }
+
   return (
     <Form style={{ marginBottom: 20 }}>
       <div className="input-block">
@@ -101,18 +152,7 @@ function Filters({ filters, setFilters }) {
             className="primary"
             style={{ marginLeft: 10, marginTop: 25 }}
             onClick={() => {
-              store.addNotification({
-                message: `Relatório gerado com sucesso!`,
-                type: 'success',
-                insert: 'top',
-                container: 'top-right',
-                animationIn: ['animate__animated', 'animate__fadeIn'],
-                animationOut: ['animate__animated', 'animate__fadeOut'],
-                dismiss: {
-                  duration: 5000,
-                  onScreen: true,
-                },
-              });
+              generatePDF();
             }}
           >
             Gerar Relatório
