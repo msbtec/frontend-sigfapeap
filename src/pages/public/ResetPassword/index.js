@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import ReactLoading from "react-loading";
+import { store } from 'react-notifications-component';
 import api from '~/services/api';
 
 import Logo from '../../../assets/img/logo.png';
 
-
-import { store } from 'react-notifications-component';
-
 import { Form, Container } from './styles';
 
-const RecoveryPassword = props => {
+const RecoveryPassword = (props) => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
@@ -38,55 +37,57 @@ const RecoveryPassword = props => {
     e.preventDefault();
 
     if (password.password != "" && password.password_confirmation != "") {
-        if (password.password != password.password_confirmation) {
-            setError('As senhas não coincidem!');
-        } else {
-          setLoading(true);
-          api
-            .put(`passwords`, { password: password.password, token })
-            .then(({ data }) => {
-              store.addNotification({
-                message: `Senha atualizada com sucesso!`,
-                type: 'success',
-                insert: 'top',
-                container: 'top-right',
-                animationIn: ['animate__animated', 'animate__fadeIn'],
-                animationOut: ['animate__animated', 'animate__fadeOut'],
-                dismiss: {
-                  duration: 5000,
-                  onScreen: true,
-                },
-              });
+      if (password.password != password.password_confirmation) {
+        setError('As senhas não coincidem!');
+      } else {
+        setLoading(true);
+        api
+          .put(`passwords`, { password: password.password, token })
+          .then(({ data }) => {
+            setLoading(false);
 
-              setTimeout(() => {
-                window.location.href = "/"
-              }, 5000)
-            })
-            .catch(error => {
-              store.addNotification({
-                message: error?.response?.data?.message,
-                type: 'danger',
-                insert: 'top',
-                container: 'top-right',
-                animationIn: ['animate__animated', 'animate__fadeIn'],
-                animationOut: ['animate__animated', 'animate__fadeOut'],
-                dismiss: {
-                  duration: 5000,
-                  onScreen: true,
-                },
-              });
-            })
-            .finally(() => {
-              setPassword({
-                password: "",
-                password_confirmation: ""
-              });
-              setLoading(false);
+            store.addNotification({
+              message: `Senha atualizada com sucesso!`,
+              type: 'success',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
             });
-        }
-      }else{
-        setError('Preencha corretamente os campos!');
+
+            setTimeout(() => {
+              window.location.href = "/";
+            }, 5000);
+          })
+          .catch((error) => {
+            store.addNotification({
+              message: error.response.data.message,
+              type: 'danger',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+          })
+          .finally(() => {
+            setPassword({
+              password: "",
+              password_confirmation: "",
+            });
+            setLoading(false);
+          });
       }
+    } else {
+      setError('Preencha corretamente os campos!');
+    }
   }
 
   return (
@@ -100,7 +101,7 @@ const RecoveryPassword = props => {
             name="password"
             value={password.password}
             placeholder="Nova senha"
-            onChange={(e) => { setPassword({ ...password, password: e.target.value }) }}
+            onChange={(e) => { setPassword({ ...password, password: e.target.value }); }}
             className={error != '' ? 'invalid' : ''}
           />
 
@@ -109,13 +110,17 @@ const RecoveryPassword = props => {
             name="password"
             value={password.password_confirmation}
             placeholder="Confirmar nova senha"
-            onChange={(e) => { setPassword({
+            onChange={(e) => {
+              setPassword({
                 ...password,
-                password_confirmation: e.target.value
-              }) }}
+                password_confirmation: e.target.value,
+              });
+            }}
             className={error != '' ? 'invalid' : ''}
           />
-          <button type="submit">Enviar</button>
+
+          {loading ? <ReactLoading type="spin" height="15%" width="15%" color="#b20710" /> : <button type="submit">Enviar</button>}
+          {/* <button type="submit">Enviar</button> */}
         </Form>
       </Container>
     </>

@@ -2,6 +2,8 @@ import React, {
   useState, useEffect, memo,
 } from 'react';
 
+import ReactLoading from "react-loading";
+
 import { store } from 'react-notifications-component';
 import { Form } from '../Form';
 
@@ -9,18 +11,23 @@ import { Button } from "../Button";
 
 import { useResearcher } from '../../hooks/researcher';
 import { useSearch } from '../../hooks/search';
-import api from '~/services/api';
+import api from '../../services/api';
 
 function Filters({ filters, setFilters }) {
   const { setUsers, setTotalPages } = useResearcher();
   const { searches } = useSearch();
 
+  const [loading, setLoading] = useState(true);
+
   async function search() {
+    setLoading(true);
     api.post(`users/search`, {
       params: filters,
     }).then(({ data }) => {
       setTotalPages(data.lastPage);
       setUsers(data.data);
+
+      setLoading(false);
     });
   }
 
@@ -52,6 +59,7 @@ function Filters({ filters, setFilters }) {
   }
 
   async function generatePDF() {
+    setLoading(true);
     api
       .post(`/report`, {
         params: filters,
@@ -63,6 +71,8 @@ function Filters({ filters, setFilters }) {
             .split("/")
             .pop(),
         );
+
+        setLoading(false);
       })
       .catch((error) => {
         store.addNotification({
@@ -148,6 +158,8 @@ function Filters({ filters, setFilters }) {
             </select>
           </div>
 
+          {!loading
+          && (
           <Button
             className="primary"
             style={{ marginLeft: 10, marginTop: 25 }}
@@ -157,8 +169,11 @@ function Filters({ filters, setFilters }) {
           >
             Gerar Relatório
           </Button>
+          )}
         </div>
 
+        {loading && <div style={{ marginTop: 20 }} />}
+        {loading && <ReactLoading type="bars" height="5%" width="5%" color="#3699ff" />}
       </div>
 
     </Form>

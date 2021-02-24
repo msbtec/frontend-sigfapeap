@@ -68,7 +68,7 @@ export const ProfileProvider = ({ children }) => {
 
     api.post(`profiles`, { ...data, access: JSON.stringify(data.access) }).then(({ data: profile }) => {
       setProfiles([...profiles, { ...profile, access: JSON.parse(profile.access) }]);
-    }).finally(() => {
+
       store.addNotification({
         message: `Perfil inserido com sucesso!`,
         type: 'success',
@@ -81,7 +81,7 @@ export const ProfileProvider = ({ children }) => {
           onScreen: true,
         },
       });
-
+    }).finally(() => {
       setLoading(false);
     });
   }, [profiles]);
@@ -92,7 +92,7 @@ export const ProfileProvider = ({ children }) => {
     api.put(`profiles/${data.id}`, { ...data, access: JSON.stringify(data.access) }).then(({ data: profile }) => {
       setProfiles(profiles.map((item) => (item.id === data.id
         ? { ...profile, access: JSON.parse(profile.access) } : item)));
-    }).finally(() => {
+
       store.addNotification({
         message: `Perfil atualizado com sucesso!`,
         type: 'success',
@@ -105,7 +105,7 @@ export const ProfileProvider = ({ children }) => {
           onScreen: true,
         },
       });
-
+    }).finally(() => {
       setLoading(false);
     });
   }, [profiles]);

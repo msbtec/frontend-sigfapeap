@@ -249,8 +249,11 @@ const SignUp = () => {
           </Footer>
 
           {loading
-            ? <ReactLoading type="spin" height="15%" width="15%" color="#b20710" />
-            : (
+            ? (
+              <div style={{ display: "flex", justifyContent: 'center', alignItems: "center" }}>
+                <ReactLoading type="spin" height="5%" width="5%" color="#b20710" />
+              </div>
+            ) : (
               <div style={{ display: "flex", justifyContent: 'center', alignItems: "center" }}>
                 <button type="submit" className="submit">
                   Continuar

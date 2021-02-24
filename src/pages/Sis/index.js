@@ -1,5 +1,7 @@
 import React, { useState, Suspense, lazy } from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
+import { Switch, Link } from 'react-router-dom';
+
+import Route from "../../routes/Route";
 
 import { useAuth } from '../../hooks/auth';
 

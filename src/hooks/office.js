@@ -30,7 +30,7 @@ export const OfficeProvider = ({ children }) => {
 
     api.post(`offices`, data).then(({ data: office }) => {
       setOffices([...offices, office]);
-    }).finally(() => {
+
       store.addNotification({
         message: `Cargo inserido com sucesso!`,
         type: 'success',
@@ -43,7 +43,7 @@ export const OfficeProvider = ({ children }) => {
           onScreen: true,
         },
       });
-
+    }).finally(() => {
       setLoading(false);
     });
   }, [offices]);
@@ -53,7 +53,7 @@ export const OfficeProvider = ({ children }) => {
 
     api.put(`offices/${data.id}`, data).then(({ data: office }) => {
       setOffices(offices.map((item) => (item.id === data.id ? office : item)));
-    }).finally(() => {
+
       store.addNotification({
         message: `Cargo atualizado com sucesso!`,
         type: 'success',
@@ -66,7 +66,7 @@ export const OfficeProvider = ({ children }) => {
           onScreen: true,
         },
       });
-
+    }).finally(() => {
       setLoading(false);
     });
   }, [offices]);
@@ -76,7 +76,7 @@ export const OfficeProvider = ({ children }) => {
 
     api.delete(`offices/${data.id}`).then(() => {
       setOffices(offices.filter((item) => (item.id !== data.id)));
-    }).finally(() => {
+
       store.addNotification({
         message: `Cargo deletado com sucesso!`,
         type: 'success',
@@ -89,7 +89,7 @@ export const OfficeProvider = ({ children }) => {
           onScreen: true,
         },
       });
-
+    }).finally(() => {
       setLoading(false);
     });
   }, [offices]);

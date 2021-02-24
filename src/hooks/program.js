@@ -36,7 +36,7 @@ export const ProgramProvider = ({ children }) => {
 
     api.post(`programs`, formData).then(({ data: program }) => {
       setPrograms([...programs, program]);
-    }).finally(() => {
+
       store.addNotification({
         message: `Programa inserido com sucesso!`,
         type: 'success',
@@ -49,7 +49,7 @@ export const ProgramProvider = ({ children }) => {
           onScreen: true,
         },
       });
-
+    }).finally(() => {
       setLoading(false);
     });
   }, [programs]);
@@ -85,7 +85,7 @@ export const ProgramProvider = ({ children }) => {
   const removeNotice = useCallback(async (data) => {
     setLoading(true);
 
-    api.delete(`files/${data.id}`).then(() => { }).finally(() => {
+    api.delete(`files/${data.id}`).then(() => {
       store.addNotification({
         message: `Edital removido com sucesso!`,
         type: 'success',
@@ -98,6 +98,7 @@ export const ProgramProvider = ({ children }) => {
           onScreen: true,
         },
       });
+    }).finally(() => {
       setLoading(false);
     });
   }, []);
@@ -115,7 +116,7 @@ export const ProgramProvider = ({ children }) => {
 
     api.put(`programs/${data.id}`, formData).then(({ data: program }) => {
       setPrograms(programs.map((item) => (item.id === data.id ? program : item)));
-    }).finally(() => {
+
       store.addNotification({
         message: `Programa atualizado com sucesso!`,
         type: 'success',
@@ -128,7 +129,7 @@ export const ProgramProvider = ({ children }) => {
           onScreen: true,
         },
       });
-
+    }).finally(() => {
       setLoading(false);
     });
   }, [programs]);
@@ -138,7 +139,7 @@ export const ProgramProvider = ({ children }) => {
 
     api.delete(`programs/${data.id}`).then(() => {
       setPrograms(programs.filter((item) => (item.id !== data.id)));
-    }).finally(() => {
+
       store.addNotification({
         message: `Programa deletado com sucesso!`,
         type: 'success',
@@ -151,7 +152,7 @@ export const ProgramProvider = ({ children }) => {
           onScreen: true,
         },
       });
-
+    }).finally(() => {
       setLoading(false);
     });
   }, [programs]);

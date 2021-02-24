@@ -15,12 +15,6 @@ export const SearchProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [searches, setSearches] = useState([]);
 
-  //   {
-  //     id: uuid(),
-  //     name: "Filosofia",
-  //     connection_area: [{ value: "Ciências Sociais", label: "Ciências Sociais" }],
-  //   }
-
   useEffect(() => {
     async function loadSearches() {
       api.get(`searchareas`).then(({ data }) => {
@@ -46,7 +40,7 @@ export const SearchProvider = ({ children }) => {
           { value: connection.id, label: connection.name }
         )),
       }]);
-    }).finally(() => {
+
       store.addNotification({
         message: `Área de pesquisa inserida com sucesso!`,
         type: 'success',
@@ -59,7 +53,7 @@ export const SearchProvider = ({ children }) => {
           onScreen: true,
         },
       });
-
+    }).finally(() => {
       setLoading(false);
     });
   }, [searches]);
@@ -74,7 +68,7 @@ export const SearchProvider = ({ children }) => {
           { value: connection.id, label: connection.name }
         )),
       } : item)));
-    }).finally(() => {
+
       store.addNotification({
         message: `Área de pesquisa atualizada com sucesso!`,
         type: 'success',
@@ -87,7 +81,7 @@ export const SearchProvider = ({ children }) => {
           onScreen: true,
         },
       });
-
+    }).finally(() => {
       setLoading(false);
     });
   }, [searches]);
@@ -97,7 +91,7 @@ export const SearchProvider = ({ children }) => {
 
     api.delete(`searchareas/${data.id}`).then(() => {
       setSearches(searches.filter((item) => (item.id !== data.id)));
-    }).finally(() => {
+
       store.addNotification({
         message: `Área de pesquisa deletada com sucesso!`,
         type: 'success',
@@ -110,7 +104,7 @@ export const SearchProvider = ({ children }) => {
           onScreen: true,
         },
       });
-
+    }).finally(() => {
       setLoading(false);
     });
   }, [searches]);

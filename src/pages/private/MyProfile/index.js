@@ -1,8 +1,10 @@
 import React, {
-  useEffect, useRef, useCallback,
+  useEffect, useState, useRef, useCallback,
 } from 'react';
 
 import * as Yup from 'yup';
+
+import ReactLoading from "react-loading";
 
 import { Form as Unform } from '@unform/web';
 import { store } from 'react-notifications-component';
@@ -16,11 +18,14 @@ import { useOffice } from '../../../hooks/office';
 import { useAuth } from '../../../hooks/auth';
 
 import getValidationErrors from '../../../utils/getValidationErrors';
-import api from '~/services/api';
+
+import api from '../../../services/api';
 
 export default function Cargos() {
   const formRef = useRef(null);
   const reference = useRef(null);
+
+  const [loading, setLoading] = useState(false);
 
   const { user, token, setAuth } = useAuth();
   const { offices } = useOffice();
@@ -75,9 +80,13 @@ export default function Cargos() {
           abortEarly: false,
         });
 
+        setLoading(true);
+
         api.put(`users/${user.id}`, formData).then(({ data: user_updated }) => {
           setAuth({ token, user: user_updated });
-        }).finally(() => {
+
+          setLoading(false);
+
           store.addNotification({
             message: `Perfil atualizado com sucesso!`,
             type: 'success',
@@ -90,9 +99,8 @@ export default function Cargos() {
               onScreen: true,
             },
           });
-        });
+        }).finally(() => {});
       } catch (error) {
-        console.log(error);
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
 
@@ -131,11 +139,13 @@ export default function Cargos() {
                 </div>
 
                 <div className="modal-footer">
-                  <Button
-                    className="primary"
-                  >
-                    Salvar
-                  </Button>
+                  {loading ? (<ReactLoading type="spin" height="5%" width="5%" color="#3699ff" />) : (
+                    <Button
+                      className="primary"
+                    >
+                      Salvar
+                    </Button>
+                  )}
                 </div>
               </Form>
             </Unform>

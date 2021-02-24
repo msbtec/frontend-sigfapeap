@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { store } from 'react-notifications-component';
+import ReactLoading from "react-loading";
 import api from '~/services/api';
 import Logo from '../../../assets/img/logo.png';
 
@@ -10,6 +11,8 @@ const RecoveryPassword = () => {
   const [email, setEmail] = useState('');
   const [email_err, setEmailErr] = useState('');
   const [error, setError] = useState('');
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Recuperação de senha';
@@ -25,10 +28,12 @@ const RecoveryPassword = () => {
     if (!email) {
       setError('Preencha todos os campos para entrar ');
     } else {
+      setLoading(true);
       api.post(`passwords`, {
         email,
       }).then(({ data }) => {
         setEmail("");
+        setLoading(false);
         store.addNotification({
           message: `Foi enviada uma solicitação de recuperação de senha para: ${email}!`,
           type: 'success',
@@ -59,7 +64,8 @@ const RecoveryPassword = () => {
             value={email}
             className={email_err != '' ? 'invalid' : ''}
           />
-          <button type="submit">Enviar</button>
+          {loading ? <ReactLoading type="spin" height="15%" width="15%" color="#b20710" /> : <button type="submit">Enviar</button>}
+          {/* <button type="submit">Enviar</button> */}
         </Form>
       </Container>
     </>

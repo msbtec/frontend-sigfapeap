@@ -30,7 +30,7 @@ export const FoundationProvider = ({ children }) => {
 
     api.post(`foundations`, data).then(({ data: foundation }) => {
       setFoundations([...foundations, foundation]);
-    }).finally(() => {
+
       store.addNotification({
         message: `Instituição de pesquisa inserida com sucesso!`,
         type: 'success',
@@ -43,7 +43,7 @@ export const FoundationProvider = ({ children }) => {
           onScreen: true,
         },
       });
-
+    }).finally(() => {
       setLoading(false);
     });
   }, [foundations]);
@@ -53,7 +53,7 @@ export const FoundationProvider = ({ children }) => {
 
     api.put(`foundations/${data.id}`, data).then(({ data: foundation }) => {
       setFoundations(foundations.map((item) => (item.id === data.id ? foundation : item)));
-    }).finally(() => {
+
       store.addNotification({
         message: `Instituição de pesquisa atualizada com sucesso!`,
         type: 'success',
@@ -66,7 +66,7 @@ export const FoundationProvider = ({ children }) => {
           onScreen: true,
         },
       });
-
+    }).finally(() => {
       setLoading(false);
     });
   }, [foundations]);
@@ -76,7 +76,7 @@ export const FoundationProvider = ({ children }) => {
 
     api.delete(`foundations/${data.id}`).then(() => {
       setFoundations(foundations.filter((item) => (item.id !== data.id)));
-    }).finally(() => {
+
       store.addNotification({
         message: `Instituição de pesquisa deletada com sucesso!`,
         type: 'success',
@@ -89,7 +89,7 @@ export const FoundationProvider = ({ children }) => {
           onScreen: true,
         },
       });
-
+    }).finally(() => {
       setLoading(false);
     });
   }, [foundations]);
