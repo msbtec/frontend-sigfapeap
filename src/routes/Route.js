@@ -12,7 +12,7 @@ export default function RouteWrapper({
 
   let path = '';
 
-  if (rest.path === '/') {
+  if (rest.path === '/' || rest.path === '/perfil') {
     return <Route {...rest} render={(props) => <Component {...props} />} />;
   }
 
