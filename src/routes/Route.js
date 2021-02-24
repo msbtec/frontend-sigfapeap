@@ -10,40 +10,40 @@ export default function RouteWrapper({
 
   const access = JSON.parse(user.profile.access).map((item) => String(item.value));
 
-  let path = '';
+  const path = '';
 
   if (rest.path === '/' || rest.path === '/perfil') {
     return <Route {...rest} render={(props) => <Component {...props} />} />;
   }
 
-  if (rest.path === '/usuarios') {
-    path = "Servidores";
-  }
-  if (rest.path === '/cargos') {
-    path = "Cargos";
-  }
-  if (rest.path === '/perfis') {
-    path = "Perfis de acesso";
-  }
-  if (rest.path === '/areas') {
-    path = "Área de pesquisa";
-  }
-  if (rest.path === '/instituicoes') {
-    path = "Instituição de pesquisa";
-  }
-  if (rest.path === '/programas') {
-    path = "Programas";
-  }
-  if (rest.path === '/avaliadores') {
-    path = "Avaliadores";
-  }
-  if (rest.path === '/pesquisadores') {
-    path = "Pesquisadores";
-  }
+  //   if (rest.path === '/usuarios') {
+  //     path = "Servidores";
+  //   }
+  //   if (rest.path === '/cargos') {
+  //     path = "Cargos";
+  //   }
+  //   if (rest.path === '/perfis') {
+  //     path = "Perfis de acesso";
+  //   }
+  //   if (rest.path === '/areas') {
+  //     path = "Área de pesquisa";
+  //   }
+  //   if (rest.path === '/instituicoes') {
+  //     path = "Instituição de pesquisa";
+  //   }
+  //   if (rest.path === '/programas') {
+  //     path = "Programas";
+  //   }
+  //   if (rest.path === '/avaliadores') {
+  //     path = "Avaliadores";
+  //   }
+  //   if (rest.path === '/pesquisadores') {
+  //     path = "Pesquisadores";
+  //   }
 
-  if (!access.includes(String(path))) {
-    return <Redirect to="/" />;
-  }
+  //   if (!access.includes(String(path))) {
+  //     return <Redirect to="/" />;
+  //   }
 
   return <Route {...rest} render={(props) => <Component {...props} />} />;
 }
