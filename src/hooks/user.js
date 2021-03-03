@@ -40,10 +40,10 @@ export const UserProvider = ({ children }) => {
     formData.append("data", JSON.stringify({ ...data, name: String(data.name).toUpperCase(), password: 'sigfapeap@2021' }));
 
     api.post(`auth/register`, formData).then(({ data: user }) => {
-      setUsers([...users, user]);
+      // setUsers([...users, user]);
 
       store.addNotification({
-        message: `Usuário cadastrado com sucesso! A informações de acesso da conta será enviada por e-mail.`,
+        message: `Usuário cadastrado com sucesso! As informações de acesso da conta serão enviadas por e-mail.`,
         type: 'success',
         insert: 'top',
         container: 'top-right',
@@ -57,7 +57,7 @@ export const UserProvider = ({ children }) => {
 
       setLoading(false);
     }).finally(() => {});
-  }, [users]);
+  }, []);
 
   const update = useCallback(async (data) => {
     setLoading(true);

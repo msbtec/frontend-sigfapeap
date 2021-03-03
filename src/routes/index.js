@@ -11,6 +11,7 @@ const SignIn = lazy(() => import('../pages/public/SignIn'));
 const SignUp = lazy(() => import('../pages/public/SignUp'));
 const RecoveryPassword = lazy(() => import('../pages/public/RecoveryPassword'));
 const ResetPassword = lazy(() => import('../pages/public/ResetPassword'));
+const ActiveAccount = lazy(() => import('../pages/public/ActiveAccount'));
 
 const Sis = lazy(() => import('../pages/Sis'));
 
@@ -43,6 +44,7 @@ export default function Routes(){
                     <Route path="/cadastro" component={SignUp} />
                     <Route path="/recuperacao-senha" component={RecoveryPassword} />
                     <Route path="/resetar-senha" component={ResetPassword} />
+                    <Route path="/ativar-conta" component={ActiveAccount} />
                     <Provider store={store}>
                         <PrivateRoute path="/" component={Sis}/>
                     </Provider>
