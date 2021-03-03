@@ -5,6 +5,9 @@ import { Form as Unform } from '@unform/web';
 
 import { FiCheckCircle, FiX, FiFile } from 'react-icons/fi';
 
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 import * as Yup from 'yup';
 import { store } from 'react-notifications-component';
 import { Form } from '../../../../components/Form';
@@ -28,6 +31,8 @@ function ModalForm({
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorFile, setErrorFile] = useState('');
 
+  const [description, setDescription] = useState("");
+
   const handleSubmit = useCallback(
     async (data) => {
       try {
@@ -47,27 +52,35 @@ function ModalForm({
 
         const schema = Yup.object().shape({
           title: Yup.string().required('Campo obrigatório'),
-          description: Yup.string().required('Campo obrigatório'),
+          // description: Yup.string().required('Campo obrigatório'),
         });
 
-        if (!selectedFile && !item) {
-          setErrorFile('Campo obrigatório');
-        } else {
-          setErrorFile('');
-        }
+        // if (!selectedFile && !item) {
+        //   setErrorFile('Campo obrigatório');
+        // } else {
+        //   setErrorFile('');
+        // }
 
         await schema.validate(data, {
           abortEarly: false,
         });
 
-        if (selectedFile || item) {
-          if (item) {
-            update({ id: item.id, ...data }, selectedFile);
-          } else {
-            create(data, selectedFile);
-          }
-          submit();
+        if (item) {
+          update({ id: item.id, description, ...data });
+        } else {
+          create({ ...data, description });
         }
+
+        submit();
+
+        // if (selectedFile || item) {
+        //   if (item) {
+        //     update({ id: item.id, ...data }, selectedFile);
+        //   } else {
+        //     create(data, selectedFile);
+        //   }
+        //   submit();
+        // }
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
@@ -76,7 +89,7 @@ function ModalForm({
         }
       }
     },
-    [create, selectedFile, update, item, submit],
+    [create, description, update, item, submit],
   );
 
   return (
@@ -99,9 +112,26 @@ function ModalForm({
           <div className="modal-body" ref={reference}>
             <Input formRef={formRef} name="title" required original title="Título" />
 
-            <Input formRef={formRef} name="description" required original title="Descrição" />
+            {/* <Input formRef={formRef} name="description" required original title="Descrição" /> */}
 
-            <div style={{ marginBottom: 10 }} className="input-block">
+            <div className="input-block">
+              <label style={{ marginBottom: 10 }}>
+                Descrição
+              </label>
+              <CKEditor
+                editor={ClassicEditor}
+                data={description}
+                onReady={(editor) => {
+                  setDescription(item ? item.description : '');
+                }}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  setDescription(data);
+                }}
+              />
+            </div>
+
+            {/* <div style={{ marginBottom: 10 }} className="input-block">
               <label htmlFor="email">
                 PDF
                 {' '}
@@ -144,7 +174,7 @@ function ModalForm({
               <sup style={{ color: '#c53030', marginTop: 5 }}>
                 {errorFile}
               </sup>
-            </div>
+            </div> */}
 
             {/* <Input formRef={formRef} name="avaliation"
             required original title="Critério de avaliação" /> */}

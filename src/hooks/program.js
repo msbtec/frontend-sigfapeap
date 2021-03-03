@@ -27,12 +27,12 @@ export const ProgramProvider = ({ children }) => {
     loadPrograms();
   }, []);
 
-  const create = useCallback(async (data, file) => {
+  const create = useCallback(async (data) => {
     setLoading(true);
 
     const formData = new FormData();
     formData.append("data", JSON.stringify(data));
-    formData.append("file", file);
+    // formData.append("file", file);
 
     api.post(`programs`, formData).then(({ data: program }) => {
       setPrograms([...programs, program]);
@@ -54,13 +54,13 @@ export const ProgramProvider = ({ children }) => {
     });
   }, [programs]);
 
-  const addNotice = useCallback(async (data, file) => {
+  const addNotice = useCallback(async (data) => {
     setLoading(true);
 
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("program_id", data.id);
-    formData.append("file", file);
+    // formData.append("file", file);
 
     api.post(`files`, formData).then(() => {
       store.addNotification({
