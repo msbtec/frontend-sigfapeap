@@ -54,13 +54,13 @@ export const ProgramProvider = ({ children }) => {
     });
   }, [programs]);
 
-  const addNotice = useCallback(async (data) => {
+  const addNotice = useCallback(async (data, file) => {
     setLoading(true);
 
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("program_id", data.id);
-    // formData.append("file", file);
+    formData.append("file", file);
 
     api.post(`files`, formData).then(() => {
       store.addNotification({

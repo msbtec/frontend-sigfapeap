@@ -79,7 +79,7 @@ function ModalForm({
 
         <Form>
           <div className="modal-body" style={{ height: 400 }} ref={reference}>
-            <Input formRef={formRef} name="name" required original title="Nome do perfil" />
+            <Input formRef={formRef} disabled={item ? (item.name === "Pesquisador" || item.name === "Servidor" || item.name === "Administrador") : false} name="name" required original title="Nome do perfil" />
             <Input formRef={formRef} name="access" required multi access={access} title="Acessos" />
           </div>
 

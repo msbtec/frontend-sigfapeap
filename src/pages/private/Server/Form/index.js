@@ -97,7 +97,7 @@ function ModalForm({
 
             <Input formRef={formRef} name="office_id" select={offices} required original title="Cargo/função" />
 
-            <Input formRef={formRef} name="profile_id" select={profiles} required original title="Perfil" />
+            <Input formRef={formRef} name="profile_id" select={profiles.filter((item) => item.name !== 'Pesquisador')} required original title="Perfil" />
           </div>
 
           <div className="modal-footer">
