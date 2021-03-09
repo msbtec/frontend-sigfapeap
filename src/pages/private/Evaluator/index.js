@@ -4,7 +4,7 @@ import React, {
 
 import { ModalProvider } from 'styled-react-modal';
 
-import { FiTrash, FiUserPlus } from 'react-icons/fi';
+import { FiTrash, FiFolderPlus, FiUserPlus } from 'react-icons/fi';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
@@ -90,7 +90,7 @@ export default function Avaliadores() {
                         }}
                         className="edit"
                       >
-                        <FiUserPlus />
+                        <FiFolderPlus />
                       </button>
                       <button
                         onClick={() => {

@@ -74,6 +74,8 @@ function ModalForm({
 
           const formData = new FormData();
           formData.append("evaluators", evaluators);
+          formData.append("name", item.name);
+          formData.append("email", item.email);
 
           // eslint-disable-next-line no-await-in-loop
           await api.put(`programs/${ids[i]}`, formData);
@@ -103,7 +105,7 @@ function ModalForm({
         }
       }
     },
-    [programs, item, submit],
+    [programs, loadEvaluators, item, submit],
   );
 
   return (
