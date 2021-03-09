@@ -49,12 +49,11 @@ export const ResearcherProvider = ({ children }) => {
     formData.append("avatar", avatar.avatar);
 
     api.post(`/auth/register`, formData).then(({ data: user }) => {
-      setUsers([...users, user]);
-
-      signIn({ cpf: user.cpf, password: data.password });
+      // setUsers([...users, user]);
+      // signIn({ cpf: user.cpf, password: data.password });
 
       store.addNotification({
-        message: `Pesquisador cadastrado com sucesso!`,
+        message: `Pesquisador cadastrado com sucesso! As informações de acesso da conta serão enviadas por e-mail.`,
         type: 'success',
         insert: 'top',
         container: 'top-right',
@@ -67,8 +66,12 @@ export const ResearcherProvider = ({ children }) => {
       });
 
       setLoading(false);
+
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 5000);
     });
-  }, [users, signIn]);
+  }, []);
 
   const update = useCallback(async (data) => {
     setLoading(true);
