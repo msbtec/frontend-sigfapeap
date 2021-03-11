@@ -34,6 +34,8 @@ export default function Dashboard() {
         </h1>
       </div>
 
+      {user.profile.name != 'Pesquisador'
+      && (
       <div className="col-3 px-0">
         <CardDashboard className="red">
           <div className="card-body">
@@ -49,7 +51,10 @@ export default function Dashboard() {
           </div>
         </CardDashboard>
       </div>
+      )}
 
+      {user.profile.name != 'Pesquisador'
+      && (
       <div className="col-3 px-0">
         <CardDashboard className="blue">
           <div className="card-body">
@@ -65,6 +70,7 @@ export default function Dashboard() {
           </div>
         </CardDashboard>
       </div>
+      )}
 
       <div className="col-3 px-0">
         <CardDashboard className="green">
@@ -82,6 +88,8 @@ export default function Dashboard() {
         </CardDashboard>
       </div>
 
+      {user.profile.name != 'Pesquisador'
+      && (
       <div className="col-3 px-0">
         <CardDashboard className="orange">
           <div className="card-body">
@@ -97,6 +105,7 @@ export default function Dashboard() {
           </div>
         </CardDashboard>
       </div>
+      )}
 
       <div style={{
         backgroundColor: '#b20710', width: '82%', position: "absolute", bottom: 0,

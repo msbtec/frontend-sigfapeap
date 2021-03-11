@@ -13,6 +13,8 @@ import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
 
 import { useProgram } from '../../../hooks/program';
+import { useAuth } from '../../../hooks/auth'
+
 import api from '../../../services/api';
 
 let ModalConfirm = () => <></>;
@@ -27,6 +29,7 @@ export default function Avaliadores() {
   const [OpenNotice, setOpenNotice] = useState(false);
 
   const { programs, removeNotice, status } = useProgram();
+  const { user } = useAuth()
 
   const { id } = useParams();
 
@@ -74,6 +77,7 @@ export default function Avaliadores() {
               {programs.length > 0 && programs.filter((item) => item.id == id)[0].title}
             </h3>
           </div>
+          {user.profile.name != 'Pesquisador' &&
           <div className="card-title">
             <Button
               onClick={() => {
@@ -85,14 +89,15 @@ export default function Avaliadores() {
 
             </Button>
           </div>
+          }
           <div className="card-body">
             <Table>
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className="col-4">Título</th>
+                  <th className={user.profile.name != 'Pesquisador' ? "col-6" : "col-4"}>Título</th>
                   <th className="col-4">Anexo</th>
-                  <th>Ações</th>
+                  {user.profile.name != 'Pesquisador' && <th>Ações</th>}
                 </tr>
               </thead>
               <tbody>
@@ -101,6 +106,7 @@ export default function Avaliadores() {
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.title }</td>
                     <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
+                    {user.profile.name != 'Pesquisador' &&
                     <td style={{ textAlign: 'center' }}>
                       <button
                         onClick={() => {
@@ -112,6 +118,7 @@ export default function Avaliadores() {
                         <FiTrash />
                       </button>
                     </td>
+                    }
                   </tr>
                 ))}
               </tbody>

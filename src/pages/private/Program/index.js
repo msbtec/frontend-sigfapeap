@@ -14,6 +14,7 @@ import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
 
 import { useProgram } from '../../../hooks/program'
+import { useAuth } from '../../../hooks/auth'
 
 let ModalForm = () => <></>;
 let ModalConfirm = () => <></>;
@@ -26,6 +27,7 @@ export default function Program() {
   const history = useHistory()
 
   const { programs, erase } = useProgram();
+  const { user } = useAuth()
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Programas';
@@ -62,12 +64,14 @@ export default function Program() {
           <div className="card-title">
             <h3>Listagem de programas</h3>
           </div>
-          <div className="card-title">
-            <Button onClick={() => {
-                setSelected(null);
-                toggleModalForm();
-            }} className="primary">Cadastrar programa</Button>
-          </div>
+          {user.profile.name != 'Pesquisador' &&
+            <div className="card-title">
+                <Button onClick={() => {
+                    setSelected(null);
+                    toggleModalForm();
+                }} className="primary">Cadastrar programa</Button>
+            </div>
+          }
           <div className="card-body">
             <Table>
               <thead>
@@ -90,28 +94,35 @@ export default function Program() {
                     {/* <td style={{ textAlign: 'center' }}>{ item.avaliation }</td> */}
                     {/* <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25,width: 25, cursor:'pointer'}} onClick={() => window.open(item.url,'_blank')} /></td> */}
                     <td style={{ textAlign: 'center' }}>
+                    {user.profile.name != 'Pesquisador' &&
                     <button onClick={() => {
                          history.push(`/avaliadores/${item.id}`)
                       }} className="edit">
                         <FiUserPlus />
                     </button>
+                    }
                     <button onClick={() => {
-                         history.push(`/editais/${item.id}`)
-                      }} className="edit">
-                        <FiFolderPlus />
-                      </button>
-                      <button onClick={() => {
-                          setSelected(item);
-                          toggleModalForm();
-                      }} className="edit">
+                        history.push(`/editais/${item.id}`)
+                    }} className="edit">
+                    <FiFolderPlus />
+                    </button>
+                    {user.profile.name != 'Pesquisador' &&
+                    <>
+                        <button onClick={() => {
+                            setSelected(item);
+                            toggleModalForm();
+                        }} className="edit">
                         <FiEdit />
-                      </button>
-                      <button onClick={() => {
-                          setSelected(item);
-                          toggleModalConfirm();
-                      }} className="eraser">
+                        </button>
+
+                        <button onClick={() => {
+                            setSelected(item);
+                            toggleModalConfirm();
+                        }} className="eraser">
                         <FiTrash />
-                      </button>
+                        </button>
+                    </>
+                    }
                     </td>
                   </tr>
                 ))}

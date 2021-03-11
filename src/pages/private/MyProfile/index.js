@@ -46,7 +46,6 @@ export default function Cargos() {
           schema = Yup.object().shape({
             name: Yup.string().required('Campo obrigatório'),
             email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
-            office_id: Yup.string().required('Campo obrigatório'),
             phone: Yup.string().required('Campo obrigatório'),
 
             password: Yup.string()
@@ -59,13 +58,14 @@ export default function Cargos() {
           formData.append("email", data.email);
           formData.append("address", data.address);
           formData.append("phone", data.phone);
-          formData.append("office_id", data.office_id);
+          if (user.profile.name != 'Pesquisador') {
+            formData.append("office_id", data.office_id);
+          }
           formData.append("password", data.password);
         } else {
           schema = Yup.object().shape({
             name: Yup.string().required('Campo obrigatório'),
             email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
-            office_id: Yup.string().required('Campo obrigatório'),
             phone: Yup.string().required('Campo obrigatório'),
           });
 
@@ -73,7 +73,9 @@ export default function Cargos() {
           formData.append("email", data.email);
           formData.append("address", data.address);
           formData.append("phone", data.phone);
-          formData.append("office_id", data.office_id);
+          if (user.profile.name != 'Pesquisador') {
+            formData.append("office_id", data.office_id);
+          }
         }
 
         await schema.validate(data, {
@@ -131,7 +133,8 @@ export default function Cargos() {
 
                   <Input formRef={formRef} maxLength={15} required name="phone" original title="Telefone/WhatsApp" />
 
-                  <Input formRef={formRef} name="office_id" select={offices} required original title="Cargo/função" />
+                  {user.profile.name != 'Pesquisador'
+                  && <Input formRef={formRef} name="office_id" select={offices} required original title="Cargo/função" />}
 
                   <Input formRef={formRef} name="password" required password original title="Senha" />
 
