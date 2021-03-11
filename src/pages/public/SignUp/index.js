@@ -59,7 +59,7 @@ const SignUp = () => {
               orger_emitter: Yup.string().required('Campo obrigatório'),
               uf: Yup.string().required('Campo obrigatório'),
               date_emitter: Yup.string().required('Campo obrigatório'),
-              email: Yup.string().required('Campo obrigatório'),
+              email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
               birthday: Yup.string().required('Campo obrigatório'),
               mother_name: Yup.string().required('Campo obrigatório'),
               curriculum: Yup.string().required('Campo obrigatório'),
@@ -69,7 +69,7 @@ const SignUp = () => {
             schema = Yup.object().shape({
               type_personal: Yup.string().required('Campo obrigatório'),
               name: Yup.string().required('Campo obrigatório'),
-              email: Yup.string().required('Campo obrigatório'),
+              email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
               birthday: Yup.string().required('Campo obrigatório'),
               mother_name: Yup.string().required('Campo obrigatório'),
               curriculum: Yup.string().required('Campo obrigatório'),
