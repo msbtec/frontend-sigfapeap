@@ -82,13 +82,16 @@ const SignUp = () => {
             abortEarly: false,
           });
 
-          if (!selectedFile) {
-            setErrorFile('Campo obrigatório');
-          } else {
-            setForm({ ...data, knowledgesArea, avatar: selectedFile });
-            setStep(2);
-            setErrorFile('');
-          }
+          setForm({ ...data, knowledgesArea, avatar: selectedFile });
+          setStep(2);
+
+        //   if (!selectedFile) {
+        //     setErrorFile('Campo obrigatório');
+        //   } else {
+        //     setForm({ ...data, knowledgesArea, avatar: selectedFile });
+        //     setStep(2);
+        //     setErrorFile('');
+        //   }
         } else if (step === 2) {
           const schema = Yup.object().shape({
             zipcode: Yup.string().required('Campo obrigatório'),

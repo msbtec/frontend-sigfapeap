@@ -55,7 +55,7 @@ const Form1 = ({
 
       <Input formRef={formRef} name="name" required original title="Nome completo" />
 
-      <div className="input-block">
+      {/* <div className="input-block">
         <label htmlFor="email">
           Foto
           {' '}
@@ -79,7 +79,7 @@ const Form1 = ({
         <sup style={{ color: '#c53030', marginTop: 5 }}>
           {errorFile}
         </sup>
-      </div>
+      </div> */}
 
       {!isForeign && (
       <>
@@ -141,7 +141,7 @@ const Form1 = ({
       <>
         <Input formRef={formRef} name="passport" original title="Passaporte" />
 
-        <Input formRef={formRef} name="rg_foreign" type="number" required original title="Rg de Estrangeiro" />
+        <Input formRef={formRef} name="rg_foreign" required original title="Rg de Estrangeiro" />
       </>
       )}
 

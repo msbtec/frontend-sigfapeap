@@ -81,6 +81,9 @@ function ModalForm({
         api.put(`users/${user.id}`, formData).then(({ data: user_updated }) => {
           setAuth({ token, user: user_updated });
 
+          localStorage.setItem('@sigfapeap:user', JSON.stringify(user_updated));
+          localStorage.setItem('@sigfapeap:token', token);
+
           setLoading(false);
 
           store.addNotification({

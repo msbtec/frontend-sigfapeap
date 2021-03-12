@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useState, useRef, useCallback, Suspense, lazy
+  useEffect, useState, useRef, useCallback, Suspense, lazy,
 } from 'react';
 
 import { ModalProvider } from 'styled-react-modal';
@@ -43,9 +43,15 @@ export default function Cargos() {
   const [OpenForm3, setOpenForm3] = useState(false);
   const [OpenForm4, setOpenForm4] = useState(false);
 
+  const [isForeign, setIsForeign] = React.useState(false);
+
   useEffect(() => {
     document.title = 'SIGFAPEAP - Perfil';
-  }, []);
+
+    if (user.type_personal == 'Pesquisador estrangeiro') {
+      setIsForeign(true);
+    }
+  }, [user]);
 
   async function toggleModalForm1() {
     ModalForm1 = await lazy(() => import("./Form1"));
@@ -130,35 +136,81 @@ export default function Cargos() {
         } else {
           console.log('');
           if (data.password !== '') {
+            if (isForeign) {
+              schema = Yup.object().shape({
+                name: Yup.string().required('Campo obrigatório'),
+                email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
+                birthday: Yup.string().required('Campo obrigatório'),
+                mother_name: Yup.string().required('Campo obrigatório'),
+                curriculum: Yup.string().required('Campo obrigatório'),
+                school: Yup.string().required('Campo obrigatório'),
+                rg_foreign: Yup.string().required('Campo obrigatório'),
+
+                password: Yup.string()
+                  .min(6, 'Mínimo de 6 caracteres')
+                  .when('oldPassword', (oldPassword, field) => (oldPassword ? field.required() : field)),
+                confirmation_password: Yup.string().when('password', (password, field) => (password ? field.required().oneOf([Yup.ref('password')], 'Senhas não coincidem') : field)),
+              });
+
+              formData.append("name", String(data.name).toUpperCase());
+              formData.append("rg_foreign", data.rg_foreign);
+              formData.append("passport", data.passport || '');
+              formData.append("email", data.email);
+              formData.append("birthday", data.birthday);
+              formData.append("mother_name", data.mother_name);
+              formData.append("curriculum", data.curriculum);
+              formData.append("school", data.school);
+              formData.append("password", data.password);
+            } else {
+              schema = Yup.object().shape({
+                name: Yup.string().required('Campo obrigatório'),
+                rg: Yup.string().required('Campo obrigatório'),
+                orger_emitter: Yup.string().required('Campo obrigatório'),
+                uf: Yup.string().required('Campo obrigatório'),
+                date_emitter: Yup.string().required('Campo obrigatório'),
+                email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
+                birthday: Yup.string().required('Campo obrigatório'),
+                mother_name: Yup.string().required('Campo obrigatório'),
+                curriculum: Yup.string().required('Campo obrigatório'),
+                school: Yup.string().required('Campo obrigatório'),
+
+                password: Yup.string()
+                  .min(6, 'Mínimo de 6 caracteres')
+                  .when('oldPassword', (oldPassword, field) => (oldPassword ? field.required() : field)),
+                confirmation_password: Yup.string().when('password', (password, field) => (password ? field.required().oneOf([Yup.ref('password')], 'Senhas não coincidem') : field)),
+              });
+
+              formData.append("name", String(data.name).toUpperCase());
+              formData.append("rg", data.rg);
+              formData.append("orger_emitter", data.orger_emitter);
+              formData.append("uf", data.uf);
+              formData.append("date_emitter", data.date_emitter);
+              formData.append("email", data.email);
+              formData.append("birthday", data.birthday);
+              formData.append("mother_name", data.mother_name);
+              formData.append("curriculum", data.curriculum);
+              formData.append("school", data.school);
+              formData.append("password", data.password);
+            }
+          } else if (isForeign) {
             schema = Yup.object().shape({
               name: Yup.string().required('Campo obrigatório'),
-              rg: Yup.string().required('Campo obrigatório'),
-              orger_emitter: Yup.string().required('Campo obrigatório'),
-              uf: Yup.string().required('Campo obrigatório'),
-              date_emitter: Yup.string().required('Campo obrigatório'),
+              rg_foreign: Yup.string().required('Campo obrigatório'),
               email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
               birthday: Yup.string().required('Campo obrigatório'),
               mother_name: Yup.string().required('Campo obrigatório'),
               curriculum: Yup.string().required('Campo obrigatório'),
               school: Yup.string().required('Campo obrigatório'),
-
-              password: Yup.string()
-                .min(6, 'Mínimo de 6 caracteres')
-                .when('oldPassword', (oldPassword, field) => (oldPassword ? field.required() : field)),
-              confirmation_password: Yup.string().when('password', (password, field) => (password ? field.required().oneOf([Yup.ref('password')], 'Senhas não coincidem') : field)),
             });
 
             formData.append("name", String(data.name).toUpperCase());
-            formData.append("rg", data.rg);
-            formData.append("orger_emitter", data.orger_emitter);
-            formData.append("uf", data.uf);
-            formData.append("date_emitter", data.date_emitter);
+            formData.append("rg_foreign", data.rg_foreign);
+            formData.append("passport", data.passport || '');
             formData.append("email", data.email);
             formData.append("birthday", data.birthday);
             formData.append("mother_name", data.mother_name);
             formData.append("curriculum", data.curriculum);
             formData.append("school", data.school);
-            formData.append("password", data.password);
           } else {
             schema = Yup.object().shape({
               name: Yup.string().required('Campo obrigatório'),
@@ -195,6 +247,9 @@ export default function Cargos() {
         api.put(`users/${user.id}`, formData).then(({ data: user_updated }) => {
           setAuth({ token, user: user_updated });
 
+          localStorage.setItem('@sigfapeap:user', JSON.stringify(user_updated));
+          localStorage.setItem('@sigfapeap:token', token);
+
           setLoading(false);
 
           store.addNotification({
@@ -218,7 +273,7 @@ export default function Cargos() {
         }
       }
     },
-    [setAuth, token, user],
+    [setAuth, token, user, isForeign],
   );
 
   return (
@@ -236,7 +291,7 @@ export default function Cargos() {
                   <Input formRef={formRef} name="name" required original title="Nome" />
 
                   {user.profile.name == 'Pesquisador'
-                && (
+                && !isForeign && (
                 <>
                   <Input formRef={formRef} name="rg" required original title="RG" />
 
@@ -281,7 +336,16 @@ export default function Cargos() {
 
                   <Input formRef={formRef} name="date_emitter" type="date" required original title="Data de Emissão" />
                 </>
-                )}
+                  )}
+
+                  {user.profile.name == 'Pesquisador'
+                && isForeign && (
+                <>
+                  <Input formRef={formRef} name="passport" original title="Passaporte" />
+
+                  <Input formRef={formRef} name="rg_foreign" required original title="Rg de Estrangeiro" />
+                </>
+                  )}
 
                   <Input formRef={formRef} name="email" required original title="E-mail" />
 
@@ -348,18 +412,26 @@ export default function Cargos() {
 
       <Suspense fallback={null}>
         <ModalProvider>
-          <ModalForm1 isOpen={OpenForm1} toggleModal={toggleModalForm1} item={{
-            zipcode: user.zipcode,
-            street: user.street,
-            number_street: user.number_street,
-            complete_street: user.complete_street,
-            neighborhood: user.neighborhood,
-            country: user.country,
-            state: user.state,
-            municipality: user.municipality,
-            phone: user.phone
-          }} submit={submitModalForm1} />
-          <ModalForm2 isOpen={OpenForm2} toggleModal={toggleModalForm2} item={{
+          <ModalForm1
+            isOpen={OpenForm1}
+            toggleModal={toggleModalForm1}
+            item={{
+              zipcode: user.zipcode,
+              street: user.street,
+              number_street: user.number_street,
+              complete_street: user.complete_street,
+              neighborhood: user.neighborhood,
+              country: user.country,
+              state: user.state,
+              municipality: user.municipality,
+              phone: user.phone,
+            }}
+            submit={submitModalForm1}
+          />
+          <ModalForm2
+            isOpen={OpenForm2}
+            toggleModal={toggleModalForm2}
+            item={{
               connection: user.connection,
               institution: user.institution,
               connection_institution: user.connection_institution,
@@ -367,25 +439,37 @@ export default function Cargos() {
               service_time: user.service_time,
               regime_work: user.regime_work,
               office_name: user.office_name,
-              office_time: user.office_time
-          }} submit={submitModalForm2} />
-          <ModalForm3 isOpen={OpenForm3} toggleModal={toggleModalForm3} item={{
-            professional_zipcode: user.professional_zipcode,
-            professional_street: user.professional_street,
-            professional_number_street: user.professional_number_street,
-            professional_complete_street: user.professional_complete_street,
-            professional_neighborhood: user.professional_neighborhood,
-            professional_country: user.professional_country,
-            professional_state: user.professional_state,
-            professional_municipality: user.professional_municipality,
-            professional_phone: user.professional_phone,
-            professional_phone_cell: user.professional_phone_cell,
-            professional_fax: user.professional_fax,
-          }} submit={submitModalForm3} />
-          <ModalForm4 isOpen={OpenForm4} toggleModal={toggleModalForm4} item={{
+              office_time: user.office_time,
+            }}
+            submit={submitModalForm2}
+          />
+          <ModalForm3
+            isOpen={OpenForm3}
+            toggleModal={toggleModalForm3}
+            item={{
+              professional_zipcode: user.professional_zipcode,
+              professional_street: user.professional_street,
+              professional_number_street: user.professional_number_street,
+              professional_complete_street: user.professional_complete_street,
+              professional_neighborhood: user.professional_neighborhood,
+              professional_country: user.professional_country,
+              professional_state: user.professional_state,
+              professional_municipality: user.professional_municipality,
+              professional_phone: user.professional_phone,
+              professional_phone_cell: user.professional_phone_cell,
+              professional_fax: user.professional_fax,
+            }}
+            submit={submitModalForm3}
+          />
+          <ModalForm4
+            isOpen={OpenForm4}
+            toggleModal={toggleModalForm4}
+            item={{
               address_mail: user.address_mail,
-              received_informations: user.received_informations
-          }} submit={submitModalForm4} />
+              received_informations: user.received_informations,
+            }}
+            submit={submitModalForm4}
+          />
         </ModalProvider>
       </Suspense>
     </>
