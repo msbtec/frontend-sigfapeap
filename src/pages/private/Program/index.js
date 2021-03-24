@@ -66,10 +66,15 @@ export default function Program() {
           </div>
           {user.profile.name != 'Pesquisador' &&
             <div className="card-title">
-                <Button onClick={() => {
-                    setSelected(null);
-                    toggleModalForm();
-                }} className="primary">Cadastrar programa</Button>
+                <div style={{display:'flex'}}>
+                    <Button style={{marginRight: 10}} onClick={() => {
+                        setSelected(null);
+                        toggleModalForm();
+                    }} className="primary">Cadastrar programa</Button>
+                    <Button onClick={() => {
+                        history.push('configurar-edital')
+                    }} className="primary">Configurar edital</Button>
+                </div>
             </div>
           }
           <div className="card-body">
