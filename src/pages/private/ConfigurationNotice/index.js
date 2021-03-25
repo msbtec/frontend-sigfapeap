@@ -126,7 +126,7 @@ export default function ConfigurationNotice() {
       <div className="col-12 px-0">
         <Card className="red">
           <div className="card-title">
-            <h3>Campos do cabeçalho</h3>
+            <h3>Cabeçalho</h3>
           </div>
           <div className="card-body">
             <Unform ref={formRef} onSubmit={handleSubmitHeader}>
@@ -257,16 +257,16 @@ export default function ConfigurationNotice() {
 
         <Card className="red">
           <div className="card-title">
-            <h3>Campos de anexo</h3>
+            <h3>Anexo</h3>
           </div>
           <div className="card-body">
             <Unform ref={formRef} onSubmit={handleSubmitAttachment}>
               <Form>
                 <Input formRef={formRef} name="name" original title="Nome" />
 
-                <Input formRef={formRef} name="size" original title="Tamanho máximo" />
+                <Input formRef={formRef} name="size" type="number" original title="Tamanho máximo (Mb)" />
 
-                <Input formRef={formRef} name="quantity" original title="Número máximo" />
+                <Input formRef={formRef} name="quantity" type="number" original title="Número máximo" />
 
                 <div className="modal-footer">
                   {loadingAttachment ? (<ReactLoading type="spin" height="5%" width="5%" color="#3699ff" />) : (

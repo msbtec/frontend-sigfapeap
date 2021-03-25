@@ -129,6 +129,14 @@ function Input({
                     const formatted = moeda(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('price', formatted);
+                  } else if (name === 'faixa_value') {
+                    const formatted = moeda(value.target.value);
+                    inputRef.current.value = String(formatted);
+                    formRef.current.setFieldValue('faixa_value', formatted);
+                  } else if (name === 'money_foreign') {
+                    const formatted = moeda(value.target.value);
+                    inputRef.current.value = String(formatted);
+                    formRef.current.setFieldValue('money_foreign', formatted);
                   } else if (name === 'time') {
                     const formatted = data(value.target.value);
                     inputRef.current.value = String(formatted);

@@ -6,8 +6,10 @@ import { useHistory } from 'react-router-dom'
 
 import { ModalProvider } from 'styled-react-modal';
 
+import ReactTooltip from 'react-tooltip';
+
 // Icons
-import { FiDownload, FiEdit, FiTrash, FiFolderPlus, FiUserPlus } from 'react-icons/fi';
+import {FiFileText, FiDownload, FiEdit, FiTrash, FiFolderPlus, FiUserPlus } from 'react-icons/fi';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
@@ -100,27 +102,34 @@ export default function Program() {
                     {/* <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25,width: 25, cursor:'pointer'}} onClick={() => window.open(item.url,'_blank')} /></td> */}
                     <td style={{ textAlign: 'center' }}>
                     {user.profile.name != 'Pesquisador' &&
-                    <button onClick={() => {
+                    <button data-tip="Avaliadores" onClick={() => {
                          history.push(`/avaliadores/${item.id}`)
                       }} className="edit">
                         <FiUserPlus />
                     </button>
                     }
-                    <button onClick={() => {
+                    <button data-tip="Visualizar editais" onClick={() => {
                         history.push(`/editais/${item.id}`)
                     }} className="edit">
                     <FiFolderPlus />
                     </button>
+                    {user.profile.name == 'Pesquisador' &&
+                    <button data-tip="Submeter projeto" onClick={() => {
+                         history.push(`/projeto/${item.id}`)
+                      }} className="edit">
+                        <FiFileText />
+                    </button>
+                    }
                     {user.profile.name != 'Pesquisador' &&
                     <>
-                        <button onClick={() => {
+                        <button data-tip="Editar programa" onClick={() => {
                             setSelected(item);
                             toggleModalForm();
                         }} className="edit">
                         <FiEdit />
                         </button>
 
-                        <button onClick={() => {
+                        <button data-tip="Cancelar programa" onClick={() => {
                             setSelected(item);
                             toggleModalConfirm();
                         }} className="eraser">
@@ -143,6 +152,8 @@ export default function Program() {
           <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
         </ModalProvider>
       </Suspense>
+
+      <ReactTooltip />
     </>
   );
 }
