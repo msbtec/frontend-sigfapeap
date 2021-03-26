@@ -2,18 +2,20 @@ import React, {
   useState, useEffect, Suspense, lazy,
 } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import { ModalProvider } from 'styled-react-modal';
 
-import { FiDownload, FiTrash } from 'react-icons/fi';
+import ReactTooltip from 'react-tooltip';
+
+import { FiDownload, FiFileText, FiTrash } from 'react-icons/fi';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
 
 import { useProgram } from '../../../hooks/program';
-import { useAuth } from '../../../hooks/auth'
+import { useAuth } from '../../../hooks/auth';
 
 import api from '../../../services/api';
 
@@ -26,10 +28,12 @@ export default function Avaliadores() {
 
   const [notice, setNotice] = useState(null);
 
+  const history = useHistory();
+
   const [OpenNotice, setOpenNotice] = useState(false);
 
   const { programs, removeNotice, status } = useProgram();
-  const { user } = useAuth()
+  const { user } = useAuth();
 
   const { id } = useParams();
 
@@ -58,7 +62,7 @@ export default function Avaliadores() {
 
     removeNotice(notice);
 
-    setSelected(selected.filter(item => item.id != notice.id));
+    setSelected(selected.filter((item) => item.id != notice.id));
   }
 
   function submitModalNotice() {
@@ -77,7 +81,8 @@ export default function Avaliadores() {
               {programs.length > 0 && programs.filter((item) => item.id == id)[0].title}
             </h3>
           </div>
-          {user.profile.name != 'Pesquisador' &&
+          {user.profile.name != 'Pesquisador'
+          && (
           <div className="card-title">
             <Button
               onClick={() => {
@@ -89,15 +94,16 @@ export default function Avaliadores() {
 
             </Button>
           </div>
-          }
+          )}
           <div className="card-body">
             <Table>
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className={user.profile.name != 'Pesquisador' ? "col-6" : "col-4"}>Título</th>
-                  <th className="col-4">Anexo</th>
-                  {user.profile.name != 'Pesquisador' && <th>Ações</th>}
+                  <th className="col-4">Título</th>
+                  <th className="col-5">Descrição</th>
+                  <th className="col-1">Anexo</th>
+                  <th className="col-1">Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -105,10 +111,13 @@ export default function Avaliadores() {
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.title }</td>
+                    <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{__html: item.description}}></td>
                     <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
-                    {user.profile.name != 'Pesquisador' &&
+                    {user.profile.name != 'Pesquisador'
+                    && (
                     <td style={{ textAlign: 'center' }}>
                       <button
+                        data-tip="Deletar edital"
                         onClick={() => {
                           setNotice(item);
                           toggleModalConfirm();
@@ -117,8 +126,26 @@ export default function Avaliadores() {
                       >
                         <FiTrash />
                       </button>
+
+                      <ReactTooltip />
                     </td>
-                    }
+                    )}
+                    {user.profile.name == 'Pesquisador'
+                    && (
+                    <td style={{ textAlign: 'center' }}>
+                      <button
+                        data-tip="Submeter projeto"
+                        onClick={() => {
+                          history.push(`/projeto/${item.id}`);
+                        }}
+                        className="edit"
+                      >
+                        <FiFileText />
+                      </button>
+
+                      <ReactTooltip />
+                    </td>
+                    )}
                   </tr>
                 ))}
               </tbody>

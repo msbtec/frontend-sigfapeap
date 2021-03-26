@@ -113,13 +113,6 @@ export default function Program() {
                     }} className="edit">
                     <FiFolderPlus />
                     </button>
-                    {user.profile.name == 'Pesquisador' &&
-                    <button data-tip="Submeter projeto" onClick={() => {
-                         history.push(`/projeto/${item.id}`)
-                      }} className="edit">
-                        <FiFileText />
-                    </button>
-                    }
                     {user.profile.name != 'Pesquisador' &&
                     <>
                         <button data-tip="Editar programa" onClick={() => {
@@ -129,7 +122,7 @@ export default function Program() {
                         <FiEdit />
                         </button>
 
-                        <button data-tip="Cancelar programa" onClick={() => {
+                        <button data-tip="Deletar programa" onClick={() => {
                             setSelected(item);
                             toggleModalConfirm();
                         }} className="eraser">

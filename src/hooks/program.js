@@ -59,6 +59,7 @@ export const ProgramProvider = ({ children }) => {
 
     const formData = new FormData();
     formData.append("title", data.title);
+    formData.append("description", data.description);
     formData.append("program_id", data.id);
     formData.append("file", file);
 

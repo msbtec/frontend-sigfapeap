@@ -6,6 +6,9 @@ import { Form as Unform } from '@unform/web';
 import { FiCheckCircle, FiX, FiFile } from 'react-icons/fi';
 import { store } from 'react-notifications-component';
 
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 import * as Yup from 'yup';
 import { Form } from '../../../../components/Form';
 
@@ -25,6 +28,8 @@ function ModalForm({
   const { addNotice } = useProgram();
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorFile, setErrorFile] = useState('');
+
+  const [description, setDescription] = useState("");
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -46,7 +51,7 @@ function ModalForm({
         });
 
         if (selectedFile) {
-          addNotice({ id, ...data }, selectedFile);
+          addNotice({ id, description, ...data }, selectedFile);
           submit();
         }
       } catch (error) {
@@ -57,7 +62,7 @@ function ModalForm({
         }
       }
     },
-    [id, addNotice, selectedFile, submit],
+    [id, addNotice, description, selectedFile, submit],
   );
 
   return (
@@ -79,6 +84,21 @@ function ModalForm({
         <Form>
           <div className="modal-body" ref={reference}>
             <Input formRef={formRef} name="title" required original title="Título" />
+
+            <div className="input-block">
+              <label style={{ marginBottom: 10 }}>
+                Descrição
+              </label>
+              <CKEditor
+                editor={ClassicEditor}
+                data={description}
+                onReady={(editor) => { }}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  setDescription(data);
+                }}
+              />
+            </div>
 
             <div style={{ marginBottom: 10 }} className="input-block">
               <label htmlFor="email">
