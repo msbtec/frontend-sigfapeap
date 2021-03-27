@@ -106,10 +106,25 @@ export default function Project() {
             <Unform ref={formRef} onSubmit={handleSubmit}>
 
               <ul className="breadcrumb" style={{ marginBottom: 20 }}>
-                <li><a onClick={() => setScreen({ ...screen, header: true, attachment: false })}>Cabeçalho</a></li>
-                <li><a onClick={() => setScreen({ ...screen, header: false, attachment: true })}>Anexo</a></li>
-                <li><a>Plano de apresentação</a></li>
-                <li><a>Diarias</a></li>
+                <li style={{
+                  backgroundColor: screen.header ? '#b20710' : '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
+                }}
+                >
+                  <a onClick={() => setScreen({ ...screen, header: true, attachment: false })}>Cabeçalho</a>
+                </li>
+                <li style={{
+                  backgroundColor: screen.attachment ? '#b20710' : '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
+                }}
+                >
+                  <a onClick={() => setScreen({ ...screen, header: false, attachment: true })}>Anexo</a>
+                </li>
+                <li style={{
+                  backgroundColor: '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
+                }}
+                >
+                  <a>Plano de apresentação</a>
+                </li>
+                <li style={{ backgroundColor: '#ccc', padding: 10, borderRadius: 10 }}><a>Diarias</a></li>
               </ul>
 
               <Content>

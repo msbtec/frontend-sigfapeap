@@ -2,6 +2,8 @@ import React, {
   useState, useEffect, Suspense, lazy,
 } from 'react';
 
+import ReactTooltip from 'react-tooltip';
+
 import { ModalProvider } from 'styled-react-modal';
 
 import { FiEdit, FiTrash } from 'react-icons/fi';
@@ -78,13 +80,13 @@ export default function Cargos() {
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.name }</td>
                     <td style={{ textAlign: 'center' }}>
-                      <button onClick={() => {
+                      <button data-tip="Editar cargo" onClick={() => {
                           setSelected(item);
                           toggleModalForm();
                       }} className="edit">
                         <FiEdit />
                       </button>
-                      <button onClick={() => {
+                      <button data-tip="Deletar cargo" onClick={() => {
                           setSelected(item);
                           toggleModalConfirm();
                       }} className="eraser">
@@ -105,6 +107,8 @@ export default function Cargos() {
           <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
         </ModalProvider>
       </Suspense>
+
+      <ReactTooltip />
     </>
   );
 }

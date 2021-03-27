@@ -2,6 +2,8 @@ import React, {
   useState, useEffect, Suspense, lazy,
 } from 'react';
 
+import ReactTooltip from 'react-tooltip';
+
 import { ModalProvider } from 'styled-react-modal';
 
 import { FiEdit, FiTrash } from 'react-icons/fi';
@@ -89,13 +91,13 @@ export default function Servidores() {
                     {/* <td style={{ textAlign: 'center' }}>{ item?.office?.name || item.office_name }</td> */}
                     <td style={{ textAlign: 'center' }}>{ item?.profile?.name }</td>
                     <td style={{ textAlign: 'center' }}>
-                      <button onClick={() => {
+                      <button data-tip="Editar usuário" onClick={() => {
                           setSelected(item);
                           toggleModalForm();
                       }} className="edit">
                         <FiEdit />
                       </button>
-                      <button onClick={() => {
+                      <button data-tip="Deletar usuário" onClick={() => {
                           setSelected(item);
                           toggleModalConfirm();
                       }} className="eraser">
@@ -130,6 +132,8 @@ export default function Servidores() {
           <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
         </ModalProvider>
       </Suspense>
+
+      <ReactTooltip />
     </>
   );
 }

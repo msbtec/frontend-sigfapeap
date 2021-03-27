@@ -234,7 +234,7 @@ export default function ConfigurationNotice() {
                       checked={fields.cotacao_moeda_estrangeira.checked}
                       fields={fields}
                       setFields={setFields}
-                      title="Contação da Moeda Estrangeira"
+                      title="Cotação da Moeda Estrangeira"
                     />
 
                     <Input type="number" disabled={!fields.cotacao_moeda_estrangeira.checked} formRef={formRef} name="duration" original />

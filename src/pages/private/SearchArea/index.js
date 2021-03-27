@@ -2,6 +2,8 @@ import React, {
   useState, useEffect, Suspense, lazy,
 } from 'react';
 
+import ReactTooltip from 'react-tooltip';
+
 import { ModalProvider } from 'styled-react-modal';
 
 import { FiEdit, FiTrash } from 'react-icons/fi';
@@ -80,13 +82,13 @@ export default function Pesquisas() {
                     <td style={{ textAlign: 'center' }}>{ item.name }</td>
                     <td style={{ textAlign: 'center' }}>{ item.connections.map(item => String(item.name)).join(", ") }</td>
                     <td style={{ textAlign: 'center' }}>
-                      <button onClick={() => {
+                      <button data-tip="Editar área de pesquisa" onClick={() => {
                           setSelected(item);
                           toggleModalForm();
                       }} className="edit">
                         <FiEdit />
                       </button>
-                      <button onClick={() => {
+                      <button data-tip="Deletar área de pesquisa" onClick={() => {
                           setSelected(item);
                           toggleModalConfirm();
                       }} className="eraser">
@@ -107,6 +109,8 @@ export default function Pesquisas() {
           <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
         </ModalProvider>
       </Suspense>
+
+      <ReactTooltip />
     </>
   );
 }

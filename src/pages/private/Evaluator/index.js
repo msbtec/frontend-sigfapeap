@@ -2,6 +2,8 @@ import React, {
   useState, useEffect, Suspense, lazy,
 } from 'react';
 
+import ReactTooltip from 'react-tooltip';
+
 import { ModalProvider } from 'styled-react-modal';
 
 import { FiTrash, FiFolderPlus, FiUserPlus } from 'react-icons/fi';
@@ -84,6 +86,7 @@ export default function Avaliadores() {
                     <td style={{ textAlign: 'center' }}>{ item.email }</td>
                     <td style={{ textAlign: 'center' }}>
                       <button
+                        data-tip="Adicionar programa(s)"
                         onClick={() => {
                             setSelected(item);
                             toggleModalForm();
@@ -93,6 +96,7 @@ export default function Avaliadores() {
                         <FiFolderPlus />
                       </button>
                       <button
+                        data-tip="Remover do banco de avaliadores"
                         onClick={() => {
                           setSelected(item);
                           toggleModalConfirm();
@@ -121,6 +125,8 @@ export default function Avaliadores() {
           />
         </ModalProvider>
       </Suspense>
+
+      <ReactTooltip />
     </>
   );
 }

@@ -2,6 +2,8 @@ import React, {
   useState, useEffect, Suspense, lazy,
 } from 'react';
 
+import ReactTooltip from 'react-tooltip';
+
 import { useParams } from 'react-router-dom';
 
 import { ModalProvider } from 'styled-react-modal';
@@ -131,6 +133,7 @@ export default function Avaliadores() {
                     <td style={{ textAlign: 'center' }}><FiLink style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.curriculum, '_blank')} /></td>
                     <td style={{ textAlign: 'center' }}>
                       <button
+                        data-tip="Remover avaliador"
                         onClick={() => {
                           setNotice(item);
                           toggleModalConfirm();
@@ -139,6 +142,7 @@ export default function Avaliadores() {
                       >
                         <FiTrash />
                       </button>
+                      <ReactTooltip />
                     </td>
                   </tr>
                 ))}
@@ -163,6 +167,8 @@ export default function Avaliadores() {
           />
         </ModalProvider>
       </Suspense>
+
+
     </>
   );
 }

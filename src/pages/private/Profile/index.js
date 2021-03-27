@@ -2,6 +2,8 @@ import React, {
   useState, useEffect, Suspense, lazy,
 } from 'react';
 
+import ReactTooltip from 'react-tooltip';
+
 import { ModalProvider } from 'styled-react-modal';
 
 // Icons
@@ -81,13 +83,13 @@ export default function Perfil() {
                     <td style={{ textAlign: 'center' }}>{ item.name }</td>
                     <td style={{ textAlign: 'center' }}>{ item.access.map(item => String(item.label)).join(", ") }</td>
                     <td style={{ textAlign: 'center' }}>
-                      <button onClick={() => {
+                      <button data-tip="Editar perfil" onClick={() => {
                           setSelected(item);
                           toggleModalForm();
                       }} className="edit">
                         <FiEdit />
                       </button>
-                      <button onClick={() => {
+                      <button data-tip="Deletar perfil" onClick={() => {
                           setSelected(item);
                           toggleModalConfirm();
                       }} className="eraser">
@@ -108,6 +110,8 @@ export default function Perfil() {
           <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
         </ModalProvider>
       </Suspense>
+
+      <ReactTooltip />
     </>
   );
 }
