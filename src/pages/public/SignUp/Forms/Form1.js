@@ -6,6 +6,7 @@ import { FiFile } from 'react-icons/fi';
 
 import { Form } from '../../../../components/Form';
 import Input from '../../../../components/Input';
+import api from '~/services/api';
 
 let ModalForm = () => <></>;
 
@@ -15,9 +16,17 @@ const Form1 = ({
 }) => {
   const [isForeign, setIsForeign] = React.useState(false);
 
+  const [institutions,setInstitutions] = useState([])
+
   const [OpenForm, setOpenForm] = useState(false);
 
   const [type, setType] = useState(1);
+
+  React.useEffect(() => {
+      api.get('foundations').then(({data}) => {
+        setInstitutions(data.map(item => ({id: item.id, name: item.name})))
+      })
+  },[])
 
   async function toggleModalForm() {
     ModalForm = await lazy(() => import("./Modal"));
@@ -54,6 +63,8 @@ const Form1 = ({
       <Input formRef={formRef} name="type_personal" setIsForeign={setIsForeign} select={[{id:"Pesquisador",name:"Pesquisador"}, {id:"Pesquisador estrangeiro",name:"Pesquisador estrangeiro"}]} required original title="Tipo Pessoa" />
 
       <Input formRef={formRef} name="name" required original title="Nome completo" />
+
+      <Input formRef={formRef} name="foundation_id" select={institutions} original title="Instituição" />
 
       {/* <div className="input-block">
         <label htmlFor="email">

@@ -6,16 +6,23 @@ import * as Yup from 'yup';
 
 import ReactLoading from "react-loading";
 
+import { useParams } from 'react-router-dom';
+
 import { Form as Unform } from '@unform/web';
 import { store } from 'react-notifications-component';
 import { Button } from '../../../components/Button';
 
 import { Content } from './styles';
 
+import { useAuth } from '../../../hooks/auth';
+
 import { Card } from '../../../components/Card';
 
 import Header from './Header';
-import Attachment from './Attachment';
+import Appresentation from './Appresentation';
+import Abrangencia from './Abrangencia';
+import Recursos from './Recursos';
+import Equipe from './Equipe';
 
 import getValidationErrors from '../../../utils/getValidationErrors';
 
@@ -24,11 +31,45 @@ import api from '../../../services/api';
 export default function Project() {
   const formRef = useRef(null);
 
+  const [plano, setPlano] = useState({
+    resumo: '',
+    palavras_chave: '',
+    informacoes_relevantes_para_avaliacao: '',
+    experiencia_coordenador: '',
+    sintese_projeto: '',
+    objetivos_gerais: '',
+    objetivos_especificos: '',
+    metodologia: '',
+    resultados_esperados: '',
+    impactos_esperados: '',
+    riscos_atividades: '',
+    referencia_bibliografica: '',
+    estado_arte: '',
+  });
+
+  const [despesas, setDespesas] = useState([]);
+  const [recursos, setRecursos] = useState([]);
+
+  const [abrangencias, setAbrangencias] = useState([]);
+
   const [loading, setLoading] = useState(false);
+
+  const { user } = useAuth();
+
+  const [membros, setMembros] = useState([{ label: user.name, value: JSON.stringify(user) }]);
+  const [atividades, setAtividades] = useState([]);
+
+  const [edital, setEdital] = useState(null);
+  const { id } = useParams();
+
+  const [files, setFiles] = useState([]);
 
   const [screen, setScreen] = useState({
     header: true,
-    attachment: false,
+    appresentation: false,
+    abrangencia: false,
+    recursos: false,
+    equipe: false,
   });
 
   const [knowledgesArea, setKnowledgesArea] = useState({
@@ -38,7 +79,11 @@ export default function Project() {
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Submeter Projeto';
-  }, []);
+
+    api.get(`/programs/files/edital/${id}`).then(({ data }) => {
+      setEdital(data);
+    });
+  }, [id]);
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -48,13 +93,11 @@ export default function Project() {
         if (screen.header) {
           const schema = Yup.object().shape({
             title: Yup.string().required('Campo obrigatório'),
-            coordenator: Yup.string().required('Campo obrigatório'),
             email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
             faixa_value: Yup.string().required('Campo obrigatório'),
             institution: Yup.string().required('Campo obrigatório'),
             unity_execution: Yup.string().required('Campo obrigatório'),
-            duration: Yup.string().required('Campo obrigatório'),
-            money_foreign: Yup.string().required('Campo obrigatório'),
+            beggin: Yup.string().required('Campo obrigatório'),
           });
 
           await schema.validate(data, {
@@ -68,22 +111,22 @@ export default function Project() {
           setLoading(false);
         }, 2000);
 
-        api.put(`route`, {}).then(({ data }) => {
-          setLoading(false);
+        // api.put(`route`, {}).then(({ data }) => {
+        //   setLoading(false);
 
-          store.addNotification({
-            message: `Projeto submetido com sucesso!`,
-            type: 'success',
-            insert: 'top',
-            container: 'top-right',
-            animationIn: ['animate__animated', 'animate__fadeIn'],
-            animationOut: ['animate__animated', 'animate__fadeOut'],
-            dismiss: {
-              duration: 5000,
-              onScreen: true,
-            },
-          });
-        }).finally(() => {});
+        //   store.addNotification({
+        //     message: `Projeto submetido com sucesso!`,
+        //     type: 'success',
+        //     insert: 'top',
+        //     container: 'top-right',
+        //     animationIn: ['animate__animated', 'animate__fadeIn'],
+        //     animationOut: ['animate__animated', 'animate__fadeOut'],
+        //     dismiss: {
+        //       duration: 5000,
+        //       onScreen: true,
+        //     },
+        //   });
+        // }).finally(() => {});
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
@@ -110,28 +153,69 @@ export default function Project() {
                   backgroundColor: screen.header ? '#b20710' : '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
                 }}
                 >
-                  <a onClick={() => setScreen({ ...screen, header: true, attachment: false })}>Cabeçalho</a>
+                  <a onClick={() => setScreen({
+                    ...screen, header: true, appresentation: false, abrangencia: false, equipe: false, recursos: false,
+                  })}
+                  >
+                    Plano de Trabalho
+                  </a>
                 </li>
                 <li style={{
-                  backgroundColor: screen.attachment ? '#b20710' : '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
+                  backgroundColor: screen.appresentation ? '#b20710' : '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
                 }}
                 >
-                  <a onClick={() => setScreen({ ...screen, header: false, attachment: true })}>Anexo</a>
+                  <a onClick={() => setScreen({
+                    ...screen, header: false, abrangencia: false, recursos: false, equipe: false, appresentation: true,
+                  })}
+                  >
+                    Plano de apresentação
+                  </a>
                 </li>
                 <li style={{
-                  backgroundColor: '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
+                  backgroundColor: screen.abrangencia ? '#b20710' : '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
                 }}
                 >
-                  <a>Plano de apresentação</a>
+                  <a onClick={() => setScreen({
+                    ...screen, header: false, appresentation: false, abrangencia: true, equipe: false, recursos: false,
+                  })}
+                  >
+                    Abrangência
+                  </a>
                 </li>
-                <li style={{ backgroundColor: '#ccc', padding: 10, borderRadius: 10 }}><a>Diarias</a></li>
+                <li style={{
+                  backgroundColor: screen.recursos ? '#b20710' : '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
+                }}
+                >
+                  <a onClick={() => setScreen({
+                    ...screen, header: false, appresentation: false, abrangencia: false, equipe: false, recursos: true,
+                  })}
+                  >
+                    Recursos
+                  </a>
+                </li>
+                <li style={{
+                  backgroundColor: screen.equipe ? '#b20710' : '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
+                }}
+                >
+                  <a onClick={() => setScreen({
+                    ...screen, header: false, appresentation: false, abrangencia: false, equipe: true, recursos: false,
+                  })}
+                  >
+                    Equipe
+                  </a>
+                </li>
               </ul>
 
               <Content>
-                {screen.header && <Header formRef={formRef} knowledgesArea={knowledgesArea} setKnowledgesArea={setKnowledgesArea} />}
-                {screen.attachment && <Attachment formRef={formRef} />}
+                {screen.header && <Header files={files} setFiles={setFiles} edital={edital} user={user} formRef={formRef} knowledgesArea={knowledgesArea} setKnowledgesArea={setKnowledgesArea} />}
+                {screen.appresentation && <Appresentation plano={plano} setPlano={setPlano} formRef={formRef} />}
+                {screen.abrangencia && <Abrangencia formRef={formRef} abrangencias={abrangencias} setAbrangencias={setAbrangencias} />}
+                {screen.recursos && <Recursos formRef={formRef} despesas={despesas} setDespesas={setDespesas} recursos={recursos} setRecursos={setRecursos} />}
+                {screen.equipe && <Equipe formRef={formRef} membros={membros} setMembros={setMembros} atividades={atividades} setAtividades={setAtividades} />}
               </Content>
 
+              {/* {screen.recursos
+              && (
               <div className="modal-footer">
                 {loading ? (<ReactLoading type="spin" height="5%" width="5%" color="#3699ff" />) : (
                   <Button
@@ -141,6 +225,7 @@ export default function Project() {
                   </Button>
                 )}
               </div>
+              )} */}
             </Unform>
           </div>
         </Card>

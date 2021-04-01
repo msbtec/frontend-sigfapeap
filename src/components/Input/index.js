@@ -9,7 +9,7 @@ import { useField } from '@unform/core';
 import SelectMultiple from "react-select";
 
 import {
-  cpfMask, mtel, moeda, data, Cep, Cnpj,
+  cpfMask, mtel, moeda, data, Cep, Cnpj, faixa,
 } from '../../utils/validations';
 
 import { Container, Title } from './styles';
@@ -17,7 +17,7 @@ import { Container, Title } from './styles';
 function Input({
   formRef, original = false, setIsForeign, disabled, handleCEP, multi = true, access,
   setIsConnection, setIsGenerate_connection, institutions, setInstitutions,
-  password, required, select, name, title, ...rest
+  password, required, select, name, title, open, ...rest
 }) {
   const inputRef = useRef(null);
 
@@ -130,7 +130,7 @@ function Input({
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('price', formatted);
                   } else if (name === 'faixa_value') {
-                    const formatted = moeda(value.target.value);
+                    const formatted = faixa(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('faixa_value', formatted);
                   } else if (name === 'money_foreign') {

@@ -24,6 +24,20 @@ function moeda(v) {
   return `R$ ${v}`;
 }
 
+function faixa(v) {
+  v = v.replace(/\D/g, '');
+
+  console.log(v.substr(3, v.length));
+  v = v.length > 3 ? v.substr(3, v.length) : v.length == 3 ? '' : v;
+
+  v = v.replace(/(\d{1})(\d{15})$/, '$1.$2');
+  v = v.replace(/(\d{1})(\d{11})$/, '$1.$2');
+  v = v.replace(/(\d{1})(\d{8})$/, '$1.$2');
+  v = v.replace(/(\d{1})(\d{5})$/, '$1.$2');
+  v = v.replace(/(\d{1})(\d{1,2})$/, '$1,$2');
+  return `R$ 1,00 à R$ ${v}`;
+}
+
 function data(v) {
   v = v.replace(/\D/g, '');
   v = v.replace(/(\d{1})(\d{1,2})$/, '$1:$2');
@@ -47,5 +61,5 @@ function Cnpj(v) {
 }
 
 export {
-  cpfMask, mtel, moeda, data, Cep, Cnpj,
+  cpfMask, mtel, moeda, data, Cep, Cnpj, faixa,
 };
