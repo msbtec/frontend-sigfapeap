@@ -1,26 +1,34 @@
-import React, {Suspense, lazy, useState} from 'react';
+import React, {
+  Suspense, lazy, useState, useEffect,
+} from 'react';
 
 import moment from 'moment';
 
-import {FiTrash} from 'react-icons/fi'
+import { FiTrash } from 'react-icons/fi';
 
 import SelectMultiple from "react-select";
+import { ModalProvider } from 'styled-react-modal';
 import { Form } from '../../../../components/Form';
 import { Table } from '../../../../components/Table';
 import { useResearcher } from '../../../../hooks/researcher';
 import { useAuth } from '../../../../hooks/auth';
 
-import { ModalProvider } from 'styled-react-modal';
+import api from '~/services/api';
+
 let ModalForm = () => <></>;
 
 export default function Header({
-  formRef, membros, setMembros, atividades, setAtividades
+  formRef, membros, setMembros, atividades, setAtividades,
 }) {
-  const { users } = useResearcher();
+  const { setUsers, users } = useResearcher();
   const { user } = useAuth();
 
   const [OpenForm, setOpenForm] = useState(false);
   const [type, setType] = useState(1);
+
+  const[totalMeses,setTotalMeses] = useState(0)
+
+  const [nameOrCpf, setNameOrCpf] = useState(null);
 
   async function toggleModalForm() {
     ModalForm = await lazy(() => import("./Modal"));
@@ -28,9 +36,29 @@ export default function Header({
     setOpenForm(!OpenForm);
   }
 
-   function submitModalForm() {
+  function submitModalForm() {
     setOpenForm(!OpenForm);
-   }
+  }
+
+  useEffect(() => {
+    api.post(`users/search`, {
+        params: {
+            page: 1,
+            nameOrCpf: nameOrCpf ? String(nameOrCpf).toUpperCase() : undefined,
+        },
+        }).then(({ data }) => {
+        setUsers(data.data);
+        });
+  }, [nameOrCpf, setUsers]);
+
+  useEffect(() => {
+    if(atividades.length > 0){
+        setTotalMeses(atividades.reduce(
+            ( accumulator, currentValue ) => accumulator + Number(currentValue.end),
+            0
+          ));
+    }
+  }, [atividades]);
 
   return (
     <Form>
@@ -46,6 +74,7 @@ export default function Header({
         value={membros}
         noOptionsMessage={({ inputValue }) => "Sem opções"}
         options={users.map((item) => ({ label: item.name, value: JSON.stringify(item) }))}
+        onInputChange={(value) => String(value) == "" ? setNameOrCpf(null) : setNameOrCpf(value)}
         onChange={(values) => {
           if (values != null) {
             const filter = values.filter((item) => JSON.parse(item.value).id == user.id);
@@ -92,7 +121,7 @@ export default function Header({
           {membros.map((item) => (
             <tr>
               <td style={{ textAlign: 'center' }}>{JSON.parse(item.value).name}</td>
-              <td style={{ textAlign: 'center' }}>{JSON.parse(item.value)?.foundation?.name}</td>
+              <td style={{ textAlign: 'center' }}>{JSON.parse(item.value).foundation.name}</td>
               <td style={{ textAlign: 'center' }}>{JSON.parse(item.value).id == user.id ? 'Coordenador(a)' : 'Pesquisador(a)'}</td>
             </tr>
           ))}
@@ -102,13 +131,13 @@ export default function Header({
       <div style={{ marginTop: 40 }} />
       <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Atividades</label>
 
-      <div style={{marginTop: 20}}>
+      <div style={{ marginTop: 20 }}>
         <button
-            style={{ marginBottom: 20, width: 100 }}
-            type="button"
-            onClick={() => toggleModalForm()}
+          style={{ marginBottom: 20, width: 100 }}
+          type="button"
+          onClick={() => toggleModalForm()}
         >
-            Adicionar
+          Adicionar
         </button>
       </div>
 
@@ -125,17 +154,21 @@ export default function Header({
           </tr>
         </thead>
         <tbody>
-            {atividades.map((item,index) => (
-                <tr>
-                    <td style={{ textAlign: 'center' }}>{`A-${index+1}`}</td>
-                    <td style={{ textAlign: 'center' }}>{item.title}</td>
-                    <td style={{ textAlign: 'center' }}>{moment(item.beggin).format('L')}</td>
-                    <td style={{ textAlign: 'center' }}>{moment(item.end).format('L')}</td>
-                    <td style={{ textAlign: 'center' }}>{item.chs} Hora(s)</td>
-                    <td style={{ textAlign: 'center' }}>{item.participantes.map(item => String(item.label)).join(', ')}</td>
-                    <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setAtividades(atividades.filter((atividade) => atividade.id !== item.id))} style={{ fontSize: 20, cursor: 'pointer' }} /></td>
-                </tr>
-            ))}
+          {atividades.map((item, index) => (
+            <tr>
+              <td style={{ textAlign: 'center' }}>{`A-${index + 1}`}</td>
+              <td style={{ textAlign: 'center' }}>{item.title}</td>
+              <td style={{ textAlign: 'center' }}>{moment(item.beggin).format('L')}</td>
+              <td style={{ textAlign: 'center' }}>{`${item.end} Mês(es)`}</td>
+              <td style={{ textAlign: 'center' }}>
+                {item.chs}
+                {' '}
+                Hora(s)
+              </td>
+              <td style={{ textAlign: 'center' }}>{item.participantes.map((item) => String(item.label)).join(', ')}</td>
+              <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setAtividades(atividades.filter((atividade) => atividade.id !== item.id))} style={{ fontSize: 20, cursor: 'pointer' }} /></td>
+            </tr>
+          ))}
         </tbody>
       </Table>
 

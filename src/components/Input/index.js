@@ -17,7 +17,7 @@ import { Container, Title } from './styles';
 function Input({
   formRef, original = false, setIsForeign, disabled, handleCEP, multi = true, access,
   setIsConnection, setIsGenerate_connection, institutions, setInstitutions,
-  password, required, select, name, title, open, ...rest
+  password, required, select, name, title, open, setMinDate, ...rest
 }) {
   const inputRef = useRef(null);
 
@@ -141,6 +141,11 @@ function Input({
                     const formatted = data(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('time', formatted);
+                  } else if (name === 'beggin') {
+                    const formatted = value.target.value;
+                    inputRef.current.value = String(formatted);
+                    formRef.current.setFieldValue('beggin', formatted);
+                    setMinDate(formatted);
                   } else if (name === 'zipcode') {
                     const formatted = Cep(value.target.value);
                     inputRef.current.value = String(formatted);
