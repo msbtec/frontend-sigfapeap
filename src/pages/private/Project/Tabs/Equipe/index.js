@@ -8,10 +8,10 @@ import { FiTrash } from 'react-icons/fi';
 
 import SelectMultiple from "react-select";
 import { ModalProvider } from 'styled-react-modal';
-import { Form } from '../../../../components/Form';
-import { Table } from '../../../../components/Table';
-import { useResearcher } from '../../../../hooks/researcher';
-import { useAuth } from '../../../../hooks/auth';
+import { Form } from '../../../../../components/Form';
+import { Table } from '../../../../../components/Table';
+import { useResearcher } from '../../../../../hooks/researcher';
+import { useAuth } from '../../../../../hooks/auth';
 
 import api from '~/services/api';
 
@@ -26,7 +26,7 @@ export default function Header({
   const [OpenForm, setOpenForm] = useState(false);
   const [type, setType] = useState(1);
 
-  const[totalMeses,setTotalMeses] = useState(0)
+  const [totalMeses, setTotalMeses] = useState(0);
 
   const [nameOrCpf, setNameOrCpf] = useState(null);
 
@@ -42,21 +42,21 @@ export default function Header({
 
   useEffect(() => {
     api.post(`users/search`, {
-        params: {
-            page: 1,
-            nameOrCpf: nameOrCpf ? String(nameOrCpf).toUpperCase() : undefined,
-        },
-        }).then(({ data }) => {
-        setUsers(data.data);
-        });
+      params: {
+        page: 1,
+        nameOrCpf: nameOrCpf ? String(nameOrCpf).toUpperCase() : undefined,
+      },
+    }).then(({ data }) => {
+      setUsers(data.data);
+    });
   }, [nameOrCpf, setUsers]);
 
   useEffect(() => {
-    if(atividades.length > 0){
-        setTotalMeses(atividades.reduce(
-            ( accumulator, currentValue ) => accumulator + Number(currentValue.end),
-            0
-          ));
+    if (atividades.length > 0) {
+      setTotalMeses(atividades.reduce(
+        (accumulator, currentValue) => accumulator + Number(currentValue.end),
+        0,
+      ));
     }
   }, [atividades]);
 
@@ -74,7 +74,7 @@ export default function Header({
         value={membros}
         noOptionsMessage={({ inputValue }) => "Sem opções"}
         options={users.map((item) => ({ label: item.name, value: JSON.stringify(item) }))}
-        onInputChange={(value) => String(value) == "" ? setNameOrCpf(null) : setNameOrCpf(value)}
+        onInputChange={(value) => (String(value) == "" ? setNameOrCpf(null) : setNameOrCpf(value))}
         onChange={(values) => {
           if (values != null) {
             const filter = values.filter((item) => JSON.parse(item.value).id == user.id);

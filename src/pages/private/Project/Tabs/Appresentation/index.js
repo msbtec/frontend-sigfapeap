@@ -2,9 +2,9 @@ import React from 'react';
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { Form } from '../../../../components/Form';
+import { Form } from '../../../../../components/Form';
 
-export default function Header({ formRef, plano, setPlano }) {
+export default function Header({ plano, setPlano }) {
   return (
     <Form>
       <div className="input-block">

@@ -2,14 +2,14 @@ import React from 'react';
 
 import { FiTrash } from 'react-icons/fi';
 import uuid from 'react-uuid';
-import { Form } from '../../../../components/Form';
-import { Table } from '../../../../components/Table';
+import { Form } from '../../../../../components/Form';
+import { Table } from '../../../../../components/Table';
 import {
   moeda,
-} from '../../../../utils/validations';
+} from '../../../../../utils/validations';
 
 export default function Header({
-  formRef, despesas, setDespesas, recursos, setRecursos,
+  despesas, setDespesas, recursos, setRecursos,
 }) {
   const [despesa, setDespesa] = React.useState({
     titulo: '',

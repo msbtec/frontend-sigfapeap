@@ -33,6 +33,7 @@
         "no-unreachable": "off",
         "no-throw-literal": "off",
         "no-shadow": "off",
+        "no-mixed-operators": "off",
         "max-len": "off",
         "jsx-a11y/anchor-is-valid": "off",
         "jsx-a11y/click-events-have-key-events": "off",

@@ -3,10 +3,10 @@ import Axios from 'axios';
 
 import { FiTrash } from 'react-icons/fi';
 import uuid from 'react-uuid';
-import { Form } from '../../../../components/Form';
-import { Table } from '../../../../components/Table';
+import { Form } from '../../../../../components/Form';
+import { Table } from '../../../../../components/Table';
 
-export default function Header({ formRef, abrangencias, setAbrangencias }) {
+export default function Header({ abrangencias, setAbrangencias }) {
   const [estados, setEstados] = React.useState([]);
   const [municipios, setMunicipios] = React.useState([]);
 
