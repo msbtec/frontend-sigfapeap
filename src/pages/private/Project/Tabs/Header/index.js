@@ -1,13 +1,20 @@
 import React from 'react';
 
 import { FiFile, FiTrash } from 'react-icons/fi';
+import { FaEye } from 'react-icons/fa';
 
+import { uuid } from 'uuidv4';
 import { Form } from '../../../../../components/Form';
 import Input from '../../../../../components/Input';
+import api from '~/services/api';
 
 export default function Header({
   formRef, protocolo, user, edital, files, setFiles,
 }) {
+  async function deleteFile(id) {
+    api.delete(`attachments/${id}`).then(({ data }) => {});
+  }
+
   return (
     <Form>
       <div style={{ marginBottom: 10 }} className="input-block">
@@ -66,10 +73,24 @@ export default function Header({
             </label>
           </div>
 
-          <FiTrash style={{
-            fontSize: 50, marginTop: 10, marginLeft: 20, marginRight: 20, cursor: 'pointer',
-          }}
-          />
+          <div style={{ display: 'flex' }}>
+            <FaEye
+              onClick={() => item.file.name && window.open(item.file.url || window.URL.createObjectURL(item.file), '__blank')}
+              style={{
+                fontSize: 25, marginTop: 10, marginLeft: 20, cursor: 'pointer',
+              }}
+            />
+
+            <FiTrash
+              onClick={() => {
+                setFiles(files.filter((file) => file.id !== item.id));
+                deleteFile(item.id);
+              }}
+              style={{
+                fontSize: 25, marginTop: 10, marginLeft: 20, marginRight: 20, cursor: 'pointer',
+              }}
+            />
+          </div>
         </div>
       ))}
 
@@ -78,6 +99,7 @@ export default function Header({
         type="button"
         onClick={() => {
           setFiles([...files, {
+            id: uuid(),
             title: 'FAPEAP - ANEXO',
             file: { name: null },
           }]);

@@ -34,6 +34,8 @@ import api from '../../../services/api';
 export default function Project() {
   const formRef = useRef(null);
 
+  const [project, setProject] = useState(null);
+
   const [screen, setScreen] = useState({
     header: true,
     appresentation: false,
@@ -42,6 +44,7 @@ export default function Project() {
     equipe: false,
   });
 
+  const [initiaLoading, setInitialLoading] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const { user } = useAuth();
@@ -51,7 +54,7 @@ export default function Project() {
 
   const [files, setFiles] = useState([]);
   const [edital, setEdital] = useState({ title: '' });
-  const protocolo = uuid();
+  const [protocolo, setProtocolo] = useState(uuid());
   const { id } = useParams();
 
   const [plano, setPlano] = useState({
@@ -77,10 +80,49 @@ export default function Project() {
   useEffect(() => {
     document.title = 'SIGFAPEAP - Submeter Projeto';
 
+    setInitialLoading(true);
+    api.put(`/projects`, {
+      edital_id: id,
+      coordenador_id: user.id,
+    }).then(({ data }) => {
+      setProject(data);
+      setFiles(data.files.map((item) => ({
+        id: item.id,
+        title: item.title,
+        file: item,
+      })));
+      setProtocolo(data.protocolo || uuid());
+      setAbrangencias(JSON.parse(data.abrangencia || '[]'));
+      setDespesas(JSON.parse(data.recursos_proprios || '[]'));
+      setRecursos(JSON.parse(data.recursos_solicitados_outros || '[]'));
+      if (data.membros.length > 0) {
+        setMembros(data.membros.map((item) => ({ label: item.name, value: JSON.stringify(item) })));
+      }
+      setAtividades(JSON.parse(data.atividades || '[]'));
+
+      setPlano({
+        resumo: data.resumo || '',
+        palavras_chave: data.palavras_chave || '',
+        informacoes_relevantes_para_avaliacao: data.informacoes_relevantes_para_avaliacao || '',
+        experiencia_coordenador: data.experiencia_coordenador || '',
+        sintese_projeto: data.sintese_projeto || '',
+        objetivos_gerais: data.objetivos_gerais || '',
+        objetivos_especificos: data.objetivos_especificos || '',
+        metodologia: data.metodologia || '',
+        resultados_esperados: data.resultados_esperados || '',
+        impactos_esperados: data.impactos_esperados || '',
+        riscos_atividades: data.riscos_atividades || '',
+        referencia_bibliografica: data.referencia_bibliografica || '',
+        estado_arte: data.estado_arte || '',
+      });
+
+      setInitialLoading(false);
+    }).catch((error) => { setInitialLoading(false); });
+
     api.get(`/programs/files/edital/${id}`).then(({ data }) => {
       setEdital(data);
     });
-  }, [id]);
+  }, [id, user]);
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -98,7 +140,7 @@ export default function Project() {
             faixa_value: Yup.string().required('Campo obrigatório'),
             institution: Yup.string().required('Campo obrigatório'),
             unity_execution: Yup.string().required('Campo obrigatório'),
-            beggin: Yup.string().required('Campo obrigatório'),
+            beggin_prevision: Yup.string().required('Campo obrigatório'),
           });
 
           await schema.validate(data, {
@@ -107,7 +149,28 @@ export default function Project() {
 
           setLoading(true);
 
-          api.put(`route`, {}).then(({ data }) => {
+          const formData = new FormData();
+          formData.append('edital_id', id);
+          formData.append('title', data.title);
+          formData.append('protocolo', protocolo);
+          formData.append('coordenador_id', user.id);
+          formData.append('email', data.email);
+          formData.append('faixa_value', data.faixa_value);
+          formData.append('theme', data.theme);
+          formData.append('institution', data.institution);
+          formData.append('unity_execution', data.unity_execution);
+          formData.append('beggin_prevision', data.beggin_prevision);
+          formData.append('duration', data.duration);
+          formData.append('money_foreign', data.money_foreign);
+
+          // eslint-disable-next-line no-plusplus
+          for (let i = 0; i < files.length; i++) {
+            if (files[i].file.name) {
+              formData.append(`file`, files[i].file);
+            }
+          }
+
+          api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
 
             store.addNotification({
@@ -122,17 +185,187 @@ export default function Project() {
                 onScreen: true,
               },
             });
-          }).finally(() => {});
+          }).catch((error) => {
+            setLoading(false);
+            store.addNotification({
+              message: `Não foi possível submeter projeto!`,
+              type: 'danger',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+          });
         } else if (screen.appresentation) {
-          console.log(plano);
+          setLoading(true);
+
+          const formData = new FormData();
+          formData.append('edital_id', id);
+          formData.append('coordenador_id', user.id);
+          formData.append('resumo', plano.resumo || '');
+          formData.append('palavras_chave', plano.palavras_chave || '');
+          formData.append('informacoes_relevantes_para_avaliacao', plano.informacoes_relevantes_para_avaliacao || '');
+          formData.append('experiencia_coordenador', plano.experiencia_coordenador || '');
+          formData.append('sintese_projeto', plano.sintese_projeto || '');
+          formData.append('objetivos_gerais', plano.objetivos_gerais || '');
+          formData.append('objetivos_especificos', plano.objetivos_especificos || '');
+          formData.append('metodologia', plano.metodologia || '');
+          formData.append('resultados_esperados', plano.resultados_esperados || '');
+          formData.append('impactos_esperados', plano.impactos_esperados || '');
+          formData.append('riscos_atividades', plano.riscos_atividades || '');
+          formData.append('referencia_bibliografica', plano.referencia_bibliografica || '');
+          formData.append('estado_arte', plano.estado_arte || '');
+
+          api.post(`projects`, formData).then(({ data }) => {
+            setLoading(false);
+
+            store.addNotification({
+              message: `Projeto submetido com sucesso!`,
+              type: 'success',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+          }).catch((error) => {
+            setLoading(false);
+            store.addNotification({
+              message: `Não foi possível submeter projeto!`,
+              type: 'danger',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+          });
         } else if (screen.abrangencia) {
-          console.log(abrangencias);
+          setLoading(true);
+
+          const formData = new FormData();
+          formData.append('edital_id', id);
+          formData.append('coordenador_id', user.id);
+          formData.append('abrangencia', JSON.stringify(abrangencias));
+
+          api.post(`projects`, formData).then(({ data }) => {
+            setLoading(false);
+
+            store.addNotification({
+              message: `Projeto submetido com sucesso!`,
+              type: 'success',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+          }).catch((error) => {
+            setLoading(false);
+            store.addNotification({
+              message: `Não foi possível submeter projeto!`,
+              type: 'danger',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+          });
         } else if (screen.recursos) {
-          console.log(despesas);
-          console.log(recursos);
+          setLoading(true);
+
+          const formData = new FormData();
+          formData.append('edital_id', id);
+          formData.append('coordenador_id', user.id);
+          formData.append('recursos_proprios', JSON.stringify(despesas));
+          formData.append('recursos_solicitados_outros', JSON.stringify(recursos));
+
+          api.post(`projects`, formData).then(({ data }) => {
+            setLoading(false);
+
+            store.addNotification({
+              message: `Projeto submetido com sucesso!`,
+              type: 'success',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+          }).catch((error) => {
+            setLoading(false);
+            store.addNotification({
+              message: `Não foi possível submeter projeto!`,
+              type: 'danger',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+          });
         } else if (screen.equipe) {
-          console.log(membros);
-          console.log(atividades);
+          setLoading(true);
+
+          const formData = new FormData();
+          formData.append('edital_id', id);
+          formData.append('coordenador_id', user.id);
+          formData.append('membros', membros.map((item) => String(JSON.parse(item.value).id)));
+          formData.append('atividades', JSON.stringify(atividades));
+
+          api.post(`projects`, formData).then(({ data }) => {
+            setLoading(false);
+
+            store.addNotification({
+              message: `Projeto submetido com sucesso!`,
+              type: 'success',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+          }).catch((error) => {
+            setLoading(false);
+            store.addNotification({
+              message: `Não foi possível submeter projeto!`,
+              type: 'danger',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+          });
         }
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
@@ -142,7 +375,7 @@ export default function Project() {
         }
       }
     },
-    [screen, edital, files, protocolo, user, plano, abrangencias, recursos, despesas, membros, atividades],
+    [id, screen, edital, files, protocolo, user, plano, abrangencias, recursos, despesas, membros, atividades],
   );
 
   return (
@@ -153,9 +386,11 @@ export default function Project() {
       <div className="col-12 px-0">
         <Card className="red">
           <div className="card-body">
-            <Unform ref={formRef} onSubmit={handleSubmit}>
-              <Breadcumb screen={screen} setScreen={setScreen} />
+            <Breadcumb screen={screen} setScreen={setScreen} />
 
+            {!initiaLoading
+            && (
+            <Unform initialData={project} ref={formRef} onSubmit={handleSubmit}>
               <Content>
                 {screen.header && <Header files={files} setFiles={setFiles} protocolo={protocolo} edital={edital} user={user} formRef={formRef} />}
                 {screen.appresentation && <Appresentation plano={plano} setPlano={setPlano} formRef={formRef} />}
@@ -174,6 +409,7 @@ export default function Project() {
                 )}
               </div>
             </Unform>
+            )}
           </div>
         </Card>
       </div>
