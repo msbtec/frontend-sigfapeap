@@ -34,7 +34,12 @@ export default function Header({
         <input value={user.name} type="text" disabled />
       </div>
 
-      <Input formRef={formRef} name="email" title="E-mail" required original />
+      <div style={{ marginBottom: 10 }} className="input-block">
+        <label className="required">E-mail</label>
+        <input value={user.email} type="text" disabled />
+      </div>
+
+      {/* <Input formRef={formRef} name="email" title="E-mail" required original /> */}
 
       <Input formRef={formRef} name="faixa_value" title="Faixa de valor" required original />
 

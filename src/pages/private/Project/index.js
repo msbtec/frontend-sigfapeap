@@ -136,7 +136,7 @@ export default function Project() {
 
           const schema = Yup.object().shape({
             title: Yup.string().required('Campo obrigatório'),
-            email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
+            // email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
             faixa_value: Yup.string().required('Campo obrigatório'),
             institution: Yup.string().required('Campo obrigatório'),
             unity_execution: Yup.string().required('Campo obrigatório'),
@@ -154,7 +154,7 @@ export default function Project() {
           formData.append('title', data.title);
           formData.append('protocolo', protocolo);
           formData.append('coordenador_id', user.id);
-          formData.append('email', data.email);
+          formData.append('email', user.email);
           formData.append('faixa_value', data.faixa_value);
           formData.append('theme', data.theme);
           formData.append('institution', data.institution);
