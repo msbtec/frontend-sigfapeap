@@ -165,7 +165,7 @@ export default function Project() {
 
           // eslint-disable-next-line no-plusplus
           for (let i = 0; i < files.length; i++) {
-            if (files[i].file.name) {
+            if (files[i].file.name && !files[i].file.url) {
               formData.append(`file`, files[i].file);
             }
           }
