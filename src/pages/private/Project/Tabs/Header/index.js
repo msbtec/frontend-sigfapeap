@@ -63,7 +63,7 @@ export default function Header({
             </label>
             <div style={{ marginBottom: 5 }} />
             <label className="file-input">
-              <input type="file" placeholder="Arquivo" accept="image/*" onChange={(e) => setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, file: e.target.files[0] }) : file)))} />
+              <input type="file" placeholder="Arquivo" accept=".pdf, .doc, .docx" onChange={(e) => setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, file: e.target.files[0] }) : file)))} />
               <div className="text">
                 {files.length > 0 && files[index].file.name || 'Selecione anexo'}
               </div>
