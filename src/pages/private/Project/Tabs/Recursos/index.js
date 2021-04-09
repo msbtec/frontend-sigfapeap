@@ -49,60 +49,22 @@ export default function Header({
     <Form>
       <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Recursos Solicitados à FAPEAP</label>
 
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div className="input-block">
-          <label className="required">Título</label>
-          <input value={despesa.titulo} type="text" onChange={(value) => setDespesa({ ...despesa, titulo: value.target.value })} />
-        </div>
-
-        <div className="input-block" style={{ marginLeft: 10, marginBottom: 15 }}>
-          <label className="required">Valor em R$</label>
-          <input value={despesa.valor} type="text" onChange={(value) => setDespesa({ ...despesa, valor: moeda(value.target.value) })} />
-        </div>
-      </div>
-
-      <button
-        style={{ marginBottom: 20, width: 100 }}
-        type="button"
-        onClick={() => {
-          if (despesa.titulo != "" && (despesa.valor != "" && despesa.valor.trim() != "R$")) {
-            const filter = despesas.filter((item) => String(item.titulo).toUpperCase() == String(despesa.titulo).toUpperCase());
-
-            if (filter.length == 0) {
-              setDespesa({
-                id: uuid(),
-                titulo: '',
-                valor: '',
-              });
-              setDespesas([...despesas, despesa]);
-            } else if (filter.length == 0) {
-              setDespesa({
-                id: uuid(),
-                titulo: '',
-                valor: '',
-              });
-              setDespesas([...despesas, despesa]);
-            }
-          }
-        }}
-      >
-        Adicionar
-      </button>
-
-      <Table>
+      <Table style={{ marginTop: 20 }}>
         <thead>
           <tr>
             <th className="col-6">Elementos de Despesas</th>
-            <th className="col-4">R$</th>
-            <th className="col-2">-</th>
+            <th className="col-6">Valor em R$</th>
           </tr>
         </thead>
         <tbody>
           {despesas.map((item) => (
             <tr>
               <td style={{ textAlign: 'center' }}>{item.titulo}</td>
-              <td style={{ textAlign: 'center' }}>{item.valor}</td>
-              <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setDespesas(despesas.filter((despesa) => despesa.id !== item.id))} style={{ fontSize: 20, cursor: 'pointer' }} /></td>
+              <td style={{ textAlign: 'center' }}>
+                <div className="input-block">
+                  <input value={item.valor} type="text" onChange={(value) => setDespesas(despesas.map((subitem) => ((subitem.titulo == item.titulo) ? ({ ...item, valor: moeda(value.target.value) }) : subitem)))} />
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -153,7 +115,7 @@ export default function Header({
         type="button"
         onClick={() => {
           if (recurso.entidade != "" && recurso.tipo != "" && (recurso.valor != "" && recurso.valor.trim() != "R$") && recurso.descricao != "") {
-            const filter = recursos.filter((item) => String(item.entidade).toUpperCase() == String(despesa.entidade).toUpperCase());
+            const filter = recursos.filter((item) => String(item.entidade).toUpperCase() == String(recurso.entidade).toUpperCase());
 
             if (filter.length == 0) {
               setRecurso({

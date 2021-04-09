@@ -6,7 +6,6 @@ import { FiCheckCircle, FiX } from 'react-icons/fi';
 
 import SelectMultiple from "react-select";
 
-import * as Yup from 'yup';
 import uuid from 'react-uuid';
 import { Form } from '../../../../../../components/Form';
 
@@ -19,14 +18,16 @@ import { useAuth } from '../../../../../../hooks/auth';
 import { StyledModal } from './styles';
 
 function ModalForm({
-  isOpen, membros, atividades, setAtividades, toggleModal, submit,
+  isOpen, project, membros, atividades, setAtividades, toggleModal, submit,
 }) {
   const reference = useRef(null);
   const { user } = useAuth();
 
   const [menuOpen, setMenuOpen] = React.useState(false);
+  const [menuOpen2, setMenuOpen2] = React.useState(false);
 
   const [participantes, setParticipantes] = React.useState(membros);
+  const [responsavel, setResponsavel] = React.useState(membros[0]);
 
   const [data, setData] = React.useState({
     title: '',
@@ -50,34 +51,50 @@ function ModalForm({
         end: '',
         time: '',
       };
+
       if (data.title == "") {
         temp.title = 'Campo obrigatório';
       } else {
         temp.title = '';
       }
+
       if (data.beggin == "") {
         temp.beggin = 'Campo obrigatório';
+      } else if (Number(data.beggin) <= 0) {
+        temp.beggin = 'Campo deve ser maior que 0';
+      } else if (Number(data.beggin) > Number(project.duration)) {
+        temp.beggin = `Campo não deve ultrapassar a duração máxima de ${project.duration} mês(es)`;
       } else {
         temp.beggin = '';
       }
+
       if (data.end == "") {
         temp.end = 'Campo obrigatório';
+      } else if (Number(data.end) <= 0) {
+        temp.end = 'Campo deve ser maior que 0';
+      } else if (Number(data.end) > Number(project.duration)) {
+        temp.end = `Campo não deve ultrapassar a duração máxima de ${project.duration} mês(es)`;
+      } else if (Number(data.end) > Number(Number(project.duration) - Number(data.beggin) + 1)) {
+        temp.end = 'Campo não deve ultrapassar a duração total';
       } else {
         temp.end = '';
       }
+
       if (data.time == "") {
         temp.time = 'Campo obrigatório';
       } else {
         temp.time = '';
       }
 
-      if (data.title == "" || data.beggin == "" || data.end == "" || data.time == "") {
+      if (temp.title != "" || temp.beggin != "" || temp.end != "" || temp.time != "") {
         setErrors(temp);
 
         throw 'Error';
       }
 
-      setAtividades([...atividades, { id: uuid(), ...data, participantes }]);
+      setAtividades([...atividades, {
+        id: uuid(), ...data, participantes, responsavel: JSON.parse(responsavel.value),
+      }]);
 
       submit();
     } catch (error) {
@@ -121,7 +138,7 @@ function ModalForm({
 
           <div className="input-block">
             <label className="required">
-              Início
+              Mês de início
               {' '}
               <sup>
                 *
@@ -129,7 +146,7 @@ function ModalForm({
             </label>
             <input
               style={{ borderColor: errors.beggin ? '#c53030' : '#999' }}
-              type="date"
+              type="number"
               value={data.beggin}
               onChange={(value) => {
                 setData({ ...data, beggin: value.target.value });
@@ -150,7 +167,6 @@ function ModalForm({
             </label>
             <input
               style={{ borderColor: errors.end ? '#c53030' : '#999' }}
-              min={1}
               type="number"
               value={data.end}
               onChange={(value) => {
@@ -242,6 +258,54 @@ function ModalForm({
           />
 
           {menuOpen && <div style={{ marginTop: 200 }} />}
+
+          <div style={{ marginTop: 15 }} />
+          <label
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: '#626262',
+            }}
+            className="required"
+          >
+            Responsável
+          </label>
+          <div style={{ marginTop: 5 }} />
+          <SelectMultiple
+            maxMenuHeight={150}
+            onMenuOpen={() => setMenuOpen2(true)}
+            onMenuClose={() => setMenuOpen2(false)}
+            className="basic-multi-select"
+            classNamePrefix="select"
+            placeholder="Pesquisadores"
+            value={responsavel}
+            noOptionsMessage={({ inputValue }) => "Sem opções"}
+            options={participantes}
+            onChange={(values) => setResponsavel(values)}
+            theme={(theme) => ({
+              ...theme,
+              borderRadius: 5,
+              colors: {
+                ...theme.colors,
+                primary25: "#080",
+                primary: "#dee2e6",
+              },
+            })}
+            styles={{
+              option: (provided, state) => ({
+                ...provided,
+                color: state.isSelected ? "#fff" : "rgb(102,102,102)",
+                backgroundColor: state.isSelected ? "rgb(102,102,102)" : "#fff",
+
+                ":active": {
+                  ...provided[":active"],
+                  backgroundColor: !state.isDisabled && "#dee2e6",
+                },
+              }),
+            }}
+          />
+
+          {menuOpen2 && <div style={{ marginTop: 200 }} />}
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className="modal-footer">

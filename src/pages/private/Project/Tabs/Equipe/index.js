@@ -18,7 +18,7 @@ import api from '~/services/api';
 let ModalForm = () => <></>;
 
 export default function Header({
-  formRef, membros, setMembros, atividades, setAtividades,
+  formRef, project, membros, setMembros, atividades, setAtividades,
 }) {
   const { setUsers, users } = useResearcher();
   const { user } = useAuth();
@@ -145,11 +145,12 @@ export default function Header({
         <thead>
           <tr>
             <th className="col-1">#</th>
-            <th className="col-4">Atividade</th>
-            <th className="col-1">Início</th>
-            <th className="col-1">Fim</th>
+            <th className="col-2">Atividade</th>
+            <th className="col-1">Mês de início</th>
+            <th className="col-1">Duração</th>
             <th className="col-1">C.H.S</th>
-            <th className="col-3">Membros</th>
+            <th className="col-3">Membro(s)</th>
+            <th className="col-2">Responsável</th>
             <th className="col-1">-</th>
           </tr>
         </thead>
@@ -158,14 +159,15 @@ export default function Header({
             <tr>
               <td style={{ textAlign: 'center' }}>{`A-${index + 1}`}</td>
               <td style={{ textAlign: 'center' }}>{item.title}</td>
-              <td style={{ textAlign: 'center' }}>{moment(item.beggin).format('L')}</td>
+              <td style={{ textAlign: 'center' }}>{item.beggin}</td>
               <td style={{ textAlign: 'center' }}>{`${item.end} Mês(es)`}</td>
               <td style={{ textAlign: 'center' }}>
-                {item.chs}
+                {item.time}
                 {' '}
                 Hora(s)
               </td>
               <td style={{ textAlign: 'center' }}>{item.participantes.map((item) => String(item.label)).join(', ')}</td>
+              <td style={{ textAlign: 'center' }}>{item.responsavel.name}</td>
               <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setAtividades(atividades.filter((atividade) => atividade.id !== item.id))} style={{ fontSize: 20, cursor: 'pointer' }} /></td>
             </tr>
           ))}
@@ -175,6 +177,7 @@ export default function Header({
       <Suspense fallback={null}>
         <ModalProvider>
           <ModalForm
+            project={project}
             atividades={atividades}
             setAtividades={setAtividades}
             membros={membros}

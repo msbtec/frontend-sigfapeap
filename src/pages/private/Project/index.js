@@ -24,6 +24,7 @@ import Appresentation from './Tabs/Appresentation';
 import Abrangencia from './Tabs/Abrangencia';
 import Recursos from './Tabs/Recursos';
 import Equipe from './Tabs/Equipe';
+import Orcamento from './Tabs/Orcamento';
 
 import Breadcumb from './Components/Breadcumb';
 
@@ -42,6 +43,7 @@ export default function Project() {
     abrangencia: false,
     recursos: false,
     equipe: false,
+    orcamento: false,
   });
 
   const [initiaLoading, setInitialLoading] = useState(true);
@@ -73,9 +75,69 @@ export default function Project() {
     estado_arte: '',
   });
 
-  const [despesas, setDespesas] = useState([]);
+  const [despesas, setDespesas] = useState([
+    {
+      id: uuid(),
+      titulo: "Diárias",
+      valor: "R$ 0,00",
+    },
+    {
+      id: uuid(),
+      titulo: "Hospedagem/Alimentação",
+      valor: "R$ 0,00",
+    },
+    {
+      id: uuid(),
+      titulo: "Material de Consumo",
+      valor: "R$ 0,00",
+    },
+    {
+      id: uuid(),
+      titulo: "Passagens",
+      valor: "R$ 0,00",
+    },
+    {
+      id: uuid(),
+      titulo: "Pessoal",
+      valor: "R$ 0,00",
+    },
+    {
+      id: uuid(),
+      titulo: "Encargos",
+      valor: "R$ 0,00",
+    },
+    {
+      id: uuid(),
+      titulo: "Bolsas",
+      valor: "R$ 0,00",
+    },
+    {
+      id: uuid(),
+      titulo: "Outros Serviços de Terceiros",
+      valor: "R$ 0,00",
+    },
+    {
+      id: uuid(),
+      titulo: "Equipamentos e Material Permanente",
+      valor: "R$ 0,00",
+    },
+  ]);
   const [recursos, setRecursos] = useState([]);
   const [abrangencias, setAbrangencias] = useState([]);
+
+  const [orcamentos, setOrcamentos] = useState(
+    {
+      diarias: [],
+      hospedagem_alimentacao: [],
+      materiais_consumo: [],
+      passagens: [],
+      servicos_terceiros: [],
+      materiais_permanentes_equipamentos: [],
+      pessoal: [],
+      bolsas: [],
+      encargos: [],
+    },
+  );
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Submeter Projeto';
@@ -93,7 +155,7 @@ export default function Project() {
       })));
       setProtocolo(data.protocolo || uuid());
       setAbrangencias(JSON.parse(data.abrangencia || '[]'));
-      setDespesas(JSON.parse(data.recursos_proprios || '[]'));
+      setDespesas(JSON.parse(data.recursos_proprios || JSON.stringify(despesas)));
       setRecursos(JSON.parse(data.recursos_solicitados_outros || '[]'));
       if (data.membros.length > 0) {
         setMembros(data.membros.map((item) => ({ label: item.name, value: JSON.stringify(item) })));
@@ -122,6 +184,8 @@ export default function Project() {
     api.get(`/programs/files/edital/${id}`).then(({ data }) => {
       setEdital(data);
     });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, user]);
 
   const handleSubmit = useCallback(
@@ -396,7 +460,8 @@ export default function Project() {
                 {screen.appresentation && <Appresentation plano={plano} setPlano={setPlano} formRef={formRef} />}
                 {screen.abrangencia && <Abrangencia formRef={formRef} abrangencias={abrangencias} setAbrangencias={setAbrangencias} />}
                 {screen.recursos && <Recursos formRef={formRef} despesas={despesas} setDespesas={setDespesas} recursos={recursos} setRecursos={setRecursos} />}
-                {screen.equipe && <Equipe formRef={formRef} membros={membros} setMembros={setMembros} atividades={atividades} setAtividades={setAtividades} />}
+                {screen.equipe && <Equipe formRef={formRef} project={project} membros={membros} setMembros={setMembros} atividades={atividades} setAtividades={setAtividades} />}
+                {screen.orcamento && <Orcamento formRef={formRef} project={project} orcamentos={orcamentos} setOrcamentos={setOrcamentos} />}
               </Content>
 
               <div style={{ marginTop: 20 }} className="modal-footer">
