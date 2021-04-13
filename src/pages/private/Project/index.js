@@ -11,6 +11,9 @@ import { useParams } from 'react-router-dom';
 import { Form as Unform } from '@unform/web';
 import { store } from 'react-notifications-component';
 import uuid from 'react-uuid';
+import {
+  moeda,
+} from '../../../utils/validations';
 import { Button } from '../../../components/Button';
 
 import { Content } from './styles';
@@ -37,7 +40,13 @@ export default function Project() {
   const formRef = useRef(null);
 
   const { user } = useAuth();
-  const { project, setProject } = useProject();
+
+  const {
+    project, setProject, membros, setMembros, atividades, setAtividades,
+    plano, setPlano, despesas, setDespesas, recursos,
+    setRecursos, abrangencias, setAbrangencias,
+    orcamentos, setOrcamentos,
+  } = useProject();
 
   const [screen, setScreen] = useState({
     header: true,
@@ -51,93 +60,32 @@ export default function Project() {
   const [initiaLoading, setInitialLoading] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const [membros, setMembros] = useState([{ label: user.name, value: JSON.stringify(user) }]);
-  const [atividades, setAtividades] = useState([]);
-
   const [files, setFiles] = useState([]);
   const [edital, setEdital] = useState({ title: '' });
   const [protocolo, setProtocolo] = useState(uuid());
   const { id } = useParams();
 
-  const [plano, setPlano] = useState({
-    resumo: '',
-    palavras_chave: '',
-    informacoes_relevantes_para_avaliacao: '',
-    experiencia_coordenador: '',
-    sintese_projeto: '',
-    objetivos_gerais: '',
-    objetivos_especificos: '',
-    metodologia: '',
-    resultados_esperados: '',
-    impactos_esperados: '',
-    riscos_atividades: '',
-    referencia_bibliografica: '',
-    estado_arte: '',
-  });
+  function getValue(value) {
+    let valor_liquido = 0;
+    if (value) {
+      const string = String(value).split('R$')[1].trim().replace(/[\D]+/g, '');
+      if (string.length > 2) {
+        const resultado = `${string.substr(0, string.length - 2)}.${string.substr(string.length - 2)}`;
+        valor_liquido = resultado;
+      } else if (string.length > 1) {
+        const resultado = `${string.substr(0, string.length - 1)}.${string.substr(string.length - 1)}`;
+        valor_liquido = resultado;
+      } else {
+        valor_liquido = string;
+      }
+    }
 
-  const [despesas, setDespesas] = useState([
-    {
-      id: uuid(),
-      titulo: "Diárias",
-      valor: "R$ 0,00",
-    },
-    {
-      id: uuid(),
-      titulo: "Hospedagem/Alimentação",
-      valor: "R$ 0,00",
-    },
-    {
-      id: uuid(),
-      titulo: "Material de Consumo",
-      valor: "R$ 0,00",
-    },
-    {
-      id: uuid(),
-      titulo: "Passagens",
-      valor: "R$ 0,00",
-    },
-    {
-      id: uuid(),
-      titulo: "Pessoal",
-      valor: "R$ 0,00",
-    },
-    {
-      id: uuid(),
-      titulo: "Encargos",
-      valor: "R$ 0,00",
-    },
-    {
-      id: uuid(),
-      titulo: "Bolsas",
-      valor: "R$ 0,00",
-    },
-    {
-      id: uuid(),
-      titulo: "Outros Serviços de Terceiros",
-      valor: "R$ 0,00",
-    },
-    {
-      id: uuid(),
-      titulo: "Equipamentos e Material Permanente",
-      valor: "R$ 0,00",
-    },
-  ]);
-  const [recursos, setRecursos] = useState([]);
-  const [abrangencias, setAbrangencias] = useState([]);
+    return Number(valor_liquido);
+  }
 
-  const [orcamentos, setOrcamentos] = useState(
-    {
-      diarias: [],
-      hospedagem_alimentacao: [],
-      materiais_consumo: [],
-      passagens: [],
-      servicos_terceiros: [],
-      materiais_permanentes_equipamentos: [],
-      pessoal: [],
-      bolsas: [],
-      encargos: [],
-    },
-  );
+  function soma(array) {
+    return array.length > 0 ? array.reduce((accumulator, currentValue) => accumulator + getValue(currentValue.custo_total), 0) : '0';
+  }
 
   async function getProject() {
     setProject(null);
@@ -155,7 +103,13 @@ export default function Project() {
       })));
       setProtocolo(data.protocolo || uuid());
       setAbrangencias(JSON.parse(data.abrangencia || '[]'));
-      setDespesas(JSON.parse(data.recursos_proprios || JSON.stringify(despesas)));
+
+      const orcamentos_temp = JSON.parse(data.orcamento || JSON.stringify(orcamentos));
+      setOrcamentos(orcamentos_temp);
+
+      const despesas_temp = JSON.parse(data.recursos_proprios || JSON.stringify(despesas));
+      setDespesas(despesas_temp.map((item) => ((item.titulo == 'Diárias') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.diarias))) }) : item)));
+
       setRecursos(JSON.parse(data.recursos_solicitados_outros || '[]'));
       if (data.membros.length > 0) {
         setMembros(data.membros.map((item) => ({ label: item.name, value: JSON.stringify(item) })));
@@ -441,6 +395,46 @@ export default function Project() {
               },
             });
           });
+        } else if (screen.orcamento) {
+          setLoading(true);
+
+          const formData = new FormData();
+          formData.append('edital_id', id);
+          formData.append('coordenador_id', user.id);
+          formData.append('orcamento', JSON.stringify(orcamentos));
+
+          api.post(`projects`, formData).then(({ data }) => {
+            setLoading(false);
+
+            store.addNotification({
+              message: `Projeto submetido com sucesso!`,
+              type: 'success',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+
+            getProject();
+          }).catch((error) => {
+            setLoading(false);
+            store.addNotification({
+              message: `Não foi possível submeter projeto!`,
+              type: 'danger',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+          });
         }
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
@@ -468,12 +462,12 @@ export default function Project() {
             && (
             <Unform initialData={project} ref={formRef} onSubmit={handleSubmit}>
               <Content>
-                {screen.header && <Header files={files} setFiles={setFiles} protocolo={protocolo} edital={edital} user={user} formRef={formRef} />}
-                {screen.appresentation && <Appresentation plano={plano} setPlano={setPlano} formRef={formRef} />}
-                {screen.abrangencia && <Abrangencia formRef={formRef} abrangencias={abrangencias} setAbrangencias={setAbrangencias} />}
-                {screen.recursos && <Recursos formRef={formRef} despesas={despesas} setDespesas={setDespesas} recursos={recursos} setRecursos={setRecursos} />}
-                {screen.equipe && <Equipe formRef={formRef} membros={membros} setMembros={setMembros} atividades={atividades} setAtividades={setAtividades} />}
+                {screen.header && <Header files={files} setFiles={setFiles} protocolo={protocolo} edital={edital} formRef={formRef} />}
+                {screen.appresentation && <Appresentation />}
+                {screen.abrangencia && <Abrangencia />}
+                {screen.equipe && <Equipe />}
                 {screen.orcamento && <Orcamento formRef={formRef} orcamentos={orcamentos} setOrcamentos={setOrcamentos} despesas={despesas} setDespesas={setDespesas} />}
+                {screen.recursos && <Recursos />}
               </Content>
 
               <div style={{ marginTop: 20 }} className="modal-footer">

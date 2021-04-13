@@ -11,17 +11,10 @@ import {
 
 import { useProject } from '../../../../../hooks/project';
 
-// import Diarias from './Diarias';
-// import Hospedagem from './Hospedagem';
-// import Materiais from './Materiais';
-// import Passagens from './Passagens';
-
 let Diarias = () => <></>;
 
-export default function Orcamento({
-  orcamentos, setOrcamentos, despesas, setDespesas
-}) {
-  const { project } = useProject();
+export default function Orcamento() {
+  const { project, orcamentos, setOrcamentos, despesas, setDespesas } = useProject();
 
   const [OpenDiarias, setOpenDiarias] = useState(false);
 
@@ -85,7 +78,11 @@ export default function Orcamento({
                 <td style={{ textAlign: 'center' }}>{item.custo_total}</td>
                 <td style={{ textAlign: 'center' }}>{item.mes}</td>
                 <td style={{ textAlign: 'center' }}>{item.justificativa}</td>
-                <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setOrcamentos({ ...orcamentos, diarias: orcamentos.diarias.filter((diaria) => diaria.id != item.id) })} style={{ fontSize: 20, cursor: 'pointer' }} /></td>
+                <td style={{ textAlign: 'center' }}><FiTrash onClick={() => {
+                    const diarias = orcamentos.diarias.filter((diaria) => diaria.id != item.id);
+                    setOrcamentos({ ...orcamentos, diarias })
+                    setDespesas(despesas.map((item) => ((item.titulo == 'Diárias') ? ({ ...item, valor: moeda(String(soma(diarias))) }) : item)));
+                }} style={{ fontSize: 20, cursor: 'pointer' }} /></td>
               </tr>
             ))}
           </tbody>

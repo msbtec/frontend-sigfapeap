@@ -8,9 +8,13 @@ import {
   moeda,
 } from '../../../../../utils/validations';
 
-export default function Recursos({
-  despesas, setDespesas, recursos, setRecursos,
-}) {
+import { useProject } from '../../../../../hooks/project';
+
+export default function Recursos() {
+  const {
+    despesas, setDespesas, recursos, setRecursos,
+  } = useProject();
+
   const [recurso, setRecurso] = React.useState({
     entidade: '',
     tipo: '',
@@ -57,7 +61,7 @@ export default function Recursos({
               <td style={{ textAlign: 'center' }}>{item.titulo}</td>
               <td style={{ textAlign: 'center' }}>
                 <div className="input-block">
-                  <input value={item.valor} type="text" onChange={(value) => setDespesas(despesas.map((subitem) => ((subitem.titulo == item.titulo) ? ({ ...item, valor: moeda(value.target.value) }) : subitem)))} />
+                  <input value={item.valor} type="text" disabled onChange={(value) => setDespesas(despesas.map((subitem) => ((subitem.titulo == item.titulo) ? ({ ...item, valor: moeda(value.target.value) }) : subitem)))} />
                 </div>
               </td>
             </tr>

@@ -12,16 +12,14 @@ import { useResearcher } from '../../../../../hooks/researcher';
 import { useAuth } from '../../../../../hooks/auth';
 import { useProject } from '../../../../../hooks/project';
 
-import api from '~/services/api';
+import api from '../../../../../services/api';
 
 let ModalForm = () => <></>;
 
-export default function Header({
-  formRef, membros, setMembros, atividades, setAtividades,
-}) {
+export default function Header() {
   const { setUsers, users } = useResearcher();
   const { user } = useAuth();
-  const { project } = useProject()
+  const { membros, setMembros, atividades, setAtividades, project } = useProject()
 
   const [OpenForm, setOpenForm] = useState(false);
 

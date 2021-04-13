@@ -4,7 +4,11 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Form } from '../../../../../components/Form';
 
-export default function Header({ plano, setPlano }) {
+import { useProject } from '../../../../../hooks/project';
+
+export default function Appresentation() {
+  const { plano, setPlano } = useProject();
+
   return (
     <Form>
       <div className="input-block">

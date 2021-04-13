@@ -6,7 +6,11 @@ import uuid from 'react-uuid';
 import { Form } from '../../../../../components/Form';
 import { Table } from '../../../../../components/Table';
 
-export default function Header({ abrangencias, setAbrangencias }) {
+import { useProject } from '../../../../../hooks/project';
+
+export default function Abrangencia() {
+  const { abrangencias, setAbrangencias } = useProject();
+
   const [estados, setEstados] = React.useState([]);
   const [municipios, setMunicipios] = React.useState([]);
 

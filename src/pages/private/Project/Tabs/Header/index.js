@@ -6,11 +6,15 @@ import { FaEye } from 'react-icons/fa';
 import { uuid } from 'uuidv4';
 import { Form } from '../../../../../components/Form';
 import Input from '../../../../../components/Input';
-import api from '~/services/api';
+import api from '../../../../../services/api';
+
+import { useAuth } from '../../../../../hooks/auth';
 
 export default function Header({
-  formRef, protocolo, user, edital, files, setFiles,
+  formRef, protocolo, edital, files, setFiles,
 }) {
+  const { user } = useAuth();
+
   async function deleteFile(id) {
     api.delete(`attachments/${id}`).then(({ data }) => {});
   }
