@@ -60,9 +60,10 @@ export default function Recursos() {
             <tr>
               <td style={{ textAlign: 'center' }}>{item.titulo}</td>
               <td style={{ textAlign: 'center' }}>
-                <div className="input-block">
+                {item.valor}
+                {/* <div className="input-block">
                   <input value={item.valor} type="text" disabled onChange={(value) => setDespesas(despesas.map((subitem) => ((subitem.titulo == item.titulo) ? ({ ...item, valor: moeda(value.target.value) }) : subitem)))} />
-                </div>
+                </div> */}
               </td>
             </tr>
           ))}
