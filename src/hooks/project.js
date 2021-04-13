@@ -14,7 +14,7 @@ export const ProjectProvider = ({ children }) => {
 
   const [project, setProject] = useState(null);
 
-  const [membros, setMembros] = useState([{ label: user.name, value: JSON.stringify(user) }]);
+  const [membros, setMembros] = useState([{ label: user?.name, value: JSON.stringify(user) }]);
   const [atividades, setAtividades] = useState([]);
 
   const [plano, setPlano] = useState({
