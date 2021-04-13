@@ -8,14 +8,9 @@ import {
   moeda,
 } from '../../../../../utils/validations';
 
-export default function Header({
+export default function Recursos({
   despesas, setDespesas, recursos, setRecursos,
 }) {
-  const [despesa, setDespesa] = React.useState({
-    titulo: '',
-    valor: '',
-  });
-
   const [recurso, setRecurso] = React.useState({
     entidade: '',
     tipo: '',

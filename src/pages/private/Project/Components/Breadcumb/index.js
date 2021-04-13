@@ -37,17 +37,6 @@ export default function App({ screen, setScreen }) {
         </a>
       </li>
       <li style={{
-        backgroundColor: screen.recursos ? '#b20710' : '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
-      }}
-      >
-        <a onClick={() => setScreen({
-          ...screen, header: false, appresentation: false, abrangencia: false, equipe: false, recursos: true, orcamento: false,
-        })}
-        >
-          Recursos
-        </a>
-      </li>
-      <li style={{
         backgroundColor: screen.equipe ? '#b20710' : '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
       }}
       >
@@ -67,6 +56,17 @@ export default function App({ screen, setScreen }) {
         })}
         >
           Orçamentos
+        </a>
+      </li>
+      <li style={{
+        backgroundColor: screen.recursos ? '#b20710' : '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
+      }}
+      >
+        <a onClick={() => setScreen({
+          ...screen, header: false, appresentation: false, abrangencia: false, equipe: false, recursos: true, orcamento: false,
+        })}
+        >
+          Recursos
         </a>
       </li>
     </ul>

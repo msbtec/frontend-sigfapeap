@@ -10,6 +10,7 @@ import { FoundationProvider } from "./foundation";
 import { ProgramProvider } from "./program";
 import { EvaluatorProvider } from "./evaluators";
 import { ResearcherProvider } from "./researcher";
+import { ProjectProvider } from "./project";
 
 const AppProvider = ({ children }) => (
   <AuthProvider>
@@ -22,7 +23,9 @@ const AppProvider = ({ children }) => (
                 <ProgramProvider>
                   <ResearcherProvider>
                     <EvaluatorProvider>
-                      {children}
+                      <ProjectProvider>
+                        {children}
+                      </ProjectProvider>
                     </EvaluatorProvider>
                   </ResearcherProvider>
                 </ProgramProvider>

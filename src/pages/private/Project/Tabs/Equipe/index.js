@@ -2,8 +2,6 @@ import React, {
   Suspense, lazy, useState, useEffect,
 } from 'react';
 
-import moment from 'moment';
-
 import { FiTrash } from 'react-icons/fi';
 
 import SelectMultiple from "react-select";
@@ -12,19 +10,20 @@ import { Form } from '../../../../../components/Form';
 import { Table } from '../../../../../components/Table';
 import { useResearcher } from '../../../../../hooks/researcher';
 import { useAuth } from '../../../../../hooks/auth';
+import { useProject } from '../../../../../hooks/project';
 
 import api from '~/services/api';
 
 let ModalForm = () => <></>;
 
 export default function Header({
-  formRef, project, membros, setMembros, atividades, setAtividades,
+  formRef, membros, setMembros, atividades, setAtividades,
 }) {
   const { setUsers, users } = useResearcher();
   const { user } = useAuth();
+  const { project } = useProject()
 
   const [OpenForm, setOpenForm] = useState(false);
-  const [type, setType] = useState(1);
 
   const [totalMeses, setTotalMeses] = useState(0);
 

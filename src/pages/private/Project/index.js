@@ -16,6 +16,7 @@ import { Button } from '../../../components/Button';
 import { Content } from './styles';
 
 import { useAuth } from '../../../hooks/auth';
+import { useProject } from '../../../hooks/project';
 
 import { Card } from '../../../components/Card';
 
@@ -35,7 +36,8 @@ import api from '../../../services/api';
 export default function Project() {
   const formRef = useRef(null);
 
-  const [project, setProject] = useState(null);
+  const { user } = useAuth();
+  const { project, setProject } = useProject();
 
   const [screen, setScreen] = useState({
     header: true,
@@ -48,8 +50,6 @@ export default function Project() {
 
   const [initiaLoading, setInitialLoading] = useState(true);
   const [loading, setLoading] = useState(false);
-
-  const { user } = useAuth();
 
   const [membros, setMembros] = useState([{ label: user.name, value: JSON.stringify(user) }]);
   const [atividades, setAtividades] = useState([]);
@@ -139,8 +139,8 @@ export default function Project() {
     },
   );
 
-  useEffect(() => {
-    document.title = 'SIGFAPEAP - Submeter Projeto';
+  async function getProject() {
+    setProject(null);
 
     setInitialLoading(true);
     api.put(`/projects`, {
@@ -180,6 +180,12 @@ export default function Project() {
 
       setInitialLoading(false);
     }).catch((error) => { setInitialLoading(false); });
+  }
+
+  useEffect(() => {
+    document.title = 'SIGFAPEAP - Submeter Projeto';
+
+    getProject();
 
     api.get(`/programs/files/edital/${id}`).then(({ data }) => {
       setEdital(data);
@@ -194,13 +200,8 @@ export default function Project() {
         formRef.current.setErrors({});
 
         if (screen.header) {
-          console.log({
-            ...data, protocolo, edital_id: edital.id, coordenador_id: user.id, files: files.filter((item) => item.file.name != null),
-          });
-
           const schema = Yup.object().shape({
             title: Yup.string().required('Campo obrigatório'),
-            // email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
             faixa_value: Yup.string().required('Campo obrigatório'),
             institution: Yup.string().required('Campo obrigatório'),
             unity_execution: Yup.string().required('Campo obrigatório'),
@@ -249,6 +250,8 @@ export default function Project() {
                 onScreen: true,
               },
             });
+
+            getProject();
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -299,6 +302,8 @@ export default function Project() {
                 onScreen: true,
               },
             });
+
+            getProject();
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -337,6 +342,8 @@ export default function Project() {
                 onScreen: true,
               },
             });
+
+            getProject();
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -376,6 +383,8 @@ export default function Project() {
                 onScreen: true,
               },
             });
+
+            getProject();
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -415,6 +424,8 @@ export default function Project() {
                 onScreen: true,
               },
             });
+
+            getProject();
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -439,7 +450,8 @@ export default function Project() {
         }
       }
     },
-    [id, screen, edital, files, protocolo, user, plano, abrangencias, recursos, despesas, membros, atividades],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [id, screen, files, protocolo, user, plano, abrangencias, recursos, despesas, membros, atividades],
   );
 
   return (
@@ -460,8 +472,8 @@ export default function Project() {
                 {screen.appresentation && <Appresentation plano={plano} setPlano={setPlano} formRef={formRef} />}
                 {screen.abrangencia && <Abrangencia formRef={formRef} abrangencias={abrangencias} setAbrangencias={setAbrangencias} />}
                 {screen.recursos && <Recursos formRef={formRef} despesas={despesas} setDespesas={setDespesas} recursos={recursos} setRecursos={setRecursos} />}
-                {screen.equipe && <Equipe formRef={formRef} project={project} membros={membros} setMembros={setMembros} atividades={atividades} setAtividades={setAtividades} />}
-                {screen.orcamento && <Orcamento formRef={formRef} project={project} orcamentos={orcamentos} setOrcamentos={setOrcamentos} />}
+                {screen.equipe && <Equipe formRef={formRef} membros={membros} setMembros={setMembros} atividades={atividades} setAtividades={setAtividades} />}
+                {screen.orcamento && <Orcamento formRef={formRef} orcamentos={orcamentos} setOrcamentos={setOrcamentos} despesas={despesas} setDespesas={setDespesas} />}
               </Content>
 
               <div style={{ marginTop: 20 }} className="modal-footer">
