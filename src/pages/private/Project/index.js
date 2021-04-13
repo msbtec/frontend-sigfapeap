@@ -89,6 +89,85 @@ export default function Project() {
 
   async function getProject() {
     setProject(null);
+    setMembros([{ label: user.name, value: JSON.stringify(user) }]);
+    setAtividades([]);
+    setPlano({
+      resumo: '',
+      palavras_chave: '',
+      informacoes_relevantes_para_avaliacao: '',
+      experiencia_coordenador: '',
+      sintese_projeto: '',
+      objetivos_gerais: '',
+      objetivos_especificos: '',
+      metodologia: '',
+      resultados_esperados: '',
+      impactos_esperados: '',
+      riscos_atividades: '',
+      referencia_bibliografica: '',
+      estado_arte: '',
+    });
+    setDespesas([
+      {
+        id: uuid(),
+        titulo: "Diárias",
+        valor: "R$ 0",
+      },
+      {
+        id: uuid(),
+        titulo: "Hospedagem/Alimentação",
+        valor: "R$ 0",
+      },
+      {
+        id: uuid(),
+        titulo: "Material de Consumo",
+        valor: "R$ 0",
+      },
+      {
+        id: uuid(),
+        titulo: "Passagens",
+        valor: "R$ 0",
+      },
+      {
+        id: uuid(),
+        titulo: "Pessoal",
+        valor: "R$ 0",
+      },
+      {
+        id: uuid(),
+        titulo: "Encargos",
+        valor: "R$ 0",
+      },
+      {
+        id: uuid(),
+        titulo: "Bolsas",
+        valor: "R$ 0",
+      },
+      {
+        id: uuid(),
+        titulo: "Outros Serviços de Terceiros",
+        valor: "R$ 0",
+      },
+      {
+        id: uuid(),
+        titulo: "Equipamentos e Material Permanente",
+        valor: "R$ 0",
+      },
+    ]);
+    setRecursos([]);
+    setAbrangencias([]);
+    setOrcamentos(
+      {
+        diarias: [],
+        hospedagem_alimentacao: [],
+        materiais_consumo: [],
+        passagens: [],
+        servicos_terceiros: [],
+        materiais_permanentes_equipamentos: [],
+        pessoal: [],
+        bolsas: [],
+        encargos: [],
+      },
+    );
 
     setInitialLoading(true);
     api.put(`/projects`, {
