@@ -187,7 +187,11 @@ export default function Project() {
       setOrcamentos(orcamentos_temp);
 
       const despesas_temp = JSON.parse(data.recursos_proprios || JSON.stringify(despesas));
-      setDespesas(despesas_temp.map((item) => ((item.titulo == 'Diárias') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.diarias))) }) : item)));
+      setDespesas(despesas_temp.map((item) => (
+        (item.titulo == 'Diárias') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.diarias))) })
+          : (item.titulo == 'Hospedagem/Alimentação') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.hospedagem_alimentacao))) })
+            : item
+      )));
 
       setRecursos(JSON.parse(data.recursos_solicitados_outros || '[]'));
       if (data.membros.length > 0) {

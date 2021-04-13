@@ -12,7 +12,7 @@ import { useProject } from '../../../../../hooks/project';
 
 export default function Recursos() {
   const {
-    despesas, setDespesas, recursos, setRecursos,
+    despesas, recursos, setRecursos,
   } = useProject();
 
   const [recurso, setRecurso] = React.useState({
@@ -41,7 +41,7 @@ export default function Recursos() {
   }
 
   function soma(array) {
-    return array.length > 0 ? array.reduce((accumulator, currentValue) => accumulator + getValue(currentValue.valor), 0) : '0';
+    return array.length > 0 ? array.reduce((accumulator, currentValue) => accumulator + getValue(currentValue.valor), 0).toFixed(2) : '0';
   }
 
   return (
@@ -80,7 +80,7 @@ export default function Recursos() {
         <tbody>
           <tr>
             <td style={{ textAlign: 'center', fontWeight: 'bold' }}>Total</td>
-            <td style={{ textAlign: 'center' }}>{moeda(String(soma(despesas)))}</td>
+            <td style={{ textAlign: 'center' }}>{moeda(String(soma(despesas))) === 'R$ 0,00' ? 'R$ 0' : moeda(String(soma(despesas)))}</td>
           </tr>
         </tbody>
       </Table>

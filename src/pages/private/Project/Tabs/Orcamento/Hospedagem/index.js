@@ -15,29 +15,29 @@ import {
 
 import { useProject } from '../../../../../../hooks/project';
 
-let Diarias = () => <></>;
+let Hospedagem = () => <></>;
 
-export default function Diaria() {
-  const [OpenDiarias, setOpenDiarias] = useState(false);
+export default function Hospedagens() {
+  const [OpenHospedagem, setOpenHospedagem] = useState(false);
 
   const {
     orcamentos, setOrcamentos, despesas, setDespesas,
   } = useProject();
 
-  async function toggleDiarias() {
-    Diarias = await lazy(() => import("./modal"));
-    setOpenDiarias(!OpenDiarias);
+  async function toggleHospedagem() {
+    Hospedagem = await lazy(() => import("./modal"));
+    setOpenHospedagem(!OpenHospedagem);
   }
 
   return (
     <div>
-      <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Diária(s)</label>
+      <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}> Hospedagem/Alimentação</label>
 
       <div>
         <button
           style={{ marginBottom: 20, marginTop: 10, width: 100 }}
           type="button"
-          onClick={toggleDiarias}
+          onClick={toggleHospedagem}
         >
           Adicionar
         </button>
@@ -45,29 +45,27 @@ export default function Diaria() {
         <Table>
           <thead>
             <tr>
-              <th className="col-2">Localidade</th>
+              <th className="col-4">Localidade</th>
               <th className="col-2">Quantidade</th>
               <th className="col-2">Custo unitário</th>
               <th className="col-2">Custo total</th>
               <th className="col-2">Mês</th>
-              <th className="col-2">Justificativa</th>
             </tr>
           </thead>
           <tbody>
-            {orcamentos.diarias.map((item) => (
+            {orcamentos.hospedagem_alimentacao.map((item) => (
               <tr>
                 <td style={{ textAlign: 'center' }}>{item.localidade}</td>
                 <td style={{ textAlign: 'center' }}>{item.quantidade}</td>
                 <td style={{ textAlign: 'center' }}>{item.custo_unitario}</td>
                 <td style={{ textAlign: 'center' }}>{item.custo_total}</td>
                 <td style={{ textAlign: 'center' }}>{item.mes}</td>
-                <td style={{ textAlign: 'center' }}>{item.justificativa}</td>
                 <td style={{ textAlign: 'center' }}>
                   <FiTrash
                     onClick={() => {
-                      const diarias = orcamentos.diarias.filter((diaria) => diaria.id != item.id);
-                      setOrcamentos({ ...orcamentos, diarias });
-                      setDespesas(despesas.map((item) => ((item.titulo == 'Diárias') ? ({ ...item, valor: moeda(String(soma(diarias))) }) : item)));
+                      const hospedagem_alimentacao = orcamentos.hospedagem_alimentacao.filter((diaria) => diaria.id != item.id);
+                      setOrcamentos({ ...orcamentos, hospedagem_alimentacao });
+                      setDespesas(despesas.map((item) => ((item.titulo == 'Hospedagem/Alimentação') ? ({ ...item, valor: moeda(String(soma(hospedagem_alimentacao))) }) : item)));
                     }}
                     style={{ fontSize: 20, cursor: 'pointer' }}
                   />
@@ -88,7 +86,7 @@ export default function Diaria() {
           <tbody>
             <tr>
               <td style={{ textAlign: 'center', fontWeight: 'bold' }}>Total</td>
-              <td style={{ textAlign: 'center' }}>{moeda(String(soma(orcamentos.diarias)))}</td>
+              <td style={{ textAlign: 'center' }}>{moeda(String(soma(orcamentos.hospedagem_alimentacao)))}</td>
             </tr>
           </tbody>
         </Table>
@@ -96,13 +94,13 @@ export default function Diaria() {
 
       <Suspense fallback={null}>
         <ModalProvider>
-          <Diarias
+          <Hospedagem
             despesas={despesas}
             setDespesas={setDespesas}
             orcamentos={orcamentos}
             setOrcamentos={setOrcamentos}
-            isOpen={OpenDiarias}
-            toggleModal={toggleDiarias}
+            isOpen={OpenHospedagem}
+            toggleModal={toggleHospedagem}
           />
         </ModalProvider>
       </Suspense>
