@@ -7,25 +7,24 @@ import {
   moeda,
 } from '../../../../../../utils/validations';
 
-import {
-  soma,
-} from '../../../../../../utils/soma';
-
 import { useProject } from '../../../../../../hooks/project';
+
+import { soma, getValue } from '../../../../../../utils/soma';
 
 import { StyledModal } from './styles';
 
-function Diaria({
+function Hospedagens({
   orcamentos, setOrcamentos, isOpen, toggleModal, despesas, setDespesas,
 }) {
   const reference = useRef(null);
 
   const { project } = useProject();
 
-  const [diaria, setDiaria] = React.useState({
+  const [material, setMaterial] = React.useState({
     id: uuid(),
-    localidade: '',
+    especificacao: '',
     quantidade: '',
+    unidade: '',
     custo_unitario: '',
     custo_total: '',
     mes: '',
@@ -33,8 +32,9 @@ function Diaria({
   });
 
   const [errors, setErrors] = React.useState({
-    localidade: '',
+    especificacao: '',
     quantidade: '',
+    unidade: '',
     custo_unitario: '',
     custo_total: '',
     mes: '',
@@ -44,67 +44,76 @@ function Diaria({
   async function handleSubmit() {
     try {
       const temp = {
-        localidade: '',
+        especificacao: '',
         quantidade: '',
+        unidade: '',
         custo_unitario: '',
         custo_total: '',
         mes: '',
         justificativa: '',
       };
 
-      if (diaria.localidade == "") {
-        temp.localidade = 'Campo obrigatório';
+      if (material.especificacao == "") {
+        temp.especificacao = 'Campo obrigatório';
       } else {
-        temp.localidade = '';
+        temp.especificacao = '';
       }
 
-      if (diaria.quantidade == "") {
+      if (material.quantidade == "") {
         temp.quantidade = 'Campo obrigatório';
-      } else if (Number(diaria.quantidade) <= 0) {
+      } else if (Number(material.quantidade) <= 0) {
         temp.quantidade = 'Campo deve ser maior que 0';
       } else {
         temp.quantidade = '';
       }
 
-      if (diaria.custo_unitario == "") {
+      if (material.unidade == "") {
+        temp.unidade = 'Campo obrigatório';
+      } else {
+        temp.unidade = '';
+      }
+
+      if (material.custo_unitario == "") {
         temp.custo_unitario = 'Campo obrigatório';
       } else {
         temp.custo_unitario = '';
       }
 
-      if (diaria.mes == "") {
+      if (material.mes == "") {
         temp.mes = 'Campo obrigatório';
-      } else if (Number(diaria.mes) <= 0) {
+      } else if (Number(material.mes) <= 0) {
         temp.mes = 'Campo deve ser maior que 0';
-      } else if (Number(diaria.mes) > Number(project.duration)) {
+      } else if (Number(material.mes) > Number(project.duration)) {
         temp.mes = `Campo não deve ultrapassar a duração máxima de ${project.duration} mês(es)`;
       } else {
         temp.mes = '';
       }
 
-      if (diaria.justificativa == "") {
+      if (material.justificativa == "") {
         temp.justificativa = 'Campo obrigatório';
       } else {
         temp.justificativa = '';
       }
 
-      if (temp.localidade != "" || temp.quantidade != "" || temp.custo_unitario != "" || temp.mes != "" || temp.justificativa != "") {
+      if (temp.especificacao != "" || temp.quantidade != "" || temp.unidade != "" || temp.custo_unitario != "" || temp.mes != "" || temp.justificativa != "") {
         setErrors(temp);
 
         throw 'Error';
       }
 
-      setDespesas(despesas.map((item) => ((item.titulo == 'Diárias') ? ({ ...item, valor: moeda(String(soma([...orcamentos.diarias, diaria]))) }) : item)));
+      setDespesas(despesas.map((item) => ((item.titulo == 'Material de Consumo') ? ({ ...item, valor: moeda(String(soma([...orcamentos.materiais_consumo, material]))) }) : item)));
 
-      setOrcamentos({ ...orcamentos, diarias: [...orcamentos.diarias, diaria] });
+      setOrcamentos({ ...orcamentos, materiais_consumo: [...orcamentos.materiais_consumo, material] });
 
-      setDiaria({
+      setMaterial({
         id: uuid(),
-        localidade: '',
-        quantidade: 0,
+        especificacao: '',
+        quantidade: '',
+        unidade: '',
         custo_unitario: '',
         custo_total: '',
         mes: '',
+        justificativa: '',
       });
 
       toggleModal();
@@ -113,30 +122,12 @@ function Diaria({
     }
   }
 
-  function getValue(value) {
-    let valor_liquido = 0;
-    if (value) {
-      const string = String(value).split('R$')[1].trim().replace(/[\D]+/g, '');
-      if (string.length > 2) {
-        const resultado = `${string.substr(0, string.length - 2)}.${string.substr(string.length - 2)}`;
-        valor_liquido = resultado;
-      } else if (string.length > 1) {
-        const resultado = `${string.substr(0, string.length - 1)}.${string.substr(string.length - 1)}`;
-        valor_liquido = resultado;
-      } else {
-        valor_liquido = string;
-      }
-    }
-
-    return Number(valor_liquido);
-  }
-
   useEffect(() => {
-    if (diaria.custo_unitario.length > 0) {
-      setDiaria({ ...diaria, custo_total: moeda(String((getValue(diaria.custo_unitario) * diaria.quantidade).toFixed(2))) });
+    if (material.custo_unitario.length > 0) {
+      setMaterial({ ...material, custo_total: moeda(String((getValue(material.custo_unitario) * material.quantidade).toFixed(2))) });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [diaria.quantidade, diaria.custo_unitario]);
+  }, [material.quantidade, material.custo_unitario]);
 
   return (
     <StyledModal
@@ -145,24 +136,32 @@ function Diaria({
       onEscapeKeydown={toggleModal}
     >
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">Diária(s)</h5>
+        <h5 className="modal-title" id="exampleModalLabel">Materiais de Consumo</h5>
       </div>
       <Form>
         <div className="modal-body" ref={reference}>
           <div>
             <div className="input-block">
-              <label className="required">Localidade</label>
-              <input style={{ borderColor: errors.localidade ? '#c53030' : '#999' }} value={diaria.localidade} type="text" onChange={(value) => setDiaria({ ...diaria, localidade: value.target.value })} />
+              <label className="required">Especificação</label>
+              <input style={{ borderColor: errors.especificacao ? '#c53030' : '#999' }} value={material.especificacao} type="text" onChange={(value) => setMaterial({ ...material, especificacao: value.target.value })} />
               <sup style={{ color: '#c53030', marginTop: 5 }}>
-                {errors.localidade && errors.localidade}
+                {errors.especificacao && errors.especificacao}
               </sup>
             </div>
 
             <div className="input-block">
               <label className="required">Quantidade</label>
-              <input style={{ borderColor: errors.quantidade ? '#c53030' : '#999' }} value={diaria.quantidade} type="number" onChange={(value) => setDiaria({ ...diaria, quantidade: value.target.value })} />
+              <input style={{ borderColor: errors.quantidade ? '#c53030' : '#999' }} value={material.quantidade} type="number" onChange={(value) => setMaterial({ ...material, quantidade: value.target.value })} />
               <sup style={{ color: '#c53030', marginTop: 5 }}>
                 {errors.quantidade && errors.quantidade}
+              </sup>
+            </div>
+
+            <div className="input-block">
+              <label className="required">Unidade</label>
+              <input style={{ borderColor: errors.unidade ? '#c53030' : '#999' }} value={material.unidade} type="text" onChange={(value) => setMaterial({ ...material, unidade: value.target.value })} />
+              <sup style={{ color: '#c53030', marginTop: 5 }}>
+                {errors.unidade && errors.unidade}
               </sup>
             </div>
 
@@ -170,10 +169,10 @@ function Diaria({
               <label className="required">Custo unitário</label>
               <input
                 style={{ borderColor: errors.custo_unitario ? '#c53030' : '#999' }}
-                value={diaria.custo_unitario}
+                value={material.custo_unitario}
                 type="text"
                 onChange={(value) => {
-                  setDiaria({ ...diaria, custo_unitario: moeda(value.target.value) });
+                  setMaterial({ ...material, custo_unitario: moeda(value.target.value) });
                 }}
               />
               <sup style={{ color: '#c53030', marginTop: 5 }}>
@@ -183,12 +182,12 @@ function Diaria({
 
             <div className="input-block">
               <label className="required">Custo total</label>
-              <input value={diaria.custo_total} disabled type="text" />
+              <input value={material.custo_total} disabled type="text" />
             </div>
 
             <div className="input-block">
               <label className="required">Mês</label>
-              <input style={{ borderColor: errors.mes ? '#c53030' : '#999' }} value={diaria.mes} type="number" onChange={(value) => setDiaria({ ...diaria, mes: value.target.value })} />
+              <input style={{ borderColor: errors.mes ? '#c53030' : '#999' }} value={material.mes} type="number" onChange={(value) => setMaterial({ ...material, mes: value.target.value })} />
               <sup style={{ color: '#c53030', marginTop: 5 }}>
                 {errors.mes && errors.mes}
               </sup>
@@ -196,7 +195,7 @@ function Diaria({
 
             <div className="input-block">
               <label className="required">Justificativa</label>
-              <textarea style={{ borderColor: errors.justificativa ? '#c53030' : '#999' }} value={diaria.justificativa} type="text" onChange={(value) => setDiaria({ ...diaria, justificativa: value.target.value })} rows="4" cols="50" />
+              <textarea style={{ borderColor: errors.justificativa ? '#c53030' : '#999' }} value={material.justificativa} type="text" onChange={(value) => setMaterial({ ...material, justificativa: value.target.value })} rows="4" cols="50" />
               <sup style={{ color: '#c53030', marginTop: 5 }}>
                 {errors.justificativa && errors.justificativa}
               </sup>
@@ -225,4 +224,4 @@ function Diaria({
   );
 }
 
-export default memo(Diaria);
+export default memo(Hospedagens);

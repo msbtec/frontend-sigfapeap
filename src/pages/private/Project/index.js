@@ -14,6 +14,9 @@ import uuid from 'react-uuid';
 import {
   moeda,
 } from '../../../utils/validations';
+import {
+  soma,
+} from '../../../utils/soma';
 import { Button } from '../../../components/Button';
 
 import { Content } from './styles';
@@ -64,28 +67,6 @@ export default function Project() {
   const [edital, setEdital] = useState({ title: '' });
   const [protocolo, setProtocolo] = useState(uuid());
   const { id } = useParams();
-
-  function getValue(value) {
-    let valor_liquido = 0;
-    if (value) {
-      const string = String(value).split('R$')[1].trim().replace(/[\D]+/g, '');
-      if (string.length > 2) {
-        const resultado = `${string.substr(0, string.length - 2)}.${string.substr(string.length - 2)}`;
-        valor_liquido = resultado;
-      } else if (string.length > 1) {
-        const resultado = `${string.substr(0, string.length - 1)}.${string.substr(string.length - 1)}`;
-        valor_liquido = resultado;
-      } else {
-        valor_liquido = string;
-      }
-    }
-
-    return Number(valor_liquido);
-  }
-
-  function soma(array) {
-    return array.length > 0 ? array.reduce((accumulator, currentValue) => accumulator + getValue(currentValue.custo_total), 0) : '0';
-  }
 
   async function getProject() {
     setProject(null);
@@ -190,7 +171,11 @@ export default function Project() {
       setDespesas(despesas_temp.map((item) => (
         (item.titulo == 'Diárias') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.diarias))) })
           : (item.titulo == 'Hospedagem/Alimentação') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.hospedagem_alimentacao))) })
-            : item
+            : (item.titulo == 'Material de Consumo') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.materiais_consumo))) })
+              : (item.titulo == 'Passagens') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.passagens))) })
+                : (item.titulo == 'Outros Serviços de Terceiros') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.servicos_terceiros))) })
+                  : (item.titulo == 'Equipamentos e Material Permanente') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.materiais_permanentes_equipamentos))) })
+                    : item
       )));
 
       setRecursos(JSON.parse(data.recursos_solicitados_outros || '[]'));
@@ -536,6 +521,20 @@ export default function Project() {
       <div className="col-12 title">
         <h1>Submeter projeto</h1>
       </div>
+      {project
+      && (
+      <Content>
+        <button
+          style={{
+            marginBottom: 10, width: 180, marginLeft: 15, marginTop: 10,
+          }}
+          type="button"
+          onClick={() => {}}
+        >
+          Submeter projeto
+        </button>
+      </Content>
+      )}
       <div className="col-12 px-0">
         <Card className="red">
           <div className="card-body">

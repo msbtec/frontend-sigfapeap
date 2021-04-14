@@ -7,93 +7,94 @@ import {
   moeda,
 } from '../../../../../../utils/validations';
 
-import { useProject } from '../../../../../../hooks/project';
-
 import { soma, getValue } from '../../../../../../utils/soma';
 
 import { StyledModal } from './styles';
 
-function Hospedagens({
+function Passagens({
   orcamentos, setOrcamentos, isOpen, toggleModal, despesas, setDespesas,
 }) {
   const reference = useRef(null);
 
-  const { project } = useProject();
-
-  const [hospedagem, setHospedagem] = React.useState({
+  const [passagem, setPassagem] = React.useState({
     id: uuid(),
-    localidade: '',
+    trecho: '',
+    tipo: '',
     quantidade: '',
     custo_unitario: '',
     custo_total: '',
-    mes: '',
+    justificativa: '',
   });
 
   const [errors, setErrors] = React.useState({
-    localidade: '',
+    trecho: '',
+    tipo: '',
     quantidade: '',
     custo_unitario: '',
     custo_total: '',
-    mes: '',
+    justificativa: '',
   });
 
   async function handleSubmit() {
     try {
       const temp = {
-        localidade: '',
+        trecho: '',
+        tipo: '',
         quantidade: '',
         custo_unitario: '',
         custo_total: '',
-        mes: '',
+        justificativa: '',
       };
 
-      if (hospedagem.localidade == "") {
-        temp.localidade = 'Campo obrigatório';
+      if (passagem.trecho == "") {
+        temp.trecho = 'Campo obrigatório';
       } else {
-        temp.localidade = '';
+        temp.trecho = '';
       }
 
-      if (hospedagem.quantidade == "") {
+      if (passagem.tipo == "") {
+        temp.tipo = 'Campo obrigatório';
+      } else {
+        temp.tipo = '';
+      }
+
+      if (passagem.quantidade == "") {
         temp.quantidade = 'Campo obrigatório';
-      } else if (Number(hospedagem.quantidade) <= 0) {
+      } else if (Number(passagem.quantidade) <= 0) {
         temp.quantidade = 'Campo deve ser maior que 0';
       } else {
         temp.quantidade = '';
       }
 
-      if (hospedagem.custo_unitario == "") {
+      if (passagem.custo_unitario == "") {
         temp.custo_unitario = 'Campo obrigatório';
       } else {
         temp.custo_unitario = '';
       }
 
-      if (hospedagem.mes == "") {
-        temp.mes = 'Campo obrigatório';
-      } else if (Number(hospedagem.mes) <= 0) {
-        temp.mes = 'Campo deve ser maior que 0';
-      } else if (Number(hospedagem.mes) > Number(project.duration)) {
-        temp.mes = `Campo não deve ultrapassar a duração máxima de ${project.duration} mês(es)`;
+      if (passagem.justificativa == "") {
+        temp.justificativa = 'Campo obrigatório';
       } else {
-        temp.mes = '';
+        temp.justificativa = '';
       }
 
-      if (temp.localidade != "" || temp.quantidade != "" || temp.custo_unitario != "" || temp.mes != "") {
+      if (temp.trecho != "" || temp.tipo != "" || temp.quantidade != "" || temp.custo_unitario != "" || temp.justificativa != "") {
         setErrors(temp);
 
         throw 'Error';
       }
 
-      setDespesas(despesas.map((item) => ((item.titulo == 'Hospedagem/Alimentação') ? ({ ...item, valor: moeda(String(soma([...orcamentos.hospedagem_alimentacao, hospedagem]))) }) : item)));
+      setDespesas(despesas.map((item) => ((item.titulo == 'Passagens') ? ({ ...item, valor: moeda(String(soma([...orcamentos.passagens, passagem]))) }) : item)));
 
-      setOrcamentos({ ...orcamentos, hospedagem_alimentacao: [...orcamentos.hospedagem_alimentacao, hospedagem] });
+      setOrcamentos({ ...orcamentos, passagens: [...orcamentos.passagens, passagem] });
 
-      setHospedagem({
+      setPassagem({
         id: uuid(),
-        localidade: '',
-        quantidade: 0,
+        trecho: '',
+        tipo: '',
         custo_unitario: '',
         custo_total: '',
-        mes: '',
+        justificativa: '',
       });
 
       toggleModal();
@@ -103,11 +104,11 @@ function Hospedagens({
   }
 
   useEffect(() => {
-    if (hospedagem.custo_unitario.length > 0) {
-      setHospedagem({ ...hospedagem, custo_total: moeda(String((getValue(hospedagem.custo_unitario) * hospedagem.quantidade).toFixed(2))) });
+    if (passagem.custo_unitario.length > 0) {
+      setPassagem({ ...passagem, custo_total: moeda(String((getValue(passagem.custo_unitario) * passagem.quantidade).toFixed(2))) });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hospedagem.quantidade, hospedagem.custo_unitario]);
+  }, [passagem.quantidade, passagem.custo_unitario]);
 
   return (
     <StyledModal
@@ -116,22 +117,30 @@ function Hospedagens({
       onEscapeKeydown={toggleModal}
     >
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">Hospedagem/Alimentação</h5>
+        <h5 className="modal-title" id="exampleModalLabel">Passagens</h5>
       </div>
       <Form>
         <div className="modal-body" ref={reference}>
           <div>
             <div className="input-block">
-              <label className="required">Localidade</label>
-              <input style={{ borderColor: errors.localidade ? '#c53030' : '#999' }} value={hospedagem.localidade} type="text" onChange={(value) => setHospedagem({ ...hospedagem, localidade: value.target.value })} />
+              <label className="required">Trecho</label>
+              <input style={{ borderColor: errors.trecho ? '#c53030' : '#999' }} value={passagem.trecho} type="text" onChange={(value) => setPassagem({ ...passagem, trecho: value.target.value })} />
               <sup style={{ color: '#c53030', marginTop: 5 }}>
-                {errors.localidade && errors.localidade}
+                {errors.trecho && errors.trecho}
+              </sup>
+            </div>
+
+            <div className="input-block">
+              <label className="required">Tipo</label>
+              <input style={{ borderColor: errors.tipo ? '#c53030' : '#999' }} value={passagem.tipo} type="text" onChange={(value) => setPassagem({ ...passagem, tipo: value.target.value })} />
+              <sup style={{ color: '#c53030', marginTop: 5 }}>
+                {errors.tipo && errors.tipo}
               </sup>
             </div>
 
             <div className="input-block">
               <label className="required">Quantidade</label>
-              <input style={{ borderColor: errors.quantidade ? '#c53030' : '#999' }} value={hospedagem.quantidade} type="number" onChange={(value) => setHospedagem({ ...hospedagem, quantidade: value.target.value })} />
+              <input style={{ borderColor: errors.quantidade ? '#c53030' : '#999' }} value={passagem.quantidade} type="number" onChange={(value) => setPassagem({ ...passagem, quantidade: value.target.value })} />
               <sup style={{ color: '#c53030', marginTop: 5 }}>
                 {errors.quantidade && errors.quantidade}
               </sup>
@@ -141,10 +150,10 @@ function Hospedagens({
               <label className="required">Custo unitário</label>
               <input
                 style={{ borderColor: errors.custo_unitario ? '#c53030' : '#999' }}
-                value={hospedagem.custo_unitario}
+                value={passagem.custo_unitario}
                 type="text"
                 onChange={(value) => {
-                  setHospedagem({ ...hospedagem, custo_unitario: moeda(value.target.value) });
+                  setPassagem({ ...passagem, custo_unitario: moeda(value.target.value) });
                 }}
               />
               <sup style={{ color: '#c53030', marginTop: 5 }}>
@@ -154,14 +163,14 @@ function Hospedagens({
 
             <div className="input-block">
               <label className="required">Custo total</label>
-              <input value={hospedagem.custo_total} disabled type="text" />
+              <input value={passagem.custo_total} disabled type="text" />
             </div>
 
             <div className="input-block">
-              <label className="required">Mês</label>
-              <input style={{ borderColor: errors.mes ? '#c53030' : '#999' }} value={hospedagem.mes} type="number" onChange={(value) => setHospedagem({ ...hospedagem, mes: value.target.value })} />
+              <label className="required">Justificativa</label>
+              <textarea style={{ borderColor: errors.justificativa ? '#c53030' : '#999' }} value={passagem.justificativa} type="text" onChange={(value) => setPassagem({ ...passagem, justificativa: value.target.value })} rows="4" cols="50" />
               <sup style={{ color: '#c53030', marginTop: 5 }}>
-                {errors.mes && errors.mes}
+                {errors.justificativa && errors.justificativa}
               </sup>
             </div>
           </div>
@@ -188,4 +197,4 @@ function Hospedagens({
   );
 }
 
-export default memo(Hospedagens);
+export default memo(Passagens);
