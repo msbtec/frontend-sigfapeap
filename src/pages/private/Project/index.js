@@ -175,7 +175,10 @@ export default function Project() {
               : (item.titulo == 'Passagens') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.passagens))) })
                 : (item.titulo == 'Outros Serviços de Terceiros') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.servicos_terceiros))) })
                   : (item.titulo == 'Equipamentos e Material Permanente') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.materiais_permanentes_equipamentos))) })
-                    : item
+                    : (item.titulo == 'Pessoal') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.pessoal))) })
+                      : (item.titulo == 'Bolsas') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.bolsas))) })
+                        : (item.titulo == 'Encargos') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.encargos))) })
+                          : item
       )));
 
       setRecursos(JSON.parse(data.recursos_solicitados_outros || '[]'));

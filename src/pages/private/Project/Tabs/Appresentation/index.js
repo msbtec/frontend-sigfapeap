@@ -88,7 +88,7 @@ export default function Appresentation() {
 
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
-          Objetivos Gerais
+          Objetivo Geral
         </label>
         <CKEditor
           editor={ClassicEditor}
@@ -103,7 +103,7 @@ export default function Appresentation() {
 
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
-          Objetivo Específico
+          Objetivos Específicos
         </label>
         <CKEditor
           editor={ClassicEditor}
