@@ -1,10 +1,14 @@
 import React, {
-  useEffect, useState, useRef, useCallback,
+  useEffect, useState, useRef, useCallback, Suspense, lazy,
 } from 'react';
 
 import * as Yup from 'yup';
 
 import ReactLoading from "react-loading";
+
+import { ModalProvider } from 'styled-react-modal';
+
+import moment from 'moment';
 
 import { useParams } from 'react-router-dom';
 
@@ -39,10 +43,14 @@ import getValidationErrors from '../../../utils/getValidationErrors';
 
 import api from '../../../services/api';
 
+let ModalConfirm = () => <></>;
+
 export default function Project() {
   const formRef = useRef(null);
 
   const { user } = useAuth();
+
+  const [OpenConfirm, setOpenConfirm] = useState(false);
 
   const {
     project, setProject, membros, setMembros, atividades, setAtividades,
@@ -519,25 +527,60 @@ export default function Project() {
     [id, screen, files, protocolo, user, plano, abrangencias, recursos, despesas, membros, atividades],
   );
 
+  async function toggleModalConfirm() {
+    ModalConfirm = await lazy(() => import("../../../components/Submit"));
+
+    setOpenConfirm(!OpenConfirm);
+  }
+
+  function submitModalConfirm() {
+    submter();
+    setOpenConfirm(!OpenConfirm);
+  }
+
+  async function submter() {
+    api.post(`projects/submit/${project.id}`, {
+      edital_id: id,
+      coordenador_id: user.id,
+      submetido: "true",
+    }).then(({ data }) => {
+        getProject();
+    });
+  }
+
   return (
     <>
       <div className="col-12 title">
         <h1>Submeter projeto</h1>
       </div>
+
       {project
-      && (
+      && project?.submetido == 'false' && (
       <Content>
         <button
           style={{
             marginBottom: 10, width: 180, marginLeft: 15, marginTop: 10,
           }}
           type="button"
-          onClick={() => {}}
+          onClick={toggleModalConfirm}
         >
           Submeter projeto
         </button>
       </Content>
       )}
+
+      {project?.submetido == 'true'
+      && (
+      <Content>
+        <div style={{
+          marginBottom: 10, marginLeft: 15, marginTop: 10,
+        }}
+        >
+          <label style={{ fontSize: 18, fontWeight: 'bold', color: '#080' }}>{`Projeto submetido com sucesso em: ${moment(project.updated_at).format("LLLL")}.`}</label>
+        </div>
+      </Content>
+      )}
+
       <div className="col-12 px-0">
         <Card className="red">
           <div className="card-body">
@@ -556,7 +599,15 @@ export default function Project() {
               </Content>
 
               <div style={{ marginTop: 20 }} className="modal-footer">
-                {loading ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
+                {loading ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : project?.submetido == 'false' && (
+                  <Button
+                    className="primary"
+                  >
+                    Salvar
+                  </Button>
+                )}
+
+                {!project && (
                   <Button
                     className="primary"
                   >
@@ -569,6 +620,12 @@ export default function Project() {
           </div>
         </Card>
       </div>
+
+      <Suspense fallback={null}>
+        <ModalProvider>
+          <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
+        </ModalProvider>
+      </Suspense>
     </>
   );
 }

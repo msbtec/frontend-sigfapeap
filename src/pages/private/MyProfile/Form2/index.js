@@ -120,7 +120,7 @@ function ModalForm({
     >
 
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar programa' : 'Atualizar programa'}</h5>
+        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar vínculo institucional' : 'Atualizar vínculo institucional'}</h5>
         <button type="button" className="close" onClick={toggleModal}>
           <span aria-hidden="true">&times;</span>
         </button>

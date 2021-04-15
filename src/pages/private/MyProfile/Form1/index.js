@@ -126,7 +126,7 @@ function ModalForm({
     >
 
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar Endereço Residencial' : 'Atualizar Endereço Residencial'}</h5>
+        <h5 className="modal-title" id="exampleModalLabel">{!item ? 'Cadastrar endereço residencial' : 'Atualizar endereço residencial'}</h5>
         <button type="button" className="close" onClick={toggleModal}>
           <span aria-hidden="true">&times;</span>
         </button>
