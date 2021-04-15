@@ -272,7 +272,7 @@ export default function Project() {
             setLoading(false);
 
             store.addNotification({
-              message: `Projeto submetido com sucesso!`,
+              message: `Projeto salvo com sucesso!`,
               type: 'success',
               insert: 'top',
               container: 'top-right',
@@ -288,7 +288,7 @@ export default function Project() {
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
-              message: `Não foi possível submeter projeto!`,
+              message: `Não foi possível salvar projeto!`,
               type: 'danger',
               insert: 'top',
               container: 'top-right',
@@ -324,7 +324,7 @@ export default function Project() {
             setLoading(false);
 
             store.addNotification({
-              message: `Projeto submetido com sucesso!`,
+              message: `Projeto salvo com sucesso!`,
               type: 'success',
               insert: 'top',
               container: 'top-right',
@@ -340,7 +340,7 @@ export default function Project() {
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
-              message: `Não foi possível submeter projeto!`,
+              message: `Não foi possível salvar projeto!`,
               type: 'danger',
               insert: 'top',
               container: 'top-right',
@@ -364,7 +364,7 @@ export default function Project() {
             setLoading(false);
 
             store.addNotification({
-              message: `Projeto submetido com sucesso!`,
+              message: `Projeto salvo com sucesso!`,
               type: 'success',
               insert: 'top',
               container: 'top-right',
@@ -380,7 +380,7 @@ export default function Project() {
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
-              message: `Não foi possível submeter projeto!`,
+              message: `Não foi possível salvar projeto!`,
               type: 'danger',
               insert: 'top',
               container: 'top-right',
@@ -405,7 +405,7 @@ export default function Project() {
             setLoading(false);
 
             store.addNotification({
-              message: `Projeto submetido com sucesso!`,
+              message: `Projeto salvo com sucesso!`,
               type: 'success',
               insert: 'top',
               container: 'top-right',
@@ -421,7 +421,7 @@ export default function Project() {
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
-              message: `Não foi possível submeter projeto!`,
+              message: `Não foi possível salvar projeto!`,
               type: 'danger',
               insert: 'top',
               container: 'top-right',
@@ -446,7 +446,7 @@ export default function Project() {
             setLoading(false);
 
             store.addNotification({
-              message: `Projeto submetido com sucesso!`,
+              message: `Projeto salvo com sucesso!`,
               type: 'success',
               insert: 'top',
               container: 'top-right',
@@ -462,7 +462,7 @@ export default function Project() {
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
-              message: `Não foi possível submeter projeto!`,
+              message: `Não foi possível salvar projeto!`,
               type: 'danger',
               insert: 'top',
               container: 'top-right',
@@ -486,7 +486,7 @@ export default function Project() {
             setLoading(false);
 
             store.addNotification({
-              message: `Projeto submetido com sucesso!`,
+              message: `Projeto salvo com sucesso!`,
               type: 'success',
               insert: 'top',
               container: 'top-right',
@@ -502,7 +502,7 @@ export default function Project() {
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
-              message: `Não foi possível submeter projeto!`,
+              message: `Não foi possível salvar projeto!`,
               type: 'danger',
               insert: 'top',
               container: 'top-right',
@@ -544,6 +544,19 @@ export default function Project() {
       coordenador_id: user.id,
       submetido: "true",
     }).then(({ data }) => {
+        store.addNotification({
+            message: `Projeto submetido com sucesso!`,
+            type: 'success',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+        });
+
         getProject();
     });
   }
