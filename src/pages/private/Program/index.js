@@ -73,9 +73,9 @@ export default function Program() {
                         setSelected(null);
                         toggleModalForm();
                     }} className="primary">Cadastrar programa</Button>
-                    {/* <Button onClick={() => {
+                    <Button onClick={() => {
                         history.push('configurar-edital')
-                    }} className="primary">Configurar edital</Button> */}
+                    }} className="primary">Configurar edital</Button>
                 </div>
             </div>
           }
