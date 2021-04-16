@@ -88,7 +88,7 @@ export default function Appresentation() {
 
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
-          Objetivo Geral
+          Objetivos Gerais
         </label>
         <CKEditor
           editor={ClassicEditor}
@@ -103,7 +103,7 @@ export default function Appresentation() {
 
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
-          Objetivos Específicos
+          Objetivo Específico
         </label>
         <CKEditor
           editor={ClassicEditor}
@@ -112,6 +112,21 @@ export default function Appresentation() {
           onChange={(event, editor) => {
             const data = editor.getData();
             setPlano({ ...plano, objetivos_especificos: data });
+          }}
+        />
+      </div>
+
+      <div className="input-block" style={{ marginBottom: 20 }}>
+        <label style={{ marginBottom: 10 }}>
+          Estado da Arte
+        </label>
+        <CKEditor
+          editor={ClassicEditor}
+          data={plano.estado_arte}
+          onReady={(editor) => {}}
+          onChange={(event, editor) => {
+            const data = editor.getData();
+            setPlano({ ...plano, estado_arte: data });
           }}
         />
       </div>
@@ -187,21 +202,6 @@ export default function Appresentation() {
           onChange={(event, editor) => {
             const data = editor.getData();
             setPlano({ ...plano, referencia_bibliografica: data });
-          }}
-        />
-      </div>
-
-      <div className="input-block" style={{ marginBottom: 20 }}>
-        <label style={{ marginBottom: 10 }}>
-          Estado da Arte
-        </label>
-        <CKEditor
-          editor={ClassicEditor}
-          data={plano.estado_arte}
-          onReady={(editor) => {}}
-          onChange={(event, editor) => {
-            const data = editor.getData();
-            setPlano({ ...plano, estado_arte: data });
           }}
         />
       </div>
