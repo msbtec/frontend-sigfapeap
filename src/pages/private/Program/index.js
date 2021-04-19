@@ -96,7 +96,7 @@ export default function Program() {
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.title }</td>
-                    <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{__html: item.description}}></td>
+                    <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{__html: item.description}}></td>
                     {/* <td style={{ textAlign: 'center' }}>{ item.description }</td> */}
                     {/* <td style={{ textAlign: 'center' }}>{ item.avaliation }</td> */}
                     {/* <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25,width: 25, cursor:'pointer'}} onClick={() => window.open(item.url,'_blank')} /></td> */}

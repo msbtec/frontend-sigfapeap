@@ -31,7 +31,7 @@ export default function RouteWrapper({
   if (rest.path === '/instituicoes') {
     path = "Instituição de pesquisa";
   }
-  if (rest.path === '/programas' || rest.path === '/projeto/:id' || rest.path === '/configurar-edital' || rest.path === '/avaliadores/:id' || rest.path === '/editais/:id') {
+  if (rest.path === '/programas' || rest.path === '/projetos_submetidos/:id' || rest.path === '/projeto/:id' || rest.path === '/configurar-edital' || rest.path === '/avaliadores/:id' || rest.path === '/editais/:id') {
     path = "Programas";
   }
   if (rest.path === '/avaliadores') {

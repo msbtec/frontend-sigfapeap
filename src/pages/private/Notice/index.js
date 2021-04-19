@@ -8,7 +8,7 @@ import { ModalProvider } from 'styled-react-modal';
 
 import ReactTooltip from 'react-tooltip';
 
-import { FiDownload, FiFileText, FiTrash } from 'react-icons/fi';
+import { FiDownload, FiEdit, FiFileText, FiTrash } from 'react-icons/fi';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
@@ -101,21 +101,31 @@ export default function Avaliadores() {
                 <tr>
                   <th className="col-1">#</th>
                   <th className="col-4">Título</th>
-                  <th className="col-5">Descrição</th>
+                  <th className="col-4">Descrição</th>
                   <th className="col-1">Anexo</th>
-                  <th className="col-1">Ações</th>
+                  <th className="col-2">Ações</th>
                 </tr>
               </thead>
               <tbody>
                 {selected.map((item, index) => (
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.title }</td>
-                    <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{__html: item.description}}></td>
+                    <td style={{textAlign: 'center' }}>{ item.title }</td>
+                    <td style={{ marginTop: 10,textAlign: 'justify' }} dangerouslySetInnerHTML={{__html: item.description}}></td>
                     <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
                     {user.profile.name != 'Pesquisador'
                     && (
                     <td style={{ textAlign: 'center' }}>
+                      <button
+                        data-tip="Visualizar projetos"
+                        onClick={() => {
+                            history.push(`/projetos_submetidos/${item.id}`);
+                        }}
+                        className="edit"
+                      >
+                        <FiFileText />
+                      </button>
+
                       <button
                         data-tip="Deletar edital"
                         onClick={() => {

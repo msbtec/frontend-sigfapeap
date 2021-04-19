@@ -21,6 +21,7 @@ const SearchArea = lazy(() => import('../private/SearchArea'));
 const ConnectSearchArea = lazy(() => import('../private/ConnectSearchArea'));
 const Foundation = lazy(() => import('../private/Foundation'));
 const Program = lazy(() => import('../private/Program'));
+const ProjetosSubmetidos = lazy(() => import('../private/ProjetosSubmetidos'));
 const Project = lazy(() => import('../private/Project'));
 const EvaluatorsProgram = lazy(() => import('../private/EvaluatorsProgram'));
 const ConfigurationNotice = lazy(() => import('../private/ConfigurationNotice'));
@@ -67,6 +68,7 @@ export default function Sis() {
                                 <Route exact path='/vinculos' component={ConnectSearchArea} />
                                 <Route exact path='/instituicoes' component={Foundation} />
                                 <Route exact path='/programas' component={Program} />
+                                <Route exact path='/projetos_submetidos/:id' component={ProjetosSubmetidos} />
                                 <Route exact path='/projeto/:id' component={Project} />
                                 <Route exact path='/configurar-edital' component={ConfigurationNotice} />
                                 <Route exact path='/avaliadores/:id' component={EvaluatorsProgram} />
