@@ -146,7 +146,7 @@ export default function Avaliadores() {
                       <button
                         data-tip="Submeter projeto"
                         onClick={() => {
-                          history.push(`/projeto/${item.id}`);
+                          history.push(`/projeto/${item.id}/${user.id}`);
                         }}
                         className="edit"
                       >

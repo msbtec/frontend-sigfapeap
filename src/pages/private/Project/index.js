@@ -229,6 +229,9 @@ export default function Project() {
 
   const handleSubmit = useCallback(
     async (data) => {
+        if(coordenador != user.id){
+            return null;
+        }
       try {
         formRef.current.setErrors({});
 
