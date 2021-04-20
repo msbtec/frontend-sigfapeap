@@ -24,15 +24,17 @@ export default function ConfigurationNotice() {
   const formRef = useRef(null);
 
   const [fields, setFields] = useState({
-    titulo_projeto: { checked: false, value: 0 },
-    coordenador: { checked: false, value: 0 },
-    email: { checked: false, value: 0 },
-    faixa_valor: { checked: false, value: 0 },
-    linha_pesquisa: { checked: false, value: 0 },
-    instituicao: { checked: false, value: 0 },
-    unidade_executora: { checked: false, value: 0 },
-    duracao: { checked: false, value: 0 },
-    cotacao_moeda_estrangeira: { checked: false, value: 0 },
+    titulo_projeto: { checked: true, value: 0 },
+    coordenador: { checked: true, value: 0 },
+    email: { checked: true, value: 0 },
+    faixa_valor: { checked: true, value: 0 },
+    tema_interesse: { checked: true, value: 0 },
+    instituicao: { checked: true, value: 0 },
+    unidade_executora: { checked: true, value: 0 },
+    linha_pesquisa: { checked: true, value: 0 },
+    inicio_previsto: { checked: true, value: 0 },
+    duracao: { checked: true, value: 0 },
+    cotacao_moeda_estrangeira: { checked: true, value: 0 },
   });
 
   const [loadingHeader, setLoadingHeader] = useState(false);
@@ -46,6 +48,9 @@ export default function ConfigurationNotice() {
     async (data) => {
       try {
         formRef.current.setErrors({});
+
+        console.log(fields);
+        console.log(data);
 
         setLoadingHeader(true);
 
@@ -77,7 +82,7 @@ export default function ConfigurationNotice() {
         }
       }
     },
-    [],
+    [fields],
   );
 
   const handleSubmitAttachment = useCallback(
@@ -126,12 +131,12 @@ export default function ConfigurationNotice() {
       <div className="col-12 px-0">
         <Card className="red">
           <div className="card-title">
-            <h3>Cabeçalho</h3>
+            <h3>Plano de trabalho</h3>
           </div>
           <div className="card-body">
             <Unform ref={formRef} onSubmit={handleSubmitHeader}>
               <Form>
-                <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                <div>
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
                       onChange={() => setFields({ ...fields, titulo_projeto: { ...fields.titulo_projeto, checked: !fields.titulo_projeto.checked } })}
@@ -141,10 +146,10 @@ export default function ConfigurationNotice() {
                       title="Título do projeto"
                     />
 
-                    <Input type="number" disabled={!fields.titulo_projeto.checked} formRef={formRef} name="title" original />
+                    {/* <Input type="number" disabled={!fields.titulo_projeto.checked} formRef={formRef} name="title" original /> */}
                   </div>
 
-                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                  {/* <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
                       onChange={() => setFields({ ...fields, coordenador: { ...fields.coordenador, checked: !fields.coordenador.checked } })}
                       checked={fields.coordenador.checked}
@@ -154,9 +159,9 @@ export default function ConfigurationNotice() {
                     />
 
                     <Input type="number" disabled={!fields.coordenador.checked} formRef={formRef} name="coordenator" original />
-                  </div>
+                  </div> */}
 
-                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                  {/* <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
                       onChange={() => setFields({ ...fields, email: { ...fields.email, checked: !fields.email.checked } })}
                       checked={fields.email.checked}
@@ -166,7 +171,7 @@ export default function ConfigurationNotice() {
                     />
 
                     <Input type="number" disabled={!fields.email.checked} formRef={formRef} name="email" original />
-                  </div>
+                  </div> */}
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
@@ -177,19 +182,19 @@ export default function ConfigurationNotice() {
                       title="Faixa de valor"
                     />
 
-                    <Input type="number" disabled={!fields.faixa_valor.checked} formRef={formRef} name="faixa_value" original />
+                    {/* <Input type="number" disabled={!fields.faixa_valor.checked} formRef={formRef} name="faixa_value" original /> */}
                   </div>
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
-                      onChange={() => setFields({ ...fields, linha_pesquisa: { ...fields.linha_pesquisa, checked: !fields.linha_pesquisa.checked } })}
-                      checked={fields.linha_pesquisa.checked}
+                      onChange={() => setFields({ ...fields, tema_interesse: { ...fields.tema_interesse, checked: !fields.tema_interesse.checked } })}
+                      checked={fields.tema_interesse.checked}
                       fields={fields}
                       setFields={setFields}
-                      title="Linha de pesquisa"
+                      title="Tema de interesse"
                     />
 
-                    <Input type="number" disabled={!fields.linha_pesquisa.checked} formRef={formRef} name="line_reseacher" original />
+                    {/* <Input type="number" disabled={!fields.faixa_valor.checked} formRef={formRef} name="faixa_value" original /> */}
                   </div>
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
@@ -198,10 +203,10 @@ export default function ConfigurationNotice() {
                       checked={fields.instituicao.checked}
                       fields={fields}
                       setFields={setFields}
-                      title="Instituição"
+                      title="Instituição Executora"
                     />
 
-                    <Input type="number" disabled={!fields.instituicao.checked} formRef={formRef} name="line_reseacher" original />
+                    {/* <Input type="number" disabled={!fields.instituicao.checked} formRef={formRef} name="line_reseacher" original /> */}
                   </div>
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
@@ -213,7 +218,31 @@ export default function ConfigurationNotice() {
                       title="Unidade Executora"
                     />
 
-                    <Input type="number" disabled={!fields.unidade_executora.checked} formRef={formRef} name="unit_execution" original />
+                    {/* <Input type="number" disabled={!fields.unidade_executora.checked} formRef={formRef} name="unit_execution" original /> */}
+                  </div>
+
+                  {/* <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
+                      onChange={() => setFields({ ...fields, linha_pesquisa: { ...fields.linha_pesquisa, checked: !fields.linha_pesquisa.checked } })}
+                      checked={fields.linha_pesquisa.checked}
+                      fields={fields}
+                      setFields={setFields}
+                      title="Linha de pesquisa"
+                    />
+
+                    <Input type="number" disabled={!fields.linha_pesquisa.checked} formRef={formRef} name="line_reseacher" original />
+                  </div> */}
+
+                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
+                      onChange={() => setFields({ ...fields, inicio_previsto: { ...fields.inicio_previsto, checked: !fields.inicio_previsto.checked } })}
+                      checked={fields.inicio_previsto.checked}
+                      fields={fields}
+                      setFields={setFields}
+                      title="Início previsto"
+                    />
+
+                    {/* <Input type="number" disabled={!fields.duracao.checked} formRef={formRef} name="duration" original /> */}
                   </div>
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
@@ -225,7 +254,7 @@ export default function ConfigurationNotice() {
                       title="Duração"
                     />
 
-                    <Input type="number" disabled={!fields.duracao.checked} formRef={formRef} name="duration" original />
+                    {/* <Input type="number" disabled={!fields.duracao.checked} formRef={formRef} name="duration" original /> */}
                   </div>
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
@@ -237,9 +266,17 @@ export default function ConfigurationNotice() {
                       title="Cotação da Moeda Estrangeira"
                     />
 
-                    <Input type="number" disabled={!fields.cotacao_moeda_estrangeira.checked} formRef={formRef} name="duration" original />
+                    {/* <Input type="number" disabled={!fields.cotacao_moeda_estrangeira.checked} formRef={formRef} name="duration" original /> */}
                   </div>
                 </div>
+
+                <h3 style={{ color: '#48465b' }}>Anexo</h3>
+
+                <Input formRef={formRef} name="name" original title="Nome" />
+
+                <Input formRef={formRef} name="size" type="number" original title="Tamanho máximo (Mb)" />
+
+                <Input formRef={formRef} name="quantity" type="number" original title="Número máximo" />
 
                 <div className="modal-footer">
                   {loadingHeader ? (<ReactLoading type="spin" height="5%" width="5%" color="#3699ff" />) : (
@@ -255,7 +292,7 @@ export default function ConfigurationNotice() {
           </div>
         </Card>
 
-        <Card className="red">
+        {/* <Card className="red">
           <div className="card-title">
             <h3>Anexo</h3>
           </div>
@@ -280,7 +317,7 @@ export default function ConfigurationNotice() {
               </Form>
             </Unform>
           </div>
-        </Card>
+        </Card> */}
       </div>
     </>
   );
