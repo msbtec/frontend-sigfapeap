@@ -74,7 +74,7 @@ export default function Project() {
   const [files, setFiles] = useState([]);
   const [edital, setEdital] = useState({ title: '' });
   const [protocolo, setProtocolo] = useState(uuid());
-  const { id } = useParams();
+  const { id, coordenador } = useParams();
 
   async function getProject() {
     setProject(null);
@@ -161,7 +161,7 @@ export default function Project() {
     setInitialLoading(true);
     api.put(`/projects`, {
       edital_id: id,
-      coordenador_id: user.id,
+      coordenador_id: coordenador,
     }).then(({ data }) => {
       setProject(data);
       setFiles(data.files.map((item) => ({
@@ -611,6 +611,7 @@ export default function Project() {
                 {screen.recursos && <Recursos />}
               </Content>
 
+            {coordenador == user.id &&
               <div style={{ marginTop: 20 }} className="modal-footer">
                 {loading ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : project?.submetido == 'false' && (
                   <Button
@@ -628,6 +629,7 @@ export default function Project() {
                   </Button>
                 )}
               </div>
+            }
             </Unform>
             )}
           </div>

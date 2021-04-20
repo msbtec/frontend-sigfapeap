@@ -6,7 +6,7 @@ import ReactTooltip from 'react-tooltip';
 
 import { BsPencilSquare } from 'react-icons/bs';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
@@ -14,6 +14,8 @@ import api from '../../../services/api';
 
 export default function ProjetosSubmetidos() {
   const [projects, setProjects] = useState([]);
+
+  const history = useHistory();
 
   const { id } = useParams();
 
@@ -62,7 +64,7 @@ export default function ProjetosSubmetidos() {
                     <td style={{ textAlign: 'center' }}>
                       <button
                         data-tip="Avaliar projeto"
-                        onClick={() => {}}
+                        onClick={() => history.push(`/projeto/${id}/${item.coordenador_id}`)}
                         className="edit"
                       >
                         <BsPencilSquare />

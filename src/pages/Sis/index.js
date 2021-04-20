@@ -69,7 +69,7 @@ export default function Sis() {
                                 <Route exact path='/instituicoes' component={Foundation} />
                                 <Route exact path='/programas' component={Program} />
                                 <Route exact path='/projetos_submetidos/:id' component={ProjetosSubmetidos} />
-                                <Route exact path='/projeto/:id' component={Project} />
+                                <Route exact path='/projeto/:id/:coordenador' component={Project} />
                                 <Route exact path='/configurar-edital' component={ConfigurationNotice} />
                                 <Route exact path='/avaliadores/:id' component={EvaluatorsProgram} />
                                 <Route exact path='/editais/:id' component={Notice} />
