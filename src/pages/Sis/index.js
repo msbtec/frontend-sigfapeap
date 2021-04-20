@@ -1,9 +1,12 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { Switch, Link } from 'react-router-dom';
 
+import LoadingOverlay from 'react-loading-overlay';
+
 import Route from "../../routes/Route";
 
 import { useAuth } from '../../hooks/auth';
+import { useProject } from '../../hooks/project';
 
 // Icons
 import { FiMenu } from 'react-icons/fi';
@@ -40,54 +43,62 @@ export default function Sis() {
 
     const { user } = useAuth();
 
+    const { loading } = useProject();
+
     const [ drag, setDrag ] = useState(false);
     return (
-        <Wrap>
-            <Sidebar drag={drag} />
-            <Main>
-                <NavBar>
-                    <FiMenu className="toggle" style={{ marginLeft: drag ? 170 : 0}} onClick={(e) => drag ? setDrag(false) : setDrag(true)} />
-                    <Link to="/perfil">
-                        <span>Olá, <span className="name">{user.name}</span></span>
-                    </Link>
-                </NavBar>
-                <div className="content">
-                    <div className="row">
-                        <Suspense fallback={
-                            <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center'}}>
-                                <div className="loader"></div>
-                            </div>
-                        }>
-                            <Switch>
-                                <Route exact path='/' component={Dashboard} />
-                                <Route exact path='/perfil' component={MyProfile} />
-                                <Route exact path='/usuarios' component={Server} />
-                                <Route exact path='/cargos' component={Office} />
-                                <Route exact path='/perfis' component={Profile} />
-                                <Route exact path='/areas' component={SearchArea} />
-                                <Route exact path='/vinculos' component={ConnectSearchArea} />
-                                <Route exact path='/instituicoes' component={Foundation} />
-                                <Route exact path='/programas' component={Program} />
-                                <Route exact path='/projetos_submetidos/:id' component={ProjetosSubmetidos} />
-                                <Route exact path='/projeto/:id/:coordenador' component={Project} />
-                                <Route exact path='/configurar-edital' component={ConfigurationNotice} />
-                                <Route exact path='/avaliadores/:id' component={EvaluatorsProgram} />
-                                <Route exact path='/editais/:id' component={Notice} />
-                                <Route exact path='/avaliadores' component={Evaluator} />
-                                <Route exact path='/pesquisadores' component={Researcher} />
+        <LoadingOverlay
+            active={loading}
+            spinner
+            text='Carregando...'
+        >
+            <Wrap>
+                <Sidebar drag={drag} />
+                <Main>
+                    <NavBar>
+                        <FiMenu className="toggle" style={{ marginLeft: drag ? 170 : 0}} onClick={(e) => drag ? setDrag(false) : setDrag(true)} />
+                        <Link to="/perfil">
+                            <span>Olá, <span className="name">{user.name}</span></span>
+                        </Link>
+                    </NavBar>
+                    <div className="content">
+                        <div className="row">
+                            <Suspense fallback={
+                                <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center'}}>
+                                    <div className="loader"></div>
+                                </div>
+                            }>
+                                <Switch>
+                                    <Route exact path='/' component={Dashboard} />
+                                    <Route exact path='/perfil' component={MyProfile} />
+                                    <Route exact path='/usuarios' component={Server} />
+                                    <Route exact path='/cargos' component={Office} />
+                                    <Route exact path='/perfis' component={Profile} />
+                                    <Route exact path='/areas' component={SearchArea} />
+                                    <Route exact path='/vinculos' component={ConnectSearchArea} />
+                                    <Route exact path='/instituicoes' component={Foundation} />
+                                    <Route exact path='/programas' component={Program} />
+                                    <Route exact path='/projetos_submetidos/:id' component={ProjetosSubmetidos} />
+                                    <Route exact path='/projeto/:id/:coordenador' component={Project} />
+                                    <Route exact path='/configurar-edital' component={ConfigurationNotice} />
+                                    <Route exact path='/avaliadores/:id' component={EvaluatorsProgram} />
+                                    <Route exact path='/editais/:id' component={Notice} />
+                                    <Route exact path='/avaliadores' component={Evaluator} />
+                                    <Route exact path='/pesquisadores' component={Researcher} />
 
-                                <Route path='/tables' component={Tables}/>
-                                <Route path='/buttons' component={Buttons}/>
-                                <Route path='/cards' component={Cards}/>
-                                <Route path='/forms' component={Forms}/>
-                                <Route path='/alerts' component={Alerts}/>
-                                <Route path='/modals' component={Modals}/>
-                            </Switch>
-                        </Suspense>
+                                    <Route path='/tables' component={Tables}/>
+                                    <Route path='/buttons' component={Buttons}/>
+                                    <Route path='/cards' component={Cards}/>
+                                    <Route path='/forms' component={Forms}/>
+                                    <Route path='/alerts' component={Alerts}/>
+                                    <Route path='/modals' component={Modals}/>
+                                </Switch>
+                            </Suspense>
+                        </div>
                     </div>
-                </div>
-            </Main>
-        </Wrap>
+                </Main>
+            </Wrap>
+        </LoadingOverlay>
     );
 }
 

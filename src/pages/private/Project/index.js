@@ -6,6 +6,8 @@ import * as Yup from 'yup';
 
 import ReactLoading from "react-loading";
 
+import LoadingOverlay from 'react-loading-overlay';
+
 import { ModalProvider } from 'styled-react-modal';
 
 import moment from 'moment';
@@ -56,7 +58,7 @@ export default function Project() {
     project, setProject, membros, setMembros, atividades, setAtividades,
     plano, setPlano, despesas, setDespesas, recursos,
     setRecursos, abrangencias, setAbrangencias,
-    orcamentos, setOrcamentos,
+    orcamentos, setOrcamentos, setLoading : setPageLoading
   } = useProject();
 
   const [screen, setScreen] = useState({
@@ -600,7 +602,7 @@ export default function Project() {
       <div className="col-12 px-0">
         <Card className="red">
           <div className="card-body">
-            <Breadcumb screen={screen} setScreen={setScreen} />
+            <Breadcumb screen={screen} setScreen={setScreen} setPageLoading={setPageLoading} />
 
             {!initiaLoading
             && (

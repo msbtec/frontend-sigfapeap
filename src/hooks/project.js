@@ -12,6 +12,8 @@ const ProjectContext = createContext({});
 export const ProjectProvider = ({ children }) => {
   const { user } = useAuth();
 
+  const [loading, setLoading] = useState(false);
+
   const [project, setProject] = useState(null);
 
   const [membros, setMembros] = useState([{ label: user?.name, value: JSON.stringify(user) }]);
@@ -100,6 +102,8 @@ export const ProjectProvider = ({ children }) => {
   return (
     <ProjectContext.Provider
       value={{
+        loading,
+        setLoading,
         project,
         setProject,
         membros,
