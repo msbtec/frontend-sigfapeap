@@ -23,6 +23,7 @@ import api from '../../../services/api';
 export default function ConfigurationNotice() {
   const formRef = useRef(null);
 
+  const [anexo, setAnexo] = useState(null);
   const [fields, setFields] = useState({
     titulo_projeto: { checked: true, value: 0 },
     coordenador: { checked: true, value: 0 },
@@ -42,6 +43,11 @@ export default function ConfigurationNotice() {
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Configurar Edital';
+
+    api.get(`configurations`).then(({ data }) => {
+      setFields(JSON.parse(data.plano_trabalho).fields);
+      setAnexo(JSON.parse(data.plano_trabalho));
+    }).catch((error) => console.log(error));
   }, []);
 
   const handleSubmitHeader = useCallback(
@@ -49,16 +55,11 @@ export default function ConfigurationNotice() {
       try {
         formRef.current.setErrors({});
 
-        console.log(fields);
-        console.log(data);
-
         setLoadingHeader(true);
 
-        setTimeout(() => {
-          setLoadingHeader(false);
-        }, 2000);
-
-        api.put(`route`, {}).then(({ data }) => {
+        api.post(`configurations`, {
+          plano_trabalho: JSON.stringify({ ...data, fields }),
+        }).then(({ data }) => {
           setLoadingHeader(false);
 
           store.addNotification({
@@ -134,7 +135,7 @@ export default function ConfigurationNotice() {
             <h3>Plano de trabalho</h3>
           </div>
           <div className="card-body">
-            <Unform ref={formRef} onSubmit={handleSubmitHeader}>
+            <Unform initialData={anexo} ref={formRef} onSubmit={handleSubmitHeader}>
               <Form>
                 <div>
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
@@ -279,7 +280,7 @@ export default function ConfigurationNotice() {
                 <Input formRef={formRef} name="quantity" type="number" original title="Número máximo" />
 
                 <div className="modal-footer">
-                  {loadingHeader ? (<ReactLoading type="spin" height="5%" width="5%" color="#3699ff" />) : (
+                  {loadingHeader ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
                     <Button
                       className="primary"
                     >

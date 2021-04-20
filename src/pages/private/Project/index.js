@@ -78,6 +78,8 @@ export default function Project() {
   const [protocolo, setProtocolo] = useState(uuid());
   const { id, coordenador } = useParams();
 
+  const [configuration, setConfigurations] = useState(null);
+
   async function getProject() {
     setProject(null);
     setMembros([{ label: user.name, value: JSON.stringify(user) }]);
@@ -224,6 +226,10 @@ export default function Project() {
 
     api.get(`/programs/files/edital/${id}`).then(({ data }) => {
       setEdital(data);
+    });
+
+    api.get(`configurations`).then(({ data }) => {
+        setConfigurations(data)
     });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
