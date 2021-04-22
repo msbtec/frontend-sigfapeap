@@ -42,7 +42,7 @@ export default function App({ screen, setScreen, setPageLoading }) {
           }, 3000);
         }}
         >
-          Plano de apresentação
+          Plano de Apresentação
         </a>
       </li>
       <li style={{

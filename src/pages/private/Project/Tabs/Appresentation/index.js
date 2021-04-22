@@ -8,10 +8,12 @@ import { Form } from '../../../../../components/Form';
 import { useProject } from '../../../../../hooks/project';
 
 export default function Appresentation() {
-  const { plano, setPlano } = useProject();
+  const { configuration, plano, setPlano } = useProject();
 
   return (
     <Form>
+      {JSON.parse(configuration.apresentacao).apresentacao.resumo.checked
+      && (
       <div className="input-block">
         <label style={{ marginBottom: 10 }}>
           Resumo da proposta
@@ -26,7 +28,10 @@ export default function Appresentation() {
           }}
         />
       </div>
+      )}
 
+      {JSON.parse(configuration.apresentacao).apresentacao.palavras_chave.checked
+      && (
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
           Palavras-Chave
@@ -41,7 +46,10 @@ export default function Appresentation() {
           }}
         />
       </div>
+      )}
 
+      {JSON.parse(configuration.apresentacao).apresentacao.informacoes_relevantes_para_avaliacao.checked
+      && (
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
           Informações Relevantes para Avaliação da Proposta
@@ -56,7 +64,10 @@ export default function Appresentation() {
           }}
         />
       </div>
+      )}
 
+      {JSON.parse(configuration.apresentacao).apresentacao.experiencia_coordenador.checked
+      && (
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
           Experiência do Coordenador
@@ -71,7 +82,10 @@ export default function Appresentation() {
           }}
         />
       </div>
+      )}
 
+      {JSON.parse(configuration.apresentacao).apresentacao.sintese_projeto.checked
+      && (
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
           Síntese do Projeto
@@ -86,7 +100,10 @@ export default function Appresentation() {
           }}
         />
       </div>
+      )}
 
+      {JSON.parse(configuration.apresentacao).apresentacao.objetivos_gerais.checked
+      && (
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
           Objetivos Gerais
@@ -101,7 +118,10 @@ export default function Appresentation() {
           }}
         />
       </div>
+      )}
 
+      {JSON.parse(configuration.apresentacao).apresentacao.objetivos_especificos.checked
+      && (
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
           Objetivo Específico
@@ -116,7 +136,10 @@ export default function Appresentation() {
           }}
         />
       </div>
+      )}
 
+      {JSON.parse(configuration.apresentacao).apresentacao.estado_arte.checked
+      && (
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
           Estado da Arte
@@ -131,7 +154,10 @@ export default function Appresentation() {
           }}
         />
       </div>
+      )}
 
+      {JSON.parse(configuration.apresentacao).apresentacao.metodologia.checked
+      && (
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
           Metodologia
@@ -146,7 +172,10 @@ export default function Appresentation() {
           }}
         />
       </div>
+      )}
 
+      {JSON.parse(configuration.apresentacao).apresentacao.resultados_esperados.checked
+      && (
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
           Resultados Esperados
@@ -161,7 +190,10 @@ export default function Appresentation() {
           }}
         />
       </div>
+      )}
 
+      {JSON.parse(configuration.apresentacao).apresentacao.impactos_esperados.checked
+      && (
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
           Impactos Esperados
@@ -176,7 +208,10 @@ export default function Appresentation() {
           }}
         />
       </div>
+      )}
 
+      {JSON.parse(configuration.apresentacao).apresentacao.riscos_atividades.checked
+      && (
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
           Riscos e Atividades
@@ -191,7 +226,10 @@ export default function Appresentation() {
           }}
         />
       </div>
+      )}
 
+      {JSON.parse(configuration.apresentacao).apresentacao.referencia_bibliografica.checked
+      && (
       <div className="input-block" style={{ marginBottom: 20 }}>
         <label style={{ marginBottom: 10 }}>
           Referência Bibliográfica
@@ -206,6 +244,7 @@ export default function Appresentation() {
           }}
         />
       </div>
+      )}
     </Form>
   );
 }
