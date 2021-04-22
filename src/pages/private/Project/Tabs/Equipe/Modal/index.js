@@ -118,10 +118,6 @@ function ModalForm({
           <div className="input-block">
             <label className="required">
               Atividade
-              {' '}
-              <sup>
-                *
-              </sup>
             </label>
             <input
               style={{ borderColor: errors.title ? '#c53030' : '#999' }}
@@ -139,10 +135,6 @@ function ModalForm({
           <div className="input-block">
             <label className="required">
               Mês de início
-              {' '}
-              <sup>
-                *
-              </sup>
             </label>
             <input
               style={{ borderColor: errors.beggin ? '#c53030' : '#999' }}
@@ -160,10 +152,6 @@ function ModalForm({
           <div className="input-block">
             <label className="required">
               Duração (em meses)
-              {' '}
-              <sup>
-                *
-              </sup>
             </label>
             <input
               style={{ borderColor: errors.end ? '#c53030' : '#999' }}
@@ -181,10 +169,6 @@ function ModalForm({
           <div style={{ marginBottom: 10 }} className="input-block">
             <label className="required">
               Carga horária semanal
-              {' '}
-              <sup>
-                *
-              </sup>
             </label>
             <input
               style={{ borderColor: errors.time ? '#c53030' : '#999' }}

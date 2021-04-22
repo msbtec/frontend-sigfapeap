@@ -6,6 +6,7 @@ import uuid from 'react-uuid';
 import { Form } from '../../../../../components/Form';
 import { Table } from '../../../../../components/Table';
 
+// eslint-disable-next-line import/named
 import { useProject } from '../../../../../hooks/project';
 
 export default function Abrangencia() {

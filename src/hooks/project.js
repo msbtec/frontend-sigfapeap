@@ -12,6 +12,8 @@ const ProjectContext = createContext({});
 export const ProjectProvider = ({ children }) => {
   const { user } = useAuth();
 
+  const [configuration, setConfigurations] = useState(null);
+
   const [loading, setLoading] = useState(false);
 
   const [project, setProject] = useState(null);
@@ -120,6 +122,8 @@ export const ProjectProvider = ({ children }) => {
         setAbrangencias,
         orcamentos,
         setOrcamentos,
+        configuration,
+        setConfigurations
       }}
     >
       {children}

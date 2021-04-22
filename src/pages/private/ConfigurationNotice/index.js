@@ -55,6 +55,16 @@ export default function ConfigurationNotice() {
       try {
         formRef.current.setErrors({});
 
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Campo obrigatório'),
+          size: Yup.number().required('Campo obrigatório').min(1, 'Valor deve ser maior ou igual a 1'),
+          quantity: Yup.number().required('Campo obrigatório').min(0, 'Valor deve ser maior ou igual a 0'),
+        });
+
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+
         setLoadingHeader(true);
 
         api.post(`configurations`, {

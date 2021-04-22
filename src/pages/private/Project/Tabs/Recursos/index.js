@@ -12,6 +12,7 @@ import {
   getValue,
 } from '../../../../../utils/soma';
 
+// eslint-disable-next-line import/named
 import { useProject } from '../../../../../hooks/project';
 
 export default function Recursos() {

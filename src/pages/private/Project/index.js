@@ -58,7 +58,8 @@ export default function Project() {
     project, setProject, membros, setMembros, atividades, setAtividades,
     plano, setPlano, despesas, setDespesas, recursos,
     setRecursos, abrangencias, setAbrangencias,
-    orcamentos, setOrcamentos, setLoading : setPageLoading
+    orcamentos, setOrcamentos, setLoading : setPageLoading,
+    configuration, setConfigurations
   } = useProject();
 
   const [screen, setScreen] = useState({
@@ -78,9 +79,9 @@ export default function Project() {
   const [protocolo, setProtocolo] = useState(uuid());
   const { id, coordenador } = useParams();
 
-  const [configuration, setConfigurations] = useState(null);
-
   async function getProject() {
+    setPageLoading(true);
+
     setProject(null);
     setMembros([{ label: user.name, value: JSON.stringify(user) }]);
     setAtividades([]);
@@ -215,21 +216,27 @@ export default function Project() {
         estado_arte: data.estado_arte || '',
       });
 
-      setInitialLoading(false);
-    }).catch((error) => { setInitialLoading(false); });
+      api.get(`configurations`).then(({ data }) => {
+        setConfigurations({...data, plano_trabalho: JSON.parse(data.plano_trabalho)})
+        setPageLoading(false);  setInitialLoading(false);
+      });
+    }).catch((error) => {
+        api.get(`configurations`).then(({ data }) => {
+            setConfigurations({...data, plano_trabalho: JSON.parse(data.plano_trabalho)})
+            setPageLoading(false);  setInitialLoading(false);
+        });
+    });
   }
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Submeter Projeto';
 
+    setPageLoading(true)
+
     getProject();
 
     api.get(`/programs/files/edital/${id}`).then(({ data }) => {
       setEdital(data);
-    });
-
-    api.get(`configurations`).then(({ data }) => {
-        setConfigurations(data)
     });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -244,17 +251,17 @@ export default function Project() {
         formRef.current.setErrors({});
 
         if (screen.header) {
-          const schema = Yup.object().shape({
-            title: Yup.string().required('Campo obrigatório'),
-            faixa_value: Yup.string().required('Campo obrigatório'),
-            institution: Yup.string().required('Campo obrigatório'),
-            unity_execution: Yup.string().required('Campo obrigatório'),
-            beggin_prevision: Yup.string().required('Campo obrigatório'),
-          });
+        //   const schema = Yup.object().shape({
+        //     title: Yup.string().required('Campo obrigatório'),
+        //     faixa_value: Yup.string().required('Campo obrigatório'),
+        //     institution: Yup.string().required('Campo obrigatório'),
+        //     unity_execution: Yup.string().required('Campo obrigatório'),
+        //     beggin_prevision: Yup.string().required('Campo obrigatório'),
+        //   });
 
-          await schema.validate(data, {
-            abortEarly: false,
-          });
+        //   await schema.validate(data, {
+        //     abortEarly: false,
+        //   });
 
           setLoading(true);
 
@@ -632,7 +639,7 @@ export default function Project() {
                   </Button>
                 )}
 
-                {!project && (
+                {!project && !loading && (
                   <Button
                     className="primary"
                   >
