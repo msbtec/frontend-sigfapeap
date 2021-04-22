@@ -251,33 +251,35 @@ export default function Project() {
         formRef.current.setErrors({});
 
         if (screen.header) {
-        //   const schema = Yup.object().shape({
-        //     title: Yup.string().required('Campo obrigatório'),
-        //     faixa_value: Yup.string().required('Campo obrigatório'),
-        //     institution: Yup.string().required('Campo obrigatório'),
-        //     unity_execution: Yup.string().required('Campo obrigatório'),
-        //     beggin_prevision: Yup.string().required('Campo obrigatório'),
-        //   });
+          const schema = Yup.object().shape({
+            title: configuration.plano_trabalho.fields.titulo_projeto.checked ? Yup.string().required('Campo obrigatório') : undefined,
+            faixa_value: configuration.plano_trabalho.fields.faixa_valor.checked ? Yup.string().required('Campo obrigatório') : undefined,
+            institution: configuration.plano_trabalho.fields.instituicao.checked ? Yup.string().required('Campo obrigatório') : undefined,
+            unity_execution: configuration.plano_trabalho.fields.unidade_executora.checked ? Yup.string().required('Campo obrigatório') : undefined,
+            beggin_prevision: configuration.plano_trabalho.fields.inicio_previsto.checked ? Yup.string().required('Campo obrigatório') : undefined,
+            money_foreign: configuration.plano_trabalho.fields.cotacao_moeda_estrangeira.checked ? Yup.string().required('Campo obrigatório') : undefined,
+            theme: configuration.plano_trabalho.fields.tema_interesse.checked ? Yup.string().required('Campo obrigatório') : undefined,
+        });
 
-        //   await schema.validate(data, {
-        //     abortEarly: false,
-        //   });
+          await schema.validate(data, {
+            abortEarly: false,
+          });
 
           setLoading(true);
 
           const formData = new FormData();
           formData.append('edital_id', id);
-          formData.append('title', data.title);
+          formData.append('title', data.title || "");
           formData.append('protocolo', protocolo);
           formData.append('coordenador_id', user.id);
           formData.append('email', user.email);
-          formData.append('faixa_value', data.faixa_value);
-          formData.append('theme', data.theme);
-          formData.append('institution', data.institution);
-          formData.append('unity_execution', data.unity_execution);
-          formData.append('beggin_prevision', data.beggin_prevision);
-          formData.append('duration', data.duration);
-          formData.append('money_foreign', data.money_foreign);
+          formData.append('faixa_value', data.faixa_value || "");
+          formData.append('theme', data.theme || "");
+          formData.append('institution', data.institution || "");
+          formData.append('unity_execution', data.unity_execution || "");
+          formData.append('beggin_prevision', data.beggin_prevision || "");
+          formData.append('duration', data.duration || "");
+          formData.append('money_foreign', data.money_foreign || "");
 
           // eslint-disable-next-line no-plusplus
           for (let i = 0; i < files.length; i++) {
@@ -534,6 +536,7 @@ export default function Project() {
           });
         }
       } catch (error) {
+          console.log(error)
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
 
@@ -542,7 +545,7 @@ export default function Project() {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [id, screen, files, protocolo, user, plano, abrangencias, recursos, despesas, membros, atividades],
+    [id, screen, files, protocolo, user, plano, abrangencias, recursos, despesas, membros, atividades, configuration],
   );
 
   async function toggleModalConfirm() {
