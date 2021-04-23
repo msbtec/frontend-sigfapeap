@@ -38,6 +38,10 @@ function ModalForm({
 
         const schema = Yup.object().shape({
           title: Yup.string().required('Campo obrigatório'),
+          beggin: Yup.date().required('Campo obrigatório').nullable().typeError('Campo obrigatório'),
+          end: Yup.date().required('Campo obrigatório').min(Yup.ref('beggin'), "A data de término não pode ser anterior à data de início").nullable()
+            .typeError('Campo obrigatório'),
+          documents: Yup.string().required('Campo obrigatório'),
         });
 
         if (!selectedFile) {
@@ -85,6 +89,12 @@ function ModalForm({
           <div className="modal-body" ref={reference}>
             <Input formRef={formRef} name="title" required original title="Título" />
 
+            <Input formRef={formRef} name="beggin" type="date" required original title="Início" />
+
+            <Input formRef={formRef} name="end" type="date" required original title="Fim" />
+
+            <Input formRef={formRef} name="documents" required original title="Documentos necessários" />
+
             <div className="input-block">
               <label style={{ marginBottom: 10 }}>
                 Descrição
@@ -102,7 +112,7 @@ function ModalForm({
 
             <div style={{ marginBottom: 10 }} className="input-block">
               <label htmlFor="email">
-                PDF
+                Anexo
                 {' '}
                 <sup style={{ color: "#f00" }}>* Tamanho máximo 3MB</sup>
               </label>
@@ -111,7 +121,7 @@ function ModalForm({
                 <input
                   type="file"
                   placeholder="Arquivo"
-                  accept=".pdf"
+                  accept=".pdf, .doc, .docx"
                   // onChange={(e) => setSelectedFile(e.target.files[0])}
                   onChange={(e) => {
                     if (e.target.files.length > 0) {

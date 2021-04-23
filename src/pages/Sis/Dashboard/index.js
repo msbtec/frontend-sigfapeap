@@ -159,7 +159,7 @@ export default function Dashboard() {
                 <tr>
                   <td style={{ textAlign: 'center' }}>{ index + 1 + (page > 1 ? (page - 1) * 5 : 0) }</td>
                   <td style={{ textAlign: 'center' }}>{ item.title }</td>
-                  <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item.description }} />
+                  <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: item.description }} />
                   <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
                   <td style={{ textAlign: 'center' }}>
                     <button

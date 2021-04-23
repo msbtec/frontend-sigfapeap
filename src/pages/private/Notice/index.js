@@ -8,7 +8,7 @@ import { ModalProvider } from 'styled-react-modal';
 
 import ReactTooltip from 'react-tooltip';
 
-import { FiDownload, FiEdit, FiFileText, FiTrash } from 'react-icons/fi';
+import { FiDownload, FiEdit, FiSettings, FiFileText, FiTrash } from 'react-icons/fi';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
@@ -116,6 +116,16 @@ export default function Avaliadores() {
                     {user.profile.name != 'Pesquisador'
                     && (
                     <td style={{ textAlign: 'center' }}>
+                      <button
+                        data-tip="Configurar edital"
+                        onClick={() => {
+                            history.push(`configurar-edital/${item.id}`)
+                        }}
+                        className="edit"
+                      >
+                        <FiSettings />
+                      </button>
+
                       <button
                         data-tip="Visualizar projetos"
                         onClick={() => {

@@ -59,25 +59,71 @@ export const ProgramProvider = ({ children }) => {
 
     const formData = new FormData();
     formData.append("title", data.title);
+    formData.append("beggin", data.beggin);
+    formData.append("end", data.end);
+    formData.append("documents", data.documents);
     formData.append("description", data.description);
     formData.append("program_id", data.id);
     formData.append("file", file);
 
-    api.post(`files`, formData).then(() => {
-      store.addNotification({
-        message: `Edital inserido com sucesso!`,
-        type: 'success',
-        insert: 'top',
-        container: 'top-right',
-        animationIn: ['animate__animated', 'animate__fadeIn'],
-        animationOut: ['animate__animated', 'animate__fadeOut'],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
+    const configurations = {
+      plano_trabalho: JSON.stringify({
+        fields: {
+          titulo_projeto: { checked: true, value: 0 },
+          coordenador: { checked: true, value: 0 },
+          email: { checked: true, value: 0 },
+          faixa_valor: { checked: true, value: 0 },
+          tema_interesse: { checked: true, value: 0 },
+          instituicao: { checked: true, value: 0 },
+          unidade_executora: { checked: true, value: 0 },
+          linha_pesquisa: { checked: true, value: 0 },
+          inicio_previsto: { checked: true, value: 0 },
+          duracao: { checked: true, value: 0 },
+          cotacao_moeda_estrangeira: { checked: true, value: 0 },
         },
-      });
+      }),
+      apresentacao: JSON.stringify({
+        apresentacao: {
+          resumo: { checked: true, value: 0 },
+          palavras_chave: { checked: true, value: 0 },
+          informacoes_relevantes_para_avaliacao: { checked: true, value: 0 },
+          experiencia_coordenador: { checked: true, value: 0 },
+          sintese_projeto: { checked: true, value: 0 },
+          objetivos_gerais: { checked: true, value: 0 },
+          objetivos_especificos: { checked: true, value: 0 },
+          metodologia: { checked: true, value: 0 },
+          resultados_esperados: { checked: true, value: 0 },
+          impactos_esperados: { checked: true, value: 0 },
+          riscos_atividades: { checked: true, value: 0 },
+          referencia_bibliografica: { checked: true, value: 0 },
+          estado_arte: { checked: true, value: 0 },
+        },
+      }),
+      abrangencia: null,
+      membros: null,
+      atividades: null,
+      orcamento: null,
+      recursos_proprios: null,
+      recursos_solicitados_outros: null,
+    };
 
-      setStatus(!status);
+    api.post(`files`, formData).then(({ data }) => {
+      api.post(`configurations`, { ...configurations, file_id: data.id }).then(({ data: configuration }) => {
+        store.addNotification({
+          message: `Edital inserido com sucesso!`,
+          type: 'success',
+          insert: 'top',
+          container: 'top-right',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
+
+        setStatus(!status);
+      }).catch((error) => console.log(error.response));
     }).finally(() => {
       setLoading(false);
     });

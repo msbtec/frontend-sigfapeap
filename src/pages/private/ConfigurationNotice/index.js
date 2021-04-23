@@ -8,6 +8,7 @@ import ReactLoading from "react-loading";
 
 import { Form as Unform } from '@unform/web';
 import { store } from 'react-notifications-component';
+import { useParams } from 'react-router-dom';
 import { Button } from '../../../components/Button';
 
 import { Form } from '../../../components/Form';
@@ -22,6 +23,8 @@ import api from '../../../services/api';
 
 export default function ConfigurationNotice() {
   const formRef = useRef(null);
+
+  const { id } = useParams();
 
   const [anexo, setAnexo] = useState(null);
   const [fields, setFields] = useState({
@@ -60,12 +63,16 @@ export default function ConfigurationNotice() {
   useEffect(() => {
     document.title = 'SIGFAPEAP - Configurar Edital';
 
-    api.get(`configurations`).then(({ data }) => {
+    api.get(`configurations`, {
+      params: {
+        edital_id: id,
+      },
+    }).then(({ data }) => {
       setFields(JSON.parse(data.plano_trabalho).fields);
       setApresentacao(JSON.parse(data.apresentacao).apresentacao);
       setAnexo(JSON.parse(data.plano_trabalho));
     }).catch((error) => console.log(error));
-  }, []);
+  }, [id]);
 
   const handleSubmitHeader = useCallback(
     async (data) => {
@@ -85,7 +92,7 @@ export default function ConfigurationNotice() {
         setLoadingHeader(true);
 
         api.post(`configurations`, {
-          plano_trabalho: JSON.stringify({ ...data, fields }),
+          plano_trabalho: JSON.stringify({ ...data, file_id: id, fields }),
         }).then(({ data }) => {
           setLoadingHeader(false);
 
@@ -110,7 +117,7 @@ export default function ConfigurationNotice() {
         }
       }
     },
-    [fields],
+    [fields, id],
   );
 
   const handleSubmitApresentacao = useCallback(
@@ -121,7 +128,7 @@ export default function ConfigurationNotice() {
         setLoadingApresentacao(true);
 
         api.post(`configurations`, {
-          apresentacao: JSON.stringify({ ...data, apresentacao }),
+          apresentacao: JSON.stringify({ ...data, file_id: id, apresentacao }),
         }).then(({ data }) => {
           setLoadingApresentacao(false);
 
@@ -146,7 +153,7 @@ export default function ConfigurationNotice() {
         }
       }
     },
-    [apresentacao],
+    [apresentacao, id],
   );
 
   return (

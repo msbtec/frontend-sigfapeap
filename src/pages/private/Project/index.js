@@ -216,12 +216,20 @@ export default function Project() {
         estado_arte: data.estado_arte || '',
       });
 
-      api.get(`configurations`).then(({ data }) => {
+      api.get(`configurations`,{
+          params: {
+              edital_id: id
+          }
+      }).then(({ data }) => {
         setConfigurations({...data, plano_trabalho: JSON.parse(data.plano_trabalho)})
         setPageLoading(false);  setInitialLoading(false);
       });
     }).catch((error) => {
-        api.get(`configurations`).then(({ data }) => {
+        api.get(`configurations`,{
+            params: {
+                edital_id: id
+            }
+        }).then(({ data }) => {
             setConfigurations({...data, plano_trabalho: JSON.parse(data.plano_trabalho)})
             setPageLoading(false);  setInitialLoading(false);
         });
