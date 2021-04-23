@@ -31,6 +31,7 @@ const ConfigurationNotice = lazy(() => import('../private/ConfigurationNotice'))
 const Notice = lazy(() => import('../private/Notice'));
 const Evaluator = lazy(() => import('../private/Evaluator'));
 const Researcher = lazy(() => import('../private/Researcher'));
+const Documentos = lazy(() => import('../private/Documentos'));
 
 const Tables = lazy(() => import('./Tables'));
 const Buttons = lazy(() => import('./Buttons'));
@@ -85,6 +86,7 @@ export default function Sis() {
                                     <Route exact path='/editais/:id' component={Notice} />
                                     <Route exact path='/avaliadores' component={Evaluator} />
                                     <Route exact path='/pesquisadores' component={Researcher} />
+                                    <Route exact path='/documentos' component={Documentos} />
 
                                     <Route path='/tables' component={Tables}/>
                                     <Route path='/buttons' component={Buttons}/>

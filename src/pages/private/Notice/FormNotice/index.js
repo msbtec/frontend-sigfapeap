@@ -6,6 +6,8 @@ import { Form as Unform } from '@unform/web';
 import { FiCheckCircle, FiX, FiFile } from 'react-icons/fi';
 import { store } from 'react-notifications-component';
 
+import SelectMultiple from "react-select";
+
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -13,6 +15,7 @@ import * as Yup from 'yup';
 import { Form } from '../../../../components/Form';
 
 import { useProgram } from '../../../../hooks/program';
+import { useDocument } from '../../../../hooks/document';
 
 import getValidationErrors from '../../../../utils/getValidationErrors';
 
@@ -29,7 +32,13 @@ function ModalForm({
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorFile, setErrorFile] = useState('');
 
+  const { documents } = useDocument();
+
+  const [documentos, setDocumentos] = React.useState([]);
+
   const [description, setDescription] = useState("");
+
+  const [menuOpen, setMenuOpen] = React.useState(false);
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -41,7 +50,6 @@ function ModalForm({
           beggin: Yup.date().required('Campo obrigatório').nullable().typeError('Campo obrigatório'),
           end: Yup.date().required('Campo obrigatório').min(Yup.ref('beggin'), "A data de término não pode ser anterior à data de início").nullable()
             .typeError('Campo obrigatório'),
-          documents: Yup.string().required('Campo obrigatório'),
         });
 
         if (!selectedFile) {
@@ -55,7 +63,9 @@ function ModalForm({
         });
 
         if (selectedFile) {
-          addNotice({ id, description, ...data }, selectedFile);
+          addNotice({
+            id, description, documents: JSON.stringify(documentos), ...data,
+          }, selectedFile);
           submit();
         }
       } catch (error) {
@@ -66,7 +76,7 @@ function ModalForm({
         }
       }
     },
-    [id, addNotice, description, selectedFile, submit],
+    [id, addNotice, description, documentos, selectedFile, submit],
   );
 
   return (
@@ -93,7 +103,58 @@ function ModalForm({
 
             <Input formRef={formRef} name="end" type="date" required original title="Fim" />
 
-            <Input formRef={formRef} name="documents" required original title="Documentos necessários" />
+            {/* <Input formRef={formRef} name="documents" required original title="Documentos necessários" /> */}
+
+            {/* <Input formRef={formRef} name="documents" required multi access={documents.map((item) => ({ value: item.id, label: item.name }))} title="Documentos necessários" /> */}
+
+            <label
+              style={{
+                fontSize: 13,
+                fontWeight: 600,
+                color: '#626262',
+              }}
+              className="required"
+            >
+              Documentos necessários
+            </label>
+
+            <div style={{ marginTop: 5 }} />
+            <SelectMultiple
+              maxMenuHeight={150}
+              isMulti
+              onMenuOpen={() => setMenuOpen(true)}
+              onMenuClose={() => setMenuOpen(false)}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              placeholder="Documentos"
+              value={documentos}
+              noOptionsMessage={({ inputValue }) => "Sem opções"}
+              options={documents.map((item) => ({ value: item.id, label: item.name }))}
+              onChange={(values) => setDocumentos(values)}
+              theme={(theme) => ({
+                ...theme,
+                borderRadius: 5,
+                colors: {
+                  ...theme.colors,
+                  primary25: "#080",
+                  primary: "#dee2e6",
+                },
+              })}
+              styles={{
+                option: (provided, state) => ({
+                  ...provided,
+                  color: state.isSelected ? "#fff" : "rgb(102,102,102)",
+                  backgroundColor: state.isSelected ? "rgb(102,102,102)" : "#fff",
+
+                  ":active": {
+                    ...provided[":active"],
+                    backgroundColor: !state.isDisabled && "#dee2e6",
+                  },
+                }),
+              }}
+            />
+
+            {menuOpen && <div style={{ marginTop: 200 }} />}
 
             <div className="input-block">
               <label style={{ marginBottom: 10 }}>

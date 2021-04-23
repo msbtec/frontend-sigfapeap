@@ -23,6 +23,10 @@ export const ProfileProvider = ({ children }) => {
       value: 'Cargos',
     },
     {
+      label: 'Documentos',
+      value: 'Documentos',
+    },
+    {
       label: 'Perfis de acesso',
       value: 'Perfis de acesso',
     },

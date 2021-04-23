@@ -4,6 +4,8 @@ import {
   FiMessageCircle, FiUsers, FiFileText, FiDownload, FiEdit, FiTrash, FiFolderPlus, FiUserPlus,
 } from 'react-icons/fi';
 
+import moment from 'moment';
+
 import ReactTooltip from 'react-tooltip';
 import { useHistory } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
@@ -148,7 +150,8 @@ export default function Dashboard() {
             <thead>
               <tr>
                 <th className="col-1">#</th>
-                <th className="col-4">Título</th>
+                <th className="col-2">Título</th>
+                <th className="col-2">Período</th>
                 <th className="col-5">Descrição</th>
                 <th className="col-1">Anexo</th>
                 <th className="col-1">Ações</th>
@@ -159,6 +162,7 @@ export default function Dashboard() {
                 <tr>
                   <td style={{ textAlign: 'center' }}>{ index + 1 + (page > 1 ? (page - 1) * 5 : 0) }</td>
                   <td style={{ textAlign: 'center' }}>{ item.title }</td>
+                  <td style={{ textAlign: 'center' }}>{ `${moment(item.beggin).format("L")} a ${moment(item.end).format("L")}` }</td>
                   <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: item.description }} />
                   <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
                   <td style={{ textAlign: 'center' }}>

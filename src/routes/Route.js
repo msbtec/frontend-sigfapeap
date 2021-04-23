@@ -40,6 +40,9 @@ export default function RouteWrapper({
   if (rest.path === '/pesquisadores') {
     path = "Pesquisadores";
   }
+  if (rest.path === '/documentos') {
+    path = "Documentos";
+  }
 
   if (!access.includes(String(path))) {
     return <Redirect to="/" />;
