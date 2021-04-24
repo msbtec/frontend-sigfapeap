@@ -597,7 +597,7 @@ export default function Project() {
       </div>
 
       {project
-      && project?.submetido == 'false' && (
+      && project?.submetido == 'false' && edital?.valid && (
       <Content>
         <button
           style={{
@@ -608,6 +608,17 @@ export default function Project() {
         >
           Submeter projeto
         </button>
+      </Content>
+      )}
+
+      {edital && !edital?.valid && project?.submetido == 'false' && (
+      <Content>
+        <div style={{
+          marginBottom: 10, marginLeft: 15, marginTop: 10,
+        }}
+        >
+          <label style={{ fontSize: 18, fontWeight: 'bold', color: '#8b0000' }}>{`Projeto não pode mais ser submetido pois o edital foi finalizado em: ${moment(edital?.end).format("LL")}.`}</label>
+        </div>
       </Content>
       )}
 
