@@ -150,6 +150,40 @@ export const ProgramProvider = ({ children }) => {
     });
   }, []);
 
+  const updateNotice = useCallback(async (data, file) => {
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("beggin", data.beggin);
+    formData.append("end", data.end);
+    formData.append("documents", data.documents);
+    formData.append("description", data.description);
+
+    if (file) {
+      formData.append("file", file);
+    }
+
+    api.put(`files/update/${data.id}`, formData).then(({ data }) => {
+      store.addNotification({
+        message: `Edital atualizado com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setStatus(!status);
+    }).finally(() => {
+      setLoading(false);
+    });
+  }, [status]);
+
   const update = useCallback(async (data, file) => {
     setLoading(true);
 
@@ -212,6 +246,7 @@ export const ProgramProvider = ({ children }) => {
         create,
         addNotice,
         removeNotice,
+        updateNotice,
         update,
         erase,
         status,

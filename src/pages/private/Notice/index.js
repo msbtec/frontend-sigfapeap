@@ -8,6 +8,8 @@ import { ModalProvider } from 'styled-react-modal';
 
 import ReactTooltip from 'react-tooltip';
 
+import moment from 'moment';
+
 import { FiDownload, FiEdit, FiSettings, FiFileText, FiTrash } from 'react-icons/fi';
 
 import { Card } from '../../../components/Card';
@@ -103,7 +105,8 @@ export default function Avaliadores() {
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className="col-4">Título</th>
+                  <th className="col-2">Título</th>
+                  <th className="col-2">Período</th>
                   <th className="col-4">Descrição</th>
                   <th className="col-1">Anexo</th>
                   <th className="col-2">Ações</th>
@@ -114,6 +117,7 @@ export default function Avaliadores() {
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{textAlign: 'center' }}>{ item.title }</td>
+                    <td style={{textAlign: 'center' }}>{ `${moment(item.beggin).format("L")} a ${moment(item.end).format("L")}` }</td>
                     <td style={{ marginTop: 10,textAlign: 'justify' }} dangerouslySetInnerHTML={{__html: item.description}}></td>
                     <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
                     {user.profile.name != 'Pesquisador'
