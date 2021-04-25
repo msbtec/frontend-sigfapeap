@@ -21,7 +21,7 @@ import Input from '../../../../components/Input';
 import { StyledModal } from './styles';
 
 function ModalForm({
-  isOpen, toggleModal, id, submit,
+  item, isOpen, toggleModal, id, submit,
 }) {
   const reference = useRef(null);
   const formRef = useRef(null);
@@ -29,7 +29,7 @@ function ModalForm({
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorFile, setErrorFile] = useState('');
 
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState(item ? item.description : "");
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -83,7 +83,7 @@ function ModalForm({
         </button>
       </div>
 
-      <Unform ref={formRef} onSubmit={handleSubmit}>
+      <Unform initialData={item} ref={formRef} onSubmit={handleSubmit}>
 
         <Form>
           <div className="modal-body" ref={reference}>

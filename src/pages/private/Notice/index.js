@@ -35,6 +35,8 @@ export default function Avaliadores() {
   const { programs, removeNotice, status } = useProgram();
   const { user } = useAuth();
 
+  const [item, setItem] = useState(null);
+
   const { id } = useParams();
 
   async function toggleModalNotice() {
@@ -86,6 +88,7 @@ export default function Avaliadores() {
           <div className="card-title">
             <Button
               onClick={() => {
+                setItem(null);
                 toggleModalNotice();
               }}
               className="primary"
@@ -116,6 +119,17 @@ export default function Avaliadores() {
                     {user.profile.name != 'Pesquisador'
                     && (
                     <td style={{ textAlign: 'center' }}>
+                      <button
+                        data-tip="Editar edital"
+                        onClick={() => {
+                            setItem({...item, beggin: String(item.beggin).split('T')[0], end: String(item.end).split('T')[0], documents: JSON.parse(item.documents)});
+                            toggleModalNotice();
+                        }}
+                        className="edit"
+                      >
+                        <FiEdit />
+                      </button>
+
                       <button
                         data-tip="Configurar edital"
                         onClick={() => {
@@ -177,7 +191,7 @@ export default function Avaliadores() {
       <Suspense fallback={null}>
         <ModalProvider>
           <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
-          <ModalNotice isOpen={OpenNotice} toggleModal={toggleModalNotice} id={id} submit={submitModalNotice} />
+          <ModalNotice item={item} isOpen={OpenNotice} toggleModal={toggleModalNotice} id={id} submit={submitModalNotice} />
         </ModalProvider>
       </Suspense>
     </>
