@@ -154,7 +154,7 @@ function ModalForm({
               placeholder="Documentos"
               value={documentos}
               noOptionsMessage={({ inputValue }) => "Sem opções"}
-              options={documents.map((item) => ({ value: item.id, label: item.name }))}
+              options={documents.map((item) => ({ value: item.id, label: item.title }))}
               onChange={(values) => setDocumentos(values)}
               theme={(theme) => ({
                 ...theme,

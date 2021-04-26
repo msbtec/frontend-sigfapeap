@@ -6,7 +6,7 @@ import ReactTooltip from 'react-tooltip';
 
 import { ModalProvider } from 'styled-react-modal';
 
-import { FiEdit, FiTrash } from 'react-icons/fi';
+import { FiEdit, FiTrash, FiDownload } from 'react-icons/fi';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
@@ -70,7 +70,8 @@ export default function Documentos() {
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className="col-8">Nome</th>
+                  <th className="col-4">Nome</th>
+                  <th className="col-4">Anexo</th>
                   <th>Ações</th>
                 </tr>
               </thead>
@@ -78,7 +79,8 @@ export default function Documentos() {
                 {documents.map((item, index) => (
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.name }</td>
+                    <td style={{ textAlign: 'center' }}>{ item.title }</td>
+                    <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
                     <td style={{ textAlign: 'center' }}>
                       <button data-tip="Editar documento" onClick={() => {
                           setSelected(item);

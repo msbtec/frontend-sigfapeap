@@ -25,10 +25,14 @@ export const DocumentProvider = ({ children }) => {
     loadDocuments();
   }, []);
 
-  const create = useCallback(async (data) => {
+  const create = useCallback(async (data, file) => {
     setLoading(true);
 
-    api.post(`documents`, data).then(({ data: document }) => {
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("file", file);
+
+    api.post(`documents`, formData).then(({ data: document }) => {
       setDocuments([...documents, document]);
 
       store.addNotification({
@@ -48,8 +52,15 @@ export const DocumentProvider = ({ children }) => {
     });
   }, [documents]);
 
-  const update = useCallback(async (data) => {
+  const update = useCallback(async (data, file) => {
     setLoading(true);
+
+    const formData = new FormData();
+    formData.append("title", data.title);
+
+    if (file) {
+      formData.append("file", file);
+    }
 
     api.put(`documents/${data.id}`, data).then(({ data: document }) => {
       setDocuments(documents.map((item) => (item.id === data.id ? document : item)));
