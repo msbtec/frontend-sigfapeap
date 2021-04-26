@@ -92,7 +92,8 @@ export default function ConfigurationNotice() {
         setLoadingHeader(true);
 
         api.post(`configurations`, {
-          plano_trabalho: JSON.stringify({ ...data, file_id: id, fields }),
+          plano_trabalho: JSON.stringify({ ...data, fields }),
+          file_id: id,
         }).then(({ data }) => {
           setLoadingHeader(false);
 
@@ -128,7 +129,8 @@ export default function ConfigurationNotice() {
         setLoadingApresentacao(true);
 
         api.post(`configurations`, {
-          apresentacao: JSON.stringify({ ...data, file_id: id, apresentacao }),
+          apresentacao: JSON.stringify({ ...data, apresentacao }),
+          file_id: id,
         }).then(({ data }) => {
           setLoadingApresentacao(false);
 

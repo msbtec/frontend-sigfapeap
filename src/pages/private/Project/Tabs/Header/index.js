@@ -16,7 +16,7 @@ import { useAuth } from '../../../../../hooks/auth';
 import { useProject } from '../../../../../hooks/project';
 
 export default function Header({
-  formRef, protocolo, edital, files, setFiles,
+  formRef, invalid, protocolo, edital, files, setFiles,
 }) {
   const { user } = useAuth();
 
@@ -143,7 +143,7 @@ export default function Header({
       ))}
 
       {files.length < Number(configuration.plano_trabalho.quantity)
-      && (
+      && !invalid && (
       <button
         style={{ marginTop: 20, marginBottom: 20, width: 150 }}
         type="button"

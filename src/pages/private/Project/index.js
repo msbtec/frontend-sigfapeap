@@ -252,7 +252,7 @@ export default function Project() {
 
   const handleSubmit = useCallback(
     async (data) => {
-        if(coordenador != user.id){
+        if(coordenador != user.id || !edital?.valid || project?.submetido == 'true'){
             return null;
         }
       try {
@@ -643,7 +643,7 @@ export default function Project() {
             && (
             <Unform initialData={project} ref={formRef} onSubmit={handleSubmit}>
               <Content>
-                {screen.header && <Header files={files} setFiles={setFiles} protocolo={protocolo} edital={edital} formRef={formRef} />}
+                {screen.header && <Header invalid={coordenador != user.id || !edital?.valid || project?.submetido == 'true'} files={files} setFiles={setFiles} protocolo={protocolo} edital={edital} formRef={formRef} />}
                 {screen.appresentation && <Appresentation />}
                 {screen.abrangencia && <Abrangencia />}
                 {screen.equipe && <Equipe />}
