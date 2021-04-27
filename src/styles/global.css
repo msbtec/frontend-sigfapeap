@@ -290,3 +290,8 @@ ul.breadcrumb {
     cursor: pointer;
   }
 
+
+  .link_document:hover {
+      color:#3699ff;
+      font-weight: bold;
+  }
