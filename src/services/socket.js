@@ -3,7 +3,7 @@ import Ws from '@adonisjs/websocket-client';
 let socket = null;
 
 function connect() {
-  socket = Ws('ws://sigfapeap.msbtec.com.br');
+  socket = Ws('wss://sigfapeap.msbtec.com.br');
   socket.connect();
 }
 
