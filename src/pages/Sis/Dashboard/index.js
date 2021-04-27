@@ -4,6 +4,8 @@ import {
   FiMessageCircle, FiUsers, FiFileText, FiDownload, FiEdit, FiTrash, FiFolderPlus, FiUserPlus,
 } from 'react-icons/fi';
 
+import Ws from '@adonisjs/websocket-client';
+
 import moment from 'moment';
 
 import ReactTooltip from 'react-tooltip';
@@ -19,7 +21,7 @@ import { Card, CardDashboard } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 
 import Footer from '../../../components/Footer';
-import api from '~/services/api';
+import api from '../../../services/api';
 
 export default function Dashboard() {
   const { user } = useAuth();

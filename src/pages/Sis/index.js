@@ -1,6 +1,10 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { Switch, Link } from 'react-router-dom';
 
+import { store } from 'react-notifications-component';
+
+import socket from '../../services/socket';
+
 import LoadingOverlay from 'react-loading-overlay';
 
 import Route from "../../routes/Route";
@@ -45,6 +49,26 @@ export default function Sis() {
     const { user } = useAuth();
 
     const { loading } = useProject();
+
+    React.useEffect(() => {
+        //if(user.profile.name == 'Pesquisador'){
+            socket.connect();
+            socket.subscribeToChannel('notice', 'message', (data) => {
+                store.addNotification({
+                    message: `Houve uma atualização no edital: ${data.title}`,
+                    type: 'success',
+                    insert: 'top',
+                    container: 'top-right',
+                    animationIn: ['animate__animated', 'animate__fadeIn'],
+                    animationOut: ['animate__animated', 'animate__fadeOut'],
+                    dismiss: {
+                      duration: 5000,
+                      onScreen: true,
+                    },
+                });
+            });
+        //}
+    },[])
 
     const [ drag, setDrag ] = useState(false);
     return (

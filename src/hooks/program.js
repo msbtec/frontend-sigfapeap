@@ -8,6 +8,7 @@ import React, {
 
 import { store } from 'react-notifications-component';
 import api from '../services/api';
+import socket from '../services/socket';
 
 const ProgramContext = createContext({});
 
@@ -165,6 +166,8 @@ export const ProgramProvider = ({ children }) => {
     }
 
     api.put(`files/update/${data.id}`, formData).then(({ data }) => {
+      socket.emitToChannel('notice', 'message', data);
+
       store.addNotification({
         message: `Edital atualizado com sucesso!`,
         type: 'success',
