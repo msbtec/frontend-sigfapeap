@@ -212,7 +212,7 @@ export default function ConfigurationNotice() {
                     />
                   </div>
 
-                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                  {/* <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
                       onChange={() => setFields({ ...fields, unidade_executora: { ...fields.unidade_executora, checked: !fields.unidade_executora.checked } })}
                       checked={fields.unidade_executora.checked}
@@ -220,7 +220,7 @@ export default function ConfigurationNotice() {
                       setFields={setFields}
                       title="Unidade Executora"
                     />
-                  </div>
+                  </div> */}
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox

@@ -27,7 +27,7 @@ export default function Dashboard() {
   const { user } = useAuth();
   const { users } = useUser();
   const { users: researches } = useResearcher();
-  const { programs } = useProgram();
+  const { programs, status } = useProgram();
   const { evaluators } = useEvaluator();
 
   const [notices, setNotices] = React.useState([]);
@@ -54,6 +54,10 @@ export default function Dashboard() {
 
     loadNotices(0);
   }, []);
+
+  useEffect(() => {
+    loadNotices(page - 1);
+  }, [status, page]);
 
   return (
     <>

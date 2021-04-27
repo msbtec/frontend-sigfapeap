@@ -263,7 +263,7 @@ export default function Project() {
             title: configuration.plano_trabalho.fields.titulo_projeto.checked ? Yup.string().required('Campo obrigatório') : undefined,
             faixa_value: configuration.plano_trabalho.fields.faixa_valor.checked ? Yup.string().required('Campo obrigatório') : undefined,
             institution: configuration.plano_trabalho.fields.instituicao.checked ? Yup.string().required('Campo obrigatório') : undefined,
-            unity_execution: configuration.plano_trabalho.fields.unidade_executora.checked ? Yup.string().required('Campo obrigatório') : undefined,
+            // unity_execution: configuration.plano_trabalho.fields.unidade_executora.checked ? Yup.string().required('Campo obrigatório') : undefined,
             beggin_prevision: configuration.plano_trabalho.fields.inicio_previsto.checked ? Yup.string().required('Campo obrigatório') : undefined,
             money_foreign: configuration.plano_trabalho.fields.cotacao_moeda_estrangeira.checked ? Yup.string().required('Campo obrigatório') : undefined,
             theme: configuration.plano_trabalho.fields.tema_interesse.checked ? Yup.string().required('Campo obrigatório') : undefined,

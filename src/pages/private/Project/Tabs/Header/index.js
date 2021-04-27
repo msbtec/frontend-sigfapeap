@@ -62,8 +62,8 @@ export default function Header({
       {configuration.plano_trabalho.fields.instituicao.checked
       && <Input formRef={formRef} name="institution" title="Instituição executora" original />}
 
-      {configuration.plano_trabalho.fields.unidade_executora.checked
-      && <Input formRef={formRef} name="unity_execution" title="Unidade executora" original />}
+      {/* {configuration.plano_trabalho.fields.unidade_executora.checked
+      && <Input formRef={formRef} name="unity_execution" title="Unidade executora" original />} */}
 
       {configuration.plano_trabalho.fields.inicio_previsto.checked
       && <Input formRef={formRef} name="beggin_prevision" title="Início previsto" type="date" original />}

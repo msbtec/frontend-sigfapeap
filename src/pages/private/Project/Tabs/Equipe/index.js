@@ -118,7 +118,7 @@ export default function Header() {
           {membros.map((item) => (
             <tr>
               <td style={{ textAlign: 'center' }}>{JSON.parse(item.value).name}</td>
-              <td style={{ textAlign: 'center' }}>{JSON.parse(item.value).foundation.name}</td>
+              <td style={{ textAlign: 'center' }}>{JSON.parse(item.value)?.foundation?.name}</td>
               <td style={{ textAlign: 'center' }}>{JSON.parse(item.value).id == user.id ? 'Coordenador(a)' : 'Pesquisador(a)'}</td>
             </tr>
           ))}

@@ -7,6 +7,14 @@ function connect() {
   socket.connect();
 }
 
+function disconnect() {
+  if (!socket) return;
+
+  if (socket.connected) {
+    socket.disconnect();
+  }
+}
+
 function subscribeToChannel(channel, event, eventFunction) {
   if (!socket) {
     console.log("Socket is not connected!");
@@ -26,4 +34,6 @@ function emitToChannel(channel, event, data) {
   socket.getSubscription(channel).emit(event, data);
 }
 
-export default { connect, subscribeToChannel, emitToChannel };
+export default {
+  connect, disconnect, subscribeToChannel, emitToChannel,
+};
