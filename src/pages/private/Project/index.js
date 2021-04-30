@@ -46,6 +46,7 @@ import getValidationErrors from '../../../utils/getValidationErrors';
 import api from '../../../services/api';
 
 let ModalConfirm = () => <></>;
+let ModalForm = () => <></>;
 
 export default function Project() {
   const formRef = useRef(null);
@@ -78,6 +79,18 @@ export default function Project() {
   const [edital, setEdital] = useState({ title: '' });
   const [protocolo, setProtocolo] = useState(uuid());
   const { id, coordenador } = useParams();
+
+  const [OpenForm, setOpenForm] = useState(false);
+
+  async function toggleModalForm() {
+    ModalForm = await lazy(() => import("./Modal"));
+
+    setOpenForm(!OpenForm);
+  }
+
+  function submitModalForm() {
+    setOpenForm(!OpenForm);
+  }
 
   async function getProject() {
     setPageLoading(true);
@@ -679,6 +692,17 @@ export default function Project() {
       <Suspense fallback={null}>
         <ModalProvider>
           <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
+
+          <ModalForm
+            project={project}
+            atividades={atividades}
+            setAtividades={setAtividades}
+            membros={membros}
+            setMembros={setMembros}
+            isOpen={OpenForm}
+            toggleModal={toggleModalForm}
+            submit={submitModalForm}
+          />
         </ModalProvider>
       </Suspense>
     </>
