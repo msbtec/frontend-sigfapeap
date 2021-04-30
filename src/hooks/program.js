@@ -241,6 +241,10 @@ export const ProgramProvider = ({ children }) => {
     });
   }, [programs]);
 
+  const changeStatus = useCallback(async () => {
+    setStatus(!status);
+  }, [status]);
+
   return (
     <ProgramContext.Provider
       value={{
@@ -253,6 +257,7 @@ export const ProgramProvider = ({ children }) => {
         update,
         erase,
         status,
+        changeStatus,
       }}
     >
       {children}
