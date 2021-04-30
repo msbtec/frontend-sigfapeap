@@ -12,7 +12,7 @@ import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
 
-import { useDocument } from '../../../hooks/document'
+import { usePublish } from '../../../hooks/publish'
 import { useAuth } from '../../../hooks/auth'
 
 let ModalForm = () => <></>;
@@ -23,11 +23,11 @@ export default function Documentos() {
   const [OpenConfirm, setOpenConfirm] = useState(false);
   const [selected,setSelected] = useState(null);
 
-  const { documents, erase } = useDocument();
+  const { publishes, erase } = usePublish();
   const { user } = useAuth();
 
   useEffect(() => {
-    document.title = 'SIGFAPEAP - Documentos';
+    document.title = 'SIGFAPEAP - Publicações';
   }, []);
 
   async function toggleModalForm() {
@@ -54,19 +54,19 @@ export default function Documentos() {
   return (
     <>
       <div className="col-12 title">
-        <h1>Documentos</h1>
+        <h1>Publicações</h1>
       </div>
       <div className="col-12 px-0">
         <Card className="red">
           <div className="card-title">
-            <h3>Listagem de documentos</h3>
+            <h3>Listagem de publicações</h3>
           </div>
           {user.profile.name != 'Pesquisador' &&
           <div className="card-title">
             <Button onClick={() => {
                 setSelected(null);
                 toggleModalForm();
-            }} className="primary">Cadastrar documento</Button>
+            }} className="primary">Cadastrar publicação</Button>
           </div>
           }
           <div className="card-body">
@@ -74,27 +74,29 @@ export default function Documentos() {
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className={user.profile.name != 'Pesquisador' ? "col-7" : "col-9"}>Nome</th>
-                  <th className="col-2">Anexo</th>
+                  <th className="col-3">Nome</th>
+                  <th className="col-5">Descrição</th>
+                  <th className="col-1">Anexo</th>
                   {user.profile.name != 'Pesquisador' && <th>Ações</th>}
                 </tr>
               </thead>
               <tbody>
-                {documents.map((item, index) => (
+                {publishes.map((item, index) => (
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.title }</td>
+                    <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{__html: item.description}}></td>
                     <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
                     {user.profile.name != 'Pesquisador' &&
                     <>
                     <td style={{ textAlign: 'center' }}>
-                      <button data-tip="Editar documento" onClick={() => {
+                      <button data-tip="Editar publicação" onClick={() => {
                           setSelected(item);
                           toggleModalForm();
                       }} className="edit">
                         <FiEdit />
                       </button>
-                      <button data-tip="Deletar documento" onClick={() => {
+                      <button data-tip="Deletar publicação" onClick={() => {
                           setSelected(item);
                           toggleModalConfirm();
                       }} className="eraser">

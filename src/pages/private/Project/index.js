@@ -649,7 +649,21 @@ export default function Project() {
       </Content>
       )}
 
-    {project && (coordenador == user.id) && (
+        {project && (coordenador != user.id) && !project?.avaliacao?.enquadrado && (
+        <Content>
+        <button
+          style={{
+            marginBottom: 10, width: 180, marginLeft: 15, marginTop: 10,
+          }}
+          type="button"
+          onClick={toggleModalForm}
+        >
+          Enquadrar projeto
+        </button>
+      </Content>
+      )}
+
+        {project && (coordenador == user.id) && (
         <Content>
             <div style={{
                 marginBottom: 10, marginLeft: 15, marginTop: 10,
@@ -659,8 +673,7 @@ export default function Project() {
             </div>
         </Content>
       )}
-
-</div>
+      </div>
 
       <div className="col-12 px-0">
         <Card className="red">
@@ -707,13 +720,9 @@ export default function Project() {
       <Suspense fallback={null}>
         <ModalProvider>
           <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
-
           <ModalForm
             project={project}
-            atividades={atividades}
-            setAtividades={setAtividades}
-            membros={membros}
-            setMembros={setMembros}
+            getProject={getProject}
             isOpen={OpenForm}
             toggleModal={toggleModalForm}
             submit={submitModalForm}

@@ -1,106 +1,106 @@
 import React, {
-  memo, useRef,
+  memo, useRef, useState, useCallback, useEffect,
 } from 'react';
+
+import { store } from 'react-notifications-component';
 
 import { FiCheckCircle, FiX } from 'react-icons/fi';
 
 import SelectMultiple from "react-select";
+import api from '../../../../services/api';
 
-import uuid from 'react-uuid';
 import { Form } from '../../../../components/Form';
 
-import {
-  data as time,
-} from '../../../../utils/validations';
-
-import { useAuth } from '../../../../hooks/auth';
-
-import { StyledModal } from './styles';
+import { StyledModal, Content } from './styles';
 
 function ModalForm({
-  isOpen, project, membros, atividades, setAtividades, toggleModal, submit,
+  isOpen, project, getProject, toggleModal, submit,
 }) {
   const reference = useRef(null);
-  const { user } = useAuth();
 
-  const [menuOpen, setMenuOpen] = React.useState(false);
-  const [menuOpen2, setMenuOpen2] = React.useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen2, setMenuOpen2] = useState(false);
 
-  const [participantes, setParticipantes] = React.useState(membros);
-  const [responsavel, setResponsavel] = React.useState(membros[0]);
+  const [enquadrados, setEnquadrados] = useState([
+    {
+      value: true,
+      label: 'ENQUADRADO',
+    },
+    {
+      value: false,
+      label: 'NÃO ENQUADRADO',
+    },
+  ]);
 
-  const [data, setData] = React.useState({
-    title: '',
-    beggin: '',
-    end: '',
-    time: '',
+  const [users, setUsers] = useState([]);
+
+  const [enquadrado, setEnquadrado] = useState({
+    value: true,
+    label: 'ENQUADRADO',
+  });
+  const [avaliador, setAvaliador] = useState({
+    value: null,
+    label: 'SEM AVALIADOR',
   });
 
-  const [errors, setErrors] = React.useState({
-    title: '',
-    beggin: '',
-    end: '',
-    time: '',
-  });
+  const [nameOrCpf, setNameOrCpf] = useState(null);
 
-  async function handleSubmit() {
-    try {
-      const temp = {
-        title: '',
-        beggin: '',
-        end: '',
-        time: '',
-      };
+  const handleSubmit = useCallback(
+    async (data) => {
+      api.post(`evaluations`, {
+        id: project.avaliacao.id,
+        enquadrado: enquadrado.value,
+        avaliador1_id: avaliador.value ? JSON.parse(avaliador.value).id : null,
+        responsavel_id: avaliador.value ? JSON.parse(avaliador.value).id : null,
+      }).then(({ data }) => {
+        store.addNotification({
+          message: `Atualizado com sucesso!`,
+          type: 'success',
+          insert: 'top',
+          container: 'top-right',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
 
-      if (data.title == "") {
-        temp.title = 'Campo obrigatório';
-      } else {
-        temp.title = '';
-      }
+        getProject();
 
-      if (data.beggin == "") {
-        temp.beggin = 'Campo obrigatório';
-      } else if (Number(data.beggin) <= 0) {
-        temp.beggin = 'Campo deve ser maior que 0';
-      } else if (Number(data.beggin) > Number(project.duration)) {
-        temp.beggin = `Campo não deve ultrapassar a duração máxima de ${project.duration} mês(es)`;
-      } else {
-        temp.beggin = '';
-      }
+        submit();
+      }).catch((error) => {
+        store.addNotification({
+          message: `Erro ao atualizar!`,
+          type: 'danger',
+          insert: 'top',
+          container: 'top-right',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [project, enquadrado, avaliador],
+  );
 
-      if (data.end == "") {
-        temp.end = 'Campo obrigatório';
-      } else if (Number(data.end) <= 0) {
-        temp.end = 'Campo deve ser maior que 0';
-      } else if (Number(data.end) > Number(project.duration)) {
-        temp.end = `Campo não deve ultrapassar a duração máxima de ${project.duration} mês(es)`;
-      } else if (Number(data.end) > Number(Number(project.duration) - Number(data.beggin) + 1)) {
-        temp.end = 'Campo não deve ultrapassar a duração total';
-      } else {
-        temp.end = '';
-      }
-
-      if (data.time == "") {
-        temp.time = 'Campo obrigatório';
-      } else {
-        temp.time = '';
-      }
-
-      if (temp.title != "" || temp.beggin != "" || temp.end != "" || temp.time != "") {
-        setErrors(temp);
-
-        throw 'Error';
-      }
-
-      setAtividades([...atividades, {
-        id: uuid(), ...data, participantes, responsavel: JSON.parse(responsavel.value),
-      }]);
-
-      submit();
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  useEffect(() => {
+    api.post(`users/search`, {
+      params: {
+        page: 1,
+        nameOrCpf: nameOrCpf ? String(nameOrCpf).toUpperCase() : undefined,
+      },
+    }).then(({ data }) => {
+      setUsers([{
+        value: null,
+        name: 'SEM AVALIADOR',
+      }, ...data.data]);
+    });
+  }, [nameOrCpf, setUsers]);
 
   return (
     <StyledModal
@@ -110,138 +110,59 @@ function ModalForm({
     >
 
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">Adicionar Atividade</h5>
+        <h5 className="modal-title" id="exampleModalLabel">Enquadrar projeto</h5>
       </div>
 
       <Form>
         <div className="modal-body" ref={reference}>
-          <div className="input-block">
-            <label className="required">
-              Atividade
-            </label>
-            <input
-              style={{ borderColor: errors.title ? '#c53030' : '#999' }}
-              value={data.title}
-              onChange={(value) => {
-                setData({ ...data, title: value.target.value });
+          <div>
+            <label
+              style={{
+                fontSize: 13,
+                fontWeight: 600,
+                color: '#626262',
               }}
-              type="text"
-            />
-            <sup style={{ color: '#c53030', marginTop: 5 }}>
-              {errors.title && errors.title}
-            </sup>
-          </div>
-
-          <div className="input-block">
-            <label className="required">
-              Mês de início
+              className="required"
+            >
+              Status
             </label>
-            <input
-              style={{ borderColor: errors.beggin ? '#c53030' : '#999' }}
-              type="number"
-              value={data.beggin}
-              onChange={(value) => {
-                setData({ ...data, beggin: value.target.value });
-              }}
-            />
-            <sup style={{ color: '#c53030', marginTop: 5 }}>
-              {errors.beggin && errors.beggin}
-            </sup>
-          </div>
-
-          <div className="input-block">
-            <label className="required">
-              Duração (em meses)
-            </label>
-            <input
-              style={{ borderColor: errors.end ? '#c53030' : '#999' }}
-              type="number"
-              value={data.end}
-              onChange={(value) => {
-                setData({ ...data, end: value.target.value });
-              }}
-            />
-            <sup style={{ color: '#c53030', marginTop: 5 }}>
-              {errors.end && errors.end}
-            </sup>
-          </div>
-
-          <div style={{ marginBottom: 10 }} className="input-block">
-            <label className="required">
-              Carga horária semanal
-            </label>
-            <input
-              style={{ borderColor: errors.time ? '#c53030' : '#999' }}
-              maxLength={5}
-              type="text"
-              value={data.time}
-              onChange={(value) => {
-                const formatted = time(value.target.value);
-                setData({ ...data, time: formatted });
-              }}
-            />
-            <sup style={{ color: '#c53030', marginTop: 5 }}>
-              {errors.time && errors.time}
-            </sup>
-          </div>
-
-          <label
-            style={{
-              fontSize: 13,
-              fontWeight: 600,
-              color: '#626262',
-            }}
-            className="required"
-          >
-            Participantes
-          </label>
-          <div style={{ marginTop: 5 }} />
-          <SelectMultiple
-            maxMenuHeight={150}
-            isMulti
-            onMenuOpen={() => setMenuOpen(true)}
-            onMenuClose={() => setMenuOpen(false)}
-            className="basic-multi-select"
-            classNamePrefix="select"
-            placeholder="Pesquisadores"
-            value={participantes}
-            noOptionsMessage={({ inputValue }) => "Sem opções"}
-            options={membros}
-            onChange={(values) => {
-              if (values != null) {
-                const filter = values.filter((item) => JSON.parse(item.value).id == user.id);
-
-                if (filter.length != 0) {
-                  setParticipantes(values);
-                }
-              } else {
-                setParticipantes(participantes);
-              }
-            }}
-            theme={(theme) => ({
-              ...theme,
-              borderRadius: 5,
-              colors: {
-                ...theme.colors,
-                primary25: "#080",
-                primary: "#dee2e6",
-              },
-            })}
-            styles={{
-              option: (provided, state) => ({
-                ...provided,
-                color: state.isSelected ? "#fff" : "rgb(102,102,102)",
-                backgroundColor: state.isSelected ? "rgb(102,102,102)" : "#fff",
-
-                ":active": {
-                  ...provided[":active"],
-                  backgroundColor: !state.isDisabled && "#dee2e6",
+            <div style={{ marginTop: 5 }} />
+            <SelectMultiple
+              maxMenuHeight={150}
+              onMenuOpen={() => setMenuOpen(true)}
+              onMenuClose={() => setMenuOpen(false)}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              placeholder="Enquadrado"
+              value={enquadrado}
+              noOptionsMessage={({ inputValue }) => "Sem opções"}
+              options={enquadrados}
+              onChange={(values) => setEnquadrado(values)}
+              theme={(theme) => ({
+                ...theme,
+                borderRadius: 5,
+                colors: {
+                  ...theme.colors,
+                  primary25: "#080",
+                  primary: "#dee2e6",
                 },
-              }),
-            }}
-          />
+              })}
+              styles={{
+                option: (provided, state) => ({
+                  ...provided,
+                  color: state.isSelected ? "#fff" : "rgb(102,102,102)",
+                  backgroundColor: state.isSelected ? "rgb(102,102,102)" : "#fff",
 
-          {menuOpen && <div style={{ marginTop: 200 }} />}
+                  ":active": {
+                    ...provided[":active"],
+                    backgroundColor: !state.isDisabled && "#dee2e6",
+                  },
+                }),
+              }}
+            />
+
+            {menuOpen && <div style={{ marginTop: 100 }} />}
+          </div>
 
           <div style={{ marginTop: 15 }} />
           <label
@@ -252,7 +173,7 @@ function ModalForm({
             }}
             className="required"
           >
-            Responsável
+            Avaliador
           </label>
           <div style={{ marginTop: 5 }} />
           <SelectMultiple
@@ -261,11 +182,14 @@ function ModalForm({
             onMenuClose={() => setMenuOpen2(false)}
             className="basic-multi-select"
             classNamePrefix="select"
-            placeholder="Pesquisadores"
-            value={responsavel}
+            placeholder="Avaliador"
+            value={avaliador}
             noOptionsMessage={({ inputValue }) => "Sem opções"}
-            options={participantes}
-            onChange={(values) => setResponsavel(values)}
+            options={users.map((item) => ({ label: item.name, value: item.name == 'SEM AVALIADOR' ? null : JSON.stringify(item) }))}
+            onInputChange={(value) => (String(value) == "" ? setNameOrCpf(null) : setNameOrCpf(value))}
+            onChange={(values) => {
+              setAvaliador(values);
+            }}
             theme={(theme) => ({
               ...theme,
               borderRadius: 5,
@@ -292,22 +216,24 @@ function ModalForm({
           {menuOpen2 && <div style={{ marginTop: 200 }} />}
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className="modal-footer">
-          <button style={{ margin: 20 }} type="button" onClick={toggleModal}>
-            <FiX />
-            {' '}
-            Fechar
-          </button>
-          <button
-            onClick={handleSubmit}
-            style={{ margin: 20 }}
-            type="button"
-          >
-            <FiCheckCircle />
-            {' '}
-            Salvar
-          </button>
-        </div>
+        <Content>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className="modal-footer">
+            <button style={{ margin: 20 }} type="button" onClick={toggleModal}>
+              <FiX />
+              {' '}
+              Fechar
+            </button>
+            <button
+              onClick={handleSubmit}
+              style={{ margin: 20 }}
+              type="button"
+            >
+              <FiCheckCircle />
+              {' '}
+              Salvar
+            </button>
+          </div>
+        </Content>
       </Form>
 
     </StyledModal>

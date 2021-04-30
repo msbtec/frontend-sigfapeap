@@ -67,6 +67,14 @@ function Sidebar({
       });
     }
 
+    if (profiles.includes('Publicações')) {
+      my_profiles.push({
+        name: 'Publicações',
+        icon: <FiGrid />,
+        path: '/publicacoes',
+      });
+    }
+
     if (profiles.includes('Servidores')) {
       my_profiles.push({
         name: 'Usuários',

@@ -31,9 +31,13 @@ export default function Dashboard() {
   const { evaluators } = useEvaluator();
 
   const [notices, setNotices] = React.useState([]);
+  const [publishes, setPublishes] = React.useState([]);
 
   const [page, setPage] = React.useState(1);
   const [totalPages, setTotalPages] = React.useState(0);
+
+  const [pagePublishes, setPagePublishes] = React.useState(1);
+  const [totalPagesPublishes, setTotalPagesPublishes] = React.useState(0);
 
   const history = useHistory();
 
@@ -49,10 +53,23 @@ export default function Dashboard() {
     });
   }
 
+  async function loadPublishes(page = 0) {
+    setPagePublishes(page + 1);
+    api.get(`paginate/publishes`, {
+      params: {
+        page: page + 1,
+      },
+    }).then(({ data }) => {
+      setPublishes(data.data);
+      setTotalPagesPublishes(data.lastPage);
+    });
+  }
+
   useEffect(() => {
     document.title = 'SIGFAPEAP - Dashboard';
 
     loadNotices(0);
+    loadPublishes(0);
   }, []);
 
   useEffect(() => {
@@ -141,6 +158,53 @@ export default function Dashboard() {
           </div>
         </CardDashboard>
       </div>
+      )}
+
+      {publishes.length > 0 && user.profile.name == 'Pesquisador'
+      && (
+      <Card style={{ width: '100%', margin: 15, marginBottom: 20 }} className="red">
+        <div className="card-title">
+          <h3>
+            Publicações recentes
+          </h3>
+        </div>
+        <div className="card-body">
+          <Table>
+            <thead>
+              <tr>
+                <th className="col-1">#</th>
+                <th className="col-4">Título</th>
+                <th className="col-6">Descrição</th>
+                <th className="col-1">Anexo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {publishes.map((item, index) => (
+                <tr>
+                  <td style={{ textAlign: 'center' }}>{ index + 1 + (page > 1 ? (page - 1) * 5 : 0) }</td>
+                  <td style={{ textAlign: 'center' }}>{ item.title }</td>
+                  <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: item.description }} />
+                  <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+
+        <ReactPaginate
+          previousLabel="anterior"
+          nextLabel="próximo"
+          breakLabel="..."
+          breakClassName="break-me"
+          pageCount={totalPagesPublishes}
+          marginPagesDisplayed={4}
+          // pageRangeDisplayed={5}
+          onPageChange={(page) => loadPublishes(page.selected)}
+          containerClassName="pagination"
+          subContainerClassName="pages pagination"
+          activeClassName="active"
+        />
+      </Card>
       )}
 
       {notices.length > 0 && user.profile.name == 'Pesquisador'

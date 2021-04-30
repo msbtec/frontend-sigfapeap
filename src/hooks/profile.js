@@ -27,6 +27,10 @@ export const ProfileProvider = ({ children }) => {
       value: 'Documentos',
     },
     {
+      label: 'Publicações',
+      value: 'Publicações',
+    },
+    {
       label: 'Perfis de acesso',
       value: 'Perfis de acesso',
     },
