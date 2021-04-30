@@ -596,6 +596,8 @@ export default function Project() {
         <h1>Submeter projeto</h1>
       </div>
 
+      <div>
+
       {project
       && project?.submetido == 'false' && edital?.valid && (
       <Content>
@@ -633,6 +635,19 @@ export default function Project() {
         </div>
       </Content>
       )}
+
+    {project && (coordenador == user.id) && (
+        <Content>
+            <div style={{
+                marginBottom: 10, marginLeft: 15, marginTop: 10,
+            }}
+            >
+                <label style={{ fontSize: 18, fontWeight: 'bold', color: '#080' }}>{`Situação atual: em ${project.avaliacao.status}`}</label>
+            </div>
+        </Content>
+      )}
+
+</div>
 
       <div className="col-12 px-0">
         <Card className="red">
