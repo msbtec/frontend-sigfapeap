@@ -10,7 +10,7 @@ import uuid from 'react-uuid';
 import { Form } from '../../../../../../components/Form';
 
 import {
-  data as time,
+  date_mask,
 } from '../../../../../../utils/validations';
 
 import { useAuth } from '../../../../../../hooks/auth';
@@ -176,7 +176,7 @@ function ModalForm({
               type="text"
               value={data.time}
               onChange={(value) => {
-                const formatted = time(value.target.value);
+                const formatted = date_mask(value.target.value);
                 setData({ ...data, time: formatted });
               }}
             />

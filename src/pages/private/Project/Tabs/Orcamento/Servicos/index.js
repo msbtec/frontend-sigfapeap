@@ -6,7 +6,7 @@ import { ModalProvider } from 'styled-react-modal';
 import { Table } from '../../../../../../components/Table';
 
 import {
-  moeda,
+  money_mask,
 } from '../../../../../../utils/validations';
 
 import {
@@ -63,7 +63,7 @@ export default function Servicos() {
                     onClick={() => {
                       const servicos_terceiros = orcamentos.servicos_terceiros.filter((diaria) => diaria.id != item.id);
                       setOrcamentos({ ...orcamentos, servicos_terceiros });
-                      setDespesas(despesas.map((item) => ((item.titulo == 'Outros Serviços de Terceiros') ? ({ ...item, valor: moeda(String(soma(servicos_terceiros))) }) : item)));
+                      setDespesas(despesas.map((item) => ((item.titulo == 'Outros Serviços de Terceiros') ? ({ ...item, valor: money_mask(String(soma(servicos_terceiros))) }) : item)));
                     }}
                     style={{ fontSize: 20, cursor: 'pointer' }}
                   />
@@ -84,7 +84,7 @@ export default function Servicos() {
           <tbody>
             <tr>
               <td style={{ textAlign: 'center', fontWeight: 'bold' }}>Total</td>
-              <td style={{ textAlign: 'center' }}>{moeda(String(soma(orcamentos.servicos_terceiros)))}</td>
+              <td style={{ textAlign: 'center' }}>{money_mask(String(soma(orcamentos.servicos_terceiros)))}</td>
             </tr>
           </tbody>
         </Table>

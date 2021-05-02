@@ -123,7 +123,7 @@ export const ProjectProvider = ({ children }) => {
         orcamentos,
         setOrcamentos,
         configuration,
-        setConfigurations
+        setConfigurations,
       }}
     >
       {children}

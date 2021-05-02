@@ -6,7 +6,7 @@ import { ModalProvider } from 'styled-react-modal';
 import { Table } from '../../../../../../components/Table';
 
 import {
-  moeda,
+  money_mask,
 } from '../../../../../../utils/validations';
 
 import {
@@ -65,7 +65,7 @@ export default function Hospedagens() {
                     onClick={() => {
                       const hospedagem_alimentacao = orcamentos.hospedagem_alimentacao.filter((diaria) => diaria.id != item.id);
                       setOrcamentos({ ...orcamentos, hospedagem_alimentacao });
-                      setDespesas(despesas.map((item) => ((item.titulo == 'Hospedagem/Alimentação') ? ({ ...item, valor: moeda(String(soma(hospedagem_alimentacao))) }) : item)));
+                      setDespesas(despesas.map((item) => ((item.titulo == 'Hospedagem/Alimentação') ? ({ ...item, valor: money_mask(String(soma(hospedagem_alimentacao))) }) : item)));
                     }}
                     style={{ fontSize: 20, cursor: 'pointer' }}
                   />
@@ -86,7 +86,7 @@ export default function Hospedagens() {
           <tbody>
             <tr>
               <td style={{ textAlign: 'center', fontWeight: 'bold' }}>Total</td>
-              <td style={{ textAlign: 'center' }}>{moeda(String(soma(orcamentos.hospedagem_alimentacao)))}</td>
+              <td style={{ textAlign: 'center' }}>{money_mask(String(soma(orcamentos.hospedagem_alimentacao)))}</td>
             </tr>
           </tbody>
         </Table>

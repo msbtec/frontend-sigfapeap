@@ -13,9 +13,6 @@ import { useAuth } from '../../hooks/auth';
 import { useProject } from '../../hooks/project';
 import { useProgram } from '../../hooks/program';
 
-// Icons
-
-// Styled Components
 import Sidebar from './Sidebar';
 import { Wrap, Main, NavBar } from './styles';
 
@@ -38,13 +35,6 @@ const Researcher = lazy(() => import('../private/Researcher'));
 const Documentos = lazy(() => import('../private/Documentos'));
 const Publicacoes = lazy(() => import('../private/Publicacoes'));
 
-const Tables = lazy(() => import('./Tables'));
-const Buttons = lazy(() => import('./Buttons'));
-const Cards = lazy(() => import('./Cards'));
-const Forms = lazy(() => import('./Forms'));
-const Alerts = lazy(() => import('./Alerts'));
-const Modals = lazy(() => import('./Modals'));
-
 export default function Sis() {
   const { user } = useAuth();
 
@@ -57,7 +47,7 @@ export default function Sis() {
   React.useEffect(() => {
     socket.connect();
     socket.subscribeToChannel('notice', 'message', (data) => {
-      setData(data)
+      setData(data);
       store.addNotification({
         message: `Houve uma atualização no edital: ${data.title}`,
         type: 'success',
@@ -75,7 +65,8 @@ export default function Sis() {
 
   React.useEffect(() => {
     changeStatus();
-  },[data])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   const [drag, setDrag] = useState(false);
   return (
@@ -106,7 +97,7 @@ export default function Sis() {
                 >
                   <div className="loader" />
                 </div>
-                              )}
+                )}
               >
                 <Switch>
                   <Route exact path="/" component={Dashboard} />
@@ -127,13 +118,6 @@ export default function Sis() {
                   <Route exact path="/pesquisadores" component={Researcher} />
                   <Route exact path="/documentos" component={Documentos} />
                   <Route exact path="/publicacoes" component={Publicacoes} />
-
-                  <Route path="/tables" component={Tables} />
-                  <Route path="/buttons" component={Buttons} />
-                  <Route path="/cards" component={Cards} />
-                  <Route path="/forms" component={Forms} />
-                  <Route path="/alerts" component={Alerts} />
-                  <Route path="/modals" component={Modals} />
                 </Switch>
               </Suspense>
             </div>

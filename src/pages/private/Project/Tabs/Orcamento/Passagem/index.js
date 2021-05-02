@@ -6,7 +6,7 @@ import { ModalProvider } from 'styled-react-modal';
 import { Table } from '../../../../../../components/Table';
 
 import {
-  moeda,
+  money_mask,
 } from '../../../../../../utils/validations';
 
 import {
@@ -67,7 +67,7 @@ export default function Passagens() {
                     onClick={() => {
                       const passagens = orcamentos.passagens.filter((diaria) => diaria.id != item.id);
                       setOrcamentos({ ...orcamentos, passagens });
-                      setDespesas(despesas.map((item) => ((item.titulo == 'Passagens') ? ({ ...item, valor: moeda(String(soma(passagens))) }) : item)));
+                      setDespesas(despesas.map((item) => ((item.titulo == 'Passagens') ? ({ ...item, valor: money_mask(String(soma(passagens))) }) : item)));
                     }}
                     style={{ fontSize: 20, cursor: 'pointer' }}
                   />
@@ -88,7 +88,7 @@ export default function Passagens() {
           <tbody>
             <tr>
               <td style={{ textAlign: 'center', fontWeight: 'bold' }}>Total</td>
-              <td style={{ textAlign: 'center' }}>{moeda(String(soma(orcamentos.passagens)))}</td>
+              <td style={{ textAlign: 'center' }}>{money_mask(String(soma(orcamentos.passagens)))}</td>
             </tr>
           </tbody>
         </Table>

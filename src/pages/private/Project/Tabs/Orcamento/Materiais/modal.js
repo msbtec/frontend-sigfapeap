@@ -4,7 +4,7 @@ import { FiCheckCircle, FiX } from 'react-icons/fi';
 import uuid from 'react-uuid';
 import { Form } from '../../../../../../components/Form';
 import {
-  moeda,
+  money_mask,
 } from '../../../../../../utils/validations';
 
 import { useProject } from '../../../../../../hooks/project';
@@ -101,7 +101,7 @@ function Hospedagens({
         throw 'Error';
       }
 
-      setDespesas(despesas.map((item) => ((item.titulo == 'Material de Consumo') ? ({ ...item, valor: moeda(String(soma([...orcamentos.materiais_consumo, material]))) }) : item)));
+      setDespesas(despesas.map((item) => ((item.titulo == 'Material de Consumo') ? ({ ...item, valor: money_mask(String(soma([...orcamentos.materiais_consumo, material]))) }) : item)));
 
       setOrcamentos({ ...orcamentos, materiais_consumo: [...orcamentos.materiais_consumo, material] });
 
@@ -124,7 +124,7 @@ function Hospedagens({
 
   useEffect(() => {
     if (material.custo_unitario.length > 0) {
-      setMaterial({ ...material, custo_total: moeda(String((getValue(material.custo_unitario) * material.quantidade).toFixed(2))) });
+      setMaterial({ ...material, custo_total: money_mask(String((getValue(material.custo_unitario) * material.quantidade).toFixed(2))) });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [material.quantidade, material.custo_unitario]);
@@ -172,7 +172,7 @@ function Hospedagens({
                 value={material.custo_unitario}
                 type="text"
                 onChange={(value) => {
-                  setMaterial({ ...material, custo_unitario: moeda(value.target.value) });
+                  setMaterial({ ...material, custo_unitario: money_mask(value.target.value) });
                 }}
               />
               <sup style={{ color: '#c53030', marginTop: 5 }}>

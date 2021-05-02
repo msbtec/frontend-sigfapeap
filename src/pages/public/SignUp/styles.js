@@ -7,7 +7,6 @@ export const Container = styled.div`
     flex:1;
     justify-content:center;
     align-items:center;
-    /* background: rgb(47, 52, 55); */
 `;
 
 export const Content = styled.div`

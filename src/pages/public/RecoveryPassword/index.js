@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { store } from 'react-notifications-component';
 import ReactLoading from "react-loading";
-import api from '~/services/api';
+import api from '../../../services/api';
 import Logo from '../../../assets/img/logo.png';
 
 import { Form, Container } from './styles';
@@ -65,7 +65,6 @@ const RecoveryPassword = () => {
             className={email_err != '' ? 'invalid' : ''}
           />
           {loading ? <ReactLoading type="spin" height="15%" width="15%" color="#b20710" /> : <button type="submit">Enviar</button>}
-          {/* <button type="submit">Enviar</button> */}
         </Form>
       </Container>
     </>

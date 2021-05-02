@@ -11,8 +11,6 @@ export const Link = styled.span`
 `;
 
 export const Content = styled.div`
-    /* background: #fff; */
-
     button{
         cursor: pointer;
         color: #fff;

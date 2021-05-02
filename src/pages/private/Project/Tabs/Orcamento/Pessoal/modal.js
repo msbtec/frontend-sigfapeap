@@ -4,7 +4,7 @@ import { FiCheckCircle, FiX } from 'react-icons/fi';
 import uuid from 'react-uuid';
 import { Form } from '../../../../../../components/Form';
 import {
-  moeda,
+  money_mask,
 } from '../../../../../../utils/validations';
 
 import { useProject } from '../../../../../../hooks/project';
@@ -96,7 +96,7 @@ function Pessoais({
         throw 'Error';
       }
 
-      setDespesas(despesas.map((item) => ((item.titulo == 'Pessoal') ? ({ ...item, valor: moeda(String(soma([...orcamentos.pessoal, pessoal]))) }) : item)));
+      setDespesas(despesas.map((item) => ((item.titulo == 'Pessoal') ? ({ ...item, valor: money_mask(String(soma([...orcamentos.pessoal, pessoal]))) }) : item)));
 
       setOrcamentos({ ...orcamentos, pessoal: [...orcamentos.pessoal, pessoal] });
 
@@ -159,7 +159,7 @@ function Pessoais({
                 value={pessoal.custo_total}
                 type="text"
                 onChange={(value) => {
-                  setPessoal({ ...pessoal, custo_total: moeda(value.target.value) });
+                  setPessoal({ ...pessoal, custo_total: money_mask(value.target.value) });
                 }}
               />
               <sup style={{ color: '#c53030', marginTop: 5 }}>

@@ -9,7 +9,7 @@ import { useField } from '@unform/core';
 import SelectMultiple from "react-select";
 
 import {
-  cpfMask, mtel, moeda, data, Cep, Cnpj, faixa,
+  cpf_mask, phone_mask, money_mask, date_mask, cep_mask, cnpj_mask, interval_value_mask,
 } from '../../utils/validations';
 
 import { Container, Title } from './styles';
@@ -110,35 +110,35 @@ function Input({
                 }}
                 onChange={(value) => {
                   if (name === 'cpf') {
-                    const formatted = cpfMask(value.target.value);
+                    const formatted = cpf_mask(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('cpf', formatted);
                   } else if (name === 'cnpj') {
-                    const formatted = Cnpj(value.target.value);
+                    const formatted = cnpj_mask(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('cnpj', formatted);
                   } else if (name === 'phone') {
-                    const formatted = mtel(value.target.value);
+                    const formatted = phone_mask(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('phone', formatted);
                   } else if (name === 'phone_cell') {
-                    const formatted = mtel(value.target.value);
+                    const formatted = phone_mask(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('phone_cell', formatted);
                   } else if (name === 'price') {
-                    const formatted = moeda(value.target.value);
+                    const formatted = money_mask(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('price', formatted);
                   } else if (name === 'faixa_value') {
-                    const formatted = faixa(value.target.value);
+                    const formatted = interval_value_mask(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('faixa_value', formatted);
                   } else if (name === 'money_foreign') {
-                    const formatted = moeda(value.target.value);
+                    const formatted = money_mask(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('money_foreign', formatted);
                   } else if (name === 'time') {
-                    const formatted = data(value.target.value);
+                    const formatted = date_mask(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('time', formatted);
                   } else if (name === 'beggin') {
@@ -146,12 +146,12 @@ function Input({
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('beggin', formatted);
                   } else if (name === 'zipcode') {
-                    const formatted = Cep(value.target.value);
+                    const formatted = cep_mask(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('zipcode', formatted);
                     handleCEP(formatted);
                   } else if (name === 'professional_zipcode') {
-                    const formatted = Cep(value.target.value);
+                    const formatted = cep_mask(value.target.value);
                     inputRef.current.value = String(formatted);
                     formRef.current.setFieldValue('zipcode', formatted);
                     handleCEP(formatted);
@@ -240,31 +240,31 @@ function Input({
               defaultValue={defaultValue}
               onChange={(value) => {
                 if (name === 'cpf') {
-                  const formatted = cpfMask(value.target.value);
+                  const formatted = cpf_mask(value.target.value);
                   inputRef.current.value = String(formatted);
                   formRef.current.setFieldValue('cpf', formatted);
                 } else if (name === 'cnpj') {
-                  const formatted = Cnpj(value.target.value);
+                  const formatted = cnpj_mask(value.target.value);
                   inputRef.current.value = String(formatted);
                   formRef.current.setFieldValue('cnpj', formatted);
                 } else if (name === 'phone') {
-                  const formatted = mtel(value.target.value);
+                  const formatted = phone_mask(value.target.value);
                   inputRef.current.value = String(formatted);
                   formRef.current.setFieldValue('phone', formatted);
                 } else if (name === 'phone_cell') {
-                  const formatted = mtel(value.target.value);
+                  const formatted = phone_mask(value.target.value);
                   inputRef.current.value = String(formatted);
                   formRef.current.setFieldValue('phone_cell', formatted);
                 } else if (name === 'price') {
-                  const formatted = moeda(value.target.value);
+                  const formatted = money_mask(value.target.value);
                   inputRef.current.value = String(formatted);
                   formRef.current.setFieldValue('price', formatted);
                 } else if (name === 'time') {
-                  const formatted = data(value.target.value);
+                  const formatted = date_mask(value.target.value);
                   inputRef.current.value = String(formatted);
                   formRef.current.setFieldValue('time', formatted);
                 } else if (name === 'zipcode') {
-                  const formatted = Cep(value.target.value);
+                  const formatted = cep_mask(value.target.value);
                   inputRef.current.value = String(formatted);
                   formRef.current.setFieldValue('zipcode', formatted);
                 } else {

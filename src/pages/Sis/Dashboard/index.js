@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 
 import {
-  FiMessageCircle, FiUsers, FiFileText, FiDownload, FiEdit, FiTrash, FiFolderPlus, FiUserPlus,
+  FiMessageCircle, FiUsers, FiFileText, FiDownload,
 } from 'react-icons/fi';
-
-import Ws from '@adonisjs/websocket-client';
 
 import moment from 'moment';
 
@@ -181,7 +179,7 @@ export default function Dashboard() {
             <tbody>
               {publishes.map((item, index) => (
                 <tr>
-                  <td style={{ textAlign: 'center' }}>{ index + 1 + (page > 1 ? (page - 1) * 5 : 0) }</td>
+                  <td style={{ textAlign: 'center' }}>{ index + 1 + (pagePublishes > 1 ? (pagePublishes - 1) * 5 : 0) }</td>
                   <td style={{ textAlign: 'center' }}>{ item.title }</td>
                   <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: item.description }} />
                   <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
@@ -263,7 +261,6 @@ export default function Dashboard() {
           breakClassName="break-me"
           pageCount={totalPages}
           marginPagesDisplayed={4}
-                // pageRangeDisplayed={5}
           onPageChange={(page) => loadNotices(page.selected)}
           containerClassName="pagination"
           subContainerClassName="pages pagination"

@@ -19,7 +19,9 @@ let ModalForm = () => <></>;
 export default function Header() {
   const { setUsers, users } = useResearcher();
   const { user } = useAuth();
-  const { membros, setMembros, atividades, setAtividades, project } = useProject()
+  const {
+    membros, setMembros, atividades, setAtividades, project,
+  } = useProject();
 
   const [OpenForm, setOpenForm] = useState(false);
 

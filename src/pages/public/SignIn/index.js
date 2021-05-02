@@ -11,7 +11,7 @@ import { Form, Container } from './styles';
 
 import { useAuth } from '../../../hooks/auth';
 
-import { cpfMask } from '../../../utils/validations';
+import { cpf_mask } from '../../../utils/validations';
 
 const SignIn = () => {
   const [cpf, setCPF] = useState('');
@@ -58,7 +58,7 @@ const SignIn = () => {
               name="cpf"
               placeholder="CPF (somente números)"
               onChange={(e) => {
-                const formatted = cpfMask(e.target.value);
+                const formatted = cpf_mask(e.target.value);
                 setCPF(formatted);
                 setCPFerr('');
               }}

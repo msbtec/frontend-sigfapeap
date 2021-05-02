@@ -5,7 +5,7 @@ import uuid from 'react-uuid';
 import { Form } from '../../../../../components/Form';
 import { Table } from '../../../../../components/Table';
 import {
-  moeda,
+  money_mask,
 } from '../../../../../utils/validations';
 
 import {
@@ -49,7 +49,7 @@ export default function Recursos() {
               <td style={{ textAlign: 'center' }}>
                 {item.valor}
                 {/* <div className="input-block">
-                  <input value={item.valor} type="text" disabled onChange={(value) => setDespesas(despesas.map((subitem) => ((subitem.titulo == item.titulo) ? ({ ...item, valor: moeda(value.target.value) }) : subitem)))} />
+                  <input value={item.valor} type="text" disabled onChange={(value) => setDespesas(despesas.map((subitem) => ((subitem.titulo == item.titulo) ? ({ ...item, valor: money_mask(value.target.value) }) : subitem)))} />
                 </div> */}
               </td>
             </tr>
@@ -67,7 +67,7 @@ export default function Recursos() {
         <tbody>
           <tr>
             <td style={{ textAlign: 'center', fontWeight: 'bold' }}>Total</td>
-            <td style={{ textAlign: 'center' }}>{moeda(String(soma(despesas))) === 'R$ 0,00' ? 'R$ 0' : moeda(String(soma(despesas)))}</td>
+            <td style={{ textAlign: 'center' }}>{money_mask(String(soma(despesas))) === 'R$ 0,00' ? 'R$ 0' : money_mask(String(soma(despesas)))}</td>
           </tr>
         </tbody>
       </Table>
@@ -88,7 +88,7 @@ export default function Recursos() {
 
         <div className="input-block" style={{ marginLeft: 10, marginBottom: 15 }}>
           <label className="required">Valor em R$</label>
-          <input value={recurso.valor} type="text" onChange={(value) => setRecurso({ ...recurso, valor: moeda(value.target.value) })} />
+          <input value={recurso.valor} type="text" onChange={(value) => setRecurso({ ...recurso, valor: money_mask(value.target.value) })} />
         </div>
 
         <div className="input-block" style={{ marginLeft: 10, marginBottom: 15 }}>
@@ -162,7 +162,7 @@ export default function Recursos() {
         <tbody>
           <tr>
             <td style={{ textAlign: 'center', fontWeight: 'bold' }}>Total</td>
-            <td style={{ textAlign: 'center' }}>{moeda(String(soma(recursos)))}</td>
+            <td style={{ textAlign: 'center' }}>{money_mask(String(soma(recursos)))}</td>
           </tr>
         </tbody>
       </Table>

@@ -34,7 +34,6 @@ function ModalForm({
 
         const schema = Yup.object().shape({
           name: Yup.string().required('Campo obrigatório'),
-          //   nomeReduzido: Yup.string().required('Campo obrigatório'),
           cpf: Yup.string().required('Campo obrigatório'),
           email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
           office_id: Yup.string().required('Campo obrigatório'),
@@ -84,8 +83,6 @@ function ModalForm({
         <Form>
           <div className="modal-body" ref={reference}>
             <Input formRef={formRef} name="name" required original title="Nome completo" />
-
-            {/* <Input formRef={formRef} name="name" required original title="Nome reduzido" /> */}
 
             <Input formRef={formRef} name="cpf" required original title="CPF" />
 

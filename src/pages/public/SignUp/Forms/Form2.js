@@ -14,8 +14,6 @@ const Form2 = ({ formRef }) => {
             logradouro, bairro, uf, localidade, pais,
           } = response.data;
 
-          console.log(response.data);
-
           formRef.current.setFieldValue('street', logradouro);
           formRef.current.setFieldValue('neighborhood', bairro);
           formRef.current.setFieldValue('country', pais);
@@ -45,10 +43,6 @@ const Form2 = ({ formRef }) => {
       <Input formRef={formRef} name="municipality" disabled required original title="Município" />
 
       <Input formRef={formRef} maxLength={15} required name="phone" original title="Telefone/WhatsApp" />
-
-      {/* <Input formRef={formRef} name="phone" maxLength={15} original title="Telefone" /> */}
-
-      {/* <Input formRef={formRef} name="phone_cell" maxLength={15} original title="Celular" /> */}
     </Form>
   );
 };

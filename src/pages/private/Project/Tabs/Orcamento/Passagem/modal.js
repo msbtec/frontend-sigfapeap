@@ -4,7 +4,7 @@ import { FiCheckCircle, FiX } from 'react-icons/fi';
 import uuid from 'react-uuid';
 import { Form } from '../../../../../../components/Form';
 import {
-  moeda,
+  money_mask,
 } from '../../../../../../utils/validations';
 
 import { soma, getValue } from '../../../../../../utils/soma';
@@ -84,7 +84,7 @@ function Passagens({
         throw 'Error';
       }
 
-      setDespesas(despesas.map((item) => ((item.titulo == 'Passagens') ? ({ ...item, valor: moeda(String(soma([...orcamentos.passagens, passagem]))) }) : item)));
+      setDespesas(despesas.map((item) => ((item.titulo == 'Passagens') ? ({ ...item, valor: money_mask(String(soma([...orcamentos.passagens, passagem]))) }) : item)));
 
       setOrcamentos({ ...orcamentos, passagens: [...orcamentos.passagens, passagem] });
 
@@ -105,7 +105,7 @@ function Passagens({
 
   useEffect(() => {
     if (passagem.custo_unitario.length > 0) {
-      setPassagem({ ...passagem, custo_total: moeda(String((getValue(passagem.custo_unitario) * passagem.quantidade).toFixed(2))) });
+      setPassagem({ ...passagem, custo_total: money_mask(String((getValue(passagem.custo_unitario) * passagem.quantidade).toFixed(2))) });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [passagem.quantidade, passagem.custo_unitario]);
@@ -153,7 +153,7 @@ function Passagens({
                 value={passagem.custo_unitario}
                 type="text"
                 onChange={(value) => {
-                  setPassagem({ ...passagem, custo_unitario: moeda(value.target.value) });
+                  setPassagem({ ...passagem, custo_unitario: money_mask(value.target.value) });
                 }}
               />
               <sup style={{ color: '#c53030', marginTop: 5 }}>

@@ -6,7 +6,7 @@ import { ModalProvider } from 'styled-react-modal';
 import { Table } from '../../../../../../components/Table';
 
 import {
-  moeda,
+  money_mask,
 } from '../../../../../../utils/validations';
 
 import {
@@ -67,7 +67,7 @@ export default function Diaria() {
                     onClick={() => {
                       const diarias = orcamentos.diarias.filter((diaria) => diaria.id != item.id);
                       setOrcamentos({ ...orcamentos, diarias });
-                      setDespesas(despesas.map((item) => ((item.titulo == 'Diárias') ? ({ ...item, valor: moeda(String(soma(diarias))) }) : item)));
+                      setDespesas(despesas.map((item) => ((item.titulo == 'Diárias') ? ({ ...item, valor: money_mask(String(soma(diarias))) }) : item)));
                     }}
                     style={{ fontSize: 20, cursor: 'pointer' }}
                   />
@@ -88,7 +88,7 @@ export default function Diaria() {
           <tbody>
             <tr>
               <td style={{ textAlign: 'center', fontWeight: 'bold' }}>Total</td>
-              <td style={{ textAlign: 'center' }}>{moeda(String(soma(orcamentos.diarias)))}</td>
+              <td style={{ textAlign: 'center' }}>{money_mask(String(soma(orcamentos.diarias)))}</td>
             </tr>
           </tbody>
         </Table>

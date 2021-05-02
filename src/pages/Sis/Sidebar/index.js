@@ -1,19 +1,13 @@
 import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 
-// Styled
 import { FiLogOut, FiGrid, FiHome } from 'react-icons/fi';
 import { connect } from 'react-redux';
 import { Side } from './styles';
 
 import { useAuth } from '../../../hooks/auth';
 
-// Logo
 import Logo from '../../../assets/img/logo.png';
-
-// Icons
-
-// Connection Redux
 
 function Sidebar({
   drag, activeMenu, itensMenu, dispatch,
@@ -124,44 +118,6 @@ function Sidebar({
     }
 
     dispatch(toggleItem(my_profiles));
-
-    // if (user.profile.name == 'Servidor') {
-    //   dispatch(toggleItem([
-    //     {
-    //       name: 'Dashboard',
-    //       icon: <FiHome />,
-    //       path: '/',
-    //     },
-    //     {
-    //       name: 'Pesquisadores',
-    //       icon: <FiGrid />,
-    //       path: '/pesquisadores',
-    //     },
-    //     {
-    //       name: 'Avaliadores',
-    //       icon: <FiGrid />,
-    //       path: '/avaliadores',
-    //     },
-    //     {
-    //       name: 'Programas',
-    //       icon: <FiGrid />,
-    //       path: '/programas',
-    //     },
-    //   ]));
-    // } else if (user.profile.name == 'Pesquisador') {
-    //   dispatch(toggleItem([
-    //     {
-    //       name: 'Dashboard',
-    //       icon: <FiHome />,
-    //       path: '/',
-    //     },
-    //     {
-    //       name: 'Programas',
-    //       icon: <FiGrid />,
-    //       path: '/programas',
-    //     },
-    //   ]));
-    // }
   }, [user, dispatch]);
 
   return (

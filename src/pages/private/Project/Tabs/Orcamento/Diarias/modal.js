@@ -4,7 +4,7 @@ import { FiCheckCircle, FiX } from 'react-icons/fi';
 import uuid from 'react-uuid';
 import { Form } from '../../../../../../components/Form';
 import {
-  moeda,
+  money_mask,
 } from '../../../../../../utils/validations';
 
 import {
@@ -94,7 +94,7 @@ function Diaria({
         throw 'Error';
       }
 
-      setDespesas(despesas.map((item) => ((item.titulo == 'Diárias') ? ({ ...item, valor: moeda(String(soma([...orcamentos.diarias, diaria]))) }) : item)));
+      setDespesas(despesas.map((item) => ((item.titulo == 'Diárias') ? ({ ...item, valor: money_mask(String(soma([...orcamentos.diarias, diaria]))) }) : item)));
 
       setOrcamentos({ ...orcamentos, diarias: [...orcamentos.diarias, diaria] });
 
@@ -133,7 +133,7 @@ function Diaria({
 
   useEffect(() => {
     if (diaria.custo_unitario.length > 0) {
-      setDiaria({ ...diaria, custo_total: moeda(String((getValue(diaria.custo_unitario) * diaria.quantidade).toFixed(2))) });
+      setDiaria({ ...diaria, custo_total: money_mask(String((getValue(diaria.custo_unitario) * diaria.quantidade).toFixed(2))) });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diaria.quantidade, diaria.custo_unitario]);
@@ -173,7 +173,7 @@ function Diaria({
                 value={diaria.custo_unitario}
                 type="text"
                 onChange={(value) => {
-                  setDiaria({ ...diaria, custo_unitario: moeda(value.target.value) });
+                  setDiaria({ ...diaria, custo_unitario: money_mask(value.target.value) });
                 }}
               />
               <sup style={{ color: '#c53030', marginTop: 5 }}>

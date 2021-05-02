@@ -4,7 +4,7 @@ import { FiCheckCircle, FiX } from 'react-icons/fi';
 import uuid from 'react-uuid';
 import { Form } from '../../../../../../components/Form';
 import {
-  moeda,
+  money_mask,
 } from '../../../../../../utils/validations';
 
 import { useProject } from '../../../../../../hooks/project';
@@ -101,7 +101,7 @@ function Bolsas({
         throw 'Error';
       }
 
-      setDespesas(despesas.map((item) => ((item.titulo == 'Bolsas') ? ({ ...item, valor: moeda(String(soma([...orcamentos.bolsas, bolsa]))) }) : item)));
+      setDespesas(despesas.map((item) => ((item.titulo == 'Bolsas') ? ({ ...item, valor: money_mask(String(soma([...orcamentos.bolsas, bolsa]))) }) : item)));
 
       setOrcamentos({ ...orcamentos, bolsas: [...orcamentos.bolsas, bolsa] });
 
@@ -124,7 +124,7 @@ function Bolsas({
 
   useEffect(() => {
     if (bolsa.custo_unitario.length > 0) {
-      setBolsa({ ...bolsa, custo_total: moeda(String((getValue(bolsa.custo_unitario) * bolsa.ord).toFixed(2))) });
+      setBolsa({ ...bolsa, custo_total: money_mask(String((getValue(bolsa.custo_unitario) * bolsa.ord).toFixed(2))) });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bolsa.ord, bolsa.custo_unitario]);
@@ -172,7 +172,7 @@ function Bolsas({
                 value={bolsa.custo_unitario}
                 type="text"
                 onChange={(value) => {
-                  setBolsa({ ...bolsa, custo_unitario: moeda(value.target.value) });
+                  setBolsa({ ...bolsa, custo_unitario: money_mask(value.target.value) });
                 }}
               />
               <sup style={{ color: '#c53030', marginTop: 5 }}>

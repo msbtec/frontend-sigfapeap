@@ -6,8 +6,6 @@ import * as Yup from 'yup';
 
 import ReactLoading from "react-loading";
 
-import LoadingOverlay from 'react-loading-overlay';
-
 import { ModalProvider } from 'styled-react-modal';
 
 import moment from 'moment';
@@ -18,7 +16,7 @@ import { Form as Unform } from '@unform/web';
 import { store } from 'react-notifications-component';
 import uuid from 'react-uuid';
 import {
-  moeda,
+  money_mask,
 } from '../../../utils/validations';
 import {
   soma,
@@ -59,8 +57,8 @@ export default function Project() {
     project, setProject, membros, setMembros, atividades, setAtividades,
     plano, setPlano, despesas, setDespesas, recursos,
     setRecursos, abrangencias, setAbrangencias,
-    orcamentos, setOrcamentos, setLoading : setPageLoading,
-    configuration, setConfigurations
+    orcamentos, setOrcamentos, setLoading: setPageLoading,
+    configuration, setConfigurations,
   } = useProject();
 
   const [screen, setScreen] = useState({
@@ -195,15 +193,15 @@ export default function Project() {
 
       const despesas_temp = JSON.parse(data.recursos_proprios || JSON.stringify(despesas));
       setDespesas(despesas_temp.map((item) => (
-        (item.titulo == 'Diárias') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.diarias))) })
-          : (item.titulo == 'Hospedagem/Alimentação') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.hospedagem_alimentacao))) })
-            : (item.titulo == 'Material de Consumo') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.materiais_consumo))) })
-              : (item.titulo == 'Passagens') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.passagens))) })
-                : (item.titulo == 'Outros Serviços de Terceiros') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.servicos_terceiros))) })
-                  : (item.titulo == 'Equipamentos e Material Permanente') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.materiais_permanentes_equipamentos))) })
-                    : (item.titulo == 'Pessoal') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.pessoal))) })
-                      : (item.titulo == 'Bolsas') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.bolsas))) })
-                        : (item.titulo == 'Encargos') ? ({ ...item, valor: moeda(String(soma(orcamentos_temp.encargos))) })
+        (item.titulo == 'Diárias') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.diarias))) })
+          : (item.titulo == 'Hospedagem/Alimentação') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.hospedagem_alimentacao))) })
+            : (item.titulo == 'Material de Consumo') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.materiais_consumo))) })
+              : (item.titulo == 'Passagens') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.passagens))) })
+                : (item.titulo == 'Outros Serviços de Terceiros') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.servicos_terceiros))) })
+                  : (item.titulo == 'Equipamentos e Material Permanente') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.materiais_permanentes_equipamentos))) })
+                    : (item.titulo == 'Pessoal') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.pessoal))) })
+                      : (item.titulo == 'Bolsas') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.bolsas))) })
+                        : (item.titulo == 'Encargos') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.encargos))) })
                           : item
       )));
 
@@ -229,30 +227,30 @@ export default function Project() {
         estado_arte: data.estado_arte || '',
       });
 
-      api.get(`configurations`,{
-          params: {
-              edital_id: id
-          }
+      api.get(`configurations`, {
+        params: {
+          edital_id: id,
+        },
       }).then(({ data }) => {
-        setConfigurations({...data, plano_trabalho: JSON.parse(data.plano_trabalho)})
-        setPageLoading(false);  setInitialLoading(false);
+        setConfigurations({ ...data, plano_trabalho: JSON.parse(data.plano_trabalho) });
+        setPageLoading(false); setInitialLoading(false);
       });
     }).catch((error) => {
-        api.get(`configurations`,{
-            params: {
-                edital_id: id
-            }
-        }).then(({ data }) => {
-            setConfigurations({...data, plano_trabalho: JSON.parse(data.plano_trabalho)})
-            setPageLoading(false);  setInitialLoading(false);
-        });
+      api.get(`configurations`, {
+        params: {
+          edital_id: id,
+        },
+      }).then(({ data }) => {
+        setConfigurations({ ...data, plano_trabalho: JSON.parse(data.plano_trabalho) });
+        setPageLoading(false); setInitialLoading(false);
+      });
     });
   }
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Submeter Projeto';
 
-    setPageLoading(true)
+    setPageLoading(true);
 
     getProject();
 
@@ -260,14 +258,14 @@ export default function Project() {
       setEdital(data);
     });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, user]);
 
   const handleSubmit = useCallback(
     async (data) => {
-        if(coordenador != user.id || !edital?.valid || project?.submetido == 'true'){
-            return null;
-        }
+      if (coordenador != user.id || !edital?.valid || project?.submetido == 'true') {
+        return null;
+      }
       try {
         formRef.current.setErrors({});
 
@@ -280,7 +278,7 @@ export default function Project() {
             beggin_prevision: configuration.plano_trabalho.fields.inicio_previsto.checked ? Yup.string().required('Campo obrigatório') : undefined,
             money_foreign: configuration.plano_trabalho.fields.cotacao_moeda_estrangeira.checked ? Yup.string().required('Campo obrigatório') : undefined,
             theme: configuration.plano_trabalho.fields.tema_interesse.checked ? Yup.string().required('Campo obrigatório') : undefined,
-        });
+          });
 
           await schema.validate(data, {
             abortEarly: false,
@@ -557,7 +555,6 @@ export default function Project() {
           });
         }
       } catch (error) {
-          console.log(error)
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
 
@@ -575,32 +572,32 @@ export default function Project() {
     setOpenConfirm(!OpenConfirm);
   }
 
-  function submitModalConfirm() {
-    submter();
-    setOpenConfirm(!OpenConfirm);
-  }
-
   async function submter() {
     api.post(`projects/submit/${project.id}`, {
       edital_id: id,
       coordenador_id: user.id,
       submetido: "true",
     }).then(({ data }) => {
-        store.addNotification({
-            message: `Projeto submetido com sucesso!`,
-            type: 'success',
-            insert: 'top',
-            container: 'top-right',
-            animationIn: ['animate__animated', 'animate__fadeIn'],
-            animationOut: ['animate__animated', 'animate__fadeOut'],
-            dismiss: {
-              duration: 5000,
-              onScreen: true,
-            },
-        });
+      store.addNotification({
+        message: `Projeto submetido com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
 
-        getProject();
+      getProject();
     });
+  }
+
+  function submitModalConfirm() {
+    submter();
+    setOpenConfirm(!OpenConfirm);
   }
 
   return (
@@ -611,7 +608,7 @@ export default function Project() {
 
       <div>
 
-      {project
+        {project
       && project?.submetido == 'false' && edital?.valid && (
       <Content>
         <button
@@ -624,20 +621,20 @@ export default function Project() {
           Submeter projeto
         </button>
       </Content>
-      )}
+        )}
 
-      {edital && !edital?.valid && project?.submetido == 'false' && (
-      <Content>
-        <div style={{
-          marginBottom: 10, marginLeft: 15, marginTop: 10,
-        }}
-        >
-          <label style={{ fontSize: 18, fontWeight: 'bold', color: '#8b0000' }}>{`Projeto não pode mais ser submetido pois o edital foi finalizado em: ${moment(edital?.end).format("LL")}.`}</label>
-        </div>
-      </Content>
-      )}
+        {edital && !edital?.valid && project?.submetido == 'false' && (
+        <Content>
+          <div style={{
+            marginBottom: 10, marginLeft: 15, marginTop: 10,
+          }}
+          >
+            <label style={{ fontSize: 18, fontWeight: 'bold', color: '#8b0000' }}>{`Projeto não pode mais ser submetido pois o edital foi finalizado em: ${moment(edital?.end).format("LL")}.`}</label>
+          </div>
+        </Content>
+        )}
 
-      {project?.submetido == 'true'
+        {project?.submetido == 'true'
       && (
       <Content>
         <div style={{
@@ -651,28 +648,28 @@ export default function Project() {
 
         {project && (coordenador != user.id) && !project?.avaliacao?.enquadrado && (
         <Content>
-        <button
-          style={{
-            marginBottom: 10, width: 180, marginLeft: 15, marginTop: 10,
-          }}
-          type="button"
-          onClick={toggleModalForm}
-        >
-          Enquadrar projeto
-        </button>
-      </Content>
-      )}
+          <button
+            style={{
+              marginBottom: 10, width: 180, marginLeft: 15, marginTop: 10,
+            }}
+            type="button"
+            onClick={toggleModalForm}
+          >
+            Enquadrar projeto
+          </button>
+        </Content>
+        )}
 
         {project && (coordenador == user.id) && (
         <Content>
-            <div style={{
-                marginBottom: 10, marginLeft: 15, marginTop: 10,
-            }}
-            >
-                <label style={{ fontSize: 18, fontWeight: 'bold', color: '#080' }}>{`Situação atual: em ${project.avaliacao.status}`}</label>
-            </div>
+          <div style={{
+            marginBottom: 10, marginLeft: 15, marginTop: 10,
+          }}
+          >
+            <label style={{ fontSize: 18, fontWeight: 'bold', color: '#080' }}>{`Situação atual: em ${project.avaliacao.status}`}</label>
+          </div>
         </Content>
-      )}
+        )}
       </div>
 
       <div className="col-12 px-0">
@@ -692,25 +689,26 @@ export default function Project() {
                 {screen.recursos && <Recursos />}
               </Content>
 
-            {coordenador == user.id &&
+              {coordenador == user.id
+              && (
               <div style={{ marginTop: 20 }} className="modal-footer">
                 {loading ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : project?.submetido == 'false' && (
-                  <Button
-                    className="primary"
-                  >
-                    Salvar
-                  </Button>
+                <Button
+                  className="primary"
+                >
+                  Salvar
+                </Button>
                 )}
 
                 {!project && !loading && (
-                  <Button
-                    className="primary"
-                  >
-                    Salvar
-                  </Button>
+                <Button
+                  className="primary"
+                >
+                  Salvar
+                </Button>
                 )}
               </div>
-            }
+              )}
             </Unform>
             )}
           </div>

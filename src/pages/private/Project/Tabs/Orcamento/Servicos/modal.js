@@ -4,7 +4,7 @@ import { FiCheckCircle, FiX } from 'react-icons/fi';
 import uuid from 'react-uuid';
 import { Form } from '../../../../../../components/Form';
 import {
-  moeda,
+  money_mask,
 } from '../../../../../../utils/validations';
 
 import { useProject } from '../../../../../../hooks/project';
@@ -78,7 +78,7 @@ function Servicos({
         throw 'Error';
       }
 
-      setDespesas(despesas.map((item) => ((item.titulo == 'Outros Serviços de Terceiros') ? ({ ...item, valor: moeda(String(soma([...orcamentos.servicos_terceiros, servico]))) }) : item)));
+      setDespesas(despesas.map((item) => ((item.titulo == 'Outros Serviços de Terceiros') ? ({ ...item, valor: money_mask(String(soma([...orcamentos.servicos_terceiros, servico]))) }) : item)));
 
       setOrcamentos({ ...orcamentos, servicos_terceiros: [...orcamentos.servicos_terceiros, servico] });
 
@@ -123,7 +123,7 @@ function Servicos({
                 value={servico.custo_total}
                 type="text"
                 onChange={(value) => {
-                  setServico({ ...servico, custo_total: moeda(value.target.value) });
+                  setServico({ ...servico, custo_total: money_mask(value.target.value) });
                 }}
               />
               <sup style={{ color: '#c53030', marginTop: 5 }}>
