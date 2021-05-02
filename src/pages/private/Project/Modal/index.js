@@ -6,6 +6,8 @@ import { store } from 'react-notifications-component';
 
 import { FiCheckCircle, FiX } from 'react-icons/fi';
 
+import { useHistory } from 'react-router-dom';
+
 import SelectMultiple from "react-select";
 import api from '../../../../services/api';
 
@@ -17,6 +19,8 @@ function ModalForm({
   isOpen, project, getProject, toggleModal, submit,
 }) {
   const reference = useRef(null);
+
+  const history = useHistory();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuOpen2, setMenuOpen2] = useState(false);
@@ -38,6 +42,7 @@ function ModalForm({
     value: true,
     label: 'ENQUADRADO',
   });
+
   const [avaliador, setAvaliador] = useState({
     value: null,
     label: 'SEM AVALIADOR',
@@ -47,12 +52,23 @@ function ModalForm({
 
   const handleSubmit = useCallback(
     async (data) => {
-      api.post(`evaluations`, {
-        id: project.avaliacao.id,
-        enquadrado: enquadrado.value,
-        avaliador1_id: avaliador.value ? JSON.parse(avaliador.value).id : null,
-        responsavel_id: avaliador.value ? JSON.parse(avaliador.value).id : null,
-      }).then(({ data }) => {
+      let params = {};
+      if (!project?.avaliacao?.responsavel_id && !project?.avaliacao?.recomendado1) {
+        params = {
+          id: project.avaliacao.id,
+          enquadrado: enquadrado.value,
+          avaliador1_id: enquadrado.value == false ? null : avaliador.value ? JSON.parse(avaliador.value).id : null,
+          responsavel_id: enquadrado.value == false ? null : avaliador.value ? JSON.parse(avaliador.value).id : null,
+        };
+      } else {
+        params = {
+          id: project.avaliacao.id,
+          avaliador2_id: avaliador.value ? JSON.parse(avaliador.value).id : null,
+          responsavel_id: avaliador.value ? JSON.parse(avaliador.value).id : null,
+        };
+      }
+
+      api.post(`evaluations`, params).then(({ data }) => {
         store.addNotification({
           message: `Atualizado com sucesso!`,
           type: 'success',
@@ -66,7 +82,11 @@ function ModalForm({
           },
         });
 
-        getProject();
+        if (enquadrado.value == false) {
+          history.goBack();
+        } else {
+          getProject();
+        }
 
         submit();
       }).catch((error) => {
@@ -95,10 +115,10 @@ function ModalForm({
         nameOrCpf: nameOrCpf ? String(nameOrCpf).toUpperCase() : undefined,
       },
     }).then(({ data }) => {
-      setUsers([{
-        value: null,
-        name: 'SEM AVALIADOR',
-      }, ...data.data]);
+      if (data.data.length > 0) {
+        setUsers(data.data);
+        setAvaliador({ label: data.data[0].name, value: JSON.stringify(data.data[0]) });
+      }
     });
   }, [nameOrCpf, setUsers]);
 
@@ -115,56 +135,65 @@ function ModalForm({
 
       <Form>
         <div className="modal-body" ref={reference}>
-          <div>
-            <label
-              style={{
-                fontSize: 13,
-                fontWeight: 600,
-                color: '#626262',
-              }}
-              className="required"
-            >
-              Status
-            </label>
-            <div style={{ marginTop: 5 }} />
-            <SelectMultiple
-              maxMenuHeight={150}
-              onMenuOpen={() => setMenuOpen(true)}
-              onMenuClose={() => setMenuOpen(false)}
-              className="basic-multi-select"
-              classNamePrefix="select"
-              placeholder="Enquadrado"
-              value={enquadrado}
-              noOptionsMessage={({ inputValue }) => "Sem opções"}
-              options={enquadrados}
-              onChange={(values) => setEnquadrado(values)}
-              theme={(theme) => ({
-                ...theme,
-                borderRadius: 5,
-                colors: {
-                  ...theme.colors,
-                  primary25: "#080",
-                  primary: "#dee2e6",
-                },
-              })}
-              styles={{
-                option: (provided, state) => ({
-                  ...provided,
-                  color: state.isSelected ? "#fff" : "rgb(102,102,102)",
-                  backgroundColor: state.isSelected ? "rgb(102,102,102)" : "#fff",
 
-                  ":active": {
-                    ...provided[":active"],
-                    backgroundColor: !state.isDisabled && "#dee2e6",
-                  },
-                }),
-              }}
-            />
+          {!project?.avaliacao?.responsavel_id && !project?.avaliacao?.recomendado1
+            && (
+            <>
+              <div>
+                <label
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: '#626262',
+                  }}
+                  className="required"
+                >
+                  Status
+                </label>
+                <div style={{ marginTop: 5 }} />
+                <SelectMultiple
+                  maxMenuHeight={150}
+                  onMenuOpen={() => setMenuOpen(true)}
+                  onMenuClose={() => setMenuOpen(false)}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
+                  placeholder="Enquadrado"
+                  value={enquadrado}
+                  noOptionsMessage={({ inputValue }) => "Sem opções"}
+                  options={enquadrados}
+                  onChange={(values) => setEnquadrado(values)}
+                  theme={(theme) => ({
+                    ...theme,
+                    borderRadius: 5,
+                    colors: {
+                      ...theme.colors,
+                      primary25: "#080",
+                      primary: "#dee2e6",
+                    },
+                  })}
+                  styles={{
+                    option: (provided, state) => ({
+                      ...provided,
+                      color: state.isSelected ? "#fff" : "rgb(102,102,102)",
+                      backgroundColor: state.isSelected ? "rgb(102,102,102)" : "#fff",
 
-            {menuOpen && <div style={{ marginTop: 100 }} />}
-          </div>
+                      ":active": {
+                        ...provided[":active"],
+                        backgroundColor: !state.isDisabled && "#dee2e6",
+                      },
+                    }),
+                  }}
+                />
 
-          <div style={{ marginTop: 15 }} />
+                {menuOpen && <div style={{ marginTop: 100 }} />}
+              </div>
+              <div style={{ marginTop: 15 }} />
+            </>
+            )}
+
+          {enquadrado.value == true
+        && (
+        <>
           <label
             style={{
               fontSize: 13,
@@ -214,6 +243,8 @@ function ModalForm({
           />
 
           {menuOpen2 && <div style={{ marginTop: 200 }} />}
+        </>
+        )}
         </div>
 
         <Content>

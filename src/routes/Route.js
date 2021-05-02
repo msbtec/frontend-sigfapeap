@@ -46,6 +46,9 @@ export default function RouteWrapper({
   if (rest.path === '/publicacoes') {
     path = "Publicações";
   }
+  if (rest.path === '/avaliacoes') {
+    path = "Avaliações";
+  }
 
   if (!access.includes(String(path))) {
     return <Redirect to="/" />;

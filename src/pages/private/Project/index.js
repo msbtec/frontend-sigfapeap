@@ -44,7 +44,10 @@ import getValidationErrors from '../../../utils/getValidationErrors';
 import api from '../../../services/api';
 
 let ModalConfirm = () => <></>;
+let ModalHomologar = () => <></>;
+let ModalContratar = () => <></>;
 let ModalForm = () => <></>;
+let ModalEvaluation = () => <></>;
 
 export default function Project() {
   const formRef = useRef(null);
@@ -52,6 +55,8 @@ export default function Project() {
   const { user } = useAuth();
 
   const [OpenConfirm, setOpenConfirm] = useState(false);
+  const [OpenHomologar, setOpenHomologar] = useState(false);
+  const [OpenContratar, setOpencontratar] = useState(false);
 
   const {
     project, setProject, membros, setMembros, atividades, setAtividades,
@@ -79,6 +84,7 @@ export default function Project() {
   const { id, coordenador } = useParams();
 
   const [OpenForm, setOpenForm] = useState(false);
+  const [OpenEvaluation, setOpenEvaluation] = useState(false);
 
   async function toggleModalForm() {
     ModalForm = await lazy(() => import("./Modal"));
@@ -88,6 +94,16 @@ export default function Project() {
 
   function submitModalForm() {
     setOpenForm(!OpenForm);
+  }
+
+  async function toggleModalEvaluation() {
+    ModalEvaluation = await lazy(() => import("./ModalEvaluation"));
+
+    setOpenEvaluation(!OpenEvaluation);
+  }
+
+  function submitModalEvaluation() {
+    setOpenEvaluation(!OpenEvaluation);
   }
 
   async function getProject() {
@@ -248,7 +264,7 @@ export default function Project() {
   }
 
   useEffect(() => {
-    document.title = 'SIGFAPEAP - Submeter Projeto';
+    document.title = 'SIGFAPEAP - Projeto';
 
     setPageLoading(true);
 
@@ -572,6 +588,18 @@ export default function Project() {
     setOpenConfirm(!OpenConfirm);
   }
 
+  async function toggleModalHomologar() {
+    ModalHomologar = await lazy(() => import("../../../components/Homologar"));
+
+    setOpenHomologar(!OpenHomologar);
+  }
+
+  async function toggleModalContratar() {
+    ModalContratar = await lazy(() => import("../../../components/Contratar"));
+
+    setOpencontratar(!OpenContratar);
+  }
+
   async function submter() {
     api.post(`projects/submit/${project.id}`, {
       edital_id: id,
@@ -598,6 +626,52 @@ export default function Project() {
   function submitModalConfirm() {
     submter();
     setOpenConfirm(!OpenConfirm);
+  }
+
+  function submitModalHomologar() {
+    api.post(`evaluations`, {
+      id: project.avaliacao.id,
+      homologado: true,
+    }).then(({ data }) => {
+      store.addNotification({
+        message: `Projeto atualizado com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setOpenHomologar(!OpenHomologar);
+      getProject();
+    });
+  }
+
+  function submitModalContratar() {
+    api.post(`evaluations`, {
+      id: project.avaliacao.id,
+      contratado: true,
+    }).then(({ data }) => {
+      store.addNotification({
+        message: `Projeto atualizado com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      setOpencontratar(!OpenContratar);
+      getProject();
+    });
   }
 
   return (
@@ -638,13 +712,35 @@ export default function Project() {
       && (
       <Content>
         <div style={{
-          marginBottom: 10, marginLeft: 15, marginTop: 10,
+          marginBottom: 10, marginLeft: 15,
         }}
         >
-          <label style={{ fontSize: 18, fontWeight: 'bold', color: '#080' }}>{`Projeto submetido com sucesso em: ${moment(project.updated_at).format("LLLL")}.`}</label>
+          <label style={{ fontSize: 12, color: '#424242' }}>{`Projeto submetido com sucesso em: ${moment(project.updated_at).format("LLLL")}.`}</label>
         </div>
       </Content>
       )}
+
+        {project && (coordenador == user.id) && project?.submetido == 'true' && (
+        <Content>
+          <div style={{
+            marginBottom: 10, marginLeft: 15, marginTop: 10,
+          }}
+          >
+            <label style={{ fontSize: 18, fontWeight: 'bold', color: '#080' }}>{`Situação atual: ${project.avaliacao.status}`}</label>
+          </div>
+        </Content>
+        )}
+
+        {project && (coordenador != user.id) && project?.avaliacao?.status == 'Contratado' && (
+        <Content>
+          <div style={{
+            marginBottom: 10, marginLeft: 15, marginTop: 10,
+          }}
+          >
+            <label style={{ fontSize: 18, fontWeight: 'bold', color: '#080' }}>{`Situação atual: ${project.avaliacao.status}`}</label>
+          </div>
+        </Content>
+        )}
 
         {project && (coordenador != user.id) && !project?.avaliacao?.enquadrado && (
         <Content>
@@ -660,14 +756,59 @@ export default function Project() {
         </Content>
         )}
 
-        {project && (coordenador == user.id) && (
+        {project && (coordenador != user.id) && project?.avaliacao?.status == 'Avaliação' && !project?.avaliacao?.responsavel_id && project?.avaliacao?.recomendado1 && (
         <Content>
-          <div style={{
-            marginBottom: 10, marginLeft: 15, marginTop: 10,
-          }}
+          <button
+            style={{
+              marginBottom: 10, width: 200, marginLeft: 15, marginTop: 10,
+            }}
+            type="button"
+            onClick={toggleModalForm}
           >
-            <label style={{ fontSize: 18, fontWeight: 'bold', color: '#080' }}>{`Situação atual: em ${project.avaliacao.status}`}</label>
-          </div>
+            Delegar 2º avaliador
+          </button>
+        </Content>
+        )}
+
+        {project && (coordenador != user.id) && project?.avaliacao?.status == 'Homologação' && (
+        <Content>
+          <button
+            style={{
+              marginBottom: 10, width: 200, marginLeft: 15, marginTop: 10,
+            }}
+            type="button"
+            onClick={toggleModalHomologar}
+          >
+            Homologar projeto
+          </button>
+        </Content>
+        )}
+
+        {project && (coordenador != user.id) && project?.avaliacao?.status == 'Contratação' && (
+        <Content>
+          <button
+            style={{
+              marginBottom: 10, width: 200, marginLeft: 15, marginTop: 10,
+            }}
+            type="button"
+            onClick={toggleModalContratar}
+          >
+            Contratar projeto
+          </button>
+        </Content>
+        )}
+
+        {project && (project?.avaliacao.responsavel_id == user.id) && (
+        <Content>
+          <button
+            style={{
+              marginBottom: 10, width: 180, marginLeft: 15, marginTop: 10,
+            }}
+            type="button"
+            onClick={toggleModalEvaluation}
+          >
+            Avaliar projeto
+          </button>
         </Content>
         )}
       </div>
@@ -718,12 +859,22 @@ export default function Project() {
       <Suspense fallback={null}>
         <ModalProvider>
           <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
+          <ModalHomologar isOpen={OpenHomologar} toggleModal={toggleModalHomologar} submit={submitModalHomologar} />
+          <ModalContratar isOpen={OpenContratar} toggleModal={toggleModalContratar} submit={submitModalContratar} />
           <ModalForm
             project={project}
             getProject={getProject}
             isOpen={OpenForm}
             toggleModal={toggleModalForm}
             submit={submitModalForm}
+          />
+          <ModalEvaluation
+            formRef={formRef}
+            project={project}
+            getProject={getProject}
+            isOpen={OpenEvaluation}
+            toggleModal={toggleModalEvaluation}
+            submit={submitModalEvaluation}
           />
         </ModalProvider>
       </Suspense>

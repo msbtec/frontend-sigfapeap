@@ -26,6 +26,7 @@
     "rules": {
         "react-hooks/rules-of-hooks": "error",
         "react/destructuring-assignment": "off",
+        "react/no-danger": "off",
         "react-hooks/exhaustive-deps": "warn",
         "camelcase": "off",
         "no-param-reassign": "off",

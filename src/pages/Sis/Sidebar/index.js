@@ -117,6 +117,14 @@ function Sidebar({
       });
     }
 
+    if (profiles.includes('Avaliações')) {
+      my_profiles.push({
+        name: 'Avaliações',
+        icon: <FiGrid />,
+        path: '/avaliacoes',
+      });
+    }
+
     dispatch(toggleItem(my_profiles));
   }, [user, dispatch]);
 

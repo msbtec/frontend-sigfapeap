@@ -67,6 +67,11 @@ const INITIAL_STATE = {
       icon: <FiGrid />,
       path: '/programas',
     },
+    {
+      name: 'Avaliações',
+      icon: <FiGrid />,
+      path: '/avaliacoes',
+    },
   ],
 };
 
