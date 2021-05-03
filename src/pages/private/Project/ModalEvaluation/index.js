@@ -64,7 +64,7 @@ function ModalForm({
         if (project.avaliacao.avaliador2_id == null) {
           params = {
             id: project.avaliacao.id,
-            analise1: description == "" ? "SEM DESCRIÇÃO" : description,
+            analise1: description == "" ? "<p>SEM DESCRIÇÃO</p>" : description,
             nota1: data.note,
             recomendado1: recomendado.value,
             responsavel_id: null,
@@ -72,7 +72,7 @@ function ModalForm({
         } else {
           params = {
             id: project.avaliacao.id,
-            analise2: description == "" ? "SEM DESCRIÇÃO" : description,
+            analise2: description == "" ? "<p>SEM DESCRIÇÃO</p>" : description,
             nota2: data.note,
             recomendado2: recomendado.value,
             responsavel_id: null,

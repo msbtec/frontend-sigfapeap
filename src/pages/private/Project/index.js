@@ -628,10 +628,10 @@ export default function Project() {
     setOpenConfirm(!OpenConfirm);
   }
 
-  function submitModalHomologar() {
+  function submitModalHomologar(homologado) {
     api.post(`evaluations`, {
       id: project.avaliacao.id,
-      homologado: true,
+      homologado,
     }).then(({ data }) => {
       store.addNotification({
         message: `Projeto atualizado com sucesso!`,
@@ -651,10 +651,10 @@ export default function Project() {
     });
   }
 
-  function submitModalContratar() {
+  function submitModalContratar(contratado) {
     api.post(`evaluations`, {
       id: project.avaliacao.id,
-      contratado: true,
+      contratado,
     }).then(({ data }) => {
       store.addNotification({
         message: `Projeto atualizado com sucesso!`,
@@ -731,7 +731,7 @@ export default function Project() {
         </Content>
         )}
 
-        {project && (coordenador != user.id) && project?.avaliacao?.status == 'Contratado' && (
+        {project && (coordenador != user.id) && (project?.avaliacao?.status == 'Não Homologado' || project?.avaliacao?.status == 'Contratado' || project?.avaliacao?.status == 'Não Contratado') && (
         <Content>
           <div style={{
             marginBottom: 10, marginLeft: 15, marginTop: 10,
@@ -770,7 +770,7 @@ export default function Project() {
         </Content>
         )}
 
-        {project && (coordenador != user.id) && project?.avaliacao?.status == 'Homologação' && (
+        {project && (coordenador != user.id) && (project?.avaliacao?.status == 'Não Homologado' || project?.avaliacao?.status == 'Homologação') && (
         <Content>
           <button
             style={{
@@ -784,7 +784,7 @@ export default function Project() {
         </Content>
         )}
 
-        {project && (coordenador != user.id) && project?.avaliacao?.status == 'Contratação' && (
+        {project && (coordenador != user.id) && (project?.avaliacao?.status == 'Contratação' || project?.avaliacao?.status == 'Não Contratado') && (
         <Content>
           <button
             style={{
@@ -859,7 +859,7 @@ export default function Project() {
       <Suspense fallback={null}>
         <ModalProvider>
           <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
-          <ModalHomologar isOpen={OpenHomologar} toggleModal={toggleModalHomologar} submit={submitModalHomologar} />
+          <ModalHomologar isOpen={OpenHomologar} project={project} toggleModal={toggleModalHomologar} submit={submitModalHomologar} />
           <ModalContratar isOpen={OpenContratar} toggleModal={toggleModalContratar} submit={submitModalContratar} />
           <ModalForm
             project={project}

@@ -104,7 +104,7 @@ export const StyledModal = Modal.styled`
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: center;
         padding: .75rem;
         border-top: 1px solid #dee2e6;
         border-bottom-right-radius: calc(.3rem - 1px);

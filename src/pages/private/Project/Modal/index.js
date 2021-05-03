@@ -52,6 +52,23 @@ function ModalForm({
 
   const handleSubmit = useCallback(
     async (data) => {
+      if (enquadrado.value == true && avaliador.value == null) {
+        store.addNotification({
+          message: `É necessário selecionar um avaliador!`,
+          type: 'danger',
+          insert: 'top',
+          container: 'top-right',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
+
+        return null;
+      }
+
       let params = {};
       if (!project?.avaliacao?.responsavel_id && !project?.avaliacao?.recomendado1) {
         params = {
@@ -109,18 +126,15 @@ function ModalForm({
   );
 
   useEffect(() => {
-    api.post(`users/search`, {
-      params: {
-        page: 1,
-        nameOrCpf: nameOrCpf ? String(nameOrCpf).toUpperCase() : undefined,
-      },
-    }).then(({ data }) => {
-      if (data.data.length > 0) {
-        setUsers(data.data);
-        setAvaliador({ label: data.data[0].name, value: JSON.stringify(data.data[0]) });
-      }
-    });
-  }, [nameOrCpf, setUsers]);
+    if (project?.edital_id) {
+      api.get(`/evaluators/program/${project.edital_id}`).then(({ data }) => {
+        if (data.length > 0) {
+          setUsers(data);
+          setAvaliador({ label: data[0].name, value: JSON.stringify(data[0]) });
+        }
+      });
+    }
+  }, [nameOrCpf, project, setUsers]);
 
   return (
     <StyledModal
@@ -266,7 +280,6 @@ function ModalForm({
           </div>
         </Content>
       </Form>
-
     </StyledModal>
   );
 }

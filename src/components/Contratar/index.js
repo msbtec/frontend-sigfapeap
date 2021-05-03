@@ -43,8 +43,9 @@ function Confirm({ isOpen, toggleModal, submit }) {
         <p>Você realmente deseja contratar esse projeto?</p>
 
         <Buttons className="wrap">
-          <Button onClick={toggleModal} className="primary">Cancelar</Button>
-          <Button onClick={submit} className="success">Confirmar</Button>
+          <Button onClick={() => submit(true)} className="success">Contratar</Button>
+          <Button onClick={() => submit(false)} className="danger">Não Contratar</Button>
+          <Button onClick={toggleModal} className="primary">Fechar</Button>
         </Buttons>
       </div>
     </StyledModal>
