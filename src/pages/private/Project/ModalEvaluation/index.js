@@ -1,8 +1,10 @@
 import React, {
-  memo, useRef, useState, useCallback, useEffect,
+  memo, useRef, useState, useCallback,
 } from 'react';
 
 import { store } from 'react-notifications-component';
+
+import * as Yup from 'yup';
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -12,6 +14,7 @@ import { Form as Unform } from '@unform/web';
 import { FiCheckCircle, FiX } from 'react-icons/fi';
 
 import SelectMultiple from "react-select";
+import getValidationErrors from '../../../../utils/getValidationErrors';
 import Input from '../../../../components/Input';
 import api from '../../../../services/api';
 
@@ -46,56 +49,74 @@ function ModalForm({
 
   const handleSubmit = useCallback(
     async (data) => {
-      let params = {};
-      if (project.avaliacao.avaliador2_id == null) {
-        params = {
-          id: project.avaliacao.id,
-          analise1: description,
-          nota1: data.note,
-          recomendado1: recomendado.value,
-          responsavel_id: null,
-        };
-      } else {
-        params = {
-          id: project.avaliacao.id,
-          analise2: description,
-          nota2: data.note,
-          recomendado2: recomendado.value,
-          responsavel_id: null,
-        };
+      try {
+        formRef.current.setErrors({});
+
+        const schema = Yup.object().shape({
+          note: Yup.string().required('Campo obrigatório'),
+        });
+
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+
+        let params = {};
+        if (project.avaliacao.avaliador2_id == null) {
+          params = {
+            id: project.avaliacao.id,
+            analise1: description == "" ? "SEM DESCRIÇÃO" : description,
+            nota1: data.note,
+            recomendado1: recomendado.value,
+            responsavel_id: null,
+          };
+        } else {
+          params = {
+            id: project.avaliacao.id,
+            analise2: description == "" ? "SEM DESCRIÇÃO" : description,
+            nota2: data.note,
+            recomendado2: recomendado.value,
+            responsavel_id: null,
+          };
+        }
+
+        api.post(`evaluations`, params).then(({ data }) => {
+          store.addNotification({
+            message: `Atualizado com sucesso!`,
+            type: 'success',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+          });
+
+          getProject();
+
+          submit();
+        }).catch((error) => {
+          store.addNotification({
+            message: `Erro ao atualizar!`,
+            type: 'danger',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+          });
+        });
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
+
+          formRef.current.setErrors(errors);
+        }
       }
-
-      api.post(`evaluations`, params).then(({ data }) => {
-        store.addNotification({
-          message: `Atualizado com sucesso!`,
-          type: 'success',
-          insert: 'top',
-          container: 'top-right',
-          animationIn: ['animate__animated', 'animate__fadeIn'],
-          animationOut: ['animate__animated', 'animate__fadeOut'],
-          dismiss: {
-            duration: 5000,
-            onScreen: true,
-          },
-        });
-
-        getProject();
-
-        submit();
-      }).catch((error) => {
-        store.addNotification({
-          message: `Erro ao atualizar!`,
-          type: 'danger',
-          insert: 'top',
-          container: 'top-right',
-          animationIn: ['animate__animated', 'animate__fadeIn'],
-          animationOut: ['animate__animated', 'animate__fadeOut'],
-          dismiss: {
-            duration: 5000,
-            onScreen: true,
-          },
-        });
-      });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [project, recomendado, description],
@@ -141,7 +162,7 @@ function ModalForm({
                 }}
                 className="required"
               >
-                Status
+                Recomendação
               </label>
               <div style={{ marginTop: 5 }} />
               <SelectMultiple
@@ -150,7 +171,7 @@ function ModalForm({
                 onMenuClose={() => setMenuOpen(false)}
                 className="basic-multi-select"
                 classNamePrefix="select"
-                placeholder="Enquadrado"
+                placeholder="Recomendado"
                 value={recomendado}
                 noOptionsMessage={({ inputValue }) => "Sem opções"}
                 options={recomendacoes}
