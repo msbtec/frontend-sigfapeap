@@ -69,6 +69,9 @@ export const ProgramProvider = ({ children }) => {
 
     const configurations = {
       plano_trabalho: JSON.stringify({
+        name: 'ANEXO - PROJETO',
+        size: 1,
+        quantity: 1,
         fields: {
           titulo_projeto: { checked: true, value: 0 },
           coordenador: { checked: true, value: 0 },

@@ -2,21 +2,23 @@ import React, {
   useState, useEffect, Suspense, lazy,
 } from 'react';
 
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
 
 import { ModalProvider } from 'styled-react-modal';
 
 import ReactTooltip from 'react-tooltip';
 
 // Icons
-import {FiFileText, FiDownload, FiEdit, FiTrash, FiFolderPlus, FiUserPlus } from 'react-icons/fi';
+import {
+  FiFileText, FiDownload, FiEdit, FiTrash, FiFolderPlus, FiUserPlus,
+} from 'react-icons/fi';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
 
-import { useProgram } from '../../../hooks/program'
-import { useAuth } from '../../../hooks/auth'
+import { useProgram } from '../../../hooks/program';
+import { useAuth } from '../../../hooks/auth';
 
 let ModalForm = () => <></>;
 let ModalConfirm = () => <></>;
@@ -24,12 +26,12 @@ let ModalConfirm = () => <></>;
 export default function Program() {
   const [OpenForm, setOpenForm] = useState(false);
   const [OpenConfirm, setOpenConfirm] = useState(false);
-  const [selected,setSelected] = useState(null);
+  const [selected, setSelected] = useState(null);
 
-  const history = useHistory()
+  const history = useHistory();
 
   const { programs, erase } = useProgram();
-  const { user } = useAuth()
+  const { user } = useAuth();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Programas';
@@ -52,7 +54,7 @@ export default function Program() {
   }
 
   function submitModalConfirm() {
-    erase(selected)
+    erase(selected);
     setOpenConfirm(!OpenConfirm);
   }
 
@@ -66,25 +68,33 @@ export default function Program() {
           <div className="card-title">
             <h3>Listagem de programas</h3>
           </div>
-          {user.profile.name != 'Pesquisador' &&
+          {user.profile.name != 'Pesquisador'
+            && (
             <div className="card-title">
-                <div style={{display:'flex'}}>
-                    <Button style={{marginRight: 10}} onClick={() => {
-                        setSelected(null);
-                        toggleModalForm();
-                    }} className="primary">Cadastrar programa</Button>
-                    {/* <Button onClick={() => {
+              <div style={{ display: 'flex' }}>
+                <Button
+                  style={{ marginRight: 10 }}
+                  onClick={() => {
+                    setSelected(null);
+                    toggleModalForm();
+                  }}
+                  className="primary"
+                >
+                  Cadastrar programa
+
+                </Button>
+                {/* <Button onClick={() => {
                         history.push('configurar-edital')
                     }} className="primary">Configurar edital</Button> */}
-                </div>
+              </div>
             </div>
-          }
+            )}
           <div className="card-body">
             <Table>
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className="col-2">Título</th>
+                  <th className="col-3">Título</th>
                   <th className="col-6">Descrição</th>
                   {/* <th className="col-1">Avaliação</th> */}
                   {/* <th className="col-1">Anexo</th> */}
@@ -96,40 +106,58 @@ export default function Program() {
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.title }</td>
-                    <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{__html: item.description}}></td>
+                    <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: item.description }} />
                     {/* <td style={{ textAlign: 'center' }}>{ item.description }</td> */}
                     {/* <td style={{ textAlign: 'center' }}>{ item.avaliation }</td> */}
                     {/* <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25,width: 25, cursor:'pointer'}} onClick={() => window.open(item.url,'_blank')} /></td> */}
                     <td style={{ textAlign: 'center' }}>
-                    {user.profile.name != 'Pesquisador' &&
-                    <button data-tip="Avaliadores" onClick={() => {
-                         history.push(`/avaliadores/${item.id}`)
-                      }} className="edit">
-                        <FiUserPlus />
+                      {user.profile.name != 'Pesquisador'
+                    && (
+                    <button
+                      data-tip="Avaliadores"
+                      onClick={() => {
+                        history.push(`/avaliadores/${item.id}`);
+                      }}
+                      className="edit"
+                    >
+                      <FiUserPlus />
                     </button>
-                    }
-                    <button data-tip="Visualizar editais" onClick={() => {
-                        history.push(`/editais/${item.id}`)
-                    }} className="edit">
-                    <FiFolderPlus />
-                    </button>
-                    {user.profile.name != 'Pesquisador' &&
+                    )}
+                      <button
+                        data-tip="Visualizar editais"
+                        onClick={() => {
+                          history.push(`/editais/${item.id}`);
+                        }}
+                        className="edit"
+                      >
+                        <FiFolderPlus />
+                      </button>
+                      {user.profile.name != 'Pesquisador'
+                    && (
                     <>
-                        <button data-tip="Editar programa" onClick={() => {
-                            setSelected(item);
-                            toggleModalForm();
-                        }} className="edit">
+                      <button
+                        data-tip="Editar programa"
+                        onClick={() => {
+                          setSelected(item);
+                          toggleModalForm();
+                        }}
+                        className="edit"
+                      >
                         <FiEdit />
-                        </button>
+                      </button>
 
-                        <button data-tip="Deletar programa" onClick={() => {
-                            setSelected(item);
-                            toggleModalConfirm();
-                        }} className="eraser">
+                      <button
+                        data-tip="Deletar programa"
+                        onClick={() => {
+                          setSelected(item);
+                          toggleModalConfirm();
+                        }}
+                        className="eraser"
+                      >
                         <FiTrash />
-                        </button>
+                      </button>
                     </>
-                    }
+                    )}
                     </td>
                   </tr>
                 ))}

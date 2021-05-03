@@ -196,7 +196,6 @@ export default function Dashboard() {
           breakClassName="break-me"
           pageCount={totalPagesPublishes}
           marginPagesDisplayed={4}
-          // pageRangeDisplayed={5}
           onPageChange={(page) => loadPublishes(page.selected)}
           containerClassName="pagination"
           subContainerClassName="pages pagination"

@@ -760,12 +760,12 @@ export default function Project() {
         <Content>
           <button
             style={{
-              marginBottom: 10, width: 200, marginLeft: 15, marginTop: 10,
+              marginBottom: 10, width: 200, height: 60, marginLeft: 15, marginTop: 10,
             }}
             type="button"
             onClick={toggleModalForm}
           >
-            Delegar 2º avaliador
+            Delegar Avaliador Especialista
           </button>
         </Content>
         )}
@@ -784,7 +784,7 @@ export default function Project() {
         </Content>
         )}
 
-        {project && (coordenador != user.id) && (project?.avaliacao?.status == 'Contratação' || project?.avaliacao?.status == 'Não Contratado') && (
+        {project && (coordenador != user.id) && (project?.avaliacao?.status == 'Homologado' || project?.avaliacao?.status == 'Não Contratado') && (
         <Content>
           <button
             style={{

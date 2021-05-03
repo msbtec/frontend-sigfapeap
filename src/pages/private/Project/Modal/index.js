@@ -162,7 +162,7 @@ function ModalForm({
                   }}
                   className="required"
                 >
-                  Status
+                  Enquadramento
                 </label>
                 <div style={{ marginTop: 5 }} />
                 <SelectMultiple
@@ -216,7 +216,7 @@ function ModalForm({
             }}
             className="required"
           >
-            Avaliador
+            {enquadrado.value == true ? 'Avaliador Especialista' : 'Avaliador ad hoc'}
           </label>
           <div style={{ marginTop: 5 }} />
           <SelectMultiple
