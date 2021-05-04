@@ -10,7 +10,9 @@ import ReactTooltip from 'react-tooltip';
 
 import moment from 'moment';
 
-import { FiDownload, FiEdit, FiSettings, FiFileText, FiTrash } from 'react-icons/fi';
+import {
+  FiDownload, FiEdit, FiSettings, FiFileText, FiTrash,
+} from 'react-icons/fi';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
@@ -73,6 +75,15 @@ export default function Avaliadores() {
     setOpenNotice(!OpenNotice);
   }
 
+  function largeName(value) {
+    return value.split("").length > 255
+      ? `${value
+        .split("")
+        .slice(0, 255)
+        .join("")}...`
+      : value;
+  }
+
   return (
     <>
       <div className="col-12 title">
@@ -117,10 +128,10 @@ export default function Avaliadores() {
                 {selected.map((item, index) => (
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
-                    <td style={{textAlign: 'center' }}>{ item.title }</td>
-                    <td style={{textAlign: 'center' }}>{ `${moment(item.beggin).format("L")} a ${moment(item.end).format("L")}` }</td>
-                    <td style={{ marginTop: 10,textAlign: 'justify' }} dangerouslySetInnerHTML={{__html: item.description}}></td>
-                    <td style={{textAlign: 'center' }}>{ JSON.parse(item.documents).map(document => <p><a className="link_document" target="_blank" href={document.url}>{String(document.title)}</a></p>)}</td>
+                    <td style={{ textAlign: 'center' }}>{ largeName(item.title) }</td>
+                    <td style={{ textAlign: 'center' }}>{ `${moment(item.beggin).format("L")} a ${moment(item.end).format("L")}` }</td>
+                    <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: largeName(item.description) }} />
+                    <td style={{ textAlign: 'center' }}>{ JSON.parse(item.documents).map((document) => <p><a className="link_document" target="_blank" href={document.url}>{String(document.title)}</a></p>)}</td>
                     <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
                     {user.profile.name != 'Pesquisador'
                     && (
@@ -128,8 +139,10 @@ export default function Avaliadores() {
                       <button
                         data-tip="Editar edital"
                         onClick={() => {
-                            setItem({...item, beggin: String(item.beggin).split('T')[0], end: String(item.end).split('T')[0], documents: JSON.parse(item.documents)});
-                            toggleModalNotice();
+                          setItem({
+                            ...item, beggin: String(item.beggin).split('T')[0], end: String(item.end).split('T')[0], documents: JSON.parse(item.documents),
+                          });
+                          toggleModalNotice();
                         }}
                         className="edit"
                       >
@@ -139,7 +152,7 @@ export default function Avaliadores() {
                       <button
                         data-tip="Configurar edital"
                         onClick={() => {
-                            history.push(`configurar-edital/${item.id}`)
+                          history.push(`configurar-edital/${item.id}`);
                         }}
                         className="edit"
                       >
@@ -149,7 +162,7 @@ export default function Avaliadores() {
                       <button
                         data-tip="Visualizar projetos"
                         onClick={() => {
-                            history.push(`/projetos_submetidos/${item.id}`);
+                          history.push(`/projetos_submetidos/${item.id}`);
                         }}
                         className="edit"
                       >

@@ -74,6 +74,15 @@ export default function Dashboard() {
     loadNotices(page - 1);
   }, [status, page]);
 
+  function largeName(value) {
+    return value.split("").length > 255
+      ? `${value
+        .split("")
+        .slice(0, 255)
+        .join("")}...`
+      : value;
+  }
+
   return (
     <>
       <div className="col-12 title">
@@ -180,8 +189,8 @@ export default function Dashboard() {
               {publishes.map((item, index) => (
                 <tr>
                   <td style={{ textAlign: 'center' }}>{ index + 1 + (pagePublishes > 1 ? (pagePublishes - 1) * 5 : 0) }</td>
-                  <td style={{ textAlign: 'center' }}>{ item.title }</td>
-                  <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: item.description }} />
+                  <td style={{ textAlign: 'center' }}>{ largeName(item.title) }</td>
+                  <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: largeName(item.description) }} />
                   <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
                 </tr>
               ))}
@@ -229,9 +238,9 @@ export default function Dashboard() {
               {notices.map((item, index) => (
                 <tr>
                   <td style={{ textAlign: 'center' }}>{ index + 1 + (page > 1 ? (page - 1) * 5 : 0) }</td>
-                  <td style={{ textAlign: 'center' }}>{ item.title }</td>
+                  <td style={{ textAlign: 'center' }}>{ largeName(item.title) }</td>
                   <td style={{ textAlign: 'center' }}>{ `${moment(item.beggin).format("L")} a ${moment(item.end).format("L")}` }</td>
-                  <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: item.description }} />
+                  <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: largeName(item.description) }} />
                   <td style={{ textAlign: 'center' }}>{ JSON.parse(item.documents).map((document) => <p><a className="link_document" target="_blank" href={document.url}>{String(document.title)}</a></p>)}</td>
                   <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
                   <td style={{ textAlign: 'center' }}>

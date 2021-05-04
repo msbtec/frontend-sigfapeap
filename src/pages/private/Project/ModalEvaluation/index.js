@@ -38,7 +38,7 @@ function ModalForm({
     },
     {
       value: false,
-      label: 'NÃO RECOMENDADO',
+      label: 'NÃO RECOMENDADO, QUANTO AO MÉRITO DA PROPOSTA',
     },
   ]);
 

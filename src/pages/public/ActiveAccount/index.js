@@ -57,7 +57,7 @@ const ActiveAccount = (props) => {
       <Container style={{ height: '100vh', padding: '0 10px' }}>
         <Form>
           <img style={{ width: 200, height: 50 }} src={Logo} alt="Airbnb" />
-          {loading ? <ReactLoading type="spin" height="15%" width="15%" color="#080" /> : <p style={{ borderColor: '#080', color: '#080' }}>Sua conta foi ativada com sucesso! Você será redirecionado para a tela de login.</p>}
+          {loading ? <ReactLoading type="spin" height="15%" width="15%" color="#080" /> : <p style={{ borderColor: '#080', color: '#080' }}>Sua conta foi ativada com sucesso! Aguarde, você será redirecionado(a) para a tela de login.</p>}
         </Form>
       </Container>
     </>

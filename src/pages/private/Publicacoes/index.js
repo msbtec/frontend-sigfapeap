@@ -12,8 +12,8 @@ import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
 
-import { usePublish } from '../../../hooks/publish'
-import { useAuth } from '../../../hooks/auth'
+import { usePublish } from '../../../hooks/publish';
+import { useAuth } from '../../../hooks/auth';
 
 let ModalForm = () => <></>;
 let ModalConfirm = () => <></>;
@@ -21,7 +21,7 @@ let ModalConfirm = () => <></>;
 export default function Documentos() {
   const [OpenForm, setOpenForm] = useState(false);
   const [OpenConfirm, setOpenConfirm] = useState(false);
-  const [selected,setSelected] = useState(null);
+  const [selected, setSelected] = useState(null);
 
   const { publishes, erase } = usePublish();
   const { user } = useAuth();
@@ -47,8 +47,17 @@ export default function Documentos() {
   }
 
   function submitModalConfirm() {
-    erase(selected)
+    erase(selected);
     setOpenConfirm(!OpenConfirm);
+  }
+
+  function largeName(value) {
+    return value.split("").length > 255
+      ? `${value
+        .split("")
+        .slice(0, 255)
+        .join("")}...`
+      : value;
   }
 
   return (
@@ -61,14 +70,21 @@ export default function Documentos() {
           <div className="card-title">
             <h3>Listagem de publicações</h3>
           </div>
-          {user.profile.name != 'Pesquisador' &&
+          {user.profile.name != 'Pesquisador'
+          && (
           <div className="card-title">
-            <Button onClick={() => {
+            <Button
+              onClick={() => {
                 setSelected(null);
                 toggleModalForm();
-            }} className="primary">Cadastrar publicação</Button>
+              }}
+              className="primary"
+            >
+              Cadastrar publicação
+
+            </Button>
           </div>
-          }
+          )}
           <div className="card-body">
             <Table>
               <thead>
@@ -84,26 +100,36 @@ export default function Documentos() {
                 {publishes.map((item, index) => (
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.title }</td>
-                    <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{__html: item.description}}></td>
+                    <td style={{ textAlign: 'center' }}>{ largeName(item.title) }</td>
+                    <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: largeName(item.description) }} />
                     <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
-                    {user.profile.name != 'Pesquisador' &&
+                    {user.profile.name != 'Pesquisador'
+                    && (
                     <>
-                    <td style={{ textAlign: 'center' }}>
-                      <button data-tip="Editar publicação" onClick={() => {
-                          setSelected(item);
-                          toggleModalForm();
-                      }} className="edit">
-                        <FiEdit />
-                      </button>
-                      <button data-tip="Deletar publicação" onClick={() => {
-                          setSelected(item);
-                          toggleModalConfirm();
-                      }} className="eraser">
-                        <FiTrash />
-                      </button>
-                    </td>
-                    </>}
+                      <td style={{ textAlign: 'center' }}>
+                        <button
+                          data-tip="Editar publicação"
+                          onClick={() => {
+                            setSelected(item);
+                            toggleModalForm();
+                          }}
+                          className="edit"
+                        >
+                          <FiEdit />
+                        </button>
+                        <button
+                          data-tip="Deletar publicação"
+                          onClick={() => {
+                            setSelected(item);
+                            toggleModalConfirm();
+                          }}
+                          className="eraser"
+                        >
+                          <FiTrash />
+                        </button>
+                      </td>
+                    </>
+                    )}
                   </tr>
                 ))}
               </tbody>

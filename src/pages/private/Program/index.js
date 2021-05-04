@@ -58,6 +58,15 @@ export default function Program() {
     setOpenConfirm(!OpenConfirm);
   }
 
+  function largeName(value) {
+    return value.split("").length > 255
+      ? `${value
+        .split("")
+        .slice(0, 255)
+        .join("")}...`
+      : value;
+  }
+
   return (
     <>
       <div className="col-12 title">
@@ -105,8 +114,8 @@ export default function Program() {
                 {programs.map((item, index) => (
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.title }</td>
-                    <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: item.description }} />
+                    <td style={{ textAlign: 'center' }}>{ largeName(item.title) }</td>
+                    <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: largeName(item.description) }} />
                     {/* <td style={{ textAlign: 'center' }}>{ item.description }</td> */}
                     {/* <td style={{ textAlign: 'center' }}>{ item.avaliation }</td> */}
                     {/* <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25,width: 25, cursor:'pointer'}} onClick={() => window.open(item.url,'_blank')} /></td> */}

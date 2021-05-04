@@ -742,7 +742,7 @@ export default function Project() {
         </Content>
         )}
 
-        {project && (coordenador != user.id) && !project?.avaliacao?.enquadrado && (
+        {project && (coordenador != user.id) && user.profile.name != 'Pesquisador' && !project?.avaliacao?.enquadrado && (
         <Content>
           <button
             style={{
@@ -756,7 +756,7 @@ export default function Project() {
         </Content>
         )}
 
-        {project && (coordenador != user.id) && project?.avaliacao?.status == 'Avaliação' && !project?.avaliacao?.responsavel_id && project?.avaliacao?.recomendado1 && (
+        {project && (coordenador != user.id) && user.profile.name != 'Pesquisador' && project?.avaliacao?.status == 'Avaliação' && !project?.avaliacao?.responsavel_id && project?.avaliacao?.recomendado1 && (
         <Content>
           <button
             style={{
@@ -770,7 +770,7 @@ export default function Project() {
         </Content>
         )}
 
-        {project && (coordenador != user.id) && (project?.avaliacao?.status == 'Não Homologado' || project?.avaliacao?.status == 'Homologação') && (
+        {project && (coordenador != user.id) && user.profile.name != 'Pesquisador' && (project?.avaliacao?.status == 'Não Homologado' || project?.avaliacao?.status == 'Homologação') && (
         <Content>
           <button
             style={{
@@ -784,7 +784,7 @@ export default function Project() {
         </Content>
         )}
 
-        {project && (coordenador != user.id) && (project?.avaliacao?.status == 'Homologado' || project?.avaliacao?.status == 'Não Contratado') && (
+        {project && (coordenador != user.id) && user.profile.name != 'Pesquisador' && (project?.avaliacao?.status == 'Homologado' || project?.avaliacao?.status == 'Não Contratado') && (
         <Content>
           <button
             style={{

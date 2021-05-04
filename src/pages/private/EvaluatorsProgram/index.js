@@ -46,9 +46,9 @@ export default function Avaliadores() {
   useEffect(() => {
     document.title = 'SIGFAPEAP - Avaliadores do Programa';
 
-    api.get(`programs/${id}`).then(({data}) => {
-        setSelected(data);
-    })
+    api.get(`programs/${id}`).then(({ data }) => {
+      setSelected(data);
+    });
 
     // const filter = programs.filter((program) => program.id == id);
   }, [id, programs]);
@@ -62,33 +62,44 @@ export default function Avaliadores() {
   function submitModalConfirm() {
     setOpenConfirm(!OpenConfirm);
 
-    const evaluators_deleted = selected.evaluators.filter(item => item.id != notice.id);
-    const ids = evaluators_deleted.map(item => String(item.id)).join(",");
+    const evaluators_deleted = selected.evaluators.filter((item) => item.id != notice.id);
+    const ids = evaluators_deleted.map((item) => String(item.id)).join(",");
 
     const formData = new FormData();
-    formData.append("evaluators",ids);
+    formData.append("evaluators", ids);
 
-    api.put(`programs/${selected.id}`,formData).then(({data}) => {
-        setSelected(selected.evaluators.filter((item) => item.id != notice.id));
-        loadEvaluators();
+    api.put(`programs/${selected.id}`, formData).then(({ data }) => {
+      setSelected(selected.evaluators.filter((item) => item.id != notice.id));
+      loadEvaluators();
 
-        store.addNotification({
-            message: `Usuário deletado com sucesso!`,
-            type: 'success',
-            insert: 'top',
-            container: 'top-right',
-            animationIn: ['animate__animated', 'animate__fadeIn'],
-            animationOut: ['animate__animated', 'animate__fadeOut'],
-            dismiss: {
-              duration: 5000,
-              onScreen: true,
-            },
-          });
+      store.addNotification({
+        message: `Usuário deletado com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
     });
   }
 
   function submitModalNotice() {
     setOpenNotice(!OpenNotice);
+  }
+
+  function validURL(term) {
+    // eslint-disable-next-line no-useless-escape
+    const re = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?|magnet:\?xt=urn:btih:/;
+
+    if (re.test(term)) {
+      return true;
+    }
+
+    return false;
   }
 
   return (
@@ -130,7 +141,7 @@ export default function Avaliadores() {
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.name }</td>
                     <td style={{ textAlign: 'center' }}>{ item.email }</td>
-                    <td style={{ textAlign: 'center' }}><FiLink style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.curriculum, '_blank')} /></td>
+                    <td style={{ textAlign: 'center' }}><FiLink style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => validURL(item.curriculum) && window.open(item.curriculum, '_blank')} /></td>
                     <td style={{ textAlign: 'center' }}>
                       <button
                         data-tip="Remover avaliador"
@@ -167,7 +178,6 @@ export default function Avaliadores() {
           />
         </ModalProvider>
       </Suspense>
-
 
     </>
   );
