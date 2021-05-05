@@ -15,7 +15,7 @@ const RecoveryPassword = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    document.title = 'SIGFAPEAP - Recuperação de senha';
+    document.title = 'SIGFAPEAP - Recuperação de Senha';
   }, []);
 
   async function handleSignIn(e) {
