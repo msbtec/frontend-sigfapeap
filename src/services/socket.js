@@ -3,7 +3,9 @@ import Ws from '@adonisjs/websocket-client';
 let socket = null;
 
 function connect() {
-  socket = Ws('wss://sigfapeap.msbtec.com.br');
+  const token = localStorage.getItem('@sigfapeap:token');
+  socket = Ws('wss://sigfapeap.msbtec.com.br').withJwtToken(token);
+
   socket.connect();
 }
 

@@ -169,8 +169,6 @@ export const ProgramProvider = ({ children }) => {
     }
 
     api.put(`files/update/${data.id}`, formData).then(({ data }) => {
-      socket.emitToChannel('notice', 'message', data);
-
       store.addNotification({
         message: `Edital atualizado com sucesso!`,
         type: 'success',
