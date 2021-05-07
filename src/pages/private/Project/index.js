@@ -4,6 +4,8 @@ import React, {
 
 import * as Yup from 'yup';
 
+import { isUuid, uuid } from 'uuidv4';
+
 import ReactLoading from "react-loading";
 
 import { ModalProvider } from 'styled-react-modal';
@@ -14,7 +16,7 @@ import { useParams } from 'react-router-dom';
 
 import { Form as Unform } from '@unform/web';
 import { store } from 'react-notifications-component';
-import uuid from 'react-uuid';
+
 import {
   money_mask,
 } from '../../../utils/validations';
@@ -225,7 +227,7 @@ export default function Project() {
       if (data.membros.length > 0) {
         setMembros(data.membros.map((item) => ({ label: item.name, value: JSON.stringify(item) })));
       }
-      setAtividades(JSON.parse(data.atividades || '[]'));
+      setAtividades(data.atividades);
 
       setPlano({
         resumo: data.resumo || '',
@@ -491,11 +493,17 @@ export default function Project() {
         } else if (screen.equipe) {
           setLoading(true);
 
+          const filter = atividades.filter((atividade) => isUuid(String(atividade.id)));
+
           const formData = new FormData();
           formData.append('edital_id', id);
           formData.append('coordenador_id', user.id);
           formData.append('membros', membros.map((item) => String(JSON.parse(item.value).id)));
-          formData.append('atividades', JSON.stringify(atividades));
+          formData.append('atividades', JSON.stringify(filter.map((item) => ({
+            ...item,
+            participantes: item.participantes.map((participante) => (String(JSON.parse(participante.value).id))).join(","),
+            responsavel: String(item.responsavel.id),
+          }))));
 
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
@@ -571,6 +579,7 @@ export default function Project() {
           });
         }
       } catch (error) {
+        console.log(error);
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
 

@@ -3,7 +3,7 @@ import React, {
   useState,
   useContext,
 } from 'react';
-import uuid from 'react-uuid';
+import { uuid } from 'uuidv4';
 
 import { useAuth } from './auth';
 

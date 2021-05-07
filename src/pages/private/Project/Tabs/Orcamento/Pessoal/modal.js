@@ -1,7 +1,7 @@
 import React, { useEffect, memo, useRef } from 'react';
 
 import { FiCheckCircle, FiX } from 'react-icons/fi';
-import uuid from 'react-uuid';
+import { uuid } from 'uuidv4';
 import { Form } from '../../../../../../components/Form';
 import {
   money_mask,

@@ -6,7 +6,7 @@ import { FiCheckCircle, FiX } from 'react-icons/fi';
 
 import SelectMultiple from "react-select";
 
-import uuid from 'react-uuid';
+import { uuid } from 'uuidv4';
 import { Form } from '../../../../../../components/Form';
 
 import {
@@ -92,8 +92,12 @@ function ModalForm({
         throw 'Error';
       }
 
+      //   setAtividades([...atividades, {
+      //     id: uuid(), ...data, participantes: participantes.map((item) => (String(JSON.parse(item.value).id))).join(","), responsavel: String(JSON.parse(responsavel.value).id),
+      //   }]);
+
       setAtividades([...atividades, {
-        id: uuid(), ...data, participantes, responsavel: JSON.parse(responsavel.value),
+        id: uuid(), ...data, participantes: participantes.map((item) => ({ ...item, name: String(JSON.parse(item.value).name) })), responsavel: JSON.parse(responsavel.value),
       }]);
 
       submit();

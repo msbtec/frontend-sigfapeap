@@ -165,8 +165,8 @@ export default function Header() {
                 {' '}
                 Hora(s)
               </td>
-              <td style={{ textAlign: 'center' }}>{item.participantes.map((item) => String(item.label)).join(', ')}</td>
-              <td style={{ textAlign: 'center' }}>{item.responsavel.name}</td>
+              <td style={{ textAlign: 'center' }}>{item?.participantes?.map((participante) => String(participante.name)).join(", ")}</td>
+              <td style={{ textAlign: 'center' }}>{item?.responsavel?.name}</td>
               <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setAtividades(atividades.filter((atividade) => atividade.id !== item.id))} style={{ fontSize: 20, cursor: 'pointer' }} /></td>
             </tr>
           ))}

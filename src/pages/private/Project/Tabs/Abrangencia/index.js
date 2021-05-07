@@ -2,7 +2,7 @@ import React from 'react';
 import Axios from 'axios';
 
 import { FiTrash } from 'react-icons/fi';
-import uuid from 'react-uuid';
+import { uuid } from 'uuidv4';
 import { Form } from '../../../../../components/Form';
 import { Table } from '../../../../../components/Table';
 
