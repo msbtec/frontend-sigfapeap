@@ -216,7 +216,7 @@ function ModalForm({
             }}
             className="required"
           >
-            {enquadrado.value == true ? 'Avaliador Especialista' : 'Avaliador ad hoc'}
+            {!project?.avaliacao?.responsavel_id && project?.avaliacao?.recomendado1 ? 'Avaliador Especialista' : 'Avaliador ad hoc'}
           </label>
           <div style={{ marginTop: 5 }} />
           <SelectMultiple

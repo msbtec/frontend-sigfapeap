@@ -49,6 +49,9 @@ export default function RouteWrapper({
   if (rest.path === '/avaliacoes') {
     path = "Avaliações";
   }
+  if (rest.path === '/atividades' || rest.path === '/tarefas/:atividade') {
+    path = "Atividades";
+  }
 
   if (!access.includes(String(path))) {
     return <Redirect to="/" />;

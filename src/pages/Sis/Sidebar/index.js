@@ -117,6 +117,14 @@ function Sidebar({
       });
     }
 
+    if (profiles.includes('Atividades')) {
+      my_profiles.push({
+        name: 'Atividades',
+        icon: <FiGrid />,
+        path: '/atividades',
+      });
+    }
+
     if (profiles.includes('Avaliações')) {
       my_profiles.push({
         name: 'Avaliações',
