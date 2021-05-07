@@ -19,7 +19,7 @@ const RecoveryPassword = (props) => {
   const [token, setToken] = useState("");
 
   useEffect(() => {
-    document.title = 'SIGFAPEAP - Recuperação de senha';
+    document.title = 'SIGFAPEAP - Recuperação de Senha';
 
     const { search } = props.location;
     const params = new URLSearchParams(search);

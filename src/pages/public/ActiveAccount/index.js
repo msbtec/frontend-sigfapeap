@@ -11,7 +11,7 @@ const ActiveAccount = (props) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    document.title = 'SIGFAPEAP - Ativação de conta';
+    document.title = 'SIGFAPEAP - Ativação de Conta';
 
     const { search } = props.location;
     const params = new URLSearchParams(search);

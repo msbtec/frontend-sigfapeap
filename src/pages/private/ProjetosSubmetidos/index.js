@@ -20,7 +20,7 @@ export default function ProjetosSubmetidos() {
   const { id } = useParams();
 
   useEffect(() => {
-    document.title = 'SIGFAPEAP - Projetos submetidos';
+    document.title = 'SIGFAPEAP - Projetos Submetidos';
 
     api.get(`projects`, {
       params: {
