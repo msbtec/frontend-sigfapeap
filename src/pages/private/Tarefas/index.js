@@ -99,8 +99,24 @@ export default function Tarefas() {
 
   return (
     <>
-      <div className="col-12 title" style={{ marginBottom: 10 }}>
-        <h1>{selectedAtividade && `#${selectedAtividade?.id} - ${selectedAtividade?.title}`}</h1>
+      <div className="col-12 px-0">
+        <div className="col-12 title" style={{ marginBottom: 10 }}>
+          <h1>{selectedAtividade && `#${selectedAtividade?.id} - ${selectedAtividade?.title}`}</h1>
+        </div>
+      </div>
+
+      <div className="col-12 px-0">
+        <Card className="red">
+          <div className="card-body">
+            <div className="col-12 title" style={{ marginBottom: 10 }}>
+              <h3 style={{ fontWeight: "normal" }}>{selectedAtividade && `Mês de início: ${selectedAtividade?.beggin}º Mês`}</h3>
+              <h3 style={{ fontWeight: "normal" }}>{selectedAtividade && `Duração: ${selectedAtividade?.end} Mês(es)`}</h3>
+              <h3 style={{ fontWeight: "normal" }}>{selectedAtividade && `C.H.S: ${selectedAtividade?.time} Hora(s)`}</h3>
+              <h3 style={{ fontWeight: "normal" }}>{selectedAtividade && `Membro(s): ${selectedAtividade?.participantes?.map((participante) => String(participante.name)).join(", ")}`}</h3>
+              <h3 style={{ fontWeight: "normal" }}>{selectedAtividade && `Responsável: ${selectedAtividade?.responsavel?.name}`}</h3>
+            </div>
+          </div>
+        </Card>
       </div>
 
       <div className="col-12 px-0">
@@ -122,7 +138,7 @@ export default function Tarefas() {
             <Table>
               <thead>
                 <tr>
-                  <th className="col-8">Nome</th>
+                  <th className="col-8">Descrição da Tarefa</th>
                   <th className="col-2">Anexo</th>
                   <th>Ações</th>
                 </tr>
@@ -133,7 +149,7 @@ export default function Tarefas() {
                     <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: largeName(item.description) }} />
                     {item.file
                       ? <td style={{ textAlign: 'center' }}><FiDownload data-tip={item.name} style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
-                      : <td style={{ textAlign: 'center' }}>Sem anexo</td>}
+                      : <td style={{ textAlign: 'center' }}>Sem Anexo</td>}
                     <td style={{ textAlign: 'center' }}>
                       <button
                         data-tip="Editar Tarefa"
