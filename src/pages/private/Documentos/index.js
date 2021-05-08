@@ -12,8 +12,8 @@ import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
 
-import { useDocument } from '../../../hooks/document'
-import { useAuth } from '../../../hooks/auth'
+import { useDocument } from '../../../hooks/document';
+import { useAuth } from '../../../hooks/auth';
 
 let ModalForm = () => <></>;
 let ModalConfirm = () => <></>;
@@ -21,7 +21,7 @@ let ModalConfirm = () => <></>;
 export default function Documentos() {
   const [OpenForm, setOpenForm] = useState(false);
   const [OpenConfirm, setOpenConfirm] = useState(false);
-  const [selected,setSelected] = useState(null);
+  const [selected, setSelected] = useState(null);
 
   const { documents, erase } = useDocument();
   const { user } = useAuth();
@@ -47,7 +47,7 @@ export default function Documentos() {
   }
 
   function submitModalConfirm() {
-    erase(selected)
+    erase(selected);
     setOpenConfirm(!OpenConfirm);
   }
 
@@ -61,14 +61,21 @@ export default function Documentos() {
           <div className="card-title">
             <h3>Listagem de documentos</h3>
           </div>
-          {user.profile.name != 'Pesquisador' &&
+          {user.profile.name != 'Pesquisador'
+          && (
           <div className="card-title">
-            <Button onClick={() => {
+            <Button
+              onClick={() => {
                 setSelected(null);
                 toggleModalForm();
-            }} className="primary">Cadastrar documento</Button>
+              }}
+              className="primary"
+            >
+              Cadastrar documento
+
+            </Button>
           </div>
-          }
+          )}
           <div className="card-body">
             <Table>
               <thead>
@@ -85,23 +92,33 @@ export default function Documentos() {
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.title }</td>
                     <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => window.open(item.url, '_blank')} /></td>
-                    {user.profile.name != 'Pesquisador' &&
+                    {user.profile.name != 'Pesquisador'
+                    && (
                     <>
-                    <td style={{ textAlign: 'center' }}>
-                      <button data-tip="Editar documento" onClick={() => {
-                          setSelected(item);
-                          toggleModalForm();
-                      }} className="edit">
-                        <FiEdit />
-                      </button>
-                      <button data-tip="Deletar documento" onClick={() => {
-                          setSelected(item);
-                          toggleModalConfirm();
-                      }} className="eraser">
-                        <FiTrash />
-                      </button>
-                    </td>
-                    </>}
+                      <td style={{ textAlign: 'center' }}>
+                        <button
+                          data-tip="Editar documento"
+                          onClick={() => {
+                            setSelected(item);
+                            toggleModalForm();
+                          }}
+                          className="edit"
+                        >
+                          <FiEdit />
+                        </button>
+                        <button
+                          data-tip="Deletar documento"
+                          onClick={() => {
+                            setSelected(item);
+                            toggleModalConfirm();
+                          }}
+                          className="eraser"
+                        >
+                          <FiTrash />
+                        </button>
+                      </td>
+                    </>
+                    )}
                   </tr>
                 ))}
               </tbody>
