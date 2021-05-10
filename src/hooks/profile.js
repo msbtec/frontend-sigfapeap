@@ -51,6 +51,10 @@ export const ProfileProvider = ({ children }) => {
       value: 'Atividades',
     },
     {
+      label: 'Fale Conosco',
+      value: 'Fale Conosco',
+    },
+    {
       label: 'Avaliações',
       value: 'Avaliações',
     },

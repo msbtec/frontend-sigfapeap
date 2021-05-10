@@ -125,6 +125,14 @@ function Sidebar({
       });
     }
 
+    if (profiles.includes('Fale Conosco')) {
+      my_profiles.push({
+        name: 'Fale Conosco',
+        icon: <FiGrid />,
+        path: '/solicitacoes',
+      });
+    }
+
     if (profiles.includes('Avaliações')) {
       my_profiles.push({
         name: 'Avaliações',
