@@ -9,24 +9,35 @@ import { ModalProvider } from 'styled-react-modal';
 import { FiEdit, FiTrash } from 'react-icons/fi';
 
 import { store } from 'react-notifications-component';
+import { Button } from '../../../components/Button';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 
+import { useAuth } from '../../../hooks/auth';
+
 import api from '../../../services/api';
 
+let ModalRequest = () => <></>;
 let ModalForm = () => <></>;
 let ModalConfirm = () => <></>;
 
 export default function Documentos() {
+  const [OpenRequest, setOpenRequest] = useState(false);
   const [OpenForm, setOpenForm] = useState(false);
   const [OpenConfirm, setOpenConfirm] = useState(false);
   const [selected, setSelected] = useState(null);
 
+  const { user } = useAuth();
+
   const [requests, setRequests] = useState([]);
 
   async function getRequests() {
-    api.get(`contacts`).then(({ data }) => {
+    api.get(`contacts`, {
+      params: {
+        user_id: user.profile.name == 'Pesquisador' ? user.id : undefined,
+      },
+    }).then(({ data }) => {
       setRequests(data);
     });
   }
@@ -35,7 +46,14 @@ export default function Documentos() {
     document.title = 'SIGFAPEAP - Fale Conosco';
 
     getRequests();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  async function toggleModalRequest() {
+    ModalRequest = await lazy(() => import("./FormRequest"));
+
+    setOpenRequest(!OpenRequest);
+  }
 
   async function toggleModalForm() {
     ModalForm = await lazy(() => import("./Form"));
@@ -49,6 +67,11 @@ export default function Documentos() {
     setOpenConfirm(!OpenConfirm);
   }
 
+  function submitModalRequest() {
+    setOpenRequest(!OpenRequest);
+    getRequests();
+  }
+
   function submitModalForm() {
     setOpenForm(!OpenForm);
     getRequests();
@@ -58,7 +81,7 @@ export default function Documentos() {
     setOpenConfirm(!OpenConfirm);
 
     const formData = new FormData();
-    formData.append("resposta", "Solicitação Cancelada pelo Administrador");
+    formData.append("resposta", user.profile.name == 'Pesquisador' ? "Solicitação Cancelada pelo Coordenador" : "Solicitação Cancelada pelo Administrador");
 
     api.put(`contacts/${selected.id}`, formData).then(({ data }) => {
       getRequests();
@@ -97,13 +120,33 @@ export default function Documentos() {
           <div className="card-title">
             <h3>Listagem de solicitações</h3>
           </div>
+
+          {user.profile.name == 'Pesquisador'
+            && (
+            <div className="card-title">
+              <div style={{ display: 'flex' }}>
+                <Button
+                  style={{ marginRight: 10 }}
+                  onClick={() => {
+                    setSelected(null);
+                    toggleModalRequest();
+                  }}
+                  className="primary"
+                >
+                  Nova Solicitação
+                </Button>
+              </div>
+            </div>
+            )}
+
           <div className="card-body">
             <Table>
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className="col-4">Assunto</th>
-                  <th className="col-4">Solicitação</th>
+                  <th className="col-3">Assunto</th>
+                  <th className={user.profile.name == 'Pesquisador' ? "col-3" : "col-6"}>Solicitação</th>
+                  {user.profile.name == 'Pesquisador' && <th className="col-3">Resposta</th>}
                   <th>Ações</th>
                 </tr>
               </thead>
@@ -112,8 +155,11 @@ export default function Documentos() {
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.assunto }</td>
-                    <td style={{ marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: largeName(item.solicitacao) }} />
+                    <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: largeName(item.solicitacao) }} />
+                    {user.profile.name == 'Pesquisador' && <td style={{ marginTop: 10, textAlign: 'center', color: item.resposta ? "#080" : "#F00" }} dangerouslySetInnerHTML={{ __html: item.resposta ? largeName(item.resposta) : "Aguardando Resposta" }} />}
                     <td style={{ textAlign: 'center' }}>
+                      {user.profile.name != 'Pesquisador'
+                    && (
                       <button
                         data-tip="Responder Solicitação"
                         onClick={() => {
@@ -124,6 +170,10 @@ export default function Documentos() {
                       >
                         <FiEdit />
                       </button>
+                    )}
+
+                      {!item.resposta
+                    && (
                       <button
                         data-tip="Cancelar Solicitação"
                         onClick={() => {
@@ -134,6 +184,7 @@ export default function Documentos() {
                       >
                         <FiTrash />
                       </button>
+                    )}
 
                       <ReactTooltip />
                     </td>
@@ -147,6 +198,7 @@ export default function Documentos() {
 
       <Suspense fallback={null}>
         <ModalProvider>
+          <ModalRequest isOpen={OpenRequest} toggleModal={toggleModalRequest} submit={submitModalRequest} />
           <ModalForm isOpen={OpenForm} toggleModal={toggleModalForm} item={selected} submit={submitModalForm} />
           <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
         </ModalProvider>
