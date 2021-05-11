@@ -12,6 +12,7 @@ import Route from "../../routes/Route";
 import { useAuth } from '../../hooks/auth';
 import { useProject } from '../../hooks/project';
 import { useProgram } from '../../hooks/program';
+import { useContact } from '../../hooks/contact';
 
 import Sidebar from './Sidebar';
 import { Wrap, Main, NavBar } from './styles';
@@ -44,17 +45,55 @@ export default function Sis() {
 
   const { changeStatus } = useProgram();
 
+  const { changeStatus: changeStatusRequest } = useContact();
+
   const { loading } = useProject();
 
   const [data, setData] = useState(null);
+  const [newRequest, setNewRequest] = useState(null);
 
   React.useEffect(() => {
+    socket.connect();
+
     if (user.profile.name == 'Pesquisador') {
-      socket.connect();
       socket.subscribeToChannel('notice', 'update-notice', (data) => {
         setData(data);
         store.addNotification({
           message: `Houve uma atualização no edital: ${data.title}`,
+          type: 'success',
+          insert: 'top',
+          container: 'top-right',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
+      });
+
+      socket.subscribeToChannel('contact', 'response-contact', (data) => {
+        setNewRequest(data);
+        store.addNotification({
+          message: `Solicitação Respondida!`,
+          type: 'success',
+          insert: 'top',
+          container: 'top-right',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
+      });
+    }
+
+    if (user.profile.name == 'Administrador') {
+      socket.subscribeToChannel('contact', 'new-contact', (data) => {
+        setNewRequest(data);
+        store.addNotification({
+          message: `Nova Solicitação Recebida!`,
           type: 'success',
           insert: 'top',
           container: 'top-right',
@@ -73,6 +112,11 @@ export default function Sis() {
     changeStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
+
+  React.useEffect(() => {
+    changeStatusRequest();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newRequest]);
 
   const [drag, setDrag] = useState(false);
   return (

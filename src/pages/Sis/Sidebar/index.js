@@ -2,10 +2,12 @@ import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 
 import { FiLogOut, FiGrid, FiHome } from 'react-icons/fi';
+import { BsFillChatDotsFill } from 'react-icons/bs';
 import { connect } from 'react-redux';
 import { Side } from './styles';
 
 import { useAuth } from '../../../hooks/auth';
+import { useContact } from '../../../hooks/contact';
 
 import Logo from '../../../assets/img/logo.png';
 
@@ -13,6 +15,8 @@ function Sidebar({
   drag, activeMenu, itensMenu, dispatch,
 }) {
   const { user, signOut } = useAuth();
+
+  const { notResponding } = useContact();
 
   function toggleMenu(menu) {
     return {
@@ -127,8 +131,30 @@ function Sidebar({
 
     if (profiles.includes('Fale Conosco')) {
       my_profiles.push({
-        name: 'Fale Conosco',
-        icon: <FiGrid />,
+        name:
+  <div style={{
+    display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: -4,
+  }}
+  >
+    <h1 style={{ fontWeight: '500', color: '#a2a3b7', fontSize: 13 }}>
+      Fale Conosco
+    </h1>
+    {notResponding > 0
+    && (
+    <div style={{
+      backgroundColor: "#080", paddingLeft: 10, paddingRight: 10, paddingBottom: 2, paddingTop: 4, borderRadius: 5, marginLeft: 10, justifyContent: 'center', alignItems: 'center',
+    }}
+    >
+      <h3 style={{
+        color: "#fff", fontSize: 13,
+      }}
+      >
+        {notResponding}
+      </h3>
+    </div>
+    )}
+  </div>,
+        icon: <BsFillChatDotsFill />,
         path: '/solicitacoes',
       });
     }
@@ -142,7 +168,7 @@ function Sidebar({
     }
 
     dispatch(toggleItem(my_profiles));
-  }, [user, dispatch]);
+  }, [user, dispatch, notResponding]);
 
   return (
     <Side drag={drag}>

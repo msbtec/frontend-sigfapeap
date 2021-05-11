@@ -15,6 +15,7 @@ import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 
 import { useAuth } from '../../../hooks/auth';
+import { useContact } from '../../../hooks/contact';
 
 import api from '../../../services/api';
 
@@ -29,18 +30,7 @@ export default function Documentos() {
   const [selected, setSelected] = useState(null);
 
   const { user } = useAuth();
-
-  const [requests, setRequests] = useState([]);
-
-  async function getRequests() {
-    api.get(`contacts`, {
-      params: {
-        user_id: user.profile.name == 'Pesquisador' ? user.id : undefined,
-      },
-    }).then(({ data }) => {
-      setRequests(data);
-    });
-  }
+  const { requests, getRequests, status } = useContact();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Fale Conosco';
@@ -48,6 +38,11 @@ export default function Documentos() {
     getRequests();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    getRequests();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   async function toggleModalRequest() {
     ModalRequest = await lazy(() => import("./FormRequest"));
@@ -144,9 +139,11 @@ export default function Documentos() {
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className="col-3">Assunto</th>
-                  <th className={user.profile.name == 'Pesquisador' ? "col-3" : "col-6"}>Solicitação</th>
-                  {user.profile.name == 'Pesquisador' && <th className="col-3">Resposta</th>}
+                  <th className="col-2">Assunto</th>
+                  <th className="col-1">Protocolo</th>
+                  <th className="col-2">Coordenador</th>
+                  <th className={user.profile.name == 'Pesquisador' ? "col-2" : "col-4"}>Solicitação</th>
+                  {user.profile.name == 'Pesquisador' && <th className="col-2">Resposta</th>}
                   <th>Ações</th>
                 </tr>
               </thead>
@@ -155,6 +152,8 @@ export default function Documentos() {
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.assunto }</td>
+                    <td style={{ textAlign: 'center' }}>{ item.projeto.protocolo }</td>
+                    <td style={{ textAlign: 'center' }}>{ item.projeto.coordenador.name }</td>
                     <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: largeName(item.solicitacao) }} />
                     {user.profile.name == 'Pesquisador' && <td style={{ marginTop: 10, textAlign: 'center', color: item.resposta ? "#080" : "#F00" }} dangerouslySetInnerHTML={{ __html: item.resposta ? largeName(item.resposta) : "Aguardando Resposta" }} />}
                     <td style={{ textAlign: 'center' }}>

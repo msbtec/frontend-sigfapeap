@@ -13,6 +13,7 @@ import { ResearcherProvider } from "./researcher";
 // eslint-disable-next-line import/named
 import { ProjectProvider } from "./project";
 import { DocumentProvider } from "./document";
+import { ContactProvider } from "./contact";
 import { PublishProvider } from "./publish";
 
 const AppProvider = ({ children }) => (
@@ -29,7 +30,9 @@ const AppProvider = ({ children }) => (
                       <ResearcherProvider>
                         <EvaluatorProvider>
                           <ProjectProvider>
-                            {children}
+                            <ContactProvider>
+                              {children}
+                            </ContactProvider>
                           </ProjectProvider>
                         </EvaluatorProvider>
                       </ResearcherProvider>
