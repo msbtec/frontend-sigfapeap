@@ -36,7 +36,7 @@ export const ContactProvider = ({ children }) => {
   useEffect(() => {
     getRequests();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   const changeStatus = useCallback(async () => {
     getRequests();
