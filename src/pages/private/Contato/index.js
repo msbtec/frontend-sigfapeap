@@ -7,8 +7,10 @@ import ReactTooltip from 'react-tooltip';
 import { ModalProvider } from 'styled-react-modal';
 
 import { FiEdit, FiTrash } from 'react-icons/fi';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
 
 import { store } from 'react-notifications-component';
+import { Form } from './Form2';
 import { Button } from '../../../components/Button';
 
 import { Card } from '../../../components/Card';
@@ -32,6 +34,8 @@ export default function Documentos() {
   const { user } = useAuth();
   const { requests, getRequests, status } = useContact();
 
+  const [date, setDate] = useState("");
+
   useEffect(() => {
     document.title = 'SIGFAPEAP - Fale Conosco';
 
@@ -43,6 +47,11 @@ export default function Documentos() {
     getRequests();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
+
+  useEffect(() => {
+    getRequests(date);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [date]);
 
   async function toggleModalRequest() {
     ModalRequest = await lazy(() => import("./FormRequest"));
@@ -114,6 +123,16 @@ export default function Documentos() {
         <Card className="red">
           <div className="card-title">
             <h3>Listagem de solicitações</h3>
+
+            {user.profile.name != 'Pesquisador'
+          && (
+          <Form>
+            <div style={{ marginBottom: 10 }} className="input-block">
+              <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            </div>
+            <AiOutlineCloseCircle size={32} style={{ marginLeft: 10, color: "#48465b", cursor: 'pointer' }} onClick={() => setDate("")} />
+          </Form>
+          )}
           </div>
 
           {user.profile.name == 'Pesquisador'
