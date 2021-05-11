@@ -208,6 +208,12 @@ a {
  }
 
 
+.url:hover {
+    color:#3699ff;
+}
+
+
+
 
 .pagination {
     margin: 15px auto;

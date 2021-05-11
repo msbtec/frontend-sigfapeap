@@ -87,11 +87,20 @@ function ModalForm({
               <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item.assunto }} />
             </div>
 
-            <div>
+            <div style={{ marginBottom: 20 }}>
               <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
                 Solicitação:
               </label>
               <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item.solicitacao }} />
+            </div>
+
+            <div>
+              <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
+                Anexo:
+              </label>
+              <td style={{ marginTop: 10, textAlign: 'center' }}>
+                <a className="url" href={item.name ? item.url : null} target="_blank">{item.name ? item.name : "Sem Anexo"}</a>
+              </td>
             </div>
 
             <div className="input-block">

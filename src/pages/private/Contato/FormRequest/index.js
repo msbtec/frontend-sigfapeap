@@ -5,7 +5,7 @@ import { Form as Unform } from '@unform/web';
 
 import SelectMultiple from "react-select";
 
-import { FiCheckCircle, FiX } from 'react-icons/fi';
+import { FiCheckCircle, FiX, FiFile } from 'react-icons/fi';
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -29,6 +29,8 @@ function ModalForm({
   const formRef = useRef(null);
 
   const [menuOpen, setMenuOpen] = React.useState(false);
+
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const { user } = useAuth();
 
@@ -70,6 +72,10 @@ function ModalForm({
         formData.append("project_id", selectedProject.value);
         formData.append("user_id", user.id);
 
+        if (selectedFile) {
+          formData.append("file", selectedFile);
+        }
+
         api.post(`contacts`, formData).then(({ data }) => {
           submit();
 
@@ -94,7 +100,7 @@ function ModalForm({
         }
       }
     },
-    [submit, description, user, selectedProject],
+    [submit, description, user, selectedProject, selectedFile],
   );
 
   return (
@@ -181,6 +187,49 @@ function ModalForm({
                 setDescription(data);
               }}
             />
+          </div>
+
+          <div style={{ marginBottom: 10 }} className="input-block">
+            <label htmlFor="email">
+              Anexo
+              {' '}
+              <sup style={{ color: "#f00" }}>* Tamanho máximo 3MB</sup>
+            </label>
+            <div style={{ marginBottom: 5 }} />
+            <label style={{ borderColor: "#dee2e6" }} className="file-input">
+              <input
+                type="file"
+                placeholder="Arquivo"
+                accept=".pdf, .doc, .docx"
+                  // onChange={(e) => setSelectedFile(e.target.files[0])}
+                onChange={(e) => {
+                  if (e.target.files.length > 0) {
+                    if (e.target.files[0].size / 1000000 > 3) {
+                      store.addNotification({
+                        message: `Seu arquivo: ${e.target.files[0].name} é muito grande! Max:${3}MB`,
+                        type: 'danger',
+                        insert: 'top',
+                        container: 'top-right',
+                        animationIn: ['animate__animated', 'animate__fadeIn'],
+                        animationOut: ['animate__animated', 'animate__fadeOut'],
+                        dismiss: {
+                          duration: 5000,
+                          onScreen: true,
+                        },
+                      });
+                    } else {
+                      setSelectedFile(e.target.files[0]);
+                    }
+                  }
+                }}
+              />
+              <div className="text">
+                { selectedFile ? selectedFile.name : 'Selecione um anexo' }
+              </div>
+              <div className="icon">
+                <FiFile />
+              </div>
+            </label>
           </div>
         </>
         )}

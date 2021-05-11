@@ -129,6 +129,14 @@ function Sidebar({
       });
     }
 
+    if (profiles.includes('Avaliações')) {
+      my_profiles.push({
+        name: 'Avaliações',
+        icon: <FiGrid />,
+        path: '/avaliacoes',
+      });
+    }
+
     if (profiles.includes('Fale Conosco')) {
       my_profiles.push({
         name:
@@ -156,14 +164,6 @@ function Sidebar({
   </div>,
         icon: <BsFillChatDotsFill />,
         path: '/solicitacoes',
-      });
-    }
-
-    if (profiles.includes('Avaliações')) {
-      my_profiles.push({
-        name: 'Avaliações',
-        icon: <FiGrid />,
-        path: '/avaliacoes',
       });
     }
 

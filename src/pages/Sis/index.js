@@ -5,6 +5,7 @@ import { store } from 'react-notifications-component';
 
 import LoadingOverlay from 'react-loading-overlay';
 import { FiMenu } from 'react-icons/fi';
+import moment from 'moment';
 import socket from '../../services/socket';
 
 import Route from "../../routes/Route";
@@ -74,18 +75,20 @@ export default function Sis() {
 
       socket.subscribeToChannel('contact', 'response-contact', (data) => {
         setNewRequest(data);
-        store.addNotification({
-          message: `Solicitação Respondida!`,
-          type: 'success',
-          insert: 'top',
-          container: 'top-right',
-          animationIn: ['animate__animated', 'animate__fadeIn'],
-          animationOut: ['animate__animated', 'animate__fadeOut'],
-          dismiss: {
-            duration: 5000,
-            onScreen: true,
-          },
-        });
+        if (moment(data.created_at).isBefore(data.updated_at)) {
+          store.addNotification({
+            message: `Solicitação Respondida!`,
+            type: 'success',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+          });
+        }
       });
     }
 
