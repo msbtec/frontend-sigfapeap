@@ -17,7 +17,7 @@ import { useProject } from '../../../../../hooks/project';
 
 export default function Recursos() {
   const {
-    despesas, recursos, setRecursos,
+    despesas, recursos, setRecursos, project,
   } = useProject();
 
   const [recurso, setRecurso] = React.useState({
@@ -97,6 +97,8 @@ export default function Recursos() {
         </div>
       </div>
 
+      {project?.submetido != 'true'
+      && (
       <button
         style={{ marginBottom: 20, width: 100 }}
         type="button"
@@ -128,6 +130,7 @@ export default function Recursos() {
       >
         Adicionar
       </button>
+      )}
 
       <Table>
         <thead>

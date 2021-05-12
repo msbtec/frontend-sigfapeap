@@ -114,7 +114,7 @@ export const ProgramProvider = ({ children }) => {
     api.post(`files`, formData).then(({ data }) => {
       api.post(`configurations`, { ...configurations, file_id: data.id }).then(({ data: configuration }) => {
         store.addNotification({
-          message: `Edital inserido com sucesso!`,
+          message: `Chamada Pública inserida com sucesso!`,
           type: 'success',
           insert: 'top',
           container: 'top-right',
@@ -138,7 +138,7 @@ export const ProgramProvider = ({ children }) => {
 
     api.delete(`files/${data.id}`).then(() => {
       store.addNotification({
-        message: `Edital removido com sucesso!`,
+        message: `Chamada Pública removida com sucesso!`,
         type: 'success',
         insert: 'top',
         container: 'top-right',
@@ -170,7 +170,7 @@ export const ProgramProvider = ({ children }) => {
 
     api.put(`files/update/${data.id}`, formData).then(({ data }) => {
       store.addNotification({
-        message: `Edital atualizado com sucesso!`,
+        message: `Chamada Pública atualizada com sucesso!`,
         type: 'success',
         insert: 'top',
         container: 'top-right',

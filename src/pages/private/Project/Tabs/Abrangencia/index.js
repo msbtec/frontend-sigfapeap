@@ -10,7 +10,7 @@ import { Table } from '../../../../../components/Table';
 import { useProject } from '../../../../../hooks/project';
 
 export default function Abrangencia() {
-  const { abrangencias, setAbrangencias } = useProject();
+  const { project, abrangencias, setAbrangencias } = useProject();
 
   const [estados, setEstados] = React.useState([]);
   const [municipios, setMunicipios] = React.useState([]);
@@ -83,6 +83,8 @@ export default function Abrangencia() {
         </div>
       </div>
 
+      {project?.submetido != 'true'
+      && (
       <button
         style={{ marginBottom: 20, width: 100 }}
         type="button"
@@ -108,6 +110,7 @@ export default function Abrangencia() {
       >
         Adicionar
       </button>
+      )}
 
       <Table>
         <thead>

@@ -21,7 +21,7 @@ export default function Pessoais() {
   const [OpenPessoais, setOpenPessoais] = useState(false);
 
   const {
-    orcamentos, setOrcamentos, despesas, setDespesas,
+    orcamentos, setOrcamentos, despesas, setDespesas, project,
   } = useProject();
 
   async function togglePessoal() {
@@ -34,6 +34,8 @@ export default function Pessoais() {
       <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Pessoal</label>
 
       <div>
+        {project?.submetido != 'true'
+      && (
         <button
           style={{ marginBottom: 20, marginTop: 10, width: 100 }}
           type="button"
@@ -41,6 +43,7 @@ export default function Pessoais() {
         >
           Adicionar
         </button>
+      )}
 
         <Table>
           <thead>

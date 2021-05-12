@@ -61,7 +61,7 @@ export default function ConfigurationNotice() {
   const [loadingApresentacao, setLoadingApresentacao] = useState(false);
 
   useEffect(() => {
-    document.title = 'SIGFAPEAP - Configurar Edital';
+    document.title = 'SIGFAPEAP - Configurar Chamada Pública';
 
     api.get(`configurations`, {
       params: {
@@ -98,7 +98,7 @@ export default function ConfigurationNotice() {
           setLoadingHeader(false);
 
           store.addNotification({
-            message: `Edital configurado com sucesso!`,
+            message: `Chamada Pública configurada com sucesso!`,
             type: 'success',
             insert: 'top',
             container: 'top-right',
@@ -135,7 +135,7 @@ export default function ConfigurationNotice() {
           setLoadingApresentacao(false);
 
           store.addNotification({
-            message: `Edital configurado com sucesso!`,
+            message: `Chamada Pública configurada com sucesso!`,
             type: 'success',
             insert: 'top',
             container: 'top-right',
@@ -161,7 +161,7 @@ export default function ConfigurationNotice() {
   return (
     <>
       <div className="col-12 title">
-        <h1>Configurar Edital</h1>
+        <h1>Configurar Chamada Pública</h1>
       </div>
       <div className="col-12 px-0">
         <Card className="red">

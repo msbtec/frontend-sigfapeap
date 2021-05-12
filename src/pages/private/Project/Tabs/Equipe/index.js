@@ -131,6 +131,8 @@ export default function Header() {
       <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Atividades</label>
 
       <div style={{ marginTop: 20 }}>
+        {project?.submetido != 'true'
+      && (
         <button
           style={{ marginBottom: 20, width: 100 }}
           type="button"
@@ -138,6 +140,7 @@ export default function Header() {
         >
           Adicionar
         </button>
+      )}
       </div>
 
       <Table style={{ marginTop: 20 }}>

@@ -133,7 +133,7 @@ export default function Program() {
                     </button>
                     )}
                       <button
-                        data-tip="Visualizar editais"
+                        data-tip="Visualizar chamadas públicas"
                         onClick={() => {
                           history.push(`/editais/${item.id}`);
                         }}

@@ -21,7 +21,7 @@ export default function Materiais() {
   const [OpenMateriais, setOpenMateriais] = useState(false);
 
   const {
-    orcamentos, setOrcamentos, despesas, setDespesas,
+    orcamentos, setOrcamentos, despesas, setDespesas, project,
   } = useProject();
 
   async function toggleMaterial() {
@@ -34,6 +34,8 @@ export default function Materiais() {
       <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Materiais de Consumo</label>
 
       <div>
+        {project?.submetido != 'true'
+      && (
         <button
           style={{ marginBottom: 20, marginTop: 10, width: 100 }}
           type="button"
@@ -41,6 +43,7 @@ export default function Materiais() {
         >
           Adicionar
         </button>
+      )}
 
         <Table>
           <thead>

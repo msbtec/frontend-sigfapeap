@@ -29,7 +29,7 @@ export default function Header({
   return (
     <Form>
       <div style={{ marginBottom: 10 }} className="input-block">
-        <label className="required">Edital</label>
+        <label className="required">Chamada Pública</label>
         <input value={edital.title} type="text" disabled />
       </div>
 

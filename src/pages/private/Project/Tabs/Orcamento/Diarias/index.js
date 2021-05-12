@@ -21,7 +21,7 @@ export default function Diaria() {
   const [OpenDiarias, setOpenDiarias] = useState(false);
 
   const {
-    orcamentos, setOrcamentos, despesas, setDespesas,
+    orcamentos, setOrcamentos, despesas, setDespesas, project,
   } = useProject();
 
   async function toggleDiarias() {
@@ -34,6 +34,8 @@ export default function Diaria() {
       <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Diária(s)</label>
 
       <div>
+        {project?.submetido != 'true'
+      && (
         <button
           style={{ marginBottom: 20, marginTop: 10, width: 100 }}
           type="button"
@@ -41,6 +43,7 @@ export default function Diaria() {
         >
           Adicionar
         </button>
+      )}
 
         <Table>
           <thead>
