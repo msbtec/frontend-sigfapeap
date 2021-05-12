@@ -20,7 +20,7 @@ export default function Header({
 }) {
   const { user } = useAuth();
 
-  const { configuration } = useProject();
+  const { configuration, project } = useProject();
 
   async function deleteFile(id) {
     api.delete(`attachments/${id}`).then(({ data }) => {});
@@ -125,10 +125,12 @@ export default function Header({
             <FaEye
               onClick={() => item.file.name && window.open(item.file.url || window.URL.createObjectURL(item.file), '__blank')}
               style={{
-                fontSize: 25, marginTop: 10, marginLeft: 20, cursor: 'pointer',
+                fontSize: 25, marginTop: 10, marginLeft: 20, marginRight: project?.submetido != "true" ? 0 : 20, cursor: 'pointer',
               }}
             />
 
+            {project?.submetido != "true"
+            && (
             <FiTrash
               onClick={() => {
                 setFiles(files.filter((file) => file.id !== item.id));
@@ -138,6 +140,7 @@ export default function Header({
                 fontSize: 25, marginTop: 10, marginLeft: 20, marginRight: 20, cursor: 'pointer',
               }}
             />
+            )}
           </div>
         </div>
       ))}

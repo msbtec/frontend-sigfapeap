@@ -115,10 +115,10 @@ export default function Abrangencia() {
       <Table>
         <thead>
           <tr>
-            <th className="col-2">Estado Sigla</th>
+            <th className={project?.submetido != "true" ? "col-2" : "col-4"}>Estado Sigla</th>
             <th className="col-4">Estado</th>
             <th className="col-4">Município</th>
-            <th className="col-2"> - </th>
+            {project?.submetido != "true" && <th className="col-2"> - </th>}
           </tr>
         </thead>
         <tbody>
@@ -127,7 +127,7 @@ export default function Abrangencia() {
               <td style={{ textAlign: 'center' }}>{item.sigla}</td>
               <td style={{ textAlign: 'center' }}>{item.estado}</td>
               <td style={{ textAlign: 'center' }}>{item.municipio}</td>
-              <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setAbrangencias(abrangencias.filter((abrangencia) => abrangencia.id !== item.id))} style={{ fontSize: 20, cursor: 'pointer' }} /></td>
+              {project?.submetido != "true" && <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setAbrangencias(abrangencias.filter((abrangencia) => abrangencia.id !== item.id))} style={{ fontSize: 20, cursor: 'pointer' }} /></td>}
             </tr>
           ))}
         </tbody>

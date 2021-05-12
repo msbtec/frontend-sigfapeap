@@ -65,6 +65,7 @@ export default function Passagens() {
                 <td style={{ textAlign: 'center' }}>{item.custo_unitario}</td>
                 <td style={{ textAlign: 'center' }}>{item.custo_total}</td>
                 <td style={{ textAlign: 'center' }}>{item.justificativa}</td>
+                {project?.submetido != 'true' && (
                 <td style={{ textAlign: 'center' }}>
                   <FiTrash
                     onClick={() => {
@@ -76,6 +77,7 @@ export default function Passagens() {
                   />
 
                 </td>
+                )}
               </tr>
             ))}
           </tbody>

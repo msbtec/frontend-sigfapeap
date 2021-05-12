@@ -59,6 +59,7 @@ export default function Encargos() {
                 <td style={{ textAlign: 'center' }}>{item.especificacao}</td>
                 <td style={{ textAlign: 'center' }}>{item.custo_total}</td>
                 <td style={{ textAlign: 'center' }}>{item.justificativa}</td>
+                {project?.submetido != 'true' && (
                 <td style={{ textAlign: 'center' }}>
                   <FiTrash
                     onClick={() => {
@@ -70,6 +71,7 @@ export default function Encargos() {
                   />
 
                 </td>
+                )}
               </tr>
             ))}
           </tbody>

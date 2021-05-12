@@ -138,8 +138,8 @@ export default function Recursos() {
             <th className="col-3">Entidade</th>
             <th className="col-2">Tipo</th>
             <th className="col-2">Valor</th>
-            <th className="col-3">Descrição</th>
-            <th className="col-2">-</th>
+            <th className={project?.submetido != 'true' ? "col-3" : "col-5"}>Descrição</th>
+            {project?.submetido != 'true' && <th className="col-2">-</th>}
           </tr>
         </thead>
         <tbody>
@@ -149,7 +149,7 @@ export default function Recursos() {
               <td style={{ textAlign: 'center' }}>{item.tipo}</td>
               <td style={{ textAlign: 'center' }}>{item.valor}</td>
               <td style={{ textAlign: 'center' }}>{item.descricao}</td>
-              <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setRecursos(recursos.filter((recurso) => recurso.id !== item.id))} style={{ fontSize: 20, cursor: 'pointer' }} /></td>
+              {project?.submetido != 'true' && <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setRecursos(recursos.filter((recurso) => recurso.id !== item.id))} style={{ fontSize: 20, cursor: 'pointer' }} /></td>}
             </tr>
           ))}
         </tbody>

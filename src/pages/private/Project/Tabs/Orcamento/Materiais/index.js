@@ -67,6 +67,7 @@ export default function Materiais() {
                 <td style={{ textAlign: 'center' }}>{item.custo_total}</td>
                 <td style={{ textAlign: 'center' }}>{item.mes}</td>
                 <td style={{ textAlign: 'center' }}>{item.justificativa}</td>
+                {project?.submetido != 'true' && (
                 <td style={{ textAlign: 'center' }}>
                   <FiTrash
                     onClick={() => {
@@ -78,6 +79,7 @@ export default function Materiais() {
                   />
 
                 </td>
+                )}
               </tr>
             ))}
           </tbody>

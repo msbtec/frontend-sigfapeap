@@ -67,6 +67,7 @@ export default function Bolsas() {
                 <td style={{ textAlign: 'center' }}>{item.custo_total}</td>
                 <td style={{ textAlign: 'center' }}>{item.mes}</td>
                 <td style={{ textAlign: 'center' }}>{item.atuacao}</td>
+                {project?.submetido != 'true' && (
                 <td style={{ textAlign: 'center' }}>
                   <FiTrash
                     onClick={() => {
@@ -78,6 +79,7 @@ export default function Bolsas() {
                   />
 
                 </td>
+                )}
               </tr>
             ))}
           </tbody>

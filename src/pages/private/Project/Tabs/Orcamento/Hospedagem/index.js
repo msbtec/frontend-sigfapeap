@@ -63,6 +63,7 @@ export default function Hospedagens() {
                 <td style={{ textAlign: 'center' }}>{item.custo_unitario}</td>
                 <td style={{ textAlign: 'center' }}>{item.custo_total}</td>
                 <td style={{ textAlign: 'center' }}>{item.mes}</td>
+                {project?.submetido != 'true' && (
                 <td style={{ textAlign: 'center' }}>
                   <FiTrash
                     onClick={() => {
@@ -74,6 +75,7 @@ export default function Hospedagens() {
                   />
 
                 </td>
+                )}
               </tr>
             ))}
           </tbody>
