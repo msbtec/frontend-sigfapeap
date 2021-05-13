@@ -6,6 +6,8 @@ import ReactTooltip from 'react-tooltip';
 
 import { ModalProvider } from 'styled-react-modal';
 
+import moment from 'moment';
+
 import { FiEdit, FiTrash } from 'react-icons/fi';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 
@@ -160,7 +162,8 @@ export default function Documentos() {
                   <th className="col-1">#</th>
                   <th className="col-1">Assunto</th>
                   <th className="col-2">Protocolo</th>
-                  <th className="col-2">Coordenador</th>
+                  <th className="col-1">Data</th>
+                  <th className="col-1">Coordenador</th>
                   <th className={user.profile.name == 'Pesquisador' ? "col-2" : "col-4"}>Solicitação</th>
                   {user.profile.name == 'Pesquisador' && <th className="col-2">Resposta</th>}
                   <th>Ações</th>
@@ -172,6 +175,7 @@ export default function Documentos() {
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.assunto }</td>
                     <td style={{ textAlign: 'center' }}>{ item.protocolo }</td>
+                    <td style={{ textAlign: 'center' }}>{ moment(item.date_beggin).format("L") }</td>
                     <td style={{ textAlign: 'center' }}>{ item.projeto.coordenador.name }</td>
                     <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: largeName(item.solicitacao) }} />
                     {user.profile.name == 'Pesquisador' && <td style={{ marginTop: 10, textAlign: 'center', color: item.resposta ? "#080" : "#F00" }} dangerouslySetInnerHTML={{ __html: item.resposta ? largeName(item.resposta) : "Aguardando Resposta" }} />}
