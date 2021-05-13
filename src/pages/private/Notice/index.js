@@ -50,7 +50,7 @@ export default function Avaliadores() {
   }
 
   useEffect(() => {
-    document.title = 'SIGFAPEAP - Editais';
+    document.title = 'SIGFAPEAP - Chamadas Públicas';
 
     api.get(`programs/files/${id}`).then(({ data }) => {
       setSelected(data);
@@ -87,7 +87,7 @@ export default function Avaliadores() {
   return (
     <>
       <div className="col-12 title">
-        <h1>Editais</h1>
+        <h1>Chamadas Públicas</h1>
       </div>
       <div className="col-12 px-0">
         <Card className="red">
@@ -106,7 +106,7 @@ export default function Avaliadores() {
               }}
               className="primary"
             >
-              Cadastrar edital
+              Cadastrar Chamada Pública
 
             </Button>
           </div>
@@ -137,7 +137,7 @@ export default function Avaliadores() {
                     && (
                     <td style={{ textAlign: 'center' }}>
                       <button
-                        data-tip="Editar edital"
+                        data-tip="Editar Chamada Pública"
                         onClick={() => {
                           setItem({
                             ...item, beggin: String(item.beggin).split('T')[0], end: String(item.end).split('T')[0], documents: JSON.parse(item.documents),
@@ -150,7 +150,7 @@ export default function Avaliadores() {
                       </button>
 
                       <button
-                        data-tip="Configurar edital"
+                        data-tip="Configurar Chamada Pública"
                         onClick={() => {
                           history.push(`configurar-edital/${item.id}`);
                         }}
@@ -170,7 +170,7 @@ export default function Avaliadores() {
                       </button>
 
                       <button
-                        data-tip="Deletar edital"
+                        data-tip="Deletar Chamada Pública"
                         onClick={() => {
                           setNotice(item);
                           toggleModalConfirm();

@@ -121,7 +121,7 @@ export default function Avaliadores() {
               }}
               className="primary"
             >
-              Cadastrar edital
+              Cadastrar Chamada Pública
             </Button>
           </div> */}
           <div className="card-body">

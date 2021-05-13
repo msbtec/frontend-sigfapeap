@@ -218,7 +218,7 @@ export default function Dashboard() {
       <Card style={{ width: '100%', margin: 15, marginBottom: 100 }} className="red">
         <div className="card-title">
           <h3>
-            Editais recentes
+            Chamadas Públicas recentes
           </h3>
         </div>
         <div className="card-body">

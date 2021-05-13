@@ -21,7 +21,7 @@ export default function Passagens() {
   const [OpenPassagens, setOpenPassagens] = useState(false);
 
   const {
-    orcamentos, setOrcamentos, despesas, setDespesas,
+    orcamentos, setOrcamentos, despesas, setDespesas, project,
   } = useProject();
 
   async function togglePassagem() {
@@ -34,6 +34,8 @@ export default function Passagens() {
       <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Passagens</label>
 
       <div>
+        {project?.submetido != 'true'
+      && (
         <button
           style={{ marginBottom: 20, marginTop: 10, width: 100 }}
           type="button"
@@ -41,6 +43,7 @@ export default function Passagens() {
         >
           Adicionar
         </button>
+      )}
 
         <Table>
           <thead>
@@ -62,6 +65,7 @@ export default function Passagens() {
                 <td style={{ textAlign: 'center' }}>{item.custo_unitario}</td>
                 <td style={{ textAlign: 'center' }}>{item.custo_total}</td>
                 <td style={{ textAlign: 'center' }}>{item.justificativa}</td>
+                {project?.submetido != 'true' && (
                 <td style={{ textAlign: 'center' }}>
                   <FiTrash
                     onClick={() => {
@@ -73,6 +77,7 @@ export default function Passagens() {
                   />
 
                 </td>
+                )}
               </tr>
             ))}
           </tbody>

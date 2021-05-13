@@ -10,7 +10,7 @@ import { Table } from '../../../../../components/Table';
 import { useProject } from '../../../../../hooks/project';
 
 export default function Abrangencia() {
-  const { abrangencias, setAbrangencias } = useProject();
+  const { project, abrangencias, setAbrangencias } = useProject();
 
   const [estados, setEstados] = React.useState([]);
   const [municipios, setMunicipios] = React.useState([]);
@@ -83,6 +83,8 @@ export default function Abrangencia() {
         </div>
       </div>
 
+      {project?.submetido != 'true'
+      && (
       <button
         style={{ marginBottom: 20, width: 100 }}
         type="button"
@@ -108,14 +110,15 @@ export default function Abrangencia() {
       >
         Adicionar
       </button>
+      )}
 
       <Table>
         <thead>
           <tr>
-            <th className="col-2">Estado Sigla</th>
+            <th className={project?.submetido != "true" ? "col-2" : "col-4"}>Estado Sigla</th>
             <th className="col-4">Estado</th>
             <th className="col-4">Município</th>
-            <th className="col-2"> - </th>
+            {project?.submetido != "true" && <th className="col-2"> - </th>}
           </tr>
         </thead>
         <tbody>
@@ -124,7 +127,7 @@ export default function Abrangencia() {
               <td style={{ textAlign: 'center' }}>{item.sigla}</td>
               <td style={{ textAlign: 'center' }}>{item.estado}</td>
               <td style={{ textAlign: 'center' }}>{item.municipio}</td>
-              <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setAbrangencias(abrangencias.filter((abrangencia) => abrangencia.id !== item.id))} style={{ fontSize: 20, cursor: 'pointer' }} /></td>
+              {project?.submetido != "true" && <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setAbrangencias(abrangencias.filter((abrangencia) => abrangencia.id !== item.id))} style={{ fontSize: 20, cursor: 'pointer' }} /></td>}
             </tr>
           ))}
         </tbody>

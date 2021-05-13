@@ -21,7 +21,7 @@ export default function Hospedagens() {
   const [OpenHospedagem, setOpenHospedagem] = useState(false);
 
   const {
-    orcamentos, setOrcamentos, despesas, setDespesas,
+    orcamentos, setOrcamentos, despesas, setDespesas, project,
   } = useProject();
 
   async function toggleHospedagem() {
@@ -34,6 +34,8 @@ export default function Hospedagens() {
       <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}> Hospedagem/Alimentação</label>
 
       <div>
+        {project?.submetido != 'true'
+      && (
         <button
           style={{ marginBottom: 20, marginTop: 10, width: 100 }}
           type="button"
@@ -41,6 +43,7 @@ export default function Hospedagens() {
         >
           Adicionar
         </button>
+      )}
 
         <Table>
           <thead>
@@ -60,6 +63,7 @@ export default function Hospedagens() {
                 <td style={{ textAlign: 'center' }}>{item.custo_unitario}</td>
                 <td style={{ textAlign: 'center' }}>{item.custo_total}</td>
                 <td style={{ textAlign: 'center' }}>{item.mes}</td>
+                {project?.submetido != 'true' && (
                 <td style={{ textAlign: 'center' }}>
                   <FiTrash
                     onClick={() => {
@@ -71,6 +75,7 @@ export default function Hospedagens() {
                   />
 
                 </td>
+                )}
               </tr>
             ))}
           </tbody>

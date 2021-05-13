@@ -131,6 +131,8 @@ export default function Header() {
       <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Atividades</label>
 
       <div style={{ marginTop: 20 }}>
+        {project?.submetido != 'true'
+      && (
         <button
           style={{ marginBottom: 20, width: 100 }}
           type="button"
@@ -138,6 +140,7 @@ export default function Header() {
         >
           Adicionar
         </button>
+      )}
       </div>
 
       <Table style={{ marginTop: 20 }}>
@@ -150,7 +153,7 @@ export default function Header() {
             <th className="col-1">C.H.S</th>
             <th className="col-3">Membro(s)</th>
             <th className="col-2">Responsável</th>
-            <th className="col-1">-</th>
+            {project?.submetido != 'true' && <th className="col-1">-</th>}
           </tr>
         </thead>
         <tbody>
@@ -167,7 +170,7 @@ export default function Header() {
               </td>
               <td style={{ textAlign: 'center' }}>{item?.participantes?.map((participante) => String(participante.name)).join(", ")}</td>
               <td style={{ textAlign: 'center' }}>{item?.responsavel?.name}</td>
-              <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setAtividades(atividades.filter((atividade) => atividade.id !== item.id))} style={{ fontSize: 20, cursor: 'pointer' }} /></td>
+              {project?.submetido != 'true' && <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setAtividades(atividades.filter((atividade) => atividade.id !== item.id))} style={{ fontSize: 20, cursor: 'pointer' }} /></td>}
             </tr>
           ))}
         </tbody>

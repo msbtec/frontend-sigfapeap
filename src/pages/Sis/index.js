@@ -60,7 +60,7 @@ export default function Sis() {
       socket.subscribeToChannel('notice', 'update-notice', (data) => {
         setData(data);
         store.addNotification({
-          message: `Houve uma atualização no edital: ${data.title}`,
+          message: `Houve uma atualização na Chamada Pública: ${data.title}`,
           type: 'success',
           insert: 'top',
           container: 'top-right',
@@ -76,18 +76,20 @@ export default function Sis() {
       socket.subscribeToChannel('contact', 'response-contact', (data) => {
         setNewRequest(data);
         if (moment(data.created_at).isBefore(data.updated_at)) {
-          store.addNotification({
-            message: `Solicitação Respondida!`,
-            type: 'success',
-            insert: 'top',
-            container: 'top-right',
-            animationIn: ['animate__animated', 'animate__fadeIn'],
-            animationOut: ['animate__animated', 'animate__fadeOut'],
-            dismiss: {
-              duration: 5000,
-              onScreen: true,
-            },
-          });
+          if (user.id == data.user_id) {
+            store.addNotification({
+              message: `Solicitação Respondida!`,
+              type: 'success',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+          }
         }
       });
     }

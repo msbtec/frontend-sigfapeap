@@ -21,7 +21,7 @@ export default function Bolsas() {
   const [OpenBolsas, setOpenBolsas] = useState(false);
 
   const {
-    orcamentos, setOrcamentos, despesas, setDespesas,
+    orcamentos, setOrcamentos, despesas, setDespesas, project,
   } = useProject();
 
   async function toggleBolsa() {
@@ -34,6 +34,8 @@ export default function Bolsas() {
       <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Bolsas</label>
 
       <div>
+        {project?.submetido != 'true'
+      && (
         <button
           style={{ marginBottom: 20, marginTop: 10, width: 100 }}
           type="button"
@@ -41,6 +43,7 @@ export default function Bolsas() {
         >
           Adicionar
         </button>
+      )}
 
         <Table>
           <thead>
@@ -64,6 +67,7 @@ export default function Bolsas() {
                 <td style={{ textAlign: 'center' }}>{item.custo_total}</td>
                 <td style={{ textAlign: 'center' }}>{item.mes}</td>
                 <td style={{ textAlign: 'center' }}>{item.atuacao}</td>
+                {project?.submetido != 'true' && (
                 <td style={{ textAlign: 'center' }}>
                   <FiTrash
                     onClick={() => {
@@ -75,6 +79,7 @@ export default function Bolsas() {
                   />
 
                 </td>
+                )}
               </tr>
             ))}
           </tbody>

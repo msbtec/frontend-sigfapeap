@@ -21,7 +21,7 @@ export default function Equipamentos() {
   const [OpenEquipamentos, setOpenEquipamentos] = useState(false);
 
   const {
-    orcamentos, setOrcamentos, despesas, setDespesas,
+    orcamentos, setOrcamentos, despesas, setDespesas, project,
   } = useProject();
 
   async function toggleEquipamento() {
@@ -34,6 +34,8 @@ export default function Equipamentos() {
       <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Materiais Permanentes e Equipamentos</label>
 
       <div>
+        {project?.submetido != 'true'
+      && (
         <button
           style={{ marginBottom: 20, marginTop: 10, width: 100 }}
           type="button"
@@ -41,6 +43,7 @@ export default function Equipamentos() {
         >
           Adicionar
         </button>
+      )}
 
         <Table>
           <thead>
@@ -62,6 +65,7 @@ export default function Equipamentos() {
                 <td style={{ textAlign: 'center' }}>{item.custo_total}</td>
                 <td style={{ textAlign: 'center' }}>{item.mes}</td>
                 <td style={{ textAlign: 'center' }}>{item.justificativa}</td>
+                {project?.submetido != 'true' && (
                 <td style={{ textAlign: 'center' }}>
                   <FiTrash
                     onClick={() => {
@@ -73,6 +77,7 @@ export default function Equipamentos() {
                   />
 
                 </td>
+                )}
               </tr>
             ))}
           </tbody>
