@@ -130,7 +130,7 @@ export default function Documentos() {
             <div style={{ marginBottom: 10 }} className="input-block">
               <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
             </div>
-            <AiOutlineCloseCircle size={32} style={{ marginLeft: 10, color: "#48465b", cursor: 'pointer' }} onClick={() => setDate("")} />
+            <AiOutlineCloseCircle data-tip="Limpar Filtro" size={32} style={{ marginLeft: 10, color: "#48465b", cursor: 'pointer' }} onClick={() => setDate("")} />
           </Form>
           )}
           </div>
