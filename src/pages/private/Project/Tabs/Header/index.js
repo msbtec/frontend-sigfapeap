@@ -90,7 +90,7 @@ export default function Header({
               <input
                 type="file"
                 placeholder="Arquivo"
-                accept=".pdf, .doc, .docx"
+                accept=".pdf"
                 onChange={(e) => {
                   if (e.target.files.length > 0) {
                     if (e.target.files[0].size / 1000000 > Number(configuration.plano_trabalho.size)) {

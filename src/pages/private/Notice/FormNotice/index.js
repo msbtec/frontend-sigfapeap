@@ -132,7 +132,7 @@ function ModalForm({
 
             {/* <Input formRef={formRef} name="documents" required multi access={documents.map((item) => ({ value: item.id, label: item.name }))} title="Documentos necessários" /> */}
 
-            <label
+            {/* <label
               style={{
                 fontSize: 13,
                 fontWeight: 600,
@@ -179,7 +179,7 @@ function ModalForm({
               }}
             />
 
-            {menuOpen && <div style={{ marginTop: 200 }} />}
+            {menuOpen && <div style={{ marginTop: 200 }} />} */}
 
             <div className="input-block">
               <label style={{ marginBottom: 10 }}>
@@ -200,14 +200,14 @@ function ModalForm({
               <label htmlFor="email">
                 Anexo
                 {' '}
-                <sup style={{ color: "#f00" }}>* Tamanho máximo 3MB</sup>
+                {/* <sup style={{ color: "#f00" }}>* Tamanho máximo 3MB</sup> */}
               </label>
               <div style={{ marginBottom: 5 }} />
               <label style={{ borderColor: errorFile ? "#f00" : "#dee2e6" }} className="file-input">
                 <input
                   type="file"
                   placeholder="Arquivo"
-                  accept=".pdf, .doc, .docx"
+                  accept=".pdf"
                   // onChange={(e) => setSelectedFile(e.target.files[0])}
                   onChange={(e) => {
                     if (e.target.files.length > 0) {

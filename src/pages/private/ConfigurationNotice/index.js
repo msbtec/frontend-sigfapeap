@@ -4,11 +4,16 @@ import React, {
 
 import * as Yup from 'yup';
 
+import { uuid } from 'uuidv4';
+
 import ReactLoading from "react-loading";
 
 import { Form as Unform } from '@unform/web';
 import { store } from 'react-notifications-component';
 import { useParams } from 'react-router-dom';
+import { FiFile, FiTrash } from 'react-icons/fi';
+import { FaEye } from 'react-icons/fa';
+import { Content } from './styles';
 import { Button } from '../../../components/Button';
 
 import { Form } from '../../../components/Form';
@@ -25,6 +30,8 @@ export default function ConfigurationNotice() {
   const formRef = useRef(null);
 
   const { id } = useParams();
+
+  const [files, setFiles] = useState([]);
 
   const [anexo, setAnexo] = useState(null);
   const [fields, setFields] = useState({
@@ -58,6 +65,7 @@ export default function ConfigurationNotice() {
   });
 
   const [loadingHeader, setLoadingHeader] = useState(false);
+  const [loadingDocuments, setLoadingDocuments] = useState(false);
   const [loadingApresentacao, setLoadingApresentacao] = useState(false);
 
   useEffect(() => {
@@ -71,6 +79,11 @@ export default function ConfigurationNotice() {
       setFields(JSON.parse(data.plano_trabalho).fields);
       setApresentacao(JSON.parse(data.apresentacao).apresentacao);
       setAnexo(JSON.parse(data.plano_trabalho));
+      setFiles(JSON.parse(data.plano_trabalho).files.map((item) => ({
+        id: uuid(),
+        title: item.title,
+        file: { name: item.title, url: item.url },
+      })));
     }).catch((error) => console.log(error));
   }, [id]);
 
@@ -78,16 +91,6 @@ export default function ConfigurationNotice() {
     async (data) => {
       try {
         formRef.current.setErrors({});
-
-        const schema = Yup.object().shape({
-          name: Yup.string().required('Campo obrigatório'),
-          size: Yup.number().required('Campo obrigatório').min(1, 'Valor deve ser maior ou igual a 1'),
-          quantity: Yup.number().required('Campo obrigatório').min(0, 'Valor deve ser maior ou igual a 0'),
-        });
-
-        await schema.validate(data, {
-          abortEarly: false,
-        });
 
         setLoadingHeader(true);
 
@@ -119,6 +122,58 @@ export default function ConfigurationNotice() {
       }
     },
     [fields, id],
+  );
+
+  const handleSubmitDocuments = useCallback(
+    async (data) => {
+      try {
+        const titles = [];
+        const formData = new FormData();
+
+        // eslint-disable-next-line no-plusplus
+        // for (let i = 0; i < files.length; i++) {
+        //   titles.push(files[i].title);
+        //   formData.append('file', files[i].file);
+        // }
+
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0; i < files.length; i++) {
+          if (files[i].file.name && !files[i].file.url) {
+            titles.push(files[i].title);
+            formData.append(`file`, files[i].file);
+          }
+        }
+
+        formData.append('titles', JSON.stringify(titles));
+        formData.append('file_id', id);
+
+        setLoadingDocuments(true);
+
+        api.post('configurations/documents', formData).then(({ data }) => {
+          setLoadingDocuments(false);
+
+          store.addNotification({
+            message: `Chamada Pública configurada com sucesso!`,
+            type: 'success',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+          });
+        });
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
+
+          formRef.current.setErrors(errors);
+        }
+      }
+    },
+    [files, id],
   );
 
   const handleSubmitApresentacao = useCallback(
@@ -253,16 +308,122 @@ export default function ConfigurationNotice() {
                   </div>
                 </div>
 
-                <h3 style={{ color: '#48465b' }}>Anexo</h3>
+                {/* <h3 style={{ color: '#48465b' }}>Anexo</h3>
 
                 <Input formRef={formRef} name="name" original title="Nome" />
 
                 <Input formRef={formRef} name="size" type="number" original title="Tamanho máximo (Mb)" />
 
-                <Input formRef={formRef} name="quantity" type="number" original title="Número máximo" />
+                <Input formRef={formRef} name="quantity" type="number" original title="Número máximo" /> */}
 
                 <div className="modal-footer">
                   {loadingHeader ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
+                    <Button
+                      className="primary"
+                    >
+                      Salvar
+                    </Button>
+                  )}
+                </div>
+              </Form>
+            </Unform>
+          </div>
+        </Card>
+
+        <Card className="red">
+          <div className="card-title">
+            <h3>Documentos</h3>
+          </div>
+          <div className="card-body">
+            <Unform ref={formRef} onSubmit={handleSubmitDocuments}>
+              <Form>
+                <div>
+                  {files.map((item, index) => (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                      <div style={{ marginBottom: 10 }} className="input-block">
+                        <label className="required">Título</label>
+                        <input value={item.title} onChange={(e) => setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, title: e.target.value }) : file)))} type="text" />
+                      </div>
+
+                      <div className="input-block" style={{ marginLeft: 10, marginBottom: 25 }}>
+                        <label htmlFor="email">
+                          Anexo
+                        </label>
+                        <div style={{ marginBottom: 5 }} />
+                        <label className="file-input">
+                          <input
+                            type="file"
+                            placeholder="Arquivo"
+                            accept=".pdf"
+                            onChange={(e) => {
+                              if (e.target.files.length > 0) {
+                                if (e.target.files[0].size / 1000000 > 3) {
+                                  store.addNotification({
+                                    message: `Seu arquivo: ${e.target.files[0].name} é muito grande! Max:3MB`,
+                                    type: 'danger',
+                                    insert: 'top',
+                                    container: 'top-right',
+                                    animationIn: ['animate__animated', 'animate__fadeIn'],
+                                    animationOut: ['animate__animated', 'animate__fadeOut'],
+                                    dismiss: {
+                                      duration: 5000,
+                                      onScreen: true,
+                                    },
+                                  });
+                                } else {
+                                  setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, file: e.target.files[0] }) : file)));
+                                }
+                              }
+                            }}
+                          />
+                          <div className="text">
+                            {files.length > 0 && files[index].file.name || 'Selecione anexo'}
+                          </div>
+                          <div className="icon">
+                            <FiFile />
+                          </div>
+                        </label>
+                      </div>
+
+                      <div style={{ display: 'flex' }}>
+                        <FaEye
+                          onClick={() => item.file.name && window.open(item.file.url || window.URL.createObjectURL(item.file), '__blank')}
+                          style={{
+                            fontSize: 25, marginTop: 10, marginLeft: 20, cursor: 'pointer',
+                          }}
+                        />
+
+                        <FiTrash
+                          onClick={() => {
+                            setFiles(files.filter((file) => file.id !== item.id));
+                          }}
+                          style={{
+                            fontSize: 25, marginTop: 10, marginLeft: 20, marginRight: 20, cursor: 'pointer',
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+
+                  <Content>
+                    <button
+                      style={{ marginTop: 20, marginBottom: 20, width: 210 }}
+                      type="button"
+                      onClick={() => {
+                        setFiles([...files, {
+                          id: uuid(),
+                          title: '',
+                          file: { name: null },
+                        }]);
+                      }}
+                    >
+                      Adicionar documento
+                    </button>
+                  </Content>
+                </div>
+
+                <div className="modal-footer">
+                  {loadingDocuments ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
                     <Button
                       className="primary"
                     >
