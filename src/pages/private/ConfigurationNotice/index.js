@@ -68,9 +68,7 @@ export default function ConfigurationNotice() {
   const [loadingDocuments, setLoadingDocuments] = useState(false);
   const [loadingApresentacao, setLoadingApresentacao] = useState(false);
 
-  useEffect(() => {
-    document.title = 'SIGFAPEAP - Configurar Chamada Pública';
-
+  async function getConfigurations() {
     api.get(`configurations`, {
       params: {
         edital_id: id,
@@ -79,12 +77,19 @@ export default function ConfigurationNotice() {
       setFields(JSON.parse(data.plano_trabalho).fields);
       setApresentacao(JSON.parse(data.apresentacao).apresentacao);
       setAnexo(JSON.parse(data.plano_trabalho));
-      setFiles(JSON.parse(data.plano_trabalho).files.map((item) => ({
-        id: uuid(),
+      setFiles(data.files.map((item) => ({
+        id: item.id,
         title: item.title,
-        file: { name: item.title, url: item.url },
+        file: { name: 'Selecione para alterar anexo', url: item.url },
       })));
     }).catch((error) => console.log(error));
+  }
+
+  useEffect(() => {
+    document.title = 'SIGFAPEAP - Configurar Chamada Pública';
+
+    getConfigurations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleSubmitHeader = useCallback(
@@ -100,6 +105,8 @@ export default function ConfigurationNotice() {
         }).then(({ data }) => {
           setLoadingHeader(false);
 
+          getConfigurations();
+
           store.addNotification({
             message: `Chamada Pública configurada com sucesso!`,
             type: 'success',
@@ -121,60 +128,46 @@ export default function ConfigurationNotice() {
         }
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [fields, id],
   );
 
-  const handleSubmitDocuments = useCallback(
-    async (data) => {
-      try {
-        const titles = [];
-        const formData = new FormData();
+  async function handleSubmitDocuments(title, file) {
+    try {
+      const formData = new FormData();
 
-        // eslint-disable-next-line no-plusplus
-        // for (let i = 0; i < files.length; i++) {
-        //   titles.push(files[i].title);
-        //   formData.append('file', files[i].file);
-        // }
+      formData.append('title', title);
+      formData.append('file', file);
+      formData.append('file_id', id);
 
-        // eslint-disable-next-line no-plusplus
-        for (let i = 0; i < files.length; i++) {
-          if (files[i].file.name && !files[i].file.url) {
-            titles.push(files[i].title);
-            formData.append(`file`, files[i].file);
-          }
-        }
+      setLoadingDocuments(true);
 
-        formData.append('titles', JSON.stringify(titles));
-        formData.append('file_id', id);
+      api.post('configurations/documents', formData).then(({ data }) => {
+        setLoadingDocuments(false);
 
-        setLoadingDocuments(true);
+        getConfigurations();
 
-        api.post('configurations/documents', formData).then(({ data }) => {
-          setLoadingDocuments(false);
-
-          store.addNotification({
-            message: `Chamada Pública configurada com sucesso!`,
-            type: 'success',
-            insert: 'top',
-            container: 'top-right',
-            animationIn: ['animate__animated', 'animate__fadeIn'],
-            animationOut: ['animate__animated', 'animate__fadeOut'],
-            dismiss: {
-              duration: 5000,
-              onScreen: true,
-            },
-          });
+        store.addNotification({
+          message: `Chamada Pública configurada com sucesso!`,
+          type: 'success',
+          insert: 'top',
+          container: 'top-right',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
         });
-      } catch (error) {
-        if (error instanceof Yup.ValidationError) {
-          const errors = getValidationErrors(error);
+      });
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        const errors = getValidationErrors(error);
 
-          formRef.current.setErrors(errors);
-        }
+        formRef.current.setErrors(errors);
       }
-    },
-    [files, id],
-  );
+    }
+  }
 
   const handleSubmitApresentacao = useCallback(
     async (data) => {
@@ -189,6 +182,8 @@ export default function ConfigurationNotice() {
         }).then(({ data }) => {
           setLoadingApresentacao(false);
 
+          getConfigurations();
+
           store.addNotification({
             message: `Chamada Pública configurada com sucesso!`,
             type: 'success',
@@ -210,6 +205,7 @@ export default function ConfigurationNotice() {
         }
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [apresentacao, id],
   );
 
@@ -335,104 +331,118 @@ export default function ConfigurationNotice() {
             <h3>Documentos</h3>
           </div>
           <div className="card-body">
-            <Unform ref={formRef} onSubmit={handleSubmitDocuments}>
-              <Form>
-                <div>
-                  {files.map((item, index) => (
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                      <div style={{ marginBottom: 10 }} className="input-block">
-                        <label className="required">Título</label>
-                        <input value={item.title} onChange={(e) => setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, title: e.target.value }) : file)))} type="text" />
-                      </div>
-
-                      <div className="input-block" style={{ marginLeft: 10, marginBottom: 25 }}>
-                        <label htmlFor="email">
-                          Anexo
-                        </label>
-                        <div style={{ marginBottom: 5 }} />
-                        <label className="file-input">
-                          <input
-                            type="file"
-                            placeholder="Arquivo"
-                            accept=".pdf"
-                            onChange={(e) => {
-                              if (e.target.files.length > 0) {
-                                if (e.target.files[0].size / 1000000 > 3) {
-                                  store.addNotification({
-                                    message: `Seu arquivo: ${e.target.files[0].name} é muito grande! Max:3MB`,
-                                    type: 'danger',
-                                    insert: 'top',
-                                    container: 'top-right',
-                                    animationIn: ['animate__animated', 'animate__fadeIn'],
-                                    animationOut: ['animate__animated', 'animate__fadeOut'],
-                                    dismiss: {
-                                      duration: 5000,
-                                      onScreen: true,
-                                    },
-                                  });
-                                } else {
-                                  setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, file: e.target.files[0] }) : file)));
-                                }
-                              }
-                            }}
-                          />
-                          <div className="text">
-                            {files.length > 0 && files[index].file.name || 'Selecione anexo'}
-                          </div>
-                          <div className="icon">
-                            <FiFile />
-                          </div>
-                        </label>
-                      </div>
-
-                      <div style={{ display: 'flex' }}>
-                        <FaEye
-                          onClick={() => item.file.name && window.open(item.file.url || window.URL.createObjectURL(item.file), '__blank')}
-                          style={{
-                            fontSize: 25, marginTop: 10, marginLeft: 20, cursor: 'pointer',
-                          }}
-                        />
-
-                        <FiTrash
-                          onClick={() => {
-                            setFiles(files.filter((file) => file.id !== item.id));
-                          }}
-                          style={{
-                            fontSize: 25, marginTop: 10, marginLeft: 20, marginRight: 20, cursor: 'pointer',
-                          }}
-                        />
-                      </div>
+            <Form>
+              <div>
+                {files.map((item, index) => (
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <div style={{ marginBottom: 10 }} className="input-block">
+                      <label className="required">Título</label>
+                      <input value={item.title} onChange={(e) => setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, title: e.target.value }) : file)))} type="text" />
                     </div>
-                  ))}
 
-                  <Content>
-                    <button
-                      style={{ marginTop: 20, marginBottom: 20, width: 210 }}
-                      type="button"
-                      onClick={() => {
-                        setFiles([...files, {
-                          id: uuid(),
-                          title: '',
-                          file: { name: null },
-                        }]);
-                      }}
-                    >
-                      Adicionar documento
-                    </button>
-                  </Content>
-                </div>
+                    <div className="input-block" style={{ marginLeft: 10, marginBottom: 25 }}>
+                      <label htmlFor="email">
+                        Anexo
+                      </label>
+                      <div style={{ marginBottom: 5 }} />
+                      <label className="file-input">
+                        <input
+                          type="file"
+                          placeholder="Arquivo"
+                          accept=".pdf"
+                          onChange={(e) => {
+                            if (e.target.files.length > 0) {
+                              if (e.target.files[0].size / 1000000 > 3) {
+                                store.addNotification({
+                                  message: `Seu arquivo: ${e.target.files[0].name} é muito grande! Max:3MB`,
+                                  type: 'danger',
+                                  insert: 'top',
+                                  container: 'top-right',
+                                  animationIn: ['animate__animated', 'animate__fadeIn'],
+                                  animationOut: ['animate__animated', 'animate__fadeOut'],
+                                  dismiss: {
+                                    duration: 5000,
+                                    onScreen: true,
+                                  },
+                                });
+                              } else {
+                                setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, file: e.target.files[0] }) : file)));
+                                handleSubmitDocuments(item.title, e.target.files[0]);
+                              }
+                            }
+                          }}
+                        />
+                        <div className="text">
+                          {files.length > 0 && files[index].file.name || 'Selecione anexo'}
+                        </div>
+                        <div className="icon">
+                          <FiFile />
+                        </div>
+                      </label>
+                    </div>
 
-                <div className="modal-footer">
-                  {loadingDocuments ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
-                    <Button
-                      className="primary"
-                    >
-                      Salvar
-                    </Button>
-                  )}
-                </div>
-              </Form>
-            </Unform>
+                    <div style={{ display: 'flex' }}>
+                      <FaEye
+                        onClick={() => item.file.name && window.open(item.file.url || window.URL.createObjectURL(item.file), '__blank')}
+                        style={{
+                          fontSize: 25, marginTop: 10, marginLeft: 20, cursor: 'pointer',
+                        }}
+                      />
+
+                      <FiTrash
+                        onClick={() => {
+                          api.delete(`configurations/documents/${item.id}`).then(({ data }) => {
+                            setFiles(files.filter((file) => file.id !== item.id));
+
+                            store.addNotification({
+                              message: `Documento removido com sucesso!`,
+                              type: 'success',
+                              insert: 'top',
+                              container: 'top-right',
+                              animationIn: ['animate__animated', 'animate__fadeIn'],
+                              animationOut: ['animate__animated', 'animate__fadeOut'],
+                              dismiss: {
+                                duration: 5000,
+                                onScreen: true,
+                              },
+                            });
+                          });
+                        }}
+                        style={{
+                          fontSize: 25, marginTop: 10, marginLeft: 20, marginRight: 20, cursor: 'pointer',
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+
+                <Content>
+                  <button
+                    style={{ marginTop: 20, marginBottom: 20, width: 210 }}
+                    type="button"
+                    onClick={() => {
+                      setFiles([...files, {
+                        id: uuid(),
+                        title: '',
+                        file: { name: null },
+                      }]);
+                    }}
+                  >
+                    Adicionar documento
+                  </button>
+                </Content>
+              </div>
+
+              {/* <div className="modal-footer">
+                {loadingDocuments ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
+                  <Button
+                    className="primary"
+                  >
+                    Salvar
+                  </Button>
+                )}
+              </div> */}
+            </Form>
           </div>
         </Card>
 

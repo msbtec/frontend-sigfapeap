@@ -1,6 +1,8 @@
 import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 
+import { Scrollbars } from 'react-custom-scrollbars';
+
 import { FiLogOut, FiGrid, FiHome } from 'react-icons/fi';
 import { BsFillChatDotsFill } from 'react-icons/bs';
 import { connect } from 'react-redux';
@@ -175,32 +177,35 @@ function Sidebar({
       <div className="logo">
         <img style={{ width: 200, height: 50 }} src={Logo} alt="" />
       </div>
-      <ul>
 
-        {itensMenu.map((item) => (
-          <li key={item.name} className={item.name === activeMenu.name ? 'active' : ''}>
-            <Link to={item.path} onClick={() => dispatch(toggleMenu(item))}>
+      <Scrollbars style={{ width: window.screen.height * (0.32), height: window.screen.height - 240 }}>
+        <ul>
+          {itensMenu.map((item) => (
+            <li key={item.name} className={item.name === activeMenu.name ? 'active' : ''}>
+              <Link to={item.path} onClick={() => dispatch(toggleMenu(item))}>
+                <span className="icon">
+                  { item.icon }
+                </span>
+                <span className="item">
+                  { item.name }
+                </span>
+              </Link>
+            </li>
+          ))}
+
+          <li>
+            <Link onClick={() => signOut()} to="/login">
               <span className="icon">
-                { item.icon }
+                <FiLogOut />
               </span>
               <span className="item">
-                { item.name }
+                Sair
               </span>
             </Link>
           </li>
-        ))}
+        </ul>
+      </Scrollbars>
 
-        <li>
-          <Link onClick={() => signOut()} to="/login">
-            <span className="icon">
-              <FiLogOut />
-            </span>
-            <span className="item">
-              Sair
-            </span>
-          </Link>
-        </li>
-      </ul>
     </Side>
   );
 }
