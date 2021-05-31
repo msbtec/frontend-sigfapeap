@@ -16,7 +16,7 @@ import { useAuth } from '../../../../../hooks/auth';
 import { useProject } from '../../../../../hooks/project';
 
 export default function Header({
-  formRef, invalid, protocolo, edital, files, setFiles,
+  formRef, invalid, protocolo, edital, files, setFiles, filesConfiguration, setFilesConfiguration,
 }) {
   const { user } = useAuth();
 
@@ -78,7 +78,7 @@ export default function Header({
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ marginBottom: 10 }} className="input-block">
             <label className="required">Título</label>
-            <input defaultValue={`${configuration.plano_trabalho.name} ${index + 1}`} type="text" disabled />
+            <input defaultValue={`${item.title}`} type="text" disabled />
           </div>
 
           <div className="input-block" style={{ marginLeft: 10, marginBottom: 25 }}>
@@ -107,13 +107,13 @@ export default function Header({
                         },
                       });
                     } else {
-                      setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, file: e.target.files[0] }) : file)));
+                      setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, title: item.title, file: e.target.files[0] }) : file)));
                     }
                   }
                 }}
               />
               <div className="text">
-                {files.length > 0 && files[index].file.name || 'Selecione anexo'}
+                {files.length > 0 ? files[index].file.url ? 'Selecione anexo' : files[index].file.name : 'Selecione anexo'}
               </div>
               <div className="icon">
                 <FiFile />
@@ -144,25 +144,6 @@ export default function Header({
           </div>
         </div>
       ))}
-
-      {files.length < Number(configuration.plano_trabalho.quantity)
-      && !invalid && (
-      <button
-        style={{ marginTop: 20, marginBottom: 20, width: 150 }}
-        type="button"
-        onClick={() => {
-          if (files.length < Number(configuration.plano_trabalho.quantity)) {
-            setFiles([...files, {
-              id: uuid(),
-              title: configuration.plano_trabalho.name,
-              file: { name: null },
-            }]);
-          }
-        }}
-      >
-        Adicionar anexo
-      </button>
-      )}
     </Form>
   );
 }

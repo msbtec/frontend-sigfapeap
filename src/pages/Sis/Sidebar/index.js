@@ -178,34 +178,33 @@ function Sidebar({
         <img style={{ width: 200, height: 50 }} src={Logo} alt="" />
       </div>
 
-      <Scrollbars style={{ width: window.screen.height * (0.32), height: window.screen.height - 240 }}>
-        <ul>
-          {itensMenu.map((item) => (
-            <li key={item.name} className={item.name === activeMenu.name ? 'active' : ''}>
-              <Link to={item.path} onClick={() => dispatch(toggleMenu(item))}>
-                <span className="icon">
-                  { item.icon }
-                </span>
-                <span className="item">
-                  { item.name }
-                </span>
-              </Link>
-            </li>
-          ))}
-
-          <li>
-            <Link onClick={() => signOut()} to="/login">
+      {/* <Scrollbars style={{ width: window.screen.height * (0.32), height: window.screen.height - 240 }}> */}
+      <ul>
+        {itensMenu.map((item) => (
+          <li key={item.name} className={item.name === activeMenu.name ? 'active' : ''}>
+            <Link to={item.path} onClick={() => dispatch(toggleMenu(item))}>
               <span className="icon">
-                <FiLogOut />
+                { item.icon }
               </span>
               <span className="item">
-                Sair
+                { item.name }
               </span>
             </Link>
           </li>
-        </ul>
-      </Scrollbars>
+        ))}
 
+        <li>
+          <Link onClick={() => signOut()} to="/login">
+            <span className="icon">
+              <FiLogOut />
+            </span>
+            <span className="item">
+              Sair
+            </span>
+          </Link>
+        </li>
+      </ul>
+      {/* </Scrollbars> */}
     </Side>
   );
 }

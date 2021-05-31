@@ -137,8 +137,11 @@ export default function ConfigurationNotice() {
       const formData = new FormData();
 
       formData.append('title', title);
-      formData.append('file', file);
       formData.append('file_id', id);
+
+      if (file) {
+        formData.append('file', file);
+      }
 
       setLoadingDocuments(true);
 
@@ -148,7 +151,7 @@ export default function ConfigurationNotice() {
         getConfigurations();
 
         store.addNotification({
-          message: `Chamada Pública configurada com sucesso!`,
+          message: `Documento inserido com sucesso!`,
           type: 'success',
           insert: 'top',
           container: 'top-right',
@@ -337,7 +340,13 @@ export default function ConfigurationNotice() {
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <div style={{ marginBottom: 10 }} className="input-block">
                       <label className="required">Título</label>
-                      <input value={item.title} onChange={(e) => setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, title: e.target.value }) : file)))} type="text" />
+                      <input
+                        value={item.title}
+                        onChange={(e) => {
+                          setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, title: e.target.value }) : file)));
+                        }}
+                        type="text"
+                      />
                     </div>
 
                     <div className="input-block" style={{ marginLeft: 10, marginBottom: 25 }}>
