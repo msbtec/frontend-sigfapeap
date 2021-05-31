@@ -4,7 +4,7 @@ import React, {
 
 import * as Yup from 'yup';
 
-import { uuid } from 'uuidv4';
+import { isUuid, uuid } from 'uuidv4';
 
 import ReactLoading from "react-loading";
 
@@ -162,6 +162,52 @@ export default function ConfigurationNotice() {
             onScreen: true,
           },
         });
+      });
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        const errors = getValidationErrors(error);
+
+        formRef.current.setErrors(errors);
+      }
+    }
+  }
+
+  // eslint-disable-next-line consistent-return
+  async function handleUpdateDocuments(id, title, file) {
+    try {
+      const formData = new FormData();
+
+      if (isUuid(String(id))) {
+        return null;
+      }
+
+      formData.append('title', title);
+
+      if (file) {
+        formData.append('file', file);
+      }
+
+      setLoadingDocuments(true);
+
+      api.put(`configurations/documents/${id}`, formData).then(({ data }) => {
+        setLoadingDocuments(false);
+
+        if (file) {
+          getConfigurations();
+
+          store.addNotification({
+            message: `Documento atualizado com sucesso!`,
+            type: 'success',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+          });
+        }
       });
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
@@ -344,6 +390,7 @@ export default function ConfigurationNotice() {
                         value={item.title}
                         onChange={(e) => {
                           setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, title: e.target.value }) : file)));
+                          handleUpdateDocuments(item.id, e.target.value, null);
                         }}
                         type="text"
                       />
@@ -376,7 +423,11 @@ export default function ConfigurationNotice() {
                                 });
                               } else {
                                 setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, file: e.target.files[0] }) : file)));
-                                handleSubmitDocuments(item.title, e.target.files[0]);
+                                if (isUuid(String(item.id))) {
+                                  handleSubmitDocuments(item.title, e.target.files[0]);
+                                } else {
+                                  handleUpdateDocuments(item.id, item.title, e.target.files[0]);
+                                }
                               }
                             }
                           }}

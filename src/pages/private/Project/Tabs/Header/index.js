@@ -2,6 +2,7 @@ import React from 'react';
 
 import { FiFile, FiTrash } from 'react-icons/fi';
 import { FaEye } from 'react-icons/fa';
+import { AiOutlineFilePdf } from 'react-icons/ai';
 
 import { store } from 'react-notifications-component';
 
@@ -16,7 +17,7 @@ import { useAuth } from '../../../../../hooks/auth';
 import { useProject } from '../../../../../hooks/project';
 
 export default function Header({
-  formRef, invalid, protocolo, edital, files, setFiles, filesConfiguration, setFilesConfiguration,
+  formRef, invalid, protocolo, edital, files, setFiles,
 }) {
   const { user } = useAuth();
 
@@ -81,6 +82,13 @@ export default function Header({
             <input defaultValue={`${item.title}`} type="text" disabled />
           </div>
 
+          <AiOutlineFilePdf
+            onClick={() => item.file.name && window.open(item.file.url || window.URL.createObjectURL(item.file), '__blank')}
+            style={{
+              fontSize: 55, marginTop: 10, marginLeft: 10, marginRight: project?.submetido != "true" ? 0 : 20, cursor: 'pointer',
+            }}
+          />
+
           <div className="input-block" style={{ marginLeft: 10, marginBottom: 25 }}>
             <label htmlFor="email">
               Anexo
@@ -122,25 +130,12 @@ export default function Header({
           </div>
 
           <div style={{ display: 'flex' }}>
-            <FaEye
+            <AiOutlineFilePdf
               onClick={() => item.file.name && window.open(item.file.url || window.URL.createObjectURL(item.file), '__blank')}
               style={{
-                fontSize: 25, marginTop: 10, marginLeft: 20, marginRight: project?.submetido != "true" ? 0 : 20, cursor: 'pointer',
+                fontSize: 25, marginTop: 10, marginLeft: 10, marginRight: 10, cursor: 'pointer',
               }}
             />
-
-            {project?.submetido != "true"
-            && (
-            <FiTrash
-              onClick={() => {
-                setFiles(files.filter((file) => file.id !== item.id));
-                deleteFile(item.id);
-              }}
-              style={{
-                fontSize: 25, marginTop: 10, marginLeft: 20, marginRight: 20, cursor: 'pointer',
-              }}
-            />
-            )}
           </div>
         </div>
       ))}

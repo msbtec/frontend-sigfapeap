@@ -81,7 +81,6 @@ export default function Project() {
   const [loading, setLoading] = useState(false);
 
   const [files, setFiles] = useState([]);
-  const [filesConfiguration, setFilesConfiguration] = useState([]);
   const [edital, setEdital] = useState({ title: '' });
   const [protocolo, setProtocolo] = useState(uuid());
   const { id, coordenador } = useParams();
@@ -195,28 +194,18 @@ export default function Project() {
 
     setInitialLoading(true);
 
-    api.get(`/configurations`, {
-      params: {
-        edital_id: id,
-      },
-    }).then(({ data }) => {
-      setFiles(data.files.map((item) => ({
-        id: item.id,
-        title: item.title,
-        file: item,
-      })));
-    });
-
     api.put(`/projects`, {
       edital_id: id,
       coordenador_id: coordenador,
     }).then(({ data }) => {
       setProject(data);
+
       setFiles(data.files.map((item) => ({
         id: item.id,
         title: item.title,
         file: item,
       })));
+
       setProtocolo(data.protocolo || uuid());
       setAbrangencias(JSON.parse(data.abrangencia || '[]'));
 
@@ -266,6 +255,11 @@ export default function Project() {
       }).then(({ data }) => {
         setConfigurations({ ...data, plano_trabalho: JSON.parse(data.plano_trabalho) });
         setPageLoading(false); setInitialLoading(false);
+        setFiles(data.files.map((item) => ({
+          id: item.id,
+          title: item.title,
+          file: item,
+        })));
       });
     }).catch((error) => {
       api.get(`configurations`, {
@@ -275,6 +269,11 @@ export default function Project() {
       }).then(({ data }) => {
         setConfigurations({ ...data, plano_trabalho: JSON.parse(data.plano_trabalho) });
         setPageLoading(false); setInitialLoading(false);
+        setFiles(data.files.map((item) => ({
+          id: item.id,
+          title: item.title,
+          file: item,
+        })));
       });
     });
   }
@@ -336,7 +335,8 @@ export default function Project() {
           for (let i = 0; i < files.length; i++) {
             if (files[i].file.name && !files[i].file.url) {
               formData.append(`file`, files[i].file);
-            } else {
+            } else if (!project) {
+              setLoading(false);
               store.addNotification({
                 message: `Preencha todos os campos de anexo!`,
                 type: 'danger',
@@ -860,7 +860,7 @@ export default function Project() {
             && (
             <Unform initialData={project} ref={formRef} onSubmit={handleSubmit}>
               <Content>
-                {screen.header && <Header invalid={coordenador != user.id || !edital?.valid || project?.submetido == 'true'} filesConfiguration={filesConfiguration} setFilesConfiguration={setFilesConfiguration} files={files} setFiles={setFiles} protocolo={protocolo} edital={edital} formRef={formRef} />}
+                {screen.header && <Header invalid={coordenador != user.id || !edital?.valid || project?.submetido == 'true'} files={files} setFiles={setFiles} protocolo={protocolo} edital={edital} formRef={formRef} />}
                 {screen.appresentation && <Appresentation />}
                 {screen.abrangencia && <Abrangencia />}
                 {screen.equipe && <Equipe />}
