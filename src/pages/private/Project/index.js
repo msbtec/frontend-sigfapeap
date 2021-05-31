@@ -305,7 +305,6 @@ export default function Project() {
             title: configuration.plano_trabalho.fields.titulo_projeto.checked ? Yup.string().required('Campo obrigatório') : undefined,
             faixa_value: configuration.plano_trabalho.fields.faixa_valor.checked ? Yup.string().required('Campo obrigatório') : undefined,
             institution: configuration.plano_trabalho.fields.instituicao.checked ? Yup.string().required('Campo obrigatório') : undefined,
-            // unity_execution: configuration.plano_trabalho.fields.unidade_executora.checked ? Yup.string().required('Campo obrigatório') : undefined,
             beggin_prevision: configuration.plano_trabalho.fields.inicio_previsto.checked ? Yup.string().required('Campo obrigatório') : undefined,
             money_foreign: configuration.plano_trabalho.fields.cotacao_moeda_estrangeira.checked ? Yup.string().required('Campo obrigatório') : undefined,
             theme: configuration.plano_trabalho.fields.tema_interesse.checked ? Yup.string().required('Campo obrigatório') : undefined,
@@ -332,27 +331,27 @@ export default function Project() {
           formData.append('money_foreign', data.money_foreign || "");
 
           // eslint-disable-next-line no-plusplus
-          for (let i = 0; i < files.length; i++) {
-            if (files[i].file.name && !files[i].file.url) {
-              formData.append(`file`, files[i].file);
-            } else if (!project) {
-              setLoading(false);
-              store.addNotification({
-                message: `Preencha todos os campos de anexo!`,
-                type: 'danger',
-                insert: 'top',
-                container: 'top-right',
-                animationIn: ['animate__animated', 'animate__fadeIn'],
-                animationOut: ['animate__animated', 'animate__fadeOut'],
-                dismiss: {
-                  duration: 5000,
-                  onScreen: true,
-                },
-              });
+          //   for (let i = 0; i < files.length; i++) {
+          //     if (files[i].file.name && !files[i].file.url) {
+          //       formData.append(`file`, files[i].file);
+          //     } else if (!project) {
+          //       setLoading(false);
+          //       store.addNotification({
+          //         message: `Preencha todos os campos de anexo!`,
+          //         type: 'danger',
+          //         insert: 'top',
+          //         container: 'top-right',
+          //         animationIn: ['animate__animated', 'animate__fadeIn'],
+          //         animationOut: ['animate__animated', 'animate__fadeOut'],
+          //         dismiss: {
+          //           duration: 5000,
+          //           onScreen: true,
+          //         },
+          //       });
 
-              return null;
-            }
-          }
+          //       return null;
+          //     }
+          //   }
 
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);

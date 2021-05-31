@@ -75,7 +75,7 @@ export default function Header({
       {configuration.plano_trabalho.fields.cotacao_moeda_estrangeira.checked
       && <Input formRef={formRef} name="money_foreign" title="Cotação da Moeda Estrangeira" original />}
 
-      {files.map((item, index) => (
+      {/* {files.map((item, index) => (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ marginBottom: 10 }} className="input-block">
             <label className="required">Título</label>
@@ -138,7 +138,7 @@ export default function Header({
             />
           </div>
         </div>
-      ))}
+      ))} */}
     </Form>
   );
 }
