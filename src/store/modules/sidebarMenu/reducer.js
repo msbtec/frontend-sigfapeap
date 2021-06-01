@@ -73,6 +73,11 @@ const INITIAL_STATE = {
       path: '/avaliacoes',
     },
     {
+      name: 'Submetidos',
+      icon: <FiGrid />,
+      path: '/submetidos',
+    },
+    {
       name: 'Atividades',
       icon: <FiGrid />,
       path: '/atividades',

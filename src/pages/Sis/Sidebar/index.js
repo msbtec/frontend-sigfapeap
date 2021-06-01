@@ -123,6 +123,14 @@ function Sidebar({
       });
     }
 
+    if (profiles.includes('Submetidos')) {
+      my_profiles.push({
+        name: 'Submetidos',
+        icon: <FiGrid />,
+        path: '/submetidos',
+      });
+    }
+
     if (profiles.includes('Atividades')) {
       my_profiles.push({
         name: 'Atividades',

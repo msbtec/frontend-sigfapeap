@@ -55,6 +55,9 @@ export default function RouteWrapper({
   if (rest.path === '/solicitacoes') {
     path = "Fale Conosco";
   }
+  if (rest.path === '/submetidos') {
+    path = "Submetidos";
+  }
 
   if (!access.includes(String(path))) {
     return <Redirect to="/" />;

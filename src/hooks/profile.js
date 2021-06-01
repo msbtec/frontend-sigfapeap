@@ -47,6 +47,10 @@ export const ProfileProvider = ({ children }) => {
       value: 'Programas',
     },
     {
+      label: 'Submetidos',
+      value: 'Submetidos',
+    },
+    {
       label: 'Atividades',
       value: 'Atividades',
     },
