@@ -31,7 +31,9 @@ export const ContactProvider = ({ children }) => {
       },
     }).then(({ data }) => {
       setRequests(data);
-      setNotResponding(data.filter((item) => !item.resposta).length);
+      if (prioridade != "Urgente") {
+        setNotResponding(data.filter((item) => !item.resposta).length);
+      }
       setLoading(false);
     });
   }
