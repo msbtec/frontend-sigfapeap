@@ -120,8 +120,8 @@ export const CardDashboard = styled.div`
   }
 
   &.green {
-    border-left: 0.25rem solid #1cc88a !important;
-    color: #1cc88a !important;
+    border-left: 0.25rem solid #080 !important;
+    color: #080 !important;
   }
 
   &.blue {

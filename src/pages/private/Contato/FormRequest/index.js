@@ -29,6 +29,7 @@ function ModalForm({
   const formRef = useRef(null);
 
   const [menuOpen, setMenuOpen] = React.useState(false);
+  const [menuOpen2, setMenuOpen2] = React.useState(false);
 
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -36,6 +37,12 @@ function ModalForm({
 
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
+
+  const [prioridades, setPrioridades] = useState([
+    { label: 'Regular', value: 'Regular' },
+    { label: 'Urgente', value: 'Urgente' },
+  ]);
+  const [selectedPrioridade, setSelectedPrioridade] = useState({ label: 'Regular', value: 'Regular' });
 
   const [description, setDescription] = useState("");
 
@@ -68,6 +75,7 @@ function ModalForm({
 
         const formData = new FormData();
         formData.append("assunto", data.assunto);
+        formData.append("prioridade", selectedPrioridade.value);
         formData.append("solicitacao", description);
         formData.append("project_id", selectedProject.value);
         formData.append("user_id", user.id);
@@ -100,7 +108,7 @@ function ModalForm({
         }
       }
     },
-    [submit, description, user, selectedProject, selectedFile],
+    [submit, description, user, selectedProject, selectedPrioridade, selectedFile],
   );
 
   return (
@@ -172,6 +180,54 @@ function ModalForm({
             {selectedProject
         && (
         <>
+          <div style={{ marginTop: 10 }} />
+          <label
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: '#626262',
+            }}
+            className="required"
+          >
+            Prioridade
+          </label>
+          <div style={{ marginTop: 5 }} />
+          <SelectMultiple
+            maxMenuHeight={150}
+            onMenuOpen={() => setMenuOpen2(true)}
+            onMenuClose={() => setMenuOpen2(false)}
+            className="basic-multi-select"
+            classNamePrefix="select"
+            placeholder="Prioridades"
+            value={selectedPrioridade}
+            noOptionsMessage={({ inputValue }) => "Sem opções"}
+            options={prioridades}
+            onChange={(values) => setSelectedPrioridade(values)}
+            theme={(theme) => ({
+              ...theme,
+              borderRadius: 5,
+              colors: {
+                ...theme.colors,
+                primary25: "#080",
+                primary: "#dee2e6",
+              },
+            })}
+            styles={{
+              option: (provided, state) => ({
+                ...provided,
+                color: state.isSelected ? "#fff" : "rgb(102,102,102)",
+                backgroundColor: state.isSelected ? "rgb(102,102,102)" : "#fff",
+
+                ":active": {
+                  ...provided[":active"],
+                  backgroundColor: !state.isDisabled && "#dee2e6",
+                },
+              }),
+            }}
+          />
+
+            {menuOpen2 && <div style={{ marginTop: 100 }} />}
+
           <Input formRef={formRef} name="assunto" required original title="Assunto" />
 
           <div className="input-block">
@@ -192,8 +248,6 @@ function ModalForm({
           <div style={{ marginBottom: 10 }} className="input-block">
             <label htmlFor="email">
               Anexo
-              {' '}
-              <sup style={{ color: "#f00" }}>* Tamanho máximo 3MB</sup>
             </label>
             <div style={{ marginBottom: 5 }} />
             <label style={{ borderColor: "#dee2e6" }} className="file-input">

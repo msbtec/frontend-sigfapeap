@@ -173,7 +173,7 @@ function Sidebar({
     )}
   </div>,
         icon: <BsFillChatDotsFill />,
-        path: '/solicitacoes',
+        path: '/solicitacoes/Regular',
       });
     }
 

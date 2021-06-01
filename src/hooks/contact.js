@@ -14,22 +14,38 @@ const ContactContext = createContext({});
 export const ContactProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [requests, setRequests] = useState([]);
+  const [requestsUrgentes, setRequestsUrgentes] = useState([]);
   const [status, setStatus] = useState(false);
 
   const [notResponding, setNotResponding] = useState(0);
 
   const { user } = useAuth();
 
-  async function getRequests(date = undefined) {
+  async function getRequests(date = undefined, prioridade = 'Regular') {
     setLoading(true);
     api.get(`contacts`, {
       params: {
         user_id: user?.profile?.name == 'Pesquisador' ? user?.id : undefined,
         date,
+        prioridade: user?.profile?.name == 'Pesquisador' ? "Todos" : prioridade,
       },
     }).then(({ data }) => {
       setRequests(data);
       setNotResponding(data.filter((item) => !item.resposta).length);
+      setLoading(false);
+    });
+  }
+
+  async function getRequestsUrgentes(date = undefined, prioridade = 'Regular') {
+    setLoading(true);
+    api.get(`contacts`, {
+      params: {
+        user_id: user?.profile?.name == 'Pesquisador' ? user?.id : undefined,
+        date,
+        prioridade: user?.profile?.name == 'Pesquisador' ? "Todos" : prioridade,
+      },
+    }).then(({ data }) => {
+      setRequestsUrgentes(data);
       setLoading(false);
     });
   }
@@ -41,6 +57,7 @@ export const ContactProvider = ({ children }) => {
 
   const changeStatus = useCallback(async () => {
     getRequests();
+    getRequestsUrgentes(undefined, 'Urgente');
     setStatus(!status);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
@@ -51,6 +68,8 @@ export const ContactProvider = ({ children }) => {
         loading,
         requests,
         getRequests,
+        requestsUrgentes,
+        getRequestsUrgentes,
         status,
         changeStatus,
         notResponding,

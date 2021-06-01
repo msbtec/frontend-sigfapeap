@@ -122,7 +122,7 @@ export default function Submetidos() {
                       <button
                         data-tip="Exibir Detalhes"
                         onClick={() => {
-                          history.push(`/projeto/${item.edital_id}/${user.id}`);
+                          history.push(`/projeto/${item.edital_id}/${item.coordenador_id}`);
                         }}
                         className="edit"
                       >

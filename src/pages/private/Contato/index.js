@@ -6,6 +6,8 @@ import ReactTooltip from 'react-tooltip';
 
 import { ModalProvider } from 'styled-react-modal';
 
+import { useParams } from 'react-router-dom';
+
 import moment from 'moment';
 
 import { FiEdit, FiTrash } from 'react-icons/fi';
@@ -36,24 +38,26 @@ export default function Documentos() {
   const { user } = useAuth();
   const { requests, getRequests, status } = useContact();
 
+  const { prioridade } = useParams();
+
   const [date, setDate] = useState("");
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Fale Conosco';
 
-    getRequests();
+    getRequests(undefined, prioridade);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    getRequests();
+    getRequests(undefined, prioridade);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  }, [status, prioridade]);
 
   useEffect(() => {
-    getRequests(date);
+    getRequests(date, prioridade);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date]);
+  }, [date, prioridade]);
 
   async function toggleModalRequest() {
     ModalRequest = await lazy(() => import("./FormRequest"));
@@ -75,12 +79,12 @@ export default function Documentos() {
 
   function submitModalRequest() {
     setOpenRequest(!OpenRequest);
-    getRequests();
+    getRequests(undefined, prioridade);
   }
 
   function submitModalForm() {
     setOpenForm(!OpenForm);
-    getRequests();
+    getRequests(undefined, prioridade);
   }
 
   function submitModalConfirm() {
@@ -90,7 +94,7 @@ export default function Documentos() {
     formData.append("resposta", user.profile.name == 'Pesquisador' ? "Solicitação Cancelada pelo Coordenador" : "Solicitação Cancelada pelo Administrador");
 
     api.put(`contacts/${selected.id}`, formData).then(({ data }) => {
-      getRequests();
+      getRequests(undefined, prioridade);
 
       store.addNotification({
         message: `Resposta enviada com sucesso!`,

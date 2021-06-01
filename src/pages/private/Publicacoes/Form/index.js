@@ -116,8 +116,6 @@ function ModalForm({
             <div style={{ marginBottom: 10 }} className="input-block">
               <label htmlFor="email">
                 Anexo
-                {' '}
-                <sup style={{ color: "#f00" }}>* Tamanho máximo 3MB</sup>
               </label>
               <div style={{ marginBottom: 5 }} />
               <label style={{ borderColor: errorFile ? "#f00" : "#dee2e6" }} className="file-input">

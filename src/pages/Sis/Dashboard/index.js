@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import {
-  FiMessageCircle, FiUsers, FiFileText, FiDownload,
+  FiMessageCircle, FiUsers, FiFileText, FiDownload, FiFolder,
 } from 'react-icons/fi';
 
 import moment from 'moment';
@@ -14,6 +14,7 @@ import { useUser } from '../../../hooks/user';
 import { useResearcher } from '../../../hooks/researcher';
 import { useProgram } from '../../../hooks/program';
 import { useEvaluator } from '../../../hooks/evaluators';
+import { useContact } from '../../../hooks/contact';
 
 import { Card, CardDashboard } from '../../../components/Card';
 import { Table } from '../../../components/Table';
@@ -27,6 +28,9 @@ export default function Dashboard() {
   const { users: researches } = useResearcher();
   const { programs, status } = useProgram();
   const { evaluators } = useEvaluator();
+  const {
+    getRequests, requests, getRequestsUrgentes, requestsUrgentes,
+  } = useContact();
 
   const [notices, setNotices] = React.useState([]);
   const [publishes, setPublishes] = React.useState([]);
@@ -68,6 +72,9 @@ export default function Dashboard() {
 
     loadNotices(0);
     loadPublishes(0);
+
+    getRequestsUrgentes(undefined, 'Urgente');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -141,7 +148,7 @@ export default function Dashboard() {
                 <div className="number pulsate">{programs.length}</div>
               </div>
               <div className="col-auto">
-                <FiMessageCircle size="3em" />
+                <FiFolder size="3em" />
               </div>
             </div>
           </div>
@@ -160,6 +167,31 @@ export default function Dashboard() {
               </div>
               <div className="col-auto">
                 <FiUsers size="3em" />
+              </div>
+            </div>
+          </div>
+        </CardDashboard>
+      </div>
+      )}
+
+      {user.profile.name == 'Administrador'
+      && (
+      <div className="col-3 px-0">
+        <CardDashboard
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            history.push('solicitacoes/Urgente');
+          }}
+          className="green"
+        >
+          <div className="card-body">
+            <div className="row">
+              <div className="col">
+                <div className="title">Solicitações Urgentes</div>
+                <div className="number pulsate">{requestsUrgentes.length}</div>
+              </div>
+              <div className={`${requestsUrgentes.length > 0 ? 'col-auto fa-blink' : 'col-auto'}`}>
+                <FiMessageCircle size="3em" color="#080" />
               </div>
             </div>
           </div>

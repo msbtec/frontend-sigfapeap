@@ -8,6 +8,8 @@ import { BsPencilSquare } from 'react-icons/bs';
 
 import { useParams, useHistory } from 'react-router-dom';
 
+import { useAuth } from '../../../hooks/auth';
+
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import api from '../../../services/api';
@@ -19,17 +21,20 @@ export default function ProjetosSubmetidos() {
 
   const { id } = useParams();
 
+  const { user } = useAuth();
+
   useEffect(() => {
     document.title = 'SIGFAPEAP - Projetos Submetidos';
 
     api.get(`projects`, {
       params: {
         edital_id: id,
+        user_id: user.profile.name == 'Administrador' ? 0 : user.id,
       },
     }).then(({ data }) => {
       setProjects(data);
     });
-  }, [id]);
+  }, [id, user]);
 
   function largeName(value) {
     return value.split("").length > 255
