@@ -206,7 +206,8 @@ export default function Project() {
         id: item.id,
         title: item.document.title,
         file: item.document,
-        url: item.url,
+        url_document: item.document.url,
+        url_attachment: item.url,
       })));
 
       setProtocolo(data.protocolo || uuid());
@@ -255,14 +256,21 @@ export default function Project() {
         params: {
           edital_id: id,
         },
-      }).then(({ data }) => {
-        setConfigurations({ ...data, plano_trabalho: JSON.parse(data.plano_trabalho) });
+      }).then(({ data: configuration }) => {
+        setConfigurations({ ...configuration, plano_trabalho: JSON.parse(configuration.plano_trabalho) });
+
+        if (data.files.length == 0) {
+          setFiles(configuration.files.map((item) => ({
+            id: item.id,
+            title: item.title,
+            file: item,
+            configuration_document_id: item.id,
+            url_document: item.url,
+            url_attachment: null,
+          })));
+        }
+
         setPageLoading(false); setInitialLoading(false);
-        // setFiles(data.files.map((item) => ({
-        //   id: item.id,
-        //   title: item.title,
-        //   file: item,
-        // })));
       });
     }).catch((error) => {
       api.get(`configurations`, {
@@ -276,8 +284,9 @@ export default function Project() {
           id: item.id,
           title: item.title,
           file: item,
-          configuration_document_id: item.configuration_document_id,
-          url: null,
+          configuration_document_id: item.id,
+          url_document: item.url,
+          url_attachment: null,
         })));
       });
     });
@@ -368,6 +377,56 @@ export default function Project() {
             });
           });
         } else if (screen.documents) {
+          console.log(files);
+
+          if (project) {
+            // eslint-disable-next-line no-plusplus
+            for (let i = 0; i < files.length; i++) {
+              if (project.files.length == 0) {
+                if (files[i].file.name && !files[i].file.url) {
+                //
+                } else if (project.files.length != files.length) {
+                  store.addNotification({
+                    message: `Preencha todos os documentos!`,
+                    type: 'danger',
+                    insert: 'top',
+                    container: 'top-right',
+                    animationIn: ['animate__animated', 'animate__fadeIn'],
+                    animationOut: ['animate__animated', 'animate__fadeOut'],
+                    dismiss: {
+                      duration: 5000,
+                      onScreen: true,
+                    },
+                  });
+
+                  return null;
+                }
+              }
+            }
+          } else {
+            // eslint-disable-next-line no-plusplus
+            for (let i = 0; i < files.length; i++) {
+              if (files[i].file.name && !files[i].file.url) {
+                //
+              } else {
+                store.addNotification({
+                  message: `Preencha todos os documentos!`,
+                  type: 'danger',
+                  insert: 'top',
+                  container: 'top-right',
+                  animationIn: ['animate__animated', 'animate__fadeIn'],
+                  animationOut: ['animate__animated', 'animate__fadeOut'],
+                  dismiss: {
+                    duration: 5000,
+                    onScreen: true,
+                  },
+                });
+
+                return null;
+              }
+            }
+          }
+
           // eslint-disable-next-line no-plusplus
           for (let i = 0; i < files.length; i++) {
             if (!project) {
@@ -382,6 +441,36 @@ export default function Project() {
 
                 setLoading(true);
                 api.post(`projects/documents`, formData).then(({ data }) => {
+                  // setFiles(files.map((file) => (file.id == data.configuration_document_id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
+                  setLoading(false);
+
+                  store.addNotification({
+                    message: `Documento salvo com sucesso!`,
+                    type: 'success',
+                    insert: 'top',
+                    container: 'top-right',
+                    animationIn: ['animate__animated', 'animate__fadeIn'],
+                    animationOut: ['animate__animated', 'animate__fadeOut'],
+                    dismiss: {
+                      duration: 5000,
+                      onScreen: true,
+                    },
+                  });
+                });
+              }
+            } else if (project.files.length == 0) {
+              if (files[i].file.name && !files[i].file.url) {
+                const formData = new FormData();
+
+                formData.append('project_id', project.id);
+                formData.append('configuration_document_id', files[i].configuration_document_id);
+                formData.append('edital_id', id);
+                formData.append('coordenador_id', user.id);
+                formData.append('file', files[i].file);
+
+                setLoading(true);
+                api.post(`projects/documents`, formData).then(({ data }) => {
+                  // setFiles(files.map((file) => (file.id == data.configuration_document_id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
                   setLoading(false);
 
                   store.addNotification({
@@ -404,6 +493,7 @@ export default function Project() {
 
               setLoading(true);
               api.put(`projects/documents/${files[i].id}`, formData).then(({ data }) => {
+                setFiles(files.map((file) => (file.id == data.id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
                 setLoading(false);
 
                 store.addNotification({

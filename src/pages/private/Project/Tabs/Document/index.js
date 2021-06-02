@@ -24,7 +24,7 @@ export default function Header({
           </div>
 
           <AiOutlineFilePdf
-            onClick={() => item.file.name && window.open(item.file.url || window.URL.createObjectURL(item.file), '__blank')}
+            onClick={() => item.url_document && window.open(item.url_document || window.URL.createObjectURL(item.file), '__blank')}
             style={{
               fontSize: 55, marginTop: 10, marginLeft: 10, marginRight: project?.submetido != "true" ? 0 : 20, cursor: 'pointer',
             }}
@@ -62,7 +62,7 @@ export default function Header({
                 }}
               />
               <div className="text">
-                {files.length > 0 ? files[index].file.url ? 'Selecione anexo' : files[index].file.name : 'Selecione anexo'}
+                {files.length > 0 ? files[index].file.size ? files[index].file.name : files[index].url_attachment ? 'Selecione para alterar anexo' : 'Selecione anexo' : 'Selecione anexo'}
               </div>
               <div className="icon">
                 <FiFile />
@@ -72,7 +72,7 @@ export default function Header({
 
           <div style={{ display: 'flex' }}>
             <AiOutlineFilePdf
-              onClick={() => item.url && window.open(item.url || window.URL.createObjectURL(item.file), '__blank')}
+              onClick={() => (item.file.size ? window.open(window.URL.createObjectURL(item.file), '__blank') : item.url_attachment && window.open(item.url_attachment, '__blank'))}
               style={{
                 fontSize: 25, marginTop: 10, marginLeft: 10, marginRight: 10, cursor: 'pointer',
               }}
