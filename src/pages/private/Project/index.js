@@ -33,6 +33,7 @@ import { useProject } from '../../../hooks/project';
 import { Card } from '../../../components/Card';
 
 import Header from './Tabs/Header';
+import Document from './Tabs/Document';
 import Appresentation from './Tabs/Appresentation';
 import Abrangencia from './Tabs/Abrangencia';
 import Recursos from './Tabs/Recursos';
@@ -71,6 +72,7 @@ export default function Project() {
   const [screen, setScreen] = useState({
     header: true,
     appresentation: false,
+    documents: false,
     abrangencia: false,
     recursos: false,
     equipe: false,
@@ -202,8 +204,9 @@ export default function Project() {
 
       setFiles(data.files.map((item) => ({
         id: item.id,
-        title: item.title,
-        file: item,
+        title: item.document.title,
+        file: item.document,
+        url: item.url,
       })));
 
       setProtocolo(data.protocolo || uuid());
@@ -255,11 +258,11 @@ export default function Project() {
       }).then(({ data }) => {
         setConfigurations({ ...data, plano_trabalho: JSON.parse(data.plano_trabalho) });
         setPageLoading(false); setInitialLoading(false);
-        setFiles(data.files.map((item) => ({
-          id: item.id,
-          title: item.title,
-          file: item,
-        })));
+        // setFiles(data.files.map((item) => ({
+        //   id: item.id,
+        //   title: item.title,
+        //   file: item,
+        // })));
       });
     }).catch((error) => {
       api.get(`configurations`, {
@@ -273,6 +276,8 @@ export default function Project() {
           id: item.id,
           title: item.title,
           file: item,
+          configuration_document_id: item.configuration_document_id,
+          url: null,
         })));
       });
     });
@@ -330,29 +335,6 @@ export default function Project() {
           formData.append('duration', data.duration || "");
           formData.append('money_foreign', data.money_foreign || "");
 
-          // eslint-disable-next-line no-plusplus
-          //   for (let i = 0; i < files.length; i++) {
-          //     if (files[i].file.name && !files[i].file.url) {
-          //       formData.append(`file`, files[i].file);
-          //     } else if (!project) {
-          //       setLoading(false);
-          //       store.addNotification({
-          //         message: `Preencha todos os campos de anexo!`,
-          //         type: 'danger',
-          //         insert: 'top',
-          //         container: 'top-right',
-          //         animationIn: ['animate__animated', 'animate__fadeIn'],
-          //         animationOut: ['animate__animated', 'animate__fadeOut'],
-          //         dismiss: {
-          //           duration: 5000,
-          //           onScreen: true,
-          //         },
-          //       });
-
-          //       return null;
-          //     }
-          //   }
-
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
 
@@ -385,6 +367,60 @@ export default function Project() {
               },
             });
           });
+        } else if (screen.documents) {
+          // eslint-disable-next-line no-plusplus
+          for (let i = 0; i < files.length; i++) {
+            if (!project) {
+              if (files[i].file.name && !files[i].file.url) {
+                const formData = new FormData();
+
+                formData.append('project_id', project.id);
+                formData.append('configuration_document_id', files[i].configuration_document_id);
+                formData.append('edital_id', id);
+                formData.append('coordenador_id', user.id);
+                formData.append('file', files[i].file);
+
+                setLoading(true);
+                api.post(`projects/documents`, formData).then(({ data }) => {
+                  setLoading(false);
+
+                  store.addNotification({
+                    message: `Documento salvo com sucesso!`,
+                    type: 'success',
+                    insert: 'top',
+                    container: 'top-right',
+                    animationIn: ['animate__animated', 'animate__fadeIn'],
+                    animationOut: ['animate__animated', 'animate__fadeOut'],
+                    dismiss: {
+                      duration: 5000,
+                      onScreen: true,
+                    },
+                  });
+                });
+              }
+            } else if (files[i].file.name && !files[i].file.url) {
+              const formData = new FormData();
+              formData.append('file', files[i].file);
+
+              setLoading(true);
+              api.put(`projects/documents/${files[i].id}`, formData).then(({ data }) => {
+                setLoading(false);
+
+                store.addNotification({
+                  message: `Documento salvo com sucesso!`,
+                  type: 'success',
+                  insert: 'top',
+                  container: 'top-right',
+                  animationIn: ['animate__animated', 'animate__fadeIn'],
+                  animationOut: ['animate__animated', 'animate__fadeOut'],
+                  dismiss: {
+                    duration: 5000,
+                    onScreen: true,
+                  },
+                });
+              });
+            }
+          }
         } else if (screen.appresentation) {
           setLoading(true);
 
@@ -860,6 +896,7 @@ export default function Project() {
             <Unform initialData={project} ref={formRef} onSubmit={handleSubmit}>
               <Content>
                 {screen.header && <Header invalid={coordenador != user.id || !edital?.valid || project?.submetido == 'true'} files={files} setFiles={setFiles} protocolo={protocolo} edital={edital} formRef={formRef} />}
+                {screen.documents && <Document invalid={coordenador != user.id || !edital?.valid || project?.submetido == 'true'} files={files} setFiles={setFiles} protocolo={protocolo} edital={edital} formRef={formRef} />}
                 {screen.appresentation && <Appresentation />}
                 {screen.abrangencia && <Abrangencia />}
                 {screen.equipe && <Equipe />}

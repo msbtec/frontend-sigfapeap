@@ -3,6 +3,7 @@ import React from 'react';
 export default function App({ screen, setScreen, setPageLoading }) {
   return (
     <ul className="breadcrumb" style={{ marginBottom: 20 }}>
+
       <li style={{
         backgroundColor: screen.header ? '#b20710' : '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
       }}
@@ -12,7 +13,7 @@ export default function App({ screen, setScreen, setPageLoading }) {
 
           setTimeout(() => {
             setScreen({
-              ...screen, header: true, appresentation: false, abrangencia: false, equipe: false, recursos: false, orcamento: false,
+              ...screen, header: true, documents: false, appresentation: false, abrangencia: false, equipe: false, recursos: false, orcamento: false,
             });
           }, 1000);
 
@@ -24,6 +25,29 @@ export default function App({ screen, setScreen, setPageLoading }) {
           Plano de Trabalho
         </a>
       </li>
+      {/*  */}
+      <li style={{
+        backgroundColor: screen.documents ? '#b20710' : '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
+      }}
+      >
+        <a onClick={() => {
+          setPageLoading(true);
+
+          setTimeout(() => {
+            setScreen({
+              ...screen, documents: true, header: false, appresentation: false, abrangencia: false, equipe: false, recursos: false, orcamento: false,
+            });
+          }, 1000);
+
+          setTimeout(() => {
+            setPageLoading(false);
+          }, 2000);
+        }}
+        >
+          Documentos
+        </a>
+      </li>
+      {/*  */}
       <li style={{
         backgroundColor: screen.appresentation ? '#b20710' : '#ccc', padding: 10, borderRadius: 10, marginRight: 5,
       }}
@@ -33,7 +57,7 @@ export default function App({ screen, setScreen, setPageLoading }) {
 
           setTimeout(() => {
             setScreen({
-              ...screen, header: false, abrangencia: false, recursos: false, equipe: false, appresentation: true, orcamento: false,
+              ...screen, header: false, documents: false, abrangencia: false, recursos: false, equipe: false, appresentation: true, orcamento: false,
             });
           }, 1000);
 
@@ -54,7 +78,7 @@ export default function App({ screen, setScreen, setPageLoading }) {
 
           setTimeout(() => {
             setScreen({
-              ...screen, header: false, appresentation: false, abrangencia: true, equipe: false, recursos: false, orcamento: false,
+              ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, recursos: false, orcamento: false,
             });
           }, 1000);
 
@@ -75,7 +99,7 @@ export default function App({ screen, setScreen, setPageLoading }) {
 
           setTimeout(() => {
             setScreen({
-              ...screen, header: false, appresentation: false, abrangencia: false, equipe: true, recursos: false, orcamento: false,
+              ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, recursos: false, orcamento: false,
             });
           }, 1000);
 
@@ -96,7 +120,7 @@ export default function App({ screen, setScreen, setPageLoading }) {
 
           setTimeout(() => {
             setScreen({
-              ...screen, header: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
+              ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
             });
           }, 1000);
 
@@ -117,7 +141,7 @@ export default function App({ screen, setScreen, setPageLoading }) {
 
           setTimeout(() => {
             setScreen({
-              ...screen, header: false, appresentation: false, abrangencia: false, equipe: false, recursos: true, orcamento: false,
+              ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, recursos: true, orcamento: false,
             });
           }, 1000);
 
