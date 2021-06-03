@@ -4,6 +4,7 @@ import ReactNotification from 'react-notifications-component';
 import Routes from './routes';
 import 'react-notifications-component/dist/theme.css';
 import 'moment/locale/pt-br';
+import 'react-perfect-scrollbar/dist/css/styles.css';
 
 import AppProvider from './hooks';
 

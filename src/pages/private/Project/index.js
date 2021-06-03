@@ -306,6 +306,29 @@ export default function Project() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, user]);
 
+  async function submter() {
+    api.post(`projects/submit/${project.id}`, {
+      edital_id: id,
+      coordenador_id: user.id,
+      submetido: "true",
+    }).then(({ data }) => {
+      store.addNotification({
+        message: `Projeto submetido com sucesso!`,
+        type: 'success',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      getProject();
+    });
+  }
+
   const handleSubmit = useCallback(
     async (data) => {
       if (coordenador != user.id || !edital?.valid || project?.submetido == 'true') {
@@ -347,20 +370,30 @@ export default function Project() {
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
 
-            store.addNotification({
-              message: `Projeto salvo com sucesso!`,
-              type: 'success',
-              insert: 'top',
-              container: 'top-right',
-              animationIn: ['animate__animated', 'animate__fadeIn'],
-              animationOut: ['animate__animated', 'animate__fadeOut'],
-              dismiss: {
-                duration: 5000,
-                onScreen: true,
-              },
-            });
+            // store.addNotification({
+            //   message: `Projeto salvo com sucesso!`,
+            //   type: 'success',
+            //   insert: 'top',
+            //   container: 'top-right',
+            //   animationIn: ['animate__animated', 'animate__fadeIn'],
+            //   animationOut: ['animate__animated', 'animate__fadeOut'],
+            //   dismiss: {
+            //     duration: 5000,
+            //     onScreen: true,
+            //   },
+            // });
 
             getProject();
+
+            setPageLoading(true);
+            setTimeout(() => {
+              setScreen({
+                ...screen, header: false, documents: true, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+              });
+            }, 1000);
+            setTimeout(() => {
+              setPageLoading(false);
+            }, 2000);
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -377,8 +410,6 @@ export default function Project() {
             });
           });
         } else if (screen.documents) {
-          console.log(files);
-
           if (project) {
             // eslint-disable-next-line no-plusplus
             for (let i = 0; i < files.length; i++) {
@@ -444,18 +475,18 @@ export default function Project() {
                   // setFiles(files.map((file) => (file.id == data.configuration_document_id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
                   setLoading(false);
 
-                  store.addNotification({
-                    message: `Documento salvo com sucesso!`,
-                    type: 'success',
-                    insert: 'top',
-                    container: 'top-right',
-                    animationIn: ['animate__animated', 'animate__fadeIn'],
-                    animationOut: ['animate__animated', 'animate__fadeOut'],
-                    dismiss: {
-                      duration: 5000,
-                      onScreen: true,
-                    },
-                  });
+                //   store.addNotification({
+                //     message: `Documento salvo com sucesso!`,
+                //     type: 'success',
+                //     insert: 'top',
+                //     container: 'top-right',
+                //     animationIn: ['animate__animated', 'animate__fadeIn'],
+                //     animationOut: ['animate__animated', 'animate__fadeOut'],
+                //     dismiss: {
+                //       duration: 5000,
+                //       onScreen: true,
+                //     },
+                //   });
                 });
               }
             } else if (project.files.length == 0) {
@@ -473,18 +504,18 @@ export default function Project() {
                   // setFiles(files.map((file) => (file.id == data.configuration_document_id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
                   setLoading(false);
 
-                  store.addNotification({
-                    message: `Documento salvo com sucesso!`,
-                    type: 'success',
-                    insert: 'top',
-                    container: 'top-right',
-                    animationIn: ['animate__animated', 'animate__fadeIn'],
-                    animationOut: ['animate__animated', 'animate__fadeOut'],
-                    dismiss: {
-                      duration: 5000,
-                      onScreen: true,
-                    },
-                  });
+                //   store.addNotification({
+                //     message: `Documento salvo com sucesso!`,
+                //     type: 'success',
+                //     insert: 'top',
+                //     container: 'top-right',
+                //     animationIn: ['animate__animated', 'animate__fadeIn'],
+                //     animationOut: ['animate__animated', 'animate__fadeOut'],
+                //     dismiss: {
+                //       duration: 5000,
+                //       onScreen: true,
+                //     },
+                //   });
                 });
               }
             } else if (files[i].file.name && !files[i].file.url) {
@@ -496,21 +527,31 @@ export default function Project() {
                 setFiles(files.map((file) => (file.id == data.id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
                 setLoading(false);
 
-                store.addNotification({
-                  message: `Documento salvo com sucesso!`,
-                  type: 'success',
-                  insert: 'top',
-                  container: 'top-right',
-                  animationIn: ['animate__animated', 'animate__fadeIn'],
-                  animationOut: ['animate__animated', 'animate__fadeOut'],
-                  dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                  },
-                });
+                // store.addNotification({
+                //   message: `Documento salvo com sucesso!`,
+                //   type: 'success',
+                //   insert: 'top',
+                //   container: 'top-right',
+                //   animationIn: ['animate__animated', 'animate__fadeIn'],
+                //   animationOut: ['animate__animated', 'animate__fadeOut'],
+                //   dismiss: {
+                //     duration: 5000,
+                //     onScreen: true,
+                //   },
+                // });
               });
             }
           }
+
+          setPageLoading(true);
+          setTimeout(() => {
+            setScreen({
+              ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+            });
+          }, 1000);
+          setTimeout(() => {
+            setPageLoading(false);
+          }, 2000);
         } else if (screen.appresentation) {
           setLoading(true);
 
@@ -534,20 +575,30 @@ export default function Project() {
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
 
-            store.addNotification({
-              message: `Projeto salvo com sucesso!`,
-              type: 'success',
-              insert: 'top',
-              container: 'top-right',
-              animationIn: ['animate__animated', 'animate__fadeIn'],
-              animationOut: ['animate__animated', 'animate__fadeOut'],
-              dismiss: {
-                duration: 5000,
-                onScreen: true,
-              },
-            });
+            // store.addNotification({
+            //   message: `Projeto salvo com sucesso!`,
+            //   type: 'success',
+            //   insert: 'top',
+            //   container: 'top-right',
+            //   animationIn: ['animate__animated', 'animate__fadeIn'],
+            //   animationOut: ['animate__animated', 'animate__fadeOut'],
+            //   dismiss: {
+            //     duration: 5000,
+            //     onScreen: true,
+            //   },
+            // });
 
             getProject();
+
+            setPageLoading(true);
+            setTimeout(() => {
+              setScreen({
+                ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
+              });
+            }, 1000);
+            setTimeout(() => {
+              setPageLoading(false);
+            }, 2000);
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -574,20 +625,30 @@ export default function Project() {
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
 
-            store.addNotification({
-              message: `Projeto salvo com sucesso!`,
-              type: 'success',
-              insert: 'top',
-              container: 'top-right',
-              animationIn: ['animate__animated', 'animate__fadeIn'],
-              animationOut: ['animate__animated', 'animate__fadeOut'],
-              dismiss: {
-                duration: 5000,
-                onScreen: true,
-              },
-            });
+            // store.addNotification({
+            //   message: `Projeto salvo com sucesso!`,
+            //   type: 'success',
+            //   insert: 'top',
+            //   container: 'top-right',
+            //   animationIn: ['animate__animated', 'animate__fadeIn'],
+            //   animationOut: ['animate__animated', 'animate__fadeOut'],
+            //   dismiss: {
+            //     duration: 5000,
+            //     onScreen: true,
+            //   },
+            // });
 
             getProject();
+
+            setPageLoading(true);
+            setTimeout(() => {
+              setScreen({
+                ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, orcamento: false, recursos: false,
+              });
+            }, 1000);
+            setTimeout(() => {
+              setPageLoading(false);
+            }, 2000);
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -615,20 +676,32 @@ export default function Project() {
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
 
-            store.addNotification({
-              message: `Projeto salvo com sucesso!`,
-              type: 'success',
-              insert: 'top',
-              container: 'top-right',
-              animationIn: ['animate__animated', 'animate__fadeIn'],
-              animationOut: ['animate__animated', 'animate__fadeOut'],
-              dismiss: {
-                duration: 5000,
-                onScreen: true,
-              },
-            });
+            // store.addNotification({
+            //   message: `Projeto salvo com sucesso!`,
+            //   type: 'success',
+            //   insert: 'top',
+            //   container: 'top-right',
+            //   animationIn: ['animate__animated', 'animate__fadeIn'],
+            //   animationOut: ['animate__animated', 'animate__fadeOut'],
+            //   dismiss: {
+            //     duration: 5000,
+            //     onScreen: true,
+            //   },
+            // });
 
             getProject();
+
+            setPageLoading(true);
+            setTimeout(() => {
+              setScreen({
+                ...screen, header: true, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+              });
+            }, 1000);
+            setTimeout(() => {
+              setPageLoading(false);
+
+              submter();
+            }, 2000);
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -662,20 +735,30 @@ export default function Project() {
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
 
-            store.addNotification({
-              message: `Projeto salvo com sucesso!`,
-              type: 'success',
-              insert: 'top',
-              container: 'top-right',
-              animationIn: ['animate__animated', 'animate__fadeIn'],
-              animationOut: ['animate__animated', 'animate__fadeOut'],
-              dismiss: {
-                duration: 5000,
-                onScreen: true,
-              },
-            });
+            // store.addNotification({
+            //   message: `Projeto salvo com sucesso!`,
+            //   type: 'success',
+            //   insert: 'top',
+            //   container: 'top-right',
+            //   animationIn: ['animate__animated', 'animate__fadeIn'],
+            //   animationOut: ['animate__animated', 'animate__fadeOut'],
+            //   dismiss: {
+            //     duration: 5000,
+            //     onScreen: true,
+            //   },
+            // });
 
             getProject();
+
+            setPageLoading(true);
+            setTimeout(() => {
+              setScreen({
+                ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
+              });
+            }, 1000);
+            setTimeout(() => {
+              setPageLoading(false);
+            }, 2000);
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -702,20 +785,30 @@ export default function Project() {
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
 
-            store.addNotification({
-              message: `Projeto salvo com sucesso!`,
-              type: 'success',
-              insert: 'top',
-              container: 'top-right',
-              animationIn: ['animate__animated', 'animate__fadeIn'],
-              animationOut: ['animate__animated', 'animate__fadeOut'],
-              dismiss: {
-                duration: 5000,
-                onScreen: true,
-              },
-            });
+            // store.addNotification({
+            //   message: `Projeto salvo com sucesso!`,
+            //   type: 'success',
+            //   insert: 'top',
+            //   container: 'top-right',
+            //   animationIn: ['animate__animated', 'animate__fadeIn'],
+            //   animationOut: ['animate__animated', 'animate__fadeOut'],
+            //   dismiss: {
+            //     duration: 5000,
+            //     onScreen: true,
+            //   },
+            // });
 
             getProject();
+
+            setPageLoading(true);
+            setTimeout(() => {
+              setScreen({
+                ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: true,
+              });
+            }, 1000);
+            setTimeout(() => {
+              setPageLoading(false);
+            }, 2000);
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -763,28 +856,28 @@ export default function Project() {
     setOpencontratar(!OpenContratar);
   }
 
-  async function submter() {
-    api.post(`projects/submit/${project.id}`, {
-      edital_id: id,
-      coordenador_id: user.id,
-      submetido: "true",
-    }).then(({ data }) => {
-      store.addNotification({
-        message: `Projeto submetido com sucesso!`,
-        type: 'success',
-        insert: 'top',
-        container: 'top-right',
-        animationIn: ['animate__animated', 'animate__fadeIn'],
-        animationOut: ['animate__animated', 'animate__fadeOut'],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-        },
-      });
+  //   async function submter() {
+  //     api.post(`projects/submit/${project.id}`, {
+  //       edital_id: id,
+  //       coordenador_id: user.id,
+  //       submetido: "true",
+  //     }).then(({ data }) => {
+  //       store.addNotification({
+  //         message: `Projeto submetido com sucesso!`,
+  //         type: 'success',
+  //         insert: 'top',
+  //         container: 'top-right',
+  //         animationIn: ['animate__animated', 'animate__fadeIn'],
+  //         animationOut: ['animate__animated', 'animate__fadeOut'],
+  //         dismiss: {
+  //           duration: 5000,
+  //           onScreen: true,
+  //         },
+  //       });
 
-      getProject();
-    });
-  }
+  //       getProject();
+  //     });
+  //   }
 
   function submitModalConfirm() {
     submter();
@@ -840,7 +933,7 @@ export default function Project() {
   return (
     <>
       <div className="col-12 title">
-        <h1>Submeter projeto</h1>
+        <h1>{edital?.title && `Projeto para ${edital.title}`}</h1>
       </div>
 
       <div>
@@ -848,7 +941,7 @@ export default function Project() {
         {project
       && project?.submetido == 'false' && edital?.valid && (
       <Content>
-        <button
+        {/* <button
           style={{
             marginBottom: 10, width: 180, marginLeft: 15, marginTop: 10,
           }}
@@ -856,7 +949,7 @@ export default function Project() {
           onClick={toggleModalConfirm}
         >
           Submeter projeto
-        </button>
+        </button> */}
       </Content>
         )}
 
@@ -979,7 +1072,7 @@ export default function Project() {
       <div className="col-12 px-0">
         <Card className="red">
           <div className="card-body">
-            <Breadcumb screen={screen} setScreen={setScreen} setPageLoading={setPageLoading} />
+            <Breadcumb project={project} screen={screen} setScreen={setScreen} setPageLoading={setPageLoading} />
 
             {!initiaLoading
             && (
