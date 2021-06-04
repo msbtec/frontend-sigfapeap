@@ -100,10 +100,22 @@ export const ProgramProvider = ({ children }) => {
           estado_arte: { checked: true, value: 0 },
         },
       }),
+      orcamento: JSON.stringify({
+        orcamentos: {
+          diarias: { checked: true, value: 0 },
+          hospedagem_alimentacao: { checked: true, value: 0 },
+          materiais_consumo: { checked: true, value: 0 },
+          passagens: { checked: true, value: 0 },
+          servicos_terceiros: { checked: true, value: 0 },
+          materiais_equipamentos: { checked: true, value: 0 },
+          pessoal: { checked: true, value: 0 },
+          bolsas: { checked: true, value: 0 },
+          encargos: { checked: true, value: 0 },
+        },
+      }),
       abrangencia: null,
       membros: null,
       atividades: null,
-      orcamento: null,
       recursos_proprios: null,
       recursos_solicitados_outros: null,
     };

@@ -17,7 +17,7 @@ import { useProject } from '../../../../../hooks/project';
 
 export default function Recursos() {
   const {
-    despesas, recursos, setRecursos, project,
+    configuration, despesas, recursos, setRecursos, project,
   } = useProject();
 
   const [recurso, setRecurso] = React.useState({

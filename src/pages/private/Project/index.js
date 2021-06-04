@@ -555,6 +555,8 @@ export default function Project() {
         } else if (screen.appresentation) {
           setLoading(true);
 
+          console.log(plano);
+
           const formData = new FormData();
           formData.append('edital_id', id);
           formData.append('coordenador_id', user.id);

@@ -24,9 +24,9 @@ export default function Appresentation() {
           onReady={(editor) => {}}
           onChange={(event, editor) => {
             const data = editor.getData();
-            if (data.length <= 5.000) {
-              setPlano({ ...plano, resumo: data });
-            }
+            // if (data.length <= 5.000) {
+            setPlano({ ...plano, resumo: data });
+            // }
           }}
         />
       </div>
@@ -44,9 +44,9 @@ export default function Appresentation() {
           onReady={(editor) => {}}
           onChange={(event, editor) => {
             const data = editor.getData();
-            if (data.length <= 200) {
-              setPlano({ ...plano, palavras_chave: data });
-            }
+            // if (data.length <= 200) {
+            setPlano({ ...plano, palavras_chave: data });
+            // }
           }}
         />
       </div>
@@ -64,9 +64,9 @@ export default function Appresentation() {
           onReady={(editor) => {}}
           onChange={(event, editor) => {
             const data = editor.getData();
-            if (data.length <= 3.000) {
-              setPlano({ ...plano, informacoes_relevantes_para_avaliacao: data });
-            }
+            // if (data.length <= 3.000) {
+            setPlano({ ...plano, informacoes_relevantes_para_avaliacao: data });
+            // }
           }}
         />
       </div>
@@ -84,9 +84,9 @@ export default function Appresentation() {
           onReady={(editor) => {}}
           onChange={(event, editor) => {
             const data = editor.getData();
-            if (data.length <= 3.000) {
-              setPlano({ ...plano, experiencia_coordenador: data });
-            }
+            // if (data.length <= 3.000) {
+            setPlano({ ...plano, experiencia_coordenador: data });
+            // }
           }}
         />
       </div>
@@ -104,9 +104,9 @@ export default function Appresentation() {
           onReady={(editor) => {}}
           onChange={(event, editor) => {
             const data = editor.getData();
-            if (data.length <= 5.000) {
-              setPlano({ ...plano, sintese_projeto: data });
-            }
+            // if (data.length <= 5.000) {
+            setPlano({ ...plano, sintese_projeto: data });
+            // }
           }}
         />
       </div>
@@ -124,9 +124,9 @@ export default function Appresentation() {
           onReady={(editor) => {}}
           onChange={(event, editor) => {
             const data = editor.getData();
-            if (data.length <= 1.000) {
-              setPlano({ ...plano, objetivos_gerais: data });
-            }
+            // if (data.length <= 1.000) {
+            setPlano({ ...plano, objetivos_gerais: data });
+            // }
           }}
         />
       </div>
@@ -144,9 +144,9 @@ export default function Appresentation() {
           onReady={(editor) => {}}
           onChange={(event, editor) => {
             const data = editor.getData();
-            if (data.length <= 3.000) {
-              setPlano({ ...plano, objetivos_especificos: data });
-            }
+            // if (data.length <= 3.000) {
+            setPlano({ ...plano, objetivos_especificos: data });
+            // }
           }}
         />
       </div>
@@ -164,9 +164,9 @@ export default function Appresentation() {
           onReady={(editor) => {}}
           onChange={(event, editor) => {
             const data = editor.getData();
-            if (data.length <= 15.000) {
-              setPlano({ ...plano, estado_arte: data });
-            }
+            // if (data.length <= 15.000) {
+            setPlano({ ...plano, estado_arte: data });
+            // }
           }}
         />
       </div>
@@ -184,9 +184,9 @@ export default function Appresentation() {
           onReady={(editor) => {}}
           onChange={(event, editor) => {
             const data = editor.getData();
-            if (data.length <= 15.000) {
-              setPlano({ ...plano, metodologia: data });
-            }
+            // if (data.length <= 15.000) {
+            setPlano({ ...plano, metodologia: data });
+            // }
           }}
         />
       </div>
@@ -204,9 +204,9 @@ export default function Appresentation() {
           onReady={(editor) => {}}
           onChange={(event, editor) => {
             const data = editor.getData();
-            if (data.length <= 5.000) {
-              setPlano({ ...plano, resultados_esperados: data });
-            }
+            // if (data.length <= 5.000) {
+            setPlano({ ...plano, resultados_esperados: data });
+            // }
           }}
         />
       </div>
@@ -224,9 +224,9 @@ export default function Appresentation() {
           onReady={(editor) => {}}
           onChange={(event, editor) => {
             const data = editor.getData();
-            if (data.length <= 5.000) {
-              setPlano({ ...plano, impactos_esperados: data });
-            }
+            // if (data.length <= 5.000) {
+            setPlano({ ...plano, impactos_esperados: data });
+            // }
           }}
         />
       </div>
@@ -244,9 +244,9 @@ export default function Appresentation() {
           onReady={(editor) => {}}
           onChange={(event, editor) => {
             const data = editor.getData();
-            if (data.length <= 3.000) {
-              setPlano({ ...plano, riscos_atividades: data });
-            }
+            // if (data.length <= 3.000) {
+            setPlano({ ...plano, riscos_atividades: data });
+            // }
           }}
         />
       </div>
@@ -264,9 +264,9 @@ export default function Appresentation() {
           onReady={(editor) => {}}
           onChange={(event, editor) => {
             const data = editor.getData();
-            if (data.length <= 5.000) {
-              setPlano({ ...plano, referencia_bibliografica: data });
-            }
+            // if (data.length <= 5.000) {
+            setPlano({ ...plano, referencia_bibliografica: data });
+            // }
           }}
         />
       </div>

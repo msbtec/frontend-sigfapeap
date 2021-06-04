@@ -48,6 +48,18 @@ export default function ConfigurationNotice() {
     cotacao_moeda_estrangeira: { checked: true, value: 0 },
   });
 
+  const [orcamentos, setOrcamentos] = useState({
+    diarias: { checked: true, value: 0 },
+    hospedagem_alimentacao: { checked: true, value: 0 },
+    materiais_consumo: { checked: true, value: 0 },
+    passagens: { checked: true, value: 0 },
+    servicos_terceiros: { checked: true, value: 0 },
+    materiais_equipamentos: { checked: true, value: 0 },
+    pessoal: { checked: true, value: 0 },
+    bolsas: { checked: true, value: 0 },
+    encargos: { checked: true, value: 0 },
+  });
+
   const [apresentacao, setApresentacao] = useState({
     resumo: { checked: true, value: 0 },
     palavras_chave: { checked: true, value: 0 },
@@ -67,6 +79,7 @@ export default function ConfigurationNotice() {
   const [loadingHeader, setLoadingHeader] = useState(false);
   const [loadingDocuments, setLoadingDocuments] = useState(false);
   const [loadingApresentacao, setLoadingApresentacao] = useState(false);
+  const [loadingOrcamento, setLoadingOrcamento] = useState(false);
 
   async function getConfigurations() {
     api.get(`configurations`, {
@@ -76,6 +89,7 @@ export default function ConfigurationNotice() {
     }).then(({ data }) => {
       setFields(JSON.parse(data.plano_trabalho).fields);
       setApresentacao(JSON.parse(data.apresentacao).apresentacao);
+      setOrcamentos(JSON.parse(data.orcamento).orcamentos);
       setAnexo(JSON.parse(data.plano_trabalho));
       setFiles(data.files.map((item) => ({
         id: item.id,
@@ -256,6 +270,46 @@ export default function ConfigurationNotice() {
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [apresentacao, id],
+  );
+
+  const handleSubmitOrcamento = useCallback(
+    async (data) => {
+      try {
+        formRef.current.setErrors({});
+
+        setLoadingOrcamento(true);
+
+        api.post(`configurations`, {
+          orcamento: JSON.stringify({ ...data, orcamentos }),
+          file_id: id,
+        }).then(({ data }) => {
+          setLoadingOrcamento(false);
+
+          getConfigurations();
+
+          store.addNotification({
+            message: `Chamada Pública configurada com sucesso!`,
+            type: 'success',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+          });
+        }).finally(() => {});
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
+
+          formRef.current.setErrors(errors);
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [orcamentos, id],
   );
 
   return (
@@ -664,82 +718,102 @@ export default function ConfigurationNotice() {
             <h3>Orçamentos</h3>
           </div>
           <div className="card-body">
-            <Unform initialData={anexo} ref={formRef} onSubmit={handleSubmitHeader}>
+            <Unform ref={formRef} onSubmit={handleSubmitOrcamento}>
               <Form>
                 <div>
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
-                      onChange={() => setFields({ ...fields, titulo_projeto: { ...fields.titulo_projeto, checked: !fields.titulo_projeto.checked } })}
-                      checked={fields.titulo_projeto.checked}
-                      fields={fields}
-                      setFields={setFields}
-                      title="Título do projeto"
+                      onChange={() => setOrcamentos({ ...orcamentos, diarias: { ...orcamentos.diarias, checked: !orcamentos.diarias.checked } })}
+                      checked={orcamentos.diarias.checked}
+                      fields={orcamentos}
+                      setFields={setOrcamentos}
+                      title="Diária(s)"
                     />
                   </div>
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
-                      onChange={() => setFields({ ...fields, faixa_valor: { ...fields.faixa_valor, checked: !fields.faixa_valor.checked } })}
-                      checked={fields.faixa_valor.checked}
-                      fields={fields}
-                      setFields={setFields}
-                      title="Faixa de valor"
+                      onChange={() => setOrcamentos({ ...orcamentos, hospedagem_alimentacao: { ...orcamentos.hospedagem_alimentacao, checked: !orcamentos.hospedagem_alimentacao.checked } })}
+                      checked={orcamentos.hospedagem_alimentacao.checked}
+                      fields={orcamentos}
+                      setFields={setOrcamentos}
+                      title="Hospedagem/Alimentação"
                     />
                   </div>
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
-                      onChange={() => setFields({ ...fields, tema_interesse: { ...fields.tema_interesse, checked: !fields.tema_interesse.checked } })}
-                      checked={fields.tema_interesse.checked}
-                      fields={fields}
-                      setFields={setFields}
-                      title="Tema de interesse"
+                      onChange={() => setOrcamentos({ ...orcamentos, materiais_consumo: { ...orcamentos.materiais_consumo, checked: !orcamentos.materiais_consumo.checked } })}
+                      checked={orcamentos.materiais_consumo.checked}
+                      fields={orcamentos}
+                      setFields={setOrcamentos}
+                      title="Materiais de Consumo"
                     />
                   </div>
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
-                      onChange={() => setFields({ ...fields, instituicao: { ...fields.instituicao, checked: !fields.instituicao.checked } })}
-                      checked={fields.instituicao.checked}
-                      fields={fields}
-                      setFields={setFields}
-                      title="Instituição Executora"
+                      onChange={() => setOrcamentos({ ...orcamentos, passagens: { ...orcamentos.passagens, checked: !orcamentos.passagens.checked } })}
+                      checked={orcamentos.passagens.checked}
+                      fields={orcamentos}
+                      setFields={setOrcamentos}
+                      title="Passagens"
                     />
                   </div>
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
-                      onChange={() => setFields({ ...fields, inicio_previsto: { ...fields.inicio_previsto, checked: !fields.inicio_previsto.checked } })}
-                      checked={fields.inicio_previsto.checked}
-                      fields={fields}
-                      setFields={setFields}
-                      title="Início previsto"
+                      onChange={() => setOrcamentos({ ...orcamentos, servicos_terceiros: { ...orcamentos.servicos_terceiros, checked: !orcamentos.servicos_terceiros.checked } })}
+                      checked={orcamentos.servicos_terceiros.checked}
+                      fields={orcamentos}
+                      setFields={setOrcamentos}
+                      title="Serviços de Terceiros"
                     />
                   </div>
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
-                      onChange={() => setFields({ ...fields, duracao: { ...fields.duracao, checked: !fields.duracao.checked } })}
-                      checked={fields.duracao.checked}
-                      fields={fields}
-                      setFields={setFields}
-                      title="Duração"
+                      onChange={() => setOrcamentos({ ...orcamentos, materiais_equipamentos: { ...orcamentos.materiais_equipamentos, checked: !orcamentos.materiais_equipamentos.checked } })}
+                      checked={orcamentos.materiais_equipamentos.checked}
+                      fields={orcamentos}
+                      setFields={setOrcamentos}
+                      title="Materiais Permanentes e Equipamentos"
                     />
                   </div>
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
-                      onChange={() => setFields({ ...fields, cotacao_moeda_estrangeira: { ...fields.cotacao_moeda_estrangeira, checked: !fields.cotacao_moeda_estrangeira.checked } })}
-                      checked={fields.cotacao_moeda_estrangeira.checked}
-                      fields={fields}
-                      setFields={setFields}
-                      title="Cotação da Moeda Estrangeira"
+                      onChange={() => setOrcamentos({ ...orcamentos, pessoal: { ...orcamentos.pessoal, checked: !orcamentos.pessoal.checked } })}
+                      checked={orcamentos.pessoal.checked}
+                      fields={orcamentos}
+                      setFields={setOrcamentos}
+                      title="Pessoal"
+                    />
+                  </div>
+
+                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
+                      onChange={() => setOrcamentos({ ...orcamentos, bolsas: { ...orcamentos.bolsas, checked: !orcamentos.bolsas.checked } })}
+                      checked={orcamentos.bolsas.checked}
+                      fields={orcamentos}
+                      setFields={setOrcamentos}
+                      title="Bolsas"
+                    />
+                  </div>
+
+                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
+                      onChange={() => setOrcamentos({ ...orcamentos, encargos: { ...orcamentos.encargos, checked: !orcamentos.encargos.checked } })}
+                      checked={orcamentos.encargos.checked}
+                      fields={orcamentos}
+                      setFields={setOrcamentos}
+                      title="Encargos"
                     />
                   </div>
                 </div>
 
                 <div className="modal-footer">
-                  {loadingHeader ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
+                  {loadingOrcamento ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
                     <Button
                       className="primary"
                     >
