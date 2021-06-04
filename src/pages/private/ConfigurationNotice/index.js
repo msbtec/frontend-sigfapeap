@@ -658,6 +658,99 @@ export default function ConfigurationNotice() {
             </Unform>
           </div>
         </Card>
+
+        <Card className="red">
+          <div className="card-title">
+            <h3>Orçamentos</h3>
+          </div>
+          <div className="card-body">
+            <Unform initialData={anexo} ref={formRef} onSubmit={handleSubmitHeader}>
+              <Form>
+                <div>
+                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
+                      onChange={() => setFields({ ...fields, titulo_projeto: { ...fields.titulo_projeto, checked: !fields.titulo_projeto.checked } })}
+                      checked={fields.titulo_projeto.checked}
+                      fields={fields}
+                      setFields={setFields}
+                      title="Título do projeto"
+                    />
+                  </div>
+
+                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
+                      onChange={() => setFields({ ...fields, faixa_valor: { ...fields.faixa_valor, checked: !fields.faixa_valor.checked } })}
+                      checked={fields.faixa_valor.checked}
+                      fields={fields}
+                      setFields={setFields}
+                      title="Faixa de valor"
+                    />
+                  </div>
+
+                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
+                      onChange={() => setFields({ ...fields, tema_interesse: { ...fields.tema_interesse, checked: !fields.tema_interesse.checked } })}
+                      checked={fields.tema_interesse.checked}
+                      fields={fields}
+                      setFields={setFields}
+                      title="Tema de interesse"
+                    />
+                  </div>
+
+                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
+                      onChange={() => setFields({ ...fields, instituicao: { ...fields.instituicao, checked: !fields.instituicao.checked } })}
+                      checked={fields.instituicao.checked}
+                      fields={fields}
+                      setFields={setFields}
+                      title="Instituição Executora"
+                    />
+                  </div>
+
+                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
+                      onChange={() => setFields({ ...fields, inicio_previsto: { ...fields.inicio_previsto, checked: !fields.inicio_previsto.checked } })}
+                      checked={fields.inicio_previsto.checked}
+                      fields={fields}
+                      setFields={setFields}
+                      title="Início previsto"
+                    />
+                  </div>
+
+                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
+                      onChange={() => setFields({ ...fields, duracao: { ...fields.duracao, checked: !fields.duracao.checked } })}
+                      checked={fields.duracao.checked}
+                      fields={fields}
+                      setFields={setFields}
+                      title="Duração"
+                    />
+                  </div>
+
+                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
+                      onChange={() => setFields({ ...fields, cotacao_moeda_estrangeira: { ...fields.cotacao_moeda_estrangeira, checked: !fields.cotacao_moeda_estrangeira.checked } })}
+                      checked={fields.cotacao_moeda_estrangeira.checked}
+                      fields={fields}
+                      setFields={setFields}
+                      title="Cotação da Moeda Estrangeira"
+                    />
+                  </div>
+                </div>
+
+                <div className="modal-footer">
+                  {loadingHeader ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
+                    <Button
+                      className="primary"
+                    >
+                      Salvar
+                    </Button>
+                  )}
+                </div>
+              </Form>
+            </Unform>
+          </div>
+        </Card>
       </div>
     </>
   );
