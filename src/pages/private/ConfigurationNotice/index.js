@@ -107,6 +107,8 @@ export default function ConfigurationNotice() {
       setApresentacao(JSON.parse(data.apresentacao).apresentacao);
       setOrcamentos(JSON.parse(data.orcamento).orcamentos);
       setAbrangencias(JSON.parse(data.abrangencia).abrangencias);
+      setEquipes(JSON.parse(data.equipe).equipes);
+      setRecursos(JSON.parse(data.recurso).recursos);
       setAnexo(JSON.parse(data.plano_trabalho));
       setFiles(data.files.map((item) => ({
         id: item.id,
