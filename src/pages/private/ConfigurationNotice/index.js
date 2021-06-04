@@ -12,6 +12,7 @@ import { Form as Unform } from '@unform/web';
 import { store } from 'react-notifications-component';
 import { useParams } from 'react-router-dom';
 import { FiFile, FiTrash } from 'react-icons/fi';
+import { AiOutlineFilePdf } from 'react-icons/ai';
 import { FaEye } from 'react-icons/fa';
 import { Content } from './styles';
 import { Button } from '../../../components/Button';
@@ -60,6 +61,18 @@ export default function ConfigurationNotice() {
     encargos: { checked: true, value: 0 },
   });
 
+  const [abrangencias, setAbrangencias] = useState({
+    abrangencia: { checked: true, value: 0 },
+  });
+
+  const [equipes, setEquipes] = useState({
+    equipe: { checked: true, value: 0 },
+  });
+
+  const [recursos, setRecursos] = useState({
+    recurso: { checked: true, value: 0 },
+  });
+
   const [apresentacao, setApresentacao] = useState({
     resumo: { checked: true, value: 0 },
     palavras_chave: { checked: true, value: 0 },
@@ -80,6 +93,9 @@ export default function ConfigurationNotice() {
   const [loadingDocuments, setLoadingDocuments] = useState(false);
   const [loadingApresentacao, setLoadingApresentacao] = useState(false);
   const [loadingOrcamento, setLoadingOrcamento] = useState(false);
+  const [loadingAbrangencia, setLoadingAbrangencia] = useState(false);
+  const [loadingEquipe, setLoadingEquipe] = useState(false);
+  const [loadingRecurso, setLoadingRecurso] = useState(false);
 
   async function getConfigurations() {
     api.get(`configurations`, {
@@ -90,6 +106,7 @@ export default function ConfigurationNotice() {
       setFields(JSON.parse(data.plano_trabalho).fields);
       setApresentacao(JSON.parse(data.apresentacao).apresentacao);
       setOrcamentos(JSON.parse(data.orcamento).orcamentos);
+      setAbrangencias(JSON.parse(data.abrangencia).abrangencias);
       setAnexo(JSON.parse(data.plano_trabalho));
       setFiles(data.files.map((item) => ({
         id: item.id,
@@ -312,6 +329,126 @@ export default function ConfigurationNotice() {
     [orcamentos, id],
   );
 
+  const handleSubmitAbrangencia = useCallback(
+    async (data) => {
+      try {
+        formRef.current.setErrors({});
+
+        setLoadingAbrangencia(true);
+
+        api.post(`configurations`, {
+          abrangencia: JSON.stringify({ ...data, abrangencias }),
+          file_id: id,
+        }).then(({ data }) => {
+          setLoadingAbrangencia(false);
+
+          getConfigurations();
+
+          store.addNotification({
+            message: `Chamada Pública configurada com sucesso!`,
+            type: 'success',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+          });
+        }).finally(() => {});
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
+
+          formRef.current.setErrors(errors);
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [abrangencias, id],
+  );
+
+  const handleSubmitEquipe = useCallback(
+    async (data) => {
+      try {
+        formRef.current.setErrors({});
+
+        setLoadingEquipe(true);
+
+        api.post(`configurations`, {
+          membros: JSON.stringify({ ...data, equipes }),
+          file_id: id,
+        }).then(({ data }) => {
+          setLoadingEquipe(false);
+
+          getConfigurations();
+
+          store.addNotification({
+            message: `Chamada Pública configurada com sucesso!`,
+            type: 'success',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+          });
+        }).finally(() => {});
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
+
+          formRef.current.setErrors(errors);
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [equipes, id],
+  );
+
+  const handleSubmitRecurso = useCallback(
+    async (data) => {
+      try {
+        formRef.current.setErrors({});
+
+        setLoadingRecurso(true);
+
+        api.post(`configurations`, {
+          recursos_solicitados_outros: JSON.stringify({ ...data, recursos }),
+          file_id: id,
+        }).then(({ data }) => {
+          setLoadingRecurso(false);
+
+          getConfigurations();
+
+          store.addNotification({
+            message: `Chamada Pública configurada com sucesso!`,
+            type: 'success',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+          });
+        }).finally(() => {});
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
+
+          formRef.current.setErrors(errors);
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [recursos, id],
+  );
+
   return (
     <>
       <div className="col-12 title">
@@ -496,7 +633,7 @@ export default function ConfigurationNotice() {
                     </div>
 
                     <div style={{ display: 'flex' }}>
-                      <FaEye
+                      <AiOutlineFilePdf
                         onClick={() => item.file.name && window.open(item.file.url || window.URL.createObjectURL(item.file), '__blank')}
                         style={{
                           fontSize: 25, marginTop: 10, marginLeft: 20, cursor: 'pointer',
@@ -814,6 +951,105 @@ export default function ConfigurationNotice() {
 
                 <div className="modal-footer">
                   {loadingOrcamento ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
+                    <Button
+                      className="primary"
+                    >
+                      Salvar
+                    </Button>
+                  )}
+                </div>
+              </Form>
+            </Unform>
+          </div>
+        </Card>
+
+        <Card className="red">
+          <div className="card-title">
+            <h3>Abrangência</h3>
+          </div>
+          <div className="card-body">
+            <Unform ref={formRef} onSubmit={handleSubmitAbrangencia}>
+              <Form>
+                <div>
+                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
+                      onChange={() => setAbrangencias({ ...abrangencias, abrangencia: { ...abrangencias.abrangencia, checked: !abrangencias.abrangencia.checked } })}
+                      checked={abrangencias.abrangencia.checked}
+                      fields={abrangencias}
+                      setFields={setAbrangencias}
+                      title="Abrangência"
+                    />
+                  </div>
+                </div>
+
+                <div className="modal-footer">
+                  {loadingAbrangencia ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
+                    <Button
+                      className="primary"
+                    >
+                      Salvar
+                    </Button>
+                  )}
+                </div>
+              </Form>
+            </Unform>
+          </div>
+        </Card>
+
+        <Card className="red">
+          <div className="card-title">
+            <h3>Equipe</h3>
+          </div>
+          <div className="card-body">
+            <Unform ref={formRef} onSubmit={handleSubmitEquipe}>
+              <Form>
+                <div>
+                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
+                      onChange={() => setEquipes({ ...equipes, equipe: { ...equipes.equipe, checked: !equipes.equipe.checked } })}
+                      checked={equipes.equipe.checked}
+                      fields={equipes}
+                      setFields={setEquipes}
+                      title="Membro(s) e Atividades"
+                    />
+                  </div>
+                </div>
+
+                <div className="modal-footer">
+                  {loadingEquipe ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
+                    <Button
+                      className="primary"
+                    >
+                      Salvar
+                    </Button>
+                  )}
+                </div>
+              </Form>
+            </Unform>
+          </div>
+        </Card>
+
+        <Card className="red">
+          <div className="card-title">
+            <h3>Recursos</h3>
+          </div>
+          <div className="card-body">
+            <Unform ref={formRef} onSubmit={handleSubmitRecurso}>
+              <Form>
+                <div>
+                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
+                      onChange={() => setRecursos({ ...recursos, recurso: { ...recursos.recurso, checked: !recursos.recurso.checked } })}
+                      checked={recursos.recurso.checked}
+                      fields={recursos}
+                      setFields={setRecursos}
+                      title="Recursos Solicitados a Outras Fontes, Parcerias e/ou Contrapartida da(s) Instituição(ões) Envolvida(s)"
+                    />
+                  </div>
+                </div>
+
+                <div className="modal-footer">
+                  {loadingRecurso ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
                     <Button
                       className="primary"
                     >
