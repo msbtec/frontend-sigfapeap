@@ -59,13 +59,13 @@ function Bolsas({
         temp.modalidade = '';
       }
 
-      if (bolsa.ord == "") {
-        temp.ord = 'Campo obrigatório';
-      } else if (Number(bolsa.ord) <= 0) {
-        temp.ord = 'Campo deve ser maior que 0';
-      } else {
-        temp.ord = '';
-      }
+      //   if (bolsa.ord == "") {
+      //     temp.ord = 'Campo obrigatório';
+      //   } else if (Number(bolsa.ord) <= 0) {
+      //     temp.ord = 'Campo deve ser maior que 0';
+      //   } else {
+      //     temp.ord = '';
+      //   }
 
       if (bolsa.duracao == "") {
         temp.duracao = 'Campo obrigatório';
@@ -149,13 +149,13 @@ function Bolsas({
               </sup>
             </div>
 
-            <div className="input-block">
+            {/* <div className="input-block">
               <label className="required">Ord</label>
               <input style={{ borderColor: errors.ord ? '#c53030' : '#999' }} value={bolsa.ord} type="number" onChange={(value) => setBolsa({ ...bolsa, ord: value.target.value })} />
               <sup style={{ color: '#c53030', marginTop: 5 }}>
                 {errors.ord && errors.ord}
               </sup>
-            </div>
+            </div> */}
 
             <div className="input-block">
               <label className="required">Duração</label>

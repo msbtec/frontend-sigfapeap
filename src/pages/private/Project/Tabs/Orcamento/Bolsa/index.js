@@ -48,8 +48,8 @@ export default function Bolsas() {
         <Table>
           <thead>
             <tr>
-              <th className="col-2">Modalidade</th>
-              <th className="col-1">Ord</th>
+              <th className="col-3">Modalidade</th>
+              {/* <th className="col-1">Ord</th> */}
               <th className="col-2">Duração</th>
               <th className="col-2">Custo unitário</th>
               <th className="col-2">Custo total</th>
@@ -61,7 +61,7 @@ export default function Bolsas() {
             {orcamentos.bolsas.map((item) => (
               <tr>
                 <td style={{ textAlign: 'center' }}>{item.modalidade}</td>
-                <td style={{ textAlign: 'center' }}>{item.ord}</td>
+                {/* <td style={{ textAlign: 'center' }}>{item.ord}</td> */}
                 <td style={{ textAlign: 'center' }}>{item.duracao}</td>
                 <td style={{ textAlign: 'center' }}>{item.custo_unitario}</td>
                 <td style={{ textAlign: 'center' }}>{item.custo_total}</td>

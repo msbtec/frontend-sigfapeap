@@ -132,8 +132,13 @@ export default function ConfigurationNotice() {
 
         setLoadingHeader(true);
 
+        let isOne = false;
+        if (fields.titulo_projeto.checked || fields.faixa_valor.checked || fields.tema_interesse.checked || fields.instituicao.checked || fields.inicio_previsto.checked || fields.duracao.checked || fields.cotacao_moeda_estrangeira.checked) {
+          isOne = true;
+        }
+
         api.post(`configurations`, {
-          plano_trabalho: JSON.stringify({ ...data, fields }),
+          plano_trabalho: JSON.stringify({ ...data, fields, isOne }),
           file_id: id,
         }).then(({ data }) => {
           setLoadingHeader(false);
@@ -258,8 +263,25 @@ export default function ConfigurationNotice() {
 
         setLoadingApresentacao(true);
 
+        let isOne = false;
+        if (apresentacao.resumo.checked
+            || apresentacao.palavras_chave.checked
+            || apresentacao.informacoes_relevantes_para_avaliacao.checked
+            || apresentacao.experiencia_coordenador.checked
+            || apresentacao.sintese_projeto.checked
+            || apresentacao.objetivos_gerais.checked
+            || apresentacao.objetivos_especificos.checked
+            || apresentacao.metodologia.checked
+            || apresentacao.resultados_esperados.checked
+            || apresentacao.impactos_esperados.checked
+            || apresentacao.riscos_atividades.checked
+            || apresentacao.referencia_bibliografica.checked
+            || apresentacao.estado_arte.checked) {
+          isOne = true;
+        }
+
         api.post(`configurations`, {
-          apresentacao: JSON.stringify({ ...data, apresentacao }),
+          apresentacao: JSON.stringify({ ...data, apresentacao, isOne }),
           file_id: id,
         }).then(({ data }) => {
           setLoadingApresentacao(false);
@@ -298,8 +320,21 @@ export default function ConfigurationNotice() {
 
         setLoadingOrcamento(true);
 
+        let isOne = false;
+        if (orcamentos.diarias.checked
+            || orcamentos.hospedagem_alimentacao.checked
+            || orcamentos.materiais_consumo.checked
+            || orcamentos.passagens.checked
+            || orcamentos.servicos_terceiros.checked
+            || orcamentos.materiais_equipamentos.checked
+            || orcamentos.pessoal.checked
+            || orcamentos.bolsas.checked
+            || orcamentos.encargos.checked) {
+          isOne = true;
+        }
+
         api.post(`configurations`, {
-          orcamento: JSON.stringify({ ...data, orcamentos }),
+          orcamento: JSON.stringify({ ...data, orcamentos, isOne }),
           file_id: id,
         }).then(({ data }) => {
           setLoadingOrcamento(false);
