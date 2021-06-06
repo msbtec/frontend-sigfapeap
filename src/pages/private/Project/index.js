@@ -65,7 +65,7 @@ export default function Project() {
     project, setProject, membros, setMembros, atividades, setAtividades,
     plano, setPlano, despesas, setDespesas, recursos,
     setRecursos, abrangencias, setAbrangencias,
-    orcamentos, setOrcamentos, setLoading: setPageLoading,
+    orcamentos, setOrcamentos, loading: pageLoading, setLoading: setPageLoading,
     configuration, setConfigurations,
   } = useProject();
 
@@ -335,73 +335,75 @@ export default function Project() {
 
   useEffect(() => {
     if (configuration) {
+      setPageLoading(true);
+
       if (screen.documents) {
         if (configuration?.files?.length == 0) {
-          setPageLoading(true);
-          setTimeout(() => {
-            setScreen({
-              ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
-            });
-          }, 1000);
-          setTimeout(() => {
-            setPageLoading(false);
-          }, 2000);
+        //   setPageLoading(true);
+        //   setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        //   }, 1000);
+        //   setTimeout(() => {
+        //     setPageLoading(false);
+        //   }, 2000);
         }
       }
 
       if (screen.appresentation) {
         if (!JSON.parse(configuration.apresentacao).isOne) {
-          setPageLoading(true);
-          setTimeout(() => {
-            setScreen({
-              ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
-            });
-          }, 1000);
-          setTimeout(() => {
-            setPageLoading(false);
-          }, 2000);
+        //   setPageLoading(true);
+        //   setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
+          });
+        //   }, 1000);
+        //   setTimeout(() => {
+        //     setPageLoading(false);
+        //   }, 2000);
         }
       }
 
       if (screen.abrangencia) {
         if (!JSON.parse(configuration.abrangencia).abrangencias.abrangencia.checked) {
-          setPageLoading(true);
-          setTimeout(() => {
-            setScreen({
-              ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, orcamento: false, recursos: false,
-            });
-          }, 1000);
-          setTimeout(() => {
-            setPageLoading(false);
-          }, 2000);
+        //   setPageLoading(true);
+        //   setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, orcamento: false, recursos: false,
+          });
+        //   }, 1000);
+        //   setTimeout(() => {
+        //     setPageLoading(false);
+        //   }, 2000);
         }
       }
 
       if (screen.equipe) {
         if (!JSON.parse(configuration.membros).equipes.equipe.checked) {
-          setPageLoading(true);
-          setTimeout(() => {
-            setScreen({
-              ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
-            });
-          }, 1000);
-          setTimeout(() => {
-            setPageLoading(false);
-          }, 2000);
+        //   setPageLoading(true);
+        //   setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
+          });
+        //   }, 1000);
+        //   setTimeout(() => {
+        //     setPageLoading(false);
+        //   }, 2000);
         }
       }
 
       if (screen.orcamento) {
         if (!JSON.parse(configuration.orcamento).isOne) {
-          setPageLoading(true);
-          setTimeout(() => {
-            setScreen({
-              ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: true,
-            });
-          }, 1000);
-          setTimeout(() => {
-            setPageLoading(false);
-          }, 2000);
+        //   setPageLoading(true);
+        //   setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: true,
+          });
+        //   }, 1000);
+        //   setTimeout(() => {
+        //     setPageLoading(false);
+        //   }, 2000);
         }
       }
 
@@ -410,6 +412,8 @@ export default function Project() {
           submter();
         }
       }
+
+      setPageLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screen]);
@@ -455,19 +459,6 @@ export default function Project() {
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
 
-            // store.addNotification({
-            //   message: `Projeto salvo com sucesso!`,
-            //   type: 'success',
-            //   insert: 'top',
-            //   container: 'top-right',
-            //   animationIn: ['animate__animated', 'animate__fadeIn'],
-            //   animationOut: ['animate__animated', 'animate__fadeOut'],
-            //   dismiss: {
-            //     duration: 5000,
-            //     onScreen: true,
-            //   },
-            // });
-
             getProject();
 
             setPageLoading(true);
@@ -479,6 +470,11 @@ export default function Project() {
             setTimeout(() => {
               setPageLoading(false);
             }, 2000);
+
+            // setPageLoading(true);
+            // setScreen({
+            //   ...screen, header: false, documents: true, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+            // });
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -559,19 +555,6 @@ export default function Project() {
                 api.post(`projects/documents`, formData).then(({ data }) => {
                   // setFiles(files.map((file) => (file.id == data.configuration_document_id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
                   setLoading(false);
-
-                //   store.addNotification({
-                //     message: `Documento salvo com sucesso!`,
-                //     type: 'success',
-                //     insert: 'top',
-                //     container: 'top-right',
-                //     animationIn: ['animate__animated', 'animate__fadeIn'],
-                //     animationOut: ['animate__animated', 'animate__fadeOut'],
-                //     dismiss: {
-                //       duration: 5000,
-                //       onScreen: true,
-                //     },
-                //   });
                 });
               }
             } else if (project.files.length == 0) {
@@ -588,19 +571,6 @@ export default function Project() {
                 api.post(`projects/documents`, formData).then(({ data }) => {
                   // setFiles(files.map((file) => (file.id == data.configuration_document_id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
                   setLoading(false);
-
-                //   store.addNotification({
-                //     message: `Documento salvo com sucesso!`,
-                //     type: 'success',
-                //     insert: 'top',
-                //     container: 'top-right',
-                //     animationIn: ['animate__animated', 'animate__fadeIn'],
-                //     animationOut: ['animate__animated', 'animate__fadeOut'],
-                //     dismiss: {
-                //       duration: 5000,
-                //       onScreen: true,
-                //     },
-                //   });
                 });
               }
             } else if (files[i].file.name && !files[i].file.url) {
@@ -611,19 +581,6 @@ export default function Project() {
               api.put(`projects/documents/${files[i].id}`, formData).then(({ data }) => {
                 setFiles(files.map((file) => (file.id == data.id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
                 setLoading(false);
-
-                // store.addNotification({
-                //   message: `Documento salvo com sucesso!`,
-                //   type: 'success',
-                //   insert: 'top',
-                //   container: 'top-right',
-                //   animationIn: ['animate__animated', 'animate__fadeIn'],
-                //   animationOut: ['animate__animated', 'animate__fadeOut'],
-                //   dismiss: {
-                //     duration: 5000,
-                //     onScreen: true,
-                //   },
-                // });
               });
             }
           }
@@ -637,10 +594,13 @@ export default function Project() {
           setTimeout(() => {
             setPageLoading(false);
           }, 2000);
+
+        //   setPageLoading(true);
+        //   setScreen({
+        //     ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+        //   });
         } else if (screen.appresentation) {
           setLoading(true);
-
-          console.log(plano);
 
           const formData = new FormData();
           formData.append('edital_id', id);
@@ -662,19 +622,6 @@ export default function Project() {
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
 
-            // store.addNotification({
-            //   message: `Projeto salvo com sucesso!`,
-            //   type: 'success',
-            //   insert: 'top',
-            //   container: 'top-right',
-            //   animationIn: ['animate__animated', 'animate__fadeIn'],
-            //   animationOut: ['animate__animated', 'animate__fadeOut'],
-            //   dismiss: {
-            //     duration: 5000,
-            //     onScreen: true,
-            //   },
-            // });
-
             getProject();
 
             setPageLoading(true);
@@ -686,6 +633,11 @@ export default function Project() {
             setTimeout(() => {
               setPageLoading(false);
             }, 2000);
+
+            // setPageLoading(true);
+            // setScreen({
+            //   ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
+            // });
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -712,19 +664,6 @@ export default function Project() {
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
 
-            // store.addNotification({
-            //   message: `Projeto salvo com sucesso!`,
-            //   type: 'success',
-            //   insert: 'top',
-            //   container: 'top-right',
-            //   animationIn: ['animate__animated', 'animate__fadeIn'],
-            //   animationOut: ['animate__animated', 'animate__fadeOut'],
-            //   dismiss: {
-            //     duration: 5000,
-            //     onScreen: true,
-            //   },
-            // });
-
             getProject();
 
             setPageLoading(true);
@@ -736,6 +675,11 @@ export default function Project() {
             setTimeout(() => {
               setPageLoading(false);
             }, 2000);
+
+            // setPageLoading(true);
+            // setScreen({
+            //   ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, orcamento: false, recursos: false,
+            // });
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -762,19 +706,6 @@ export default function Project() {
 
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
-
-            // store.addNotification({
-            //   message: `Projeto salvo com sucesso!`,
-            //   type: 'success',
-            //   insert: 'top',
-            //   container: 'top-right',
-            //   animationIn: ['animate__animated', 'animate__fadeIn'],
-            //   animationOut: ['animate__animated', 'animate__fadeOut'],
-            //   dismiss: {
-            //     duration: 5000,
-            //     onScreen: true,
-            //   },
-            // });
 
             getProject();
 
@@ -822,19 +753,6 @@ export default function Project() {
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
 
-            // store.addNotification({
-            //   message: `Projeto salvo com sucesso!`,
-            //   type: 'success',
-            //   insert: 'top',
-            //   container: 'top-right',
-            //   animationIn: ['animate__animated', 'animate__fadeIn'],
-            //   animationOut: ['animate__animated', 'animate__fadeOut'],
-            //   dismiss: {
-            //     duration: 5000,
-            //     onScreen: true,
-            //   },
-            // });
-
             getProject();
 
             setPageLoading(true);
@@ -846,6 +764,11 @@ export default function Project() {
             setTimeout(() => {
               setPageLoading(false);
             }, 2000);
+
+            // setPageLoading(true);
+            // setScreen({
+            //   ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
+            // });
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -872,19 +795,6 @@ export default function Project() {
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
 
-            // store.addNotification({
-            //   message: `Projeto salvo com sucesso!`,
-            //   type: 'success',
-            //   insert: 'top',
-            //   container: 'top-right',
-            //   animationIn: ['animate__animated', 'animate__fadeIn'],
-            //   animationOut: ['animate__animated', 'animate__fadeOut'],
-            //   dismiss: {
-            //     duration: 5000,
-            //     onScreen: true,
-            //   },
-            // });
-
             getProject();
 
             setPageLoading(true);
@@ -896,6 +806,11 @@ export default function Project() {
             setTimeout(() => {
               setPageLoading(false);
             }, 2000);
+
+            // setPageLoading(true);
+            // setScreen({
+            //   ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: true,
+            // });
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -1165,13 +1080,13 @@ export default function Project() {
             && (
             <Unform initialData={project} ref={formRef} onSubmit={handleSubmit}>
               <Content>
-                {screen.header && <Header invalid={coordenador != user.id || !edital?.valid || project?.submetido == 'true'} files={files} setFiles={setFiles} protocolo={protocolo} edital={edital} formRef={formRef} />}
-                {screen.documents && <Document invalid={coordenador != user.id || !edital?.valid || project?.submetido == 'true'} files={files} setFiles={setFiles} protocolo={protocolo} edital={edital} formRef={formRef} />}
-                {screen.appresentation && <Appresentation />}
-                {screen.abrangencia && <Abrangencia />}
-                {screen.equipe && <Equipe />}
-                {screen.orcamento && <Orcamento formRef={formRef} orcamentos={orcamentos} setOrcamentos={setOrcamentos} despesas={despesas} setDespesas={setDespesas} />}
-                {screen.recursos && <Recursos />}
+                {screen.header && !pageLoading && <Header invalid={coordenador != user.id || !edital?.valid || project?.submetido == 'true'} files={files} setFiles={setFiles} protocolo={protocolo} edital={edital} formRef={formRef} />}
+                {screen.documents && !pageLoading && <Document invalid={coordenador != user.id || !edital?.valid || project?.submetido == 'true'} files={files} setFiles={setFiles} protocolo={protocolo} edital={edital} formRef={formRef} />}
+                {screen.appresentation && !pageLoading && <Appresentation />}
+                {screen.abrangencia && !pageLoading && <Abrangencia />}
+                {screen.equipe && !pageLoading && <Equipe />}
+                {screen.orcamento && !pageLoading && <Orcamento formRef={formRef} orcamentos={orcamentos} setOrcamentos={setOrcamentos} despesas={despesas} setDespesas={setDespesas} />}
+                {screen.recursos && !pageLoading && <Recursos />}
               </Content>
 
               {coordenador == user.id
