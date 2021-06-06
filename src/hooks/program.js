@@ -113,11 +113,23 @@ export const ProgramProvider = ({ children }) => {
           encargos: { checked: true, value: 0 },
         },
       }),
-      abrangencia: null,
-      membros: null,
+      abrangencia: JSON.stringfy({
+        abrangencias: {
+          abrangencia: { checked: true, value: 0 },
+        },
+      }),
+      membros: JSON.stringfy({
+        equipes: {
+          equipe: { checked: true, value: 0 },
+        },
+      }),
       atividades: null,
       recursos_proprios: null,
-      recursos_solicitados_outros: null,
+      recursos_solicitados_outros: JSON.stringfy({
+        recursos: {
+          recurso: { checked: true, value: 0 },
+        },
+      }),
     };
 
     api.post(`files`, formData).then(({ data }) => {

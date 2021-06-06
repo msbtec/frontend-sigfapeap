@@ -325,9 +325,94 @@ export default function Project() {
         },
       });
 
+      setScreen({
+        ...screen, header: true, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+      });
+
       getProject();
     });
   }
+
+  useEffect(() => {
+    if (configuration) {
+      if (screen.documents) {
+        if (configuration?.files?.length == 0) {
+          setPageLoading(true);
+          setTimeout(() => {
+            setScreen({
+              ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+            });
+          }, 1000);
+          setTimeout(() => {
+            setPageLoading(false);
+          }, 2000);
+        }
+      }
+
+      if (screen.appresentation) {
+        if (!JSON.parse(configuration.apresentacao).isOne) {
+          setPageLoading(true);
+          setTimeout(() => {
+            setScreen({
+              ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
+            });
+          }, 1000);
+          setTimeout(() => {
+            setPageLoading(false);
+          }, 2000);
+        }
+      }
+
+      if (screen.abrangencia) {
+        if (!JSON.parse(configuration.abrangencia).abrangencias.abrangencia.checked) {
+          setPageLoading(true);
+          setTimeout(() => {
+            setScreen({
+              ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, orcamento: false, recursos: false,
+            });
+          }, 1000);
+          setTimeout(() => {
+            setPageLoading(false);
+          }, 2000);
+        }
+      }
+
+      if (screen.equipe) {
+        if (!JSON.parse(configuration.membros).equipes.equipe.checked) {
+          setPageLoading(true);
+          setTimeout(() => {
+            setScreen({
+              ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
+            });
+          }, 1000);
+          setTimeout(() => {
+            setPageLoading(false);
+          }, 2000);
+        }
+      }
+
+      if (screen.orcamento) {
+        if (!JSON.parse(configuration.orcamento).isOne) {
+          setPageLoading(true);
+          setTimeout(() => {
+            setScreen({
+              ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: true,
+            });
+          }, 1000);
+          setTimeout(() => {
+            setPageLoading(false);
+          }, 2000);
+        }
+      }
+
+      if (screen.recursos) {
+        if (!JSON.parse(configuration.orcamento).isOne && !JSON.parse(configuration.recursos_solicitados_outros).recursos.recurso.checked) {
+          submter();
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen]);
 
   const handleSubmit = useCallback(
     async (data) => {

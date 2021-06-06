@@ -142,8 +142,7 @@ export default function App({
       </li>
       )}
 
-      {configuration && (JSON.parse(configuration.orcamento).isOne
-      || JSON.parse(configuration.recursos_solicitados_outros).recursos.recurso.checked) && (
+      {configuration && JSON.parse(configuration.orcamento).isOne && (
       <li style={{
         backgroundColor: screen.orcamento ? '#b20710' : '#ccc', padding: 10, marginRight: 2,
       }}
@@ -169,8 +168,8 @@ export default function App({
       </li>
       )}
 
-      {configuration && JSON.parse(configuration.orcamento).isOne
-      && (
+      {configuration && (JSON.parse(configuration.orcamento).isOne
+      || JSON.parse(configuration.recursos_solicitados_outros).recursos.recurso.checked) && (
       <li style={{
         backgroundColor: screen.recursos ? '#b20710' : '#ccc', padding: 10, marginRight: 2,
       }}
