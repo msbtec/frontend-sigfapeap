@@ -44,12 +44,12 @@ export default function Header({
 
       <div style={{ marginBottom: 10 }} className="input-block">
         <label className="required">Coordenador</label>
-        <input value={user.name} type="text" disabled />
+        <input value={user.profile.name != 'Pesquisador' ? project.coordenador.name : user.name} type="text" disabled />
       </div>
 
       <div style={{ marginBottom: 10 }} className="input-block">
         <label className="required">E-mail</label>
-        <input value={user.email} type="text" disabled />
+        <input value={user.profile.name != 'Pesquisador' ? project.coordenador.email : user.email} type="text" disabled />
       </div>
 
       {/* <Input formRef={formRef} name="email" title="E-mail"  original /> */}
