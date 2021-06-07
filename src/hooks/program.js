@@ -113,19 +113,19 @@ export const ProgramProvider = ({ children }) => {
           encargos: { checked: true, value: 0 },
         },
       }),
-      abrangencia: JSON.stringfy({
+      abrangencia: JSON.stringify({
         abrangencias: {
           abrangencia: { checked: true, value: 0 },
         },
       }),
-      membros: JSON.stringfy({
+      membros: JSON.stringify({
         equipes: {
           equipe: { checked: true, value: 0 },
         },
       }),
       atividades: null,
       recursos_proprios: null,
-      recursos_solicitados_outros: JSON.stringfy({
+      recursos_solicitados_outros: JSON.stringify({
         recursos: {
           recurso: { checked: true, value: 0 },
         },
