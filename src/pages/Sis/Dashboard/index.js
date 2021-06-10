@@ -187,7 +187,7 @@ export default function Dashboard() {
           <div className="card-body">
             <div className="row">
               <div className="col">
-                <div className="title">Solicitações Urgentes</div>
+                <div className="title">Comunicação com o pesquisador (Solicitações Urgentes)</div>
                 <div className="number pulsate">{requestsUrgentes.length}</div>
               </div>
               <div className={`${requestsUrgentes.length > 0 ? 'col-auto fa-blink' : 'col-auto'}`}>

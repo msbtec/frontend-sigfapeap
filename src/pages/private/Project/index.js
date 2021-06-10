@@ -539,6 +539,8 @@ export default function Project() {
             }
           }
 
+          console.log(files);
+
           // eslint-disable-next-line no-plusplus
           for (let i = 0; i < files.length; i++) {
             if (!project) {
@@ -568,20 +570,29 @@ export default function Project() {
                 formData.append('file', files[i].file);
 
                 setLoading(true);
-                api.post(`projects/documents`, formData).then(({ data }) => {
-                  // setFiles(files.map((file) => (file.id == data.configuration_document_id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
-                  setLoading(false);
-                });
+                // api.post(`projects/documents`, formData).then(({ data }) => {
+                //   // setFiles(files.map((file) => (file.id == data.configuration_document_id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
+                //   setLoading(false);
+                // });
+
+                // eslint-disable-next-line no-await-in-loop
+                await api.post(`projects/documents`, formData);
+                setLoading(false);
               }
             } else if (files[i].file.name && !files[i].file.url) {
               const formData = new FormData();
               formData.append('file', files[i].file);
 
               setLoading(true);
-              api.put(`projects/documents/${files[i].id}`, formData).then(({ data }) => {
-                setFiles(files.map((file) => (file.id == data.id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
-                setLoading(false);
-              });
+              //   api.put(`projects/documents/${files[i].id}`, formData).then(({ data }) => {
+              //     setFiles(files.map((file) => (file.id == data.id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
+              //     setLoading(false);
+              //   });
+
+              // eslint-disable-next-line no-await-in-loop
+              const { data } = await api.put(`projects/documents/${files[i].id}`, formData);
+              setFiles(files.map((file) => (file.id == data.id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
+              setLoading(false);
             }
           }
 
@@ -593,6 +604,7 @@ export default function Project() {
           }, 1000);
           setTimeout(() => {
             setPageLoading(false);
+            getProject();
           }, 2000);
 
         //   setPageLoading(true);
@@ -932,6 +944,240 @@ export default function Project() {
     });
   }
 
+  function backPage() {
+    if (screen.documents) {
+      setPageLoading(true);
+      setTimeout(() => {
+        setScreen({
+          ...screen, header: true, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+        });
+      }, 1000);
+      setTimeout(() => {
+        setPageLoading(false);
+      }, 2000);
+    }
+
+    if (screen.appresentation) {
+      if (configuration?.files?.length == 0) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: true, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: true, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      }
+    }
+
+    if (screen.abrangencia) {
+      if (JSON.parse(configuration.apresentacao).isOne) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else if (configuration?.files?.length != 0) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: true, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: true, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      }
+    }
+
+    if (screen.equipe) {
+      if (JSON.parse(configuration.abrangencia).abrangencias.abrangencia.checked) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else if (JSON.parse(configuration.apresentacao).isOne) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else if (configuration?.files?.length != 0) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: true, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: true, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      }
+    }
+
+    if (screen.orcamento) {
+      if (JSON.parse(configuration.membros).equipes.equipe.checked) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else if (JSON.parse(configuration.abrangencia).abrangencias.abrangencia.checked) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else if (JSON.parse(configuration.apresentacao).isOne) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else if (configuration?.files?.length != 0) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: true, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: true, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      }
+    }
+
+    if (screen.recursos) {
+      if (JSON.parse(configuration.orcamento).isOne) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else if (JSON.parse(configuration.orcamento).isOne) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else if (JSON.parse(configuration.abrangencia).abrangencias.abrangencia.checked) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else if (JSON.parse(configuration.apresentacao).isOne) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else if (configuration?.files?.length != 0) {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: false, documents: true, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      } else {
+        setPageLoading(true);
+        setTimeout(() => {
+          setScreen({
+            ...screen, header: true, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          });
+        }, 1000);
+        setTimeout(() => {
+          setPageLoading(false);
+        }, 2000);
+      }
+    }
+  }
+
   return (
     <>
       <div className="col-12 title">
@@ -1093,19 +1339,46 @@ export default function Project() {
               && (
               <div style={{ marginTop: 20 }} className="modal-footer">
                 {loading ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : project?.submetido == 'false' && (
-                <Button
-                  className="primary"
-                >
-                  Salvar
-                </Button>
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                  {!screen.header && !pageLoading
+                  && (
+                  <Button
+                    className="primary"
+                    style={{ marginRight: 10 }}
+                    type="button"
+                    onClick={backPage}
+                  >
+                    Voltar
+                  </Button>
+                  )}
+                  <Button
+                    className="primary"
+                  >
+                    Salvar
+                  </Button>
+                </div>
                 )}
 
                 {!project && !loading && (
-                <Button
-                  className="primary"
-                >
-                  Salvar
-                </Button>
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    {!screen.header && !pageLoading
+                  && (
+                  <Button
+                    className="primary"
+                    style={{ marginRight: 10 }}
+                    type="button"
+                    onClick={backPage}
+                  >
+                    Voltar
+                  </Button>
+                  )}
+
+                  <Button
+                    className="primary"
+                  >
+                    Salvar
+                  </Button>
+                </div>
                 )}
               </div>
               )}
