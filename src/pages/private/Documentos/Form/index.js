@@ -98,7 +98,7 @@ function ModalForm({
                 <input
                   type="file"
                   placeholder="Arquivo"
-                  accept=".pdf"
+                  accept=".pdf,.doc,.docx"
                   // onChange={(e) => setSelectedFile(e.target.files[0])}
                   onChange={(e) => {
                     if (e.target.files.length > 0) {
@@ -122,7 +122,7 @@ function ModalForm({
                   }}
                 />
                 <div className="text">
-                  { selectedFile ? selectedFile.name : 'Selecione um arquivo PDF' }
+                  { selectedFile ? selectedFile.name : 'Selecione um arquivo' }
                 </div>
                 <div className="icon">
                   <FiFile />
