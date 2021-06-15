@@ -234,7 +234,7 @@ function ModalForm({
             <label style={{ marginBottom: 10 }}>
               Solicitação
             </label>
-            <CKEditor
+            {/* <CKEditor
               editor={ClassicEditor}
               data={description}
               onReady={(editor) => {}}
@@ -242,6 +242,12 @@ function ModalForm({
                 const data = editor.getData();
                 setDescription(data);
               }}
+            /> */}
+            <textarea
+              rows={5}
+              style={{ borderColor: "rgb(153, 153, 153)", padding: 10 }}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
 

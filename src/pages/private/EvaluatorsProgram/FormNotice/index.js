@@ -94,7 +94,7 @@ function ModalForm({
                   onChange={(e) => setSelectedFile(e.target.files[0])}
                 />
                 <div className="text">
-                  { selectedFile ? selectedFile.name : 'Selecione um arquivo PDF' }
+                  { selectedFile ? selectedFile.name : 'Selecione um arquivo' }
                 </div>
                 <div className="icon">
                   <FiFile />

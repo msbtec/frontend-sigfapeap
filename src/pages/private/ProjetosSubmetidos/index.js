@@ -32,7 +32,7 @@ export default function ProjetosSubmetidos() {
         user_id: user.profile.name == 'Administrador' ? 0 : user.id,
       },
     }).then(({ data }) => {
-      setProjects(data);
+      setProjects(data.filter((item) => (item.avaliacao.status == 'Análise' || item.avaliacao.status == 'Avaliação')));
     });
   }, [id, user]);
 

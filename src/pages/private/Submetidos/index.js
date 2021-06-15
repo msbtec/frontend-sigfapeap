@@ -43,7 +43,7 @@ export default function Submetidos() {
           user_id: user.profile.name == 'Administrador' ? 0 : user.id,
         },
       }).then(({ data }) => {
-        setProjetos(data);
+        setProjetos(data.filter((item) => (item.avaliacao.status == 'Análise' || item.avaliacao.status == 'Avaliação')));
       });
     }
   }, [selectedEdital, user]);

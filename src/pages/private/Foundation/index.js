@@ -12,7 +12,7 @@ import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
 
-import { useFoundation } from '../../../hooks/foundation'
+import { useFoundation } from '../../../hooks/foundation';
 
 let ModalForm = () => <></>;
 let ModalConfirm = () => <></>;
@@ -20,7 +20,7 @@ let ModalConfirm = () => <></>;
 export default function Instituicoes() {
   const [OpenForm, setOpenForm] = useState(false);
   const [OpenConfirm, setOpenConfirm] = useState(false);
-  const [selected,setSelected] = useState(null);
+  const [selected, setSelected] = useState(null);
 
   const { foundations, erase } = useFoundation();
 
@@ -45,7 +45,7 @@ export default function Instituicoes() {
   }
 
   function submitModalConfirm() {
-    erase(selected)
+    erase(selected);
     setOpenConfirm(!OpenConfirm);
   }
 
@@ -60,10 +60,16 @@ export default function Instituicoes() {
             <h3>Listagem de instituições de pesquisa</h3>
           </div>
           <div className="card-title">
-            <Button onClick={() => {
+            <Button
+              onClick={() => {
                 setSelected(null);
                 toggleModalForm();
-            }} className="primary">Cadastrar institução de pesquisa</Button>
+              }}
+              className="primary"
+            >
+              Cadastrar institução de pesquisa
+
+            </Button>
           </div>
           <div className="card-body">
             <Table>
@@ -72,9 +78,9 @@ export default function Instituicoes() {
                   <th className="col-1">#</th>
                   <th className="col-2">Nome</th>
                   <th className="col-2">Tipo</th>
-                  <th className="col-2">Endereço</th>
+                  <th className="col-3">Endereço</th>
                   <th className="col-2">E-mail</th>
-                  <th>Ações</th>
+                  <th className="col-2">Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -86,16 +92,24 @@ export default function Instituicoes() {
                     <td style={{ textAlign: 'center' }}>{ item.address }</td>
                     <td style={{ textAlign: 'center' }}>{ item.email }</td>
                     <td style={{ textAlign: 'center' }}>
-                      <button data-tip="Editar instituição" onClick={() => {
+                      <button
+                        data-tip="Editar instituição"
+                        onClick={() => {
                           setSelected(item);
                           toggleModalForm();
-                      }} className="edit">
+                        }}
+                        className="edit"
+                      >
                         <FiEdit />
                       </button>
-                      <button data-tip="Deletar instituição" onClick={() => {
+                      <button
+                        data-tip="Deletar instituição"
+                        onClick={() => {
                           setSelected(item);
                           toggleModalConfirm();
-                      }} className="eraser">
+                        }}
+                        className="eraser"
+                      >
                         <FiTrash />
                       </button>
                     </td>

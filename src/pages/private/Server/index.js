@@ -82,10 +82,10 @@ export default function Servidores() {
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className="col-4">Nome</th>
+                  <th className="col-5">Nome</th>
                   <th className="col-2">E-mail</th>
                   <th className="col-2">Perfil</th>
-                  <th>Ações</th>
+                  <th className="col-2">Ações</th>
                 </tr>
               </thead>
               <tbody>

@@ -73,7 +73,7 @@ export default function Dashboard() {
     loadNotices(0);
     loadPublishes(0);
 
-    getRequestsUrgentes(undefined, 'Urgente');
+    getRequestsUrgentes(undefined, 'urgente');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -180,14 +180,14 @@ export default function Dashboard() {
         <CardDashboard
           style={{ cursor: 'pointer' }}
           onClick={() => {
-            history.push('solicitacoes/Urgente');
+            history.push('solicitacoes/urgente');
           }}
           className="green"
         >
           <div className="card-body">
             <div className="row">
               <div className="col">
-                <div className="title">Comunicação com o pesquisador (Solicitações Urgentes)</div>
+                <div className="title">Comunicação com o pesquisador (Solicitações Relevantes)</div>
                 <div className="number pulsate">{requestsUrgentes.length}</div>
               </div>
               <div className={`${requestsUrgentes.length > 0 ? 'col-auto fa-blink' : 'col-auto'}`}>

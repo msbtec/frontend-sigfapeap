@@ -93,7 +93,7 @@ export default function Documentos() {
                   <th className="col-3">Nome</th>
                   <th className="col-5">Descrição</th>
                   <th className="col-1">Anexo</th>
-                  {user.profile.name != 'Pesquisador' && <th>Ações</th>}
+                  {user.profile.name != 'Pesquisador' && <th className="col-2">Ações</th>}
                 </tr>
               </thead>
               <tbody>

@@ -71,10 +71,10 @@ export default function Avaliadores() {
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className="col-4">Nome</th>
+                  <th className="col-5">Nome</th>
                   <th className="col-2">CPF</th>
                   <th className="col-2">E-mail</th>
-                  <th>Ações</th>
+                  <th className="col-2">Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -88,8 +88,8 @@ export default function Avaliadores() {
                       <button
                         data-tip="Adicionar programa(s)"
                         onClick={() => {
-                            setSelected(item);
-                            toggleModalForm();
+                          setSelected(item);
+                          toggleModalForm();
                         }}
                         className="edit"
                       >
@@ -116,7 +116,7 @@ export default function Avaliadores() {
 
       <Suspense fallback={null}>
         <ModalProvider>
-        <ModalForm isOpen={OpenForm} toggleModal={toggleModalForm} item={selected} submit={submitModalForm} />
+          <ModalForm isOpen={OpenForm} toggleModal={toggleModalForm} item={selected} submit={submitModalForm} />
 
           <ModalConfirm
             isOpen={OpenConfirm}

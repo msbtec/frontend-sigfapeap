@@ -82,16 +82,23 @@ function ModalForm({
           <div className="modal-body" ref={reference}>
             <div style={{ marginBottom: 20 }}>
               <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
+                Projeto:
+              </label>
+              <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item?.projeto?.title }} />
+            </div>
+
+            <div style={{ marginBottom: 20 }}>
+              <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
                 Assunto:
               </label>
-              <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item.assunto }} />
+              <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item?.assunto }} />
             </div>
 
             <div style={{ marginBottom: 20 }}>
               <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
                 Solicitação:
               </label>
-              <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item.solicitacao }} />
+              <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item?.solicitacao }} />
             </div>
 
             <div>
@@ -99,7 +106,7 @@ function ModalForm({
                 Anexo:
               </label>
               <td style={{ marginTop: 10, textAlign: 'center' }}>
-                <a className="url" href={item.name ? item.url : null} target="_blank">{item.name ? item.name : "Sem Anexo"}</a>
+                <a className="url" href={item?.name ? item?.url : null} target="_blank">{item?.name ? item?.name : "Sem Anexo"}</a>
               </td>
             </div>
 
@@ -107,7 +114,7 @@ function ModalForm({
               <label style={{ marginBottom: 10 }}>
                 Resposta
               </label>
-              <CKEditor
+              {/* <CKEditor
                 editor={ClassicEditor}
                 data={description}
                 onReady={(editor) => {}}
@@ -115,6 +122,12 @@ function ModalForm({
                   const data = editor.getData();
                   setDescription(data);
                 }}
+              /> */}
+              <textarea
+                rows={5}
+                style={{ borderColor: "rgb(153, 153, 153)", padding: 10 }}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
           </div>

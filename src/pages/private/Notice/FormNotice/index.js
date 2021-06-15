@@ -185,7 +185,7 @@ function ModalForm({
               <label style={{ marginBottom: 10 }}>
                 Descrição
               </label>
-              <CKEditor
+              {/* <CKEditor
                 editor={ClassicEditor}
                 data={description}
                 onReady={(editor) => { }}
@@ -193,6 +193,12 @@ function ModalForm({
                   const data = editor.getData();
                   setDescription(data);
                 }}
+              /> */}
+              <textarea
+                rows={5}
+                style={{ borderColor: "rgb(153, 153, 153)", padding: 10 }}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
 
@@ -231,7 +237,7 @@ function ModalForm({
                   }}
                 />
                 <div className="text">
-                  { selectedFile ? selectedFile.name : 'Selecione um arquivo PDF' }
+                  { selectedFile ? selectedFile.name : 'Selecione um arquivo' }
                 </div>
                 <div className="icon">
                   <FiFile />

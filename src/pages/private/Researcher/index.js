@@ -8,18 +8,17 @@ import { ModalProvider } from 'styled-react-modal';
 
 import { FiEdit, FiTrash } from 'react-icons/fi';
 
+import ReactPaginate from 'react-paginate';
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
 
-import ReactPaginate from 'react-paginate';
+import { useResearcher } from '../../../hooks/researcher';
 
-import { useResearcher } from '../../../hooks/researcher'
-
-import Filters from '../../../components/Filters'
+import Filters from '../../../components/Filters';
 
 const Form = import("./Form");
-const Confirm = import("../../../components/Confirm")
+const Confirm = import("../../../components/Confirm");
 
 let ModalForm = () => <></>;
 let ModalConfirm = () => <></>;
@@ -27,7 +26,7 @@ let ModalConfirm = () => <></>;
 export default function Servidores() {
   const [OpenForm, setOpenForm] = useState(false);
   const [OpenConfirm, setOpenConfirm] = useState(false);
-  const [selected,setSelected] = useState(null);
+  const [selected, setSelected] = useState(null);
 
   const [filters, setFilters] = useState({
     page: 1,
@@ -37,7 +36,9 @@ export default function Servidores() {
     knowledgesArea: null,
   });
 
-  const { users, erase, loadResearches, totalPages } = useResearcher();
+  const {
+    users, erase, loadResearches, totalPages,
+  } = useResearcher();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Pesquisadores';
@@ -60,7 +61,7 @@ export default function Servidores() {
   }
 
   function submitModalConfirm() {
-    erase(selected)
+    erase(selected);
     setOpenConfirm(!OpenConfirm);
   }
 
@@ -88,11 +89,11 @@ export default function Servidores() {
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className="col-4">Nome</th>
+                  <th className="col-5">Nome</th>
                   <th className="col-3">E-mail</th>
                   {/* <th className="col-1">Cargo/Função</th> */}
                   <th className="col-1">Avaliador</th>
-                  <th>Ações</th>
+                  <th className="col-2">Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -104,16 +105,24 @@ export default function Servidores() {
                     {/* <td style={{ textAlign: 'center' }}>{ item.office_name }</td> */}
                     <td style={{ textAlign: 'center' }}>{ item.evaluator ? 'SIM' : 'NÃO' }</td>
                     <td style={{ textAlign: 'center' }}>
-                      <button data-tip="Alterar status" onClick={() => {
+                      <button
+                        data-tip="Alterar status"
+                        onClick={() => {
                           setSelected(item);
                           toggleModalForm();
-                      }} className="edit">
+                        }}
+                        className="edit"
+                      >
                         <FiEdit />
                       </button>
-                      <button data-tip="Deletar pesquisador" onClick={() => {
+                      <button
+                        data-tip="Deletar pesquisador"
+                        onClick={() => {
                           setSelected(item);
                           toggleModalConfirm();
-                      }} className="eraser">
+                        }}
+                        className="eraser"
+                      >
                         <FiTrash />
                       </button>
                     </td>
@@ -123,20 +132,20 @@ export default function Servidores() {
             </Table>
           </div>
 
-            <ReactPaginate
-                previousLabel={"anterior"}
-                nextLabel={"próximo"}
-                breakLabel={"..."}
-                breakClassName={"break-me"}
-                pageCount={totalPages}
-                marginPagesDisplayed={4}
-                pageRangeDisplayed={5}
-                forcePage={filters.page - 1}
-                onPageChange={(page) => { setFilters({...filters, page: page.selected + 1}); /* loadResearches(page.selected); */ }}
-                containerClassName={"pagination"}
-                subContainerClassName={"pages pagination"}
-                activeClassName={"active"}
-            />
+          <ReactPaginate
+            previousLabel="anterior"
+            nextLabel="próximo"
+            breakLabel="..."
+            breakClassName="break-me"
+            pageCount={totalPages}
+            marginPagesDisplayed={4}
+            pageRangeDisplayed={5}
+            forcePage={filters.page - 1}
+            onPageChange={(page) => { setFilters({ ...filters, page: page.selected + 1 }); /* loadResearches(page.selected); */ }}
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+            activeClassName="active"
+          />
         </Card>
       </div>
 

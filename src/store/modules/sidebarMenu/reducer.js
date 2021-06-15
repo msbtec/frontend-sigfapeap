@@ -85,7 +85,7 @@ const INITIAL_STATE = {
     {
       name: 'Fale Conosco',
       icon: <FiGrid />,
-      path: '/solicitacoes/Regular',
+      path: '/solicitacoes/regular',
     },
   ],
 };
