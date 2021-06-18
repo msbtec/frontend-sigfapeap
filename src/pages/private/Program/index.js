@@ -107,7 +107,7 @@ export default function Program() {
                   <th className="col-6">Descrição</th>
                   {/* <th className="col-1">Avaliação</th> */}
                   {/* <th className="col-1">Anexo</th> */}
-                  <th>Ações</th>
+                  <th className="col-2">Ações</th>
                 </tr>
               </thead>
               <tbody>

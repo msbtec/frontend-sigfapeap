@@ -158,7 +158,7 @@ const SignUp = () => {
           });
 
           create({
-            ...form, ...data, name: String(form.name).toUpperCase(), profile_id: 2, type_personal: form.type_personal === 'Avaliador' ? 'Pesquisador' : form.type_personal, evaluator: form.type_personal === 'Avaliador',
+            ...form, ...data, name: String(form.name).toUpperCase(), profile_id: 1, type_personal: form.type_personal === 'Avaliador' ? 'Pesquisador' : form.type_personal, evaluator: form.type_personal === 'Avaliador',
           }, { avatar: form.avatar });
         }
       } catch (error) {

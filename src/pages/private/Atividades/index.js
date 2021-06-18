@@ -112,7 +112,7 @@ export default function Atividades() {
                 <tr>
                   <th className="col-1">#</th>
                   <th className="col-9">Nome</th>
-                  <th>Ações</th>
+                  <th className="col-2">Ações</th>
                 </tr>
               </thead>
               <tbody>

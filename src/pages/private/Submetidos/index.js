@@ -43,7 +43,7 @@ export default function Submetidos() {
           user_id: user.profile.name == 'Administrador' ? 0 : user.id,
         },
       }).then(({ data }) => {
-        setProjetos(data.filter((item) => (item.avaliacao.status == 'Análise' || item.avaliacao.status == 'Avaliação')));
+        setProjetos(data.filter((item) => (item.avaliacao.status == 'Análise' || item.avaliacao.status == 'Avaliação' || item.avaliacao.status == "Homologação" || item.avaliacao.status == "Homologado")));
       });
     }
   }, [selectedEdital, user]);
@@ -110,7 +110,7 @@ export default function Submetidos() {
                 <tr>
                   <th className="col-1">#</th>
                   <th className="col-9">Nome</th>
-                  <th>Ações</th>
+                  <th className="col-2">Ações</th>
                 </tr>
               </thead>
               <tbody>

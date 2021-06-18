@@ -129,8 +129,11 @@ function ModalForm({
     if (project?.edital_id) {
       api.get(`/evaluators/program/${project.edital_id}`).then(({ data }) => {
         if (data.length > 0) {
-          setUsers(data);
-          setAvaliador({ label: data[0].name, value: JSON.stringify(data[0]) });
+          const filter = data.filter((item) => item.id != project.coordenador.id);
+          if (filter.length > 0) {
+            setUsers(filter);
+            setAvaliador({ label: filter[0].name, value: JSON.stringify(filter[0]) });
+          }
         }
       });
     }

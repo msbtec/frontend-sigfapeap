@@ -140,7 +140,7 @@ export default function Tarefas() {
                 <tr>
                   <th className="col-8">Descrição da Tarefa</th>
                   <th className="col-2">Anexo</th>
-                  <th>Ações</th>
+                  <th className="col-2">Ações</th>
                 </tr>
               </thead>
               <tbody>

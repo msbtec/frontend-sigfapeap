@@ -4,6 +4,7 @@ import React, {
   useContext,
 } from 'react';
 import { uuid } from 'uuidv4';
+import api from '../services/api';
 
 import { useAuth } from './auth';
 
@@ -18,8 +19,17 @@ export const ProjectProvider = ({ children }) => {
 
   const [project, setProject] = useState(null);
 
+  const [review, setReview] = useState(0);
+  const [status, setStatus] = useState(false);
+
   const [membros, setMembros] = useState([{ label: user?.name, value: JSON.stringify(user) }]);
   const [atividades, setAtividades] = useState([]);
+
+  React.useEffect(() => {
+    api.get(`projects/review`).then(({ data }) => {
+      setReview(data.length);
+    });
+  }, [user, status]);
 
   const [plano, setPlano] = useState({
     resumo: '',
@@ -106,6 +116,9 @@ export const ProjectProvider = ({ children }) => {
       value={{
         loading,
         setLoading,
+        status,
+        setStatus,
+        review,
         project,
         setProject,
         membros,

@@ -66,7 +66,7 @@ export default function ProjetosSubmetidos() {
                   {/* <th className="col-3">Resumo</th> */}
                   <th className="col-2">Status</th>
                   <th className="col-1">E-mail do coordenador</th>
-                  <th>Ações</th>
+                  <th className="col-2">Ações</th>
                 </tr>
               </thead>
               <tbody>

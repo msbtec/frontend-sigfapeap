@@ -66,7 +66,7 @@ export default function Project() {
     plano, setPlano, despesas, setDespesas, recursos,
     setRecursos, abrangencias, setAbrangencias,
     orcamentos, setOrcamentos, loading: pageLoading, setLoading: setPageLoading,
-    configuration, setConfigurations,
+    configuration, setConfigurations, status, setStatus,
   } = useProject();
 
   const [screen, setScreen] = useState({
@@ -201,6 +201,8 @@ export default function Project() {
       coordenador_id: coordenador,
     }).then(({ data }) => {
       setProject(data);
+
+      setStatus(!status);
 
       setFiles(data.files.map((item) => ({
         id: item.id,

@@ -131,8 +131,8 @@ export default function Avaliadores() {
                   <th className="col-1">#</th>
                   <th className="col-4">Nome</th>
                   <th className="col-3">Email</th>
-                  <th className="col-1">Currículo</th>
-                  <th>Ações</th>
+                  <th className="col-2">Currículo</th>
+                  <th className="col-2">Ações</th>
                 </tr>
               </thead>
               <tbody>

@@ -59,7 +59,7 @@ function Confirm({
 
             <p>
               <h4>Avaliação:</h4>
-              <p style={{ textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: project?.avaliacao?.analise1 }} />
+              <p style={{ textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: project?.avaliacao?.analise1 }} />
             </p>
 
             <p>
@@ -84,7 +84,7 @@ function Confirm({
 
             <p>
               <h4>Avaliação:</h4>
-              <p style={{ textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: project?.avaliacao?.analise2 }} />
+              <p style={{ textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: project?.avaliacao?.analise2 }} />
             </p>
 
             <p>

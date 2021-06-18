@@ -9,6 +9,7 @@ import { Side } from './styles';
 
 import { useAuth } from '../../../hooks/auth';
 import { useContact } from '../../../hooks/contact';
+import { useProject } from '../../../hooks/project';
 
 import Logo from '../../../assets/img/logo.png';
 
@@ -18,6 +19,8 @@ function Sidebar({
   const { user, signOut } = useAuth();
 
   const { notResponding } = useContact();
+
+  const { review } = useProject();
 
   function toggleMenu(menu) {
     return {
@@ -124,7 +127,28 @@ function Sidebar({
 
     if (profiles.includes('Submetidos')) {
       my_profiles.push({
-        name: 'Submetidos',
+        name: <div style={{
+          display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: -4,
+        }}
+        >
+          <h1 style={{ fontWeight: '500', color: '#a2a3b7', fontSize: 13 }}>
+            Projetos Submetidos
+          </h1>
+          {review > 0
+            && (
+            <div style={{
+              backgroundColor: "#080", paddingLeft: 10, paddingRight: 10, paddingBottom: 2, paddingTop: 4, borderRadius: 5, marginLeft: 10, justifyContent: 'center', alignItems: 'center',
+            }}
+            >
+              <h3 style={{
+                color: "#fff", fontSize: 13,
+              }}
+              >
+                {review}
+              </h3>
+            </div>
+            )}
+        </div>,
         icon: <FiGrid />,
         path: '/submetidos',
       });
@@ -177,7 +201,7 @@ function Sidebar({
     }
 
     dispatch(toggleItem(my_profiles));
-  }, [user, dispatch, notResponding]);
+  }, [user, review, dispatch, notResponding]);
 
   return (
 
