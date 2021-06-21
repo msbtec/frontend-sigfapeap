@@ -26,7 +26,7 @@ const RecoveryPassword = () => {
     }
 
     if (!email) {
-      setError('Preencha todos os campos para entrar ');
+      setError('Preencha todos os campos para continuar');
     } else {
       setLoading(true);
       api.post(`passwords`, {

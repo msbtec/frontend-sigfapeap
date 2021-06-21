@@ -70,7 +70,7 @@ export const Form = styled.div`
             color: rgb(102, 102, 102);
             border: 1px solid #dee2e6;
             padding: 5px 12px;
-            border-radius: 6px;
+            border-radius: 5px;
             transition: all 0.2s;
             background: none;
             /* width: 100%; */
@@ -87,7 +87,7 @@ export const Form = styled.div`
 
             &.bottom-b {
                 border: none;
-                border-radius: 0;
+                border-radius: 5px;
                 border-bottom: 1px solid #999;
             }
 
@@ -123,7 +123,7 @@ export const Form = styled.div`
 
         .file-input {
             border: 1px solid #dee2e6;
-            border-radius: 6px;
+            border-radius: 5px;
             overflow: hidden;
             display: inline-block;
             padding: 0px 0px 0px 12px;
@@ -216,7 +216,7 @@ export const Form = styled.div`
         }
 
         &.btn-circle {
-            border-radius: 60px;
+            border-radius: 5px;
         }
 
         &:hover {

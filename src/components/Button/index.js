@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Button = styled.button`
     border: none;
-    border-radius: 0.42rem;
+    border-radius: 5px;
     padding: .65rem 1rem;
     font-size: 1rem;
     line-height: 1.5;
@@ -67,7 +67,7 @@ export const Button = styled.button`
     }
 
     &.btn-circle {
-        border-radius: 2rem;
+        border-radius: 5px;
     }
 
     &.btn-shadow {

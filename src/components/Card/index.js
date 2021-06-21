@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Card = styled.div`
   margin-top: 30px;
-  border-radius: 10px;
+  border-radius: 5px;
   border: none;
   box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
   display: flex;
@@ -47,7 +47,7 @@ export const Card = styled.div`
         font-size: 12px;
         background: #b20710;
         padding: 8px 10px;
-        border-radius: 6px;
+        border-radius: 5px;
         color: #fff;
         border: none;
         font-weight: bold;
@@ -101,7 +101,7 @@ export const Card = styled.div`
 
 export const CardDashboard = styled.div`
   margin-top: 30px;
-  border-radius: 10px;
+  border-radius: 5px;
   border: none;
   box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
   display: flex;

@@ -32,7 +32,7 @@ export const StyledModal = Modal.styled`
     position: fixed;
     top: 0;
     margin: 1.75rem auto;
-    border-radius: .3rem;
+    border-radius: 5px;
 
     @keyframes modalFade {
         from {transform: translateY(-50%);opacity: 0;}
@@ -99,7 +99,7 @@ export const StyledModal = Modal.styled`
         .close, .submit {
             margin: 0 3px;
             padding: 7px 14px;
-            border-radius: 50px;
+            border-radius: 5px;
             font-size: 12px;
             font-weight: 500 !important;
             transition: all 0.2s !important;

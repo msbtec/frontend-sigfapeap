@@ -12,7 +12,7 @@ export const Container = styled.div`
 export const Content = styled.div`
     /* background: #fff; */
     padding: 50px;
-    border-radius: 10px;
+    border-radius: 5px;
     box-shadow: 1px 1px 20px 10px #dcdcdc;
 
     button{
@@ -50,7 +50,7 @@ export const DotsContainer = styled.div`
 
 export const Dots = styled.div`
   margin: 0 10px;
-  border-radius: 4px;
+  border-radius: 5px;
   height: 8px;
   width: 35px;
   background: ${({ isFilled }) => (isFilled ? "#b20710" : "#999")};

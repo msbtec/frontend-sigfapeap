@@ -57,7 +57,7 @@ export const Table = styled.table`
     cursor: pointer;
     font-size: 12px;
     padding: 8px 10px;
-    border-radius: 60px;
+    border-radius: 5px;
     color: #fff;
     border: none;
     font-weight: 400;

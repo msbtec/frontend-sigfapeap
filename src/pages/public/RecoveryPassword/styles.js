@@ -22,7 +22,7 @@ export const Form = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 10px;
+    border-radius: 5px;
     box-shadow: 1px 1px 20px 10px #dcdcdc;
 
     img{
@@ -34,7 +34,7 @@ export const Form = styled.form`
         color: #ff3333;
         margin-bottom: 15px;
         border: 1px solid #ff3333;
-        border-radius: 20px;
+        border-radius: 5px;
         padding: 10px;
         width: 100%;
         text-align: center;
