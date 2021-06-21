@@ -13,6 +13,7 @@ import { useAuth } from '../../../hooks/auth';
 import { useUser } from '../../../hooks/user';
 import { useResearcher } from '../../../hooks/researcher';
 import { useProgram } from '../../../hooks/program';
+import { useProject } from '../../../hooks/project';
 import { useEvaluator } from '../../../hooks/evaluators';
 import { useContact } from '../../../hooks/contact';
 
@@ -28,6 +29,9 @@ export default function Dashboard() {
   const { users: researches } = useResearcher();
   const { programs, status } = useProgram();
   const { evaluators } = useEvaluator();
+
+  const { review } = useProject();
+
   const {
     getRequests, requests, getRequestsUrgentes, requestsUrgentes,
   } = useContact();
@@ -73,7 +77,7 @@ export default function Dashboard() {
     loadNotices(0);
     loadPublishes(0);
 
-    getRequestsUrgentes(undefined, 'urgente');
+    getRequestsUrgentes(undefined, 'Todos');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -104,7 +108,7 @@ export default function Dashboard() {
       {user.profile.name != 'Pesquisador'
       && (
       <div className="col-3 px-0">
-        <CardDashboard className="red">
+        <CardDashboard className="blue">
           <div className="card-body">
             <div className="row">
               <div className="col">
@@ -139,6 +143,25 @@ export default function Dashboard() {
       </div>
       )}
 
+      {user.profile.name != 'Pesquisador'
+      && (
+      <div className="col-3 px-0">
+        <CardDashboard className="blue">
+          <div className="card-body">
+            <div className="row">
+              <div className="col">
+                <div className="title">Avaliadores</div>
+                <div className="number pulsate">{evaluators.length}</div>
+              </div>
+              <div className="col-auto">
+                <FiUsers size="3em" />
+              </div>
+            </div>
+          </div>
+        </CardDashboard>
+      </div>
+      )}
+
       <div className="col-3 px-0">
         <CardDashboard className="green">
           <div className="card-body">
@@ -155,18 +178,24 @@ export default function Dashboard() {
         </CardDashboard>
       </div>
 
-      {user.profile.name != 'Pesquisador'
+      {user.profile.name == 'Administrador'
       && (
       <div className="col-3 px-0">
-        <CardDashboard className="orange">
+        <CardDashboard
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            history.push('submetidos');
+          }}
+          className="green"
+        >
           <div className="card-body">
             <div className="row">
               <div className="col">
-                <div className="title">Avaliadores</div>
-                <div className="number pulsate">{evaluators.length}</div>
+                <div className="title">Projetos Submetidos (Pendentes)</div>
+                <div className="number pulsate">{review}</div>
               </div>
               <div className="col-auto">
-                <FiUsers size="3em" />
+                <FiFolder size="3em" />
               </div>
             </div>
           </div>
@@ -180,7 +209,7 @@ export default function Dashboard() {
         <CardDashboard
           style={{ cursor: 'pointer' }}
           onClick={() => {
-            history.push('solicitacoes/urgente');
+            history.push('solicitacoes');
           }}
           className="green"
         >

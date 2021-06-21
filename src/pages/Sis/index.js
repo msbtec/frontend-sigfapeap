@@ -177,7 +177,7 @@ export default function Sis() {
                   <Route exact path="/avaliacoes" component={ProjetosAvaliacao} />
                   <Route exact path="/atividades" component={Atividades} />
                   <Route exact path="/tarefas/:atividade" component={Tarefas} />
-                  <Route exact path="/solicitacoes/:prioridade" component={Contato} />
+                  <Route exact path="/solicitacoes" component={Contato} />
                   <Route exact path="/submetidos" component={Submetidos} />
                 </Switch>
               </Suspense>

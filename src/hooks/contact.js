@@ -21,7 +21,7 @@ export const ContactProvider = ({ children }) => {
 
   const { user } = useAuth();
 
-  async function getRequests(date = undefined, prioridade = 'regular') {
+  async function getRequests(date = undefined, prioridade = 'Todos') {
     setLoading(true);
     api.get(`contacts`, {
       params: {
@@ -31,9 +31,7 @@ export const ContactProvider = ({ children }) => {
       },
     }).then(({ data }) => {
       setRequests(data);
-      if (prioridade != "urgente") {
-        setNotResponding(data.filter((item) => !item.resposta).length);
-      }
+      setNotResponding(data.filter((item) => !item.resposta).length);
       setLoading(false);
     });
   }
@@ -59,7 +57,7 @@ export const ContactProvider = ({ children }) => {
 
   const changeStatus = useCallback(async () => {
     getRequests();
-    getRequestsUrgentes(undefined, 'urgente');
+    // getRequestsUrgentes(undefined, 'Todos');
     setStatus(!status);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);

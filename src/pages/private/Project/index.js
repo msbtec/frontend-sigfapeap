@@ -29,6 +29,7 @@ import { Content } from './styles';
 
 import { useAuth } from '../../../hooks/auth';
 import { useProject } from '../../../hooks/project';
+import { useEvaluator } from '../../../hooks/evaluators';
 
 import { Card } from '../../../components/Card';
 
@@ -56,6 +57,8 @@ export default function Project() {
   const formRef = useRef(null);
 
   const { user } = useAuth();
+
+  const { changeStatus } = useEvaluator();
 
   const [OpenConfirm, setOpenConfirm] = useState(false);
   const [OpenHomologar, setOpenHomologar] = useState(false);
@@ -203,6 +206,7 @@ export default function Project() {
       setProject(data);
 
       setStatus(!status);
+      changeStatus();
 
       setFiles(data.files.map((item) => ({
         id: item.id,
@@ -335,90 +339,90 @@ export default function Project() {
     });
   }
 
-  useEffect(() => {
-    if (configuration) {
-      setPageLoading(true);
+  //   useEffect(() => {
+  //     if (configuration) {
+  //       setPageLoading(true);
 
-      if (screen.documents) {
-        if (configuration?.files?.length == 0) {
-        //   setPageLoading(true);
-        //   setTimeout(() => {
-          setScreen({
-            ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
-          });
-        //   }, 1000);
-        //   setTimeout(() => {
-        //     setPageLoading(false);
-        //   }, 2000);
-        }
-      }
+  //       if (screen.documents) {
+  //         if (configuration?.files?.length == 0) {
+  //         //   setPageLoading(true);
+  //         //   setTimeout(() => {
+  //           setScreen({
+  //             ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+  //           });
+  //         //   }, 1000);
+  //         //   setTimeout(() => {
+  //         //     setPageLoading(false);
+  //         //   }, 2000);
+  //         }
+  //       }
 
-      if (screen.appresentation) {
-        if (!JSON.parse(configuration.apresentacao).isOne) {
-        //   setPageLoading(true);
-        //   setTimeout(() => {
-          setScreen({
-            ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
-          });
-        //   }, 1000);
-        //   setTimeout(() => {
-        //     setPageLoading(false);
-        //   }, 2000);
-        }
-      }
+  //       if (screen.appresentation) {
+  //         if (!JSON.parse(configuration.apresentacao).isOne) {
+  //         //   setPageLoading(true);
+  //         //   setTimeout(() => {
+  //           setScreen({
+  //             ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
+  //           });
+  //         //   }, 1000);
+  //         //   setTimeout(() => {
+  //         //     setPageLoading(false);
+  //         //   }, 2000);
+  //         }
+  //       }
 
-      if (screen.abrangencia) {
-        if (!JSON.parse(configuration.abrangencia).abrangencias.abrangencia.checked) {
-        //   setPageLoading(true);
-        //   setTimeout(() => {
-          setScreen({
-            ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, orcamento: false, recursos: false,
-          });
-        //   }, 1000);
-        //   setTimeout(() => {
-        //     setPageLoading(false);
-        //   }, 2000);
-        }
-      }
+  //       if (screen.abrangencia) {
+  //         if (!JSON.parse(configuration.abrangencia).abrangencias.abrangencia.checked) {
+  //         //   setPageLoading(true);
+  //         //   setTimeout(() => {
+  //           setScreen({
+  //             ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, orcamento: false, recursos: false,
+  //           });
+  //         //   }, 1000);
+  //         //   setTimeout(() => {
+  //         //     setPageLoading(false);
+  //         //   }, 2000);
+  //         }
+  //       }
 
-      if (screen.equipe) {
-        if (!JSON.parse(configuration.membros).equipes.equipe.checked) {
-        //   setPageLoading(true);
-        //   setTimeout(() => {
-          setScreen({
-            ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
-          });
-        //   }, 1000);
-        //   setTimeout(() => {
-        //     setPageLoading(false);
-        //   }, 2000);
-        }
-      }
+  //       if (screen.equipe) {
+  //         if (!JSON.parse(configuration.membros).equipes.equipe.checked) {
+  //         //   setPageLoading(true);
+  //         //   setTimeout(() => {
+  //           setScreen({
+  //             ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
+  //           });
+  //         //   }, 1000);
+  //         //   setTimeout(() => {
+  //         //     setPageLoading(false);
+  //         //   }, 2000);
+  //         }
+  //       }
 
-      if (screen.orcamento) {
-        if (!JSON.parse(configuration.orcamento).isOne) {
-        //   setPageLoading(true);
-        //   setTimeout(() => {
-          setScreen({
-            ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: true,
-          });
-        //   }, 1000);
-        //   setTimeout(() => {
-        //     setPageLoading(false);
-        //   }, 2000);
-        }
-      }
+  //       if (screen.orcamento) {
+  //         if (!JSON.parse(configuration.orcamento).isOne) {
+  //         //   setPageLoading(true);
+  //         //   setTimeout(() => {
+  //           setScreen({
+  //             ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: true,
+  //           });
+  //         //   }, 1000);
+  //         //   setTimeout(() => {
+  //         //     setPageLoading(false);
+  //         //   }, 2000);
+  //         }
+  //       }
 
-      if (screen.recursos) {
-        if (!JSON.parse(configuration.orcamento).isOne && !JSON.parse(configuration.recursos_solicitados_outros).recursos.recurso.checked) {
-          submter();
-        }
-      }
+  //       if (screen.recursos) {
+  //         if (!JSON.parse(configuration.orcamento).isOne && !JSON.parse(configuration.recursos_solicitados_outros).recursos.recurso.checked) {
+  //           submter();
+  //         }
+  //       }
 
-      setPageLoading(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [screen]);
+  //       setPageLoading(false);
+  //     }
+  //     // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   }, [screen]);
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -463,15 +467,15 @@ export default function Project() {
 
             getProject();
 
-            setPageLoading(true);
-            setTimeout(() => {
-              setScreen({
-                ...screen, header: false, documents: true, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
-              });
-            }, 1000);
-            setTimeout(() => {
-              setPageLoading(false);
-            }, 2000);
+            // setPageLoading(true);
+            // setTimeout(() => {
+            //   setScreen({
+            //     ...screen, header: false, documents: true, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+            //   });
+            // }, 1000);
+            // setTimeout(() => {
+            //   setPageLoading(false);
+            // }, 2000);
 
             // setPageLoading(true);
             // setScreen({
@@ -541,8 +545,6 @@ export default function Project() {
             }
           }
 
-          console.log(files);
-
           // eslint-disable-next-line no-plusplus
           for (let i = 0; i < files.length; i++) {
             if (!project) {
@@ -598,16 +600,16 @@ export default function Project() {
             }
           }
 
-          setPageLoading(true);
-          setTimeout(() => {
-            setScreen({
-              ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
-            });
-          }, 1000);
-          setTimeout(() => {
-            setPageLoading(false);
-            getProject();
-          }, 2000);
+          //   setPageLoading(true);
+          //   setTimeout(() => {
+          //     setScreen({
+          //       ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+          //     });
+          //   }, 1000);
+          //   setTimeout(() => {
+          //     setPageLoading(false);
+          //     getProject();
+          //   }, 2000);
 
         //   setPageLoading(true);
         //   setScreen({
@@ -638,15 +640,15 @@ export default function Project() {
 
             getProject();
 
-            setPageLoading(true);
-            setTimeout(() => {
-              setScreen({
-                ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
-              });
-            }, 1000);
-            setTimeout(() => {
-              setPageLoading(false);
-            }, 2000);
+            // setPageLoading(true);
+            // setTimeout(() => {
+            //   setScreen({
+            //     ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
+            //   });
+            // }, 1000);
+            // setTimeout(() => {
+            //   setPageLoading(false);
+            // }, 2000);
 
             // setPageLoading(true);
             // setScreen({
@@ -680,15 +682,15 @@ export default function Project() {
 
             getProject();
 
-            setPageLoading(true);
-            setTimeout(() => {
-              setScreen({
-                ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, orcamento: false, recursos: false,
-              });
-            }, 1000);
-            setTimeout(() => {
-              setPageLoading(false);
-            }, 2000);
+            // setPageLoading(true);
+            // setTimeout(() => {
+            //   setScreen({
+            //     ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, orcamento: false, recursos: false,
+            //   });
+            // }, 1000);
+            // setTimeout(() => {
+            //   setPageLoading(false);
+            // }, 2000);
 
             // setPageLoading(true);
             // setScreen({
@@ -723,17 +725,17 @@ export default function Project() {
 
             getProject();
 
-            setPageLoading(true);
-            setTimeout(() => {
-              setScreen({
-                ...screen, header: true, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
-              });
-            }, 1000);
-            setTimeout(() => {
-              setPageLoading(false);
+            // setPageLoading(true);
+            // setTimeout(() => {
+            //   setScreen({
+            //     ...screen, header: true, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
+            //   });
+            // }, 1000);
+            // setTimeout(() => {
+            //   setPageLoading(false);
 
-              submter();
-            }, 2000);
+            //   submter();
+            // }, 2000);
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -769,15 +771,15 @@ export default function Project() {
 
             getProject();
 
-            setPageLoading(true);
-            setTimeout(() => {
-              setScreen({
-                ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
-              });
-            }, 1000);
-            setTimeout(() => {
-              setPageLoading(false);
-            }, 2000);
+            // setPageLoading(true);
+            // setTimeout(() => {
+            //   setScreen({
+            //     ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
+            //   });
+            // }, 1000);
+            // setTimeout(() => {
+            //   setPageLoading(false);
+            // }, 2000);
 
             // setPageLoading(true);
             // setScreen({
@@ -811,15 +813,15 @@ export default function Project() {
 
             getProject();
 
-            setPageLoading(true);
-            setTimeout(() => {
-              setScreen({
-                ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: true,
-              });
-            }, 1000);
-            setTimeout(() => {
-              setPageLoading(false);
-            }, 2000);
+            // setPageLoading(true);
+            // setTimeout(() => {
+            //   setScreen({
+            //     ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: true,
+            //   });
+            // }, 1000);
+            // setTimeout(() => {
+            //   setPageLoading(false);
+            // }, 2000);
 
             // setPageLoading(true);
             // setScreen({
@@ -871,29 +873,6 @@ export default function Project() {
 
     setOpencontratar(!OpenContratar);
   }
-
-  //   async function submter() {
-  //     api.post(`projects/submit/${project.id}`, {
-  //       edital_id: id,
-  //       coordenador_id: user.id,
-  //       submetido: "true",
-  //     }).then(({ data }) => {
-  //       store.addNotification({
-  //         message: `Projeto submetido com sucesso!`,
-  //         type: 'success',
-  //         insert: 'top',
-  //         container: 'top-right',
-  //         animationIn: ['animate__animated', 'animate__fadeIn'],
-  //         animationOut: ['animate__animated', 'animate__fadeOut'],
-  //         dismiss: {
-  //           duration: 5000,
-  //           onScreen: true,
-  //         },
-  //       });
-
-  //       getProject();
-  //     });
-  //   }
 
   function submitModalConfirm() {
     submter();
@@ -1191,7 +1170,7 @@ export default function Project() {
         {project
       && project?.submetido == 'false' && edital?.valid && (
       <Content>
-        {/* <button
+        <button
           style={{
             marginBottom: 10, width: 180, marginLeft: 15, marginTop: 10,
           }}
@@ -1199,7 +1178,7 @@ export default function Project() {
           onClick={toggleModalConfirm}
         >
           Submeter projeto
-        </button> */}
+        </button>
       </Content>
         )}
 

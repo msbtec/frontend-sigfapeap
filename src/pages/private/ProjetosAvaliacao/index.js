@@ -9,6 +9,7 @@ import { BsPencilSquare } from 'react-icons/bs';
 import { useHistory } from 'react-router-dom';
 
 import { useAuth } from '../../../hooks/auth';
+import { useEvaluator } from '../../../hooks/evaluators';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
@@ -16,11 +17,13 @@ import { Table } from '../../../components/Table';
 import api from '../../../services/api';
 
 export default function ProjetosAvaliacao() {
-  const [projects, setProjects] = useState([]);
+//   const [projects, setProjects] = useState([]);
 
   const history = useHistory();
 
   const { user } = useAuth();
+
+  const { evaluations: projects, setEvaluations } = useEvaluator();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Projetos para Avaliação';
@@ -30,8 +33,10 @@ export default function ProjetosAvaliacao() {
         user_id: user.id,
       },
     }).then(({ data }) => {
-      setProjects(data);
+      setEvaluations(data);
     });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   function largeName(value) {

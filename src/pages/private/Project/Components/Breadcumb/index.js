@@ -15,19 +15,19 @@ export default function App({
       }}
       >
         <a onClick={() => {
-          if (project?.submetido == 'true') {
-            setPageLoading(true);
+        //   if (project?.submetido == 'true') {
+          setPageLoading(true);
 
-            setTimeout(() => {
-              setScreen({
-                ...screen, header: true, documents: false, appresentation: false, abrangencia: false, equipe: false, recursos: false, orcamento: false,
-              });
-            }, 1000);
+          setTimeout(() => {
+            setScreen({
+              ...screen, header: true, documents: false, appresentation: false, abrangencia: false, equipe: false, recursos: false, orcamento: false,
+            });
+          }, 1000);
 
-            setTimeout(() => {
-              setPageLoading(false);
-            }, 2000);
-          }
+          setTimeout(() => {
+            setPageLoading(false);
+          }, 2000);
+        //   }
         }}
         >
           Plano de Trabalho
@@ -41,19 +41,19 @@ export default function App({
       }}
       >
         <a onClick={() => {
-          if (project?.submetido == 'true') {
-            setPageLoading(true);
+        //   if (project?.submetido == 'true') {
+          setPageLoading(true);
 
-            setTimeout(() => {
-              setScreen({
-                ...screen, documents: true, header: false, appresentation: false, abrangencia: false, equipe: false, recursos: false, orcamento: false,
-              });
-            }, 1000);
+          setTimeout(() => {
+            setScreen({
+              ...screen, documents: true, header: false, appresentation: false, abrangencia: false, equipe: false, recursos: false, orcamento: false,
+            });
+          }, 1000);
 
-            setTimeout(() => {
-              setPageLoading(false);
-            }, 2000);
-          }
+          setTimeout(() => {
+            setPageLoading(false);
+          }, 2000);
+        //   }
         }}
         >
           Documentos
@@ -68,19 +68,19 @@ export default function App({
       }}
       >
         <a onClick={() => {
-          if (project?.submetido == 'true') {
-            setPageLoading(true);
+        //   if (project?.submetido == 'true') {
+          setPageLoading(true);
 
-            setTimeout(() => {
-              setScreen({
-                ...screen, header: false, documents: false, abrangencia: false, recursos: false, equipe: false, appresentation: true, orcamento: false,
-              });
-            }, 1000);
+          setTimeout(() => {
+            setScreen({
+              ...screen, header: false, documents: false, abrangencia: false, recursos: false, equipe: false, appresentation: true, orcamento: false,
+            });
+          }, 1000);
 
-            setTimeout(() => {
-              setPageLoading(false);
-            }, 3000);
-          }
+          setTimeout(() => {
+            setPageLoading(false);
+          }, 3000);
+        //   }
         }}
         >
           Plano de Apresentação
@@ -95,19 +95,19 @@ export default function App({
       }}
       >
         <a onClick={() => {
-          if (project?.submetido == 'true') {
-            setPageLoading(true);
+        //   if (project?.submetido == 'true') {
+          setPageLoading(true);
 
-            setTimeout(() => {
-              setScreen({
-                ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, recursos: false, orcamento: false,
-              });
-            }, 1000);
+          setTimeout(() => {
+            setScreen({
+              ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, recursos: false, orcamento: false,
+            });
+          }, 1000);
 
-            setTimeout(() => {
-              setPageLoading(false);
-            }, 2000);
-          }
+          setTimeout(() => {
+            setPageLoading(false);
+          }, 2000);
+        //   }
         }}
         >
           Abrangência
@@ -122,19 +122,19 @@ export default function App({
       }}
       >
         <a onClick={() => {
-          if (project?.submetido == 'true') {
-            setPageLoading(true);
+        //   if (project?.submetido == 'true') {
+          setPageLoading(true);
 
-            setTimeout(() => {
-              setScreen({
-                ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, recursos: false, orcamento: false,
-              });
-            }, 1000);
+          setTimeout(() => {
+            setScreen({
+              ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, recursos: false, orcamento: false,
+            });
+          }, 1000);
 
-            setTimeout(() => {
-              setPageLoading(false);
-            }, 2000);
-          }
+          setTimeout(() => {
+            setPageLoading(false);
+          }, 2000);
+        //   }
         }}
         >
           Equipe
@@ -148,19 +148,19 @@ export default function App({
       }}
       >
         <a onClick={() => {
-          if (project?.submetido == 'true') {
-            setPageLoading(true);
+        //   if (project?.submetido == 'true') {
+          setPageLoading(true);
 
-            setTimeout(() => {
-              setScreen({
-                ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
-              });
-            }, 1000);
+          setTimeout(() => {
+            setScreen({
+              ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
+            });
+          }, 1000);
 
-            setTimeout(() => {
-              setPageLoading(false);
-            }, 2000);
-          }
+          setTimeout(() => {
+            setPageLoading(false);
+          }, 2000);
+        //   }
         }}
         >
           Orçamentos
@@ -175,19 +175,19 @@ export default function App({
       }}
       >
         <a onClick={() => {
-          if (project?.submetido == 'true') {
-            setPageLoading(true);
+        //   if (project?.submetido == 'true') {
+          setPageLoading(true);
 
-            setTimeout(() => {
-              setScreen({
-                ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, recursos: true, orcamento: false,
-              });
-            }, 1000);
+          setTimeout(() => {
+            setScreen({
+              ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, recursos: true, orcamento: false,
+            });
+          }, 1000);
 
-            setTimeout(() => {
-              setPageLoading(false);
-            }, 2000);
-          }
+          setTimeout(() => {
+            setPageLoading(false);
+          }, 2000);
+        //   }
         }}
         >
           Recursos

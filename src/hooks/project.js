@@ -26,9 +26,17 @@ export const ProjectProvider = ({ children }) => {
   const [atividades, setAtividades] = useState([]);
 
   React.useEffect(() => {
-    api.get(`projects/review`).then(({ data }) => {
-      setReview(data.length);
-    });
+    if (user) {
+      if (user.profile.name == 'Administrador') {
+        api.get(`projects/review`, {
+          params: {
+            user_id: 0,
+          },
+        }).then(({ data }) => {
+          setReview(data.length);
+        });
+      }
+    }
   }, [user, status]);
 
   const [plano, setPlano] = useState({

@@ -6,6 +6,8 @@ import React, {
   useContext,
 } from 'react';
 
+import { useAuth } from './auth';
+
 import api from '../services/api';
 
 import { useResearcher } from './researcher';
@@ -17,7 +19,13 @@ export const EvaluatorProvider = ({ children }) => {
 
   const { users, update } = useResearcher();
 
+  const { user } = useAuth();
+
   const [evaluators, setEvaluators] = useState([]);
+
+  const [status, setStatus] = useState(false);
+
+  const [evaluations, setEvaluations] = useState([]);
 
   async function loadEvaluators() {
     api.get(`evaluators`).then(({ data }) => {
@@ -28,9 +36,32 @@ export const EvaluatorProvider = ({ children }) => {
     });
   }
 
+  async function getEvaluations() {
+    api.get(`evaluations`, {
+      params: {
+        user_id: user.id,
+      },
+    }).then(({ data }) => {
+      setEvaluations(data);
+    });
+  }
+
+  useEffect(() => {
+    if (user) {
+      getEvaluations();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   useEffect(() => {
     loadEvaluators();
   }, [users]);
+
+  const changeStatus = useCallback(async () => {
+    getEvaluations();
+    setStatus(!status);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   const erase = useCallback(async (data) => {
     setLoading(true);
@@ -66,6 +97,10 @@ export const EvaluatorProvider = ({ children }) => {
         loading,
         erase,
         loadEvaluators,
+        evaluations,
+        setEvaluations,
+        status,
+        changeStatus,
       }}
     >
       {children}

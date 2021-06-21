@@ -241,7 +241,7 @@ a {
     color: #3699ff;
   }
   .pagination > li:first-child > a, .pagination > li:first-child > span, .pagination > li:last-child > a, .pagination > li:last-child > span{
-    border-radius: 5px;
+    border-radius: 0px;
   }
 
 

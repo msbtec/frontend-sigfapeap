@@ -38,12 +38,12 @@ export default function Documentos() {
   const { user } = useAuth();
   const { requests, getRequests, status } = useContact();
 
-  const { prioridade } = useParams();
+  const prioridade = 'Todos'; // useParams();
 
   const [date, setDate] = useState("");
 
   useEffect(() => {
-    document.title = 'SIGFAPEAP - Fale Conosco';
+    document.title = 'SIGFAPEAP - Solicitações';
 
     getRequests(undefined, prioridade);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,6 +92,7 @@ export default function Documentos() {
 
     const formData = new FormData();
     formData.append("resposta", user.profile.name == 'Pesquisador' ? "Solicitação Cancelada pelo Coordenador" : "Solicitação Cancelada pelo Administrador");
+    formData.append("solicitacao", selected.solicitacao);
 
     api.put(`contacts/${selected.id}`, formData).then(({ data }) => {
       getRequests(undefined, prioridade);

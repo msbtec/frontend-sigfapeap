@@ -32,7 +32,7 @@ function ModalForm({
         formRef.current.setErrors({});
 
         const formData = new FormData();
-        formData.append("solicitacao", item.solicitacao)
+        formData.append("solicitacao", item.solicitacao);
         formData.append("resposta", description);
 
         api.put(`contacts/${item.id}`, formData).then(({ data }) => {

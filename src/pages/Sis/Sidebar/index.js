@@ -10,6 +10,7 @@ import { Side } from './styles';
 import { useAuth } from '../../../hooks/auth';
 import { useContact } from '../../../hooks/contact';
 import { useProject } from '../../../hooks/project';
+import { useEvaluator } from '../../../hooks/evaluators';
 
 import Logo from '../../../assets/img/logo.png';
 
@@ -19,6 +20,8 @@ function Sidebar({
   const { user, signOut } = useAuth();
 
   const { notResponding } = useContact();
+
+  const { evaluations } = useEvaluator();
 
   const { review } = useProject();
 
@@ -148,7 +151,7 @@ function Sidebar({
               </h3>
             </div>
             )}
-        </div>,
+              </div>,
         icon: <FiGrid />,
         path: '/submetidos',
       });
@@ -164,13 +167,34 @@ function Sidebar({
 
     if (profiles.includes('Avaliações')) {
       my_profiles.push({
-        name: 'Avaliações',
+        name: <div style={{
+          display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: -4,
+        }}
+        >
+          <h1 style={{ fontWeight: '500', color: '#a2a3b7', fontSize: 13 }}>
+            Avaliações
+          </h1>
+          {evaluations.length > 0
+            && (
+            <div style={{
+              backgroundColor: "#080", paddingLeft: 10, paddingRight: 10, paddingBottom: 2, paddingTop: 4, borderRadius: 5, marginLeft: 10, justifyContent: 'center', alignItems: 'center',
+            }}
+            >
+              <h3 style={{
+                color: "#fff", fontSize: 13,
+              }}
+              >
+                {evaluations.length}
+              </h3>
+            </div>
+            )}
+              </div>,
         icon: <FiGrid />,
         path: '/avaliacoes',
       });
     }
 
-    if (profiles.includes('Fale Conosco')) {
+    if (profiles.includes('Solicitações')) {
       my_profiles.push({
         name:
   <div style={{
@@ -178,7 +202,7 @@ function Sidebar({
   }}
   >
     <h1 style={{ fontWeight: '500', color: '#a2a3b7', fontSize: 13 }}>
-      Fale Conosco
+      Solicitações
     </h1>
     {notResponding > 0
     && (
@@ -196,12 +220,12 @@ function Sidebar({
     )}
   </div>,
         icon: <BsFillChatDotsFill />,
-        path: '/solicitacoes/regular',
+        path: '/solicitacoes',
       });
     }
 
     dispatch(toggleItem(my_profiles));
-  }, [user, review, dispatch, notResponding]);
+  }, [user, review, evaluations, dispatch, notResponding]);
 
   return (
 
