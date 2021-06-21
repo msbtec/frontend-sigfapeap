@@ -119,6 +119,11 @@ export const ProjectProvider = ({ children }) => {
     },
   );
 
+  const changeStatus = React.useCallback(async () => {
+    setStatus(!status);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+
   return (
     <ProjectContext.Provider
       value={{
@@ -126,6 +131,7 @@ export const ProjectProvider = ({ children }) => {
         setLoading,
         status,
         setStatus,
+        changeStatus,
         review,
         project,
         setProject,

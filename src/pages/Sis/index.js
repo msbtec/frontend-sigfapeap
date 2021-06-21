@@ -14,6 +14,7 @@ import { useAuth } from '../../hooks/auth';
 import { useProject } from '../../hooks/project';
 import { useProgram } from '../../hooks/program';
 import { useContact } from '../../hooks/contact';
+import { useEvaluator } from '../../hooks/evaluators';
 
 import Sidebar from './Sidebar';
 import { Wrap, Main, NavBar } from './styles';
@@ -49,10 +50,14 @@ export default function Sis() {
 
   const { changeStatus: changeStatusRequest } = useContact();
 
-  const { loading } = useProject();
+  const { loading, changeStatus: changeStatusProject } = useProject();
+
+  const { changeStatus: changeStatusEvaluation } = useEvaluator();
 
   const [data, setData] = useState(null);
   const [newRequest, setNewRequest] = useState(null);
+  const [newProject, setNewProject] = useState(null);
+  const [newEvaluation, setNewEvaluation] = useState(null);
 
   React.useEffect(() => {
     socket.connect();
@@ -112,6 +117,23 @@ export default function Sis() {
         });
       });
     }
+
+    // socket.subscribeToChannel('project', 'new-project', (data) => {
+    //   setNewProject(data);
+    // });
+
+    socket.subscribeToChannel('project', 'update-project', (data) => {
+      setNewProject(data);
+    });
+
+    // socket.subscribeToChannel('evaluation', 'new-evaluation', (data) => {
+    //   setNewEvaluation(data);
+    // });
+
+    socket.subscribeToChannel('evaluation', 'update-evaluation', (data) => {
+      setNewEvaluation(data);
+      setNewProject(data);
+    });
   }, [user]);
 
   React.useEffect(() => {
@@ -123,6 +145,16 @@ export default function Sis() {
     changeStatusRequest();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newRequest]);
+
+  React.useEffect(() => {
+    changeStatusProject();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newProject]);
+
+  React.useEffect(() => {
+    changeStatusEvaluation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newEvaluation]);
 
   const [drag, setDrag] = useState(false);
   return (
