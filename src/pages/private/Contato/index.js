@@ -124,7 +124,7 @@ export default function Documentos() {
   return (
     <>
       <div className="col-12 title">
-        <h1>Fale Conosco</h1>
+        <h1>Solicitações</h1>
       </div>
       <div className="col-12 px-0">
         <Card className="red">
