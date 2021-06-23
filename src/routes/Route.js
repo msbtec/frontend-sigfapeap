@@ -43,6 +43,9 @@ export default function RouteWrapper({
   if (rest.path === '/documentos') {
     path = "Documentos";
   }
+  if (rest.path === '/arquivos') {
+    path = "Arquivos";
+  }
   if (rest.path === '/publicacoes') {
     path = "Publicações";
   }

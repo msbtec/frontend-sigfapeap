@@ -38,7 +38,11 @@ function ModalForm({
     },
     {
       value: false,
-      label: 'NÃO RECOMENDADO, QUANTO AO MÉRITO DA PROPOSTA',
+      label: 'RECOMENDADO, COM AJUSTES',
+    },
+    {
+      value: false,
+      label: 'NÃO RECOMENDADO',
     },
   ]);
 
@@ -205,7 +209,7 @@ function ModalForm({
                 }}
               />
 
-              {menuOpen && <div style={{ marginTop: 100 }} />}
+              {menuOpen && <div style={{ marginTop: 150 }} />}
             </div>
           </div>
 

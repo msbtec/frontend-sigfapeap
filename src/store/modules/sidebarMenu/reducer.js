@@ -33,6 +33,11 @@ const INITIAL_STATE = {
       path: '/documentos',
     },
     {
+      name: 'Arquivos',
+      icon: <FiGrid />,
+      path: '/arquivos',
+    },
+    {
       name: 'Publicações',
       icon: <FiGrid />,
       path: '/publicacoes',

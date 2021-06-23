@@ -36,6 +36,7 @@ const Notice = lazy(() => import('../private/Notice'));
 const Evaluator = lazy(() => import('../private/Evaluator'));
 const Researcher = lazy(() => import('../private/Researcher'));
 const Documentos = lazy(() => import('../private/Documentos'));
+const Arquivos = lazy(() => import('../private/Arquivos'));
 const Publicacoes = lazy(() => import('../private/Publicacoes'));
 const ProjetosAvaliacao = lazy(() => import('../private/ProjetosAvaliacao'));
 const Atividades = lazy(() => import('../private/Atividades'));
@@ -205,6 +206,7 @@ export default function Sis() {
                   <Route exact path="/avaliadores" component={Evaluator} />
                   <Route exact path="/pesquisadores" component={Researcher} />
                   <Route exact path="/documentos" component={Documentos} />
+                  <Route exact path="/arquivos" component={Arquivos} />
                   <Route exact path="/publicacoes" component={Publicacoes} />
                   <Route exact path="/avaliacoes" component={ProjetosAvaliacao} />
                   <Route exact path="/atividades" component={Atividades} />

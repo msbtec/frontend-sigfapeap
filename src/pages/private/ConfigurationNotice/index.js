@@ -814,6 +814,16 @@ export default function ConfigurationNotice() {
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
+                      onChange={() => setApresentacao({ ...apresentacao, estado_arte: { ...apresentacao.estado_arte, checked: !apresentacao.estado_arte.checked } })}
+                      checked={apresentacao.estado_arte.checked}
+                      fields={apresentacao}
+                      setFields={setApresentacao}
+                      title="Estado da Arte"
+                    />
+                  </div>
+
+                  <div style={{ marginRight: 10, marginBottom: 20 }}>
+                    <Checkbox
                       onChange={() => setApresentacao({ ...apresentacao, metodologia: { ...apresentacao.metodologia, checked: !apresentacao.metodologia.checked } })}
                       checked={apresentacao.metodologia.checked}
                       fields={apresentacao}
@@ -859,16 +869,6 @@ export default function ConfigurationNotice() {
                       fields={apresentacao}
                       setFields={setApresentacao}
                       title="Referência Bibliográfica"
-                    />
-                  </div>
-
-                  <div style={{ marginRight: 10, marginBottom: 20 }}>
-                    <Checkbox
-                      onChange={() => setApresentacao({ ...apresentacao, estado_arte: { ...apresentacao.estado_arte, checked: !apresentacao.estado_arte.checked } })}
-                      checked={apresentacao.estado_arte.checked}
-                      fields={apresentacao}
-                      setFields={setApresentacao}
-                      title="Estado da Arte"
                     />
                   </div>
                 </div>

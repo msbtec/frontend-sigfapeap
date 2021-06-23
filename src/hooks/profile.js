@@ -27,6 +27,10 @@ export const ProfileProvider = ({ children }) => {
       value: 'Documentos',
     },
     {
+      label: 'Arquivos',
+      value: 'Arquivos',
+    },
+    {
       label: 'Publicações',
       value: 'Publicações',
     },

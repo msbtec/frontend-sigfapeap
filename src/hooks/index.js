@@ -13,6 +13,7 @@ import { ResearcherProvider } from "./researcher";
 // eslint-disable-next-line import/named
 import { ProjectProvider } from "./project";
 import { DocumentProvider } from "./document";
+import { ArchiveProvider } from "./archive";
 import { ContactProvider } from "./contact";
 import { PublishProvider } from "./publish";
 
@@ -21,27 +22,29 @@ const AppProvider = ({ children }) => (
     <UserProvider>
       <OfficeProvider>
         <DocumentProvider>
-          <PublishProvider>
-            <ProfileProvider>
-              <ConnectSearchProvider>
-                <SearchProvider>
-                  <FoundationProvider>
-                    <ProgramProvider>
-                      <ResearcherProvider>
-                        <EvaluatorProvider>
-                          <ProjectProvider>
-                            <ContactProvider>
-                              {children}
-                            </ContactProvider>
-                          </ProjectProvider>
-                        </EvaluatorProvider>
-                      </ResearcherProvider>
-                    </ProgramProvider>
-                  </FoundationProvider>
-                </SearchProvider>
-              </ConnectSearchProvider>
-            </ProfileProvider>
-          </PublishProvider>
+          <ArchiveProvider>
+            <PublishProvider>
+              <ProfileProvider>
+                <ConnectSearchProvider>
+                  <SearchProvider>
+                    <FoundationProvider>
+                      <ProgramProvider>
+                        <ResearcherProvider>
+                          <EvaluatorProvider>
+                            <ProjectProvider>
+                              <ContactProvider>
+                                  {children}
+                                </ContactProvider>
+                            </ProjectProvider>
+                          </EvaluatorProvider>
+                        </ResearcherProvider>
+                      </ProgramProvider>
+                    </FoundationProvider>
+                  </SearchProvider>
+                </ConnectSearchProvider>
+              </ProfileProvider>
+            </PublishProvider>
+          </ArchiveProvider>
         </DocumentProvider>
       </OfficeProvider>
     </UserProvider>

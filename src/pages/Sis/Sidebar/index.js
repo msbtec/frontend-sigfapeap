@@ -72,6 +72,14 @@ function Sidebar({
       });
     }
 
+    if (profiles.includes('Arquivos')) {
+      my_profiles.push({
+        name: 'Arquivos',
+        icon: <FiGrid />,
+        path: '/arquivos',
+      });
+    }
+
     if (profiles.includes('Publicações')) {
       my_profiles.push({
         name: 'Publicações',
@@ -151,7 +159,7 @@ function Sidebar({
               </h3>
             </div>
             )}
-              </div>,
+        </div>,
         icon: <FiGrid />,
         path: '/submetidos',
       });
@@ -188,7 +196,7 @@ function Sidebar({
               </h3>
             </div>
             )}
-              </div>,
+        </div>,
         icon: <FiGrid />,
         path: '/avaliacoes',
       });
