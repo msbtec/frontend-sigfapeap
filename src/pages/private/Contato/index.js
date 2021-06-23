@@ -188,7 +188,7 @@ export default function Documentos() {
                     {/* {user.profile.name == 'Pesquisador' && <td style={{ marginTop: 10, textAlign: 'center', color: item.resposta ? "#080" : "#F00" }} dangerouslySetInnerHTML={{ __html: item.resposta ? largeName(item.resposta) : "Aguardando Resposta" }} />} */}
                     <td style={{ textAlign: 'center' }}>
                       {user.profile.name != 'Pesquisador'
-                    && (
+                    && !item.resposta && (
                       <button
                         data-tip="Responder Solicitação"
                         onClick={() => {
@@ -199,7 +199,7 @@ export default function Documentos() {
                       >
                         <FiEdit />
                       </button>
-                    )}
+                      )}
 
                       {!item.resposta
                     && (

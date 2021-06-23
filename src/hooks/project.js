@@ -6,12 +6,22 @@ import React, {
 import { uuid } from 'uuidv4';
 import api from '../services/api';
 
+import {
+  money_mask,
+} from '../utils/validations';
+import {
+  soma,
+} from '../utils/soma';
+
 import { useAuth } from './auth';
+import { useEvaluator } from './evaluators';
 
 const ProjectContext = createContext({});
 
 export const ProjectProvider = ({ children }) => {
   const { user } = useAuth();
+
+  const { changeStatus: changeStatusEvaluator } = useEvaluator();
 
   const [configuration, setConfigurations] = useState(null);
 
@@ -119,8 +129,151 @@ export const ProjectProvider = ({ children }) => {
     },
   );
 
+  const getProject = React.useCallback(async (edital, coordenador, setFiles, setInitialLoading, setProtocolo) => {
+    setLoading(true);
+
+    setProject(null);
+    setMembros([{ label: user.name, value: JSON.stringify(user) }]);
+    setAtividades([]);
+    setPlano({
+      resumo: '',
+      palavras_chave: '',
+      informacoes_relevantes_para_avaliacao: '',
+      experiencia_coordenador: '',
+      sintese_projeto: '',
+      objetivos_gerais: '',
+      objetivos_especificos: '',
+      metodologia: '',
+      resultados_esperados: '',
+      impactos_esperados: '',
+      riscos_atividades: '',
+      referencia_bibliografica: '',
+      estado_arte: '',
+    });
+    setDespesas(despesas);
+    setRecursos([]);
+    setAbrangencias([]);
+    setOrcamentos(
+      {
+        diarias: [],
+        hospedagem_alimentacao: [],
+        materiais_consumo: [],
+        passagens: [],
+        servicos_terceiros: [],
+        materiais_permanentes_equipamentos: [],
+        pessoal: [],
+        bolsas: [],
+        encargos: [],
+      },
+    );
+
+    setInitialLoading(true);
+
+    api.put(`/projects`, {
+      edital_id: edital,
+      coordenador_id: coordenador,
+    }).then(({ data }) => {
+      setProject(data);
+
+      setStatus(!status);
+      changeStatusEvaluator();
+
+      setFiles(data.files.map((item) => ({
+        id: item.id,
+        title: item.document.title,
+        file: item.document,
+        url_document: item.document.url,
+        url_attachment: item.url,
+      })));
+
+      setProtocolo(data.protocolo || uuid());
+      setAbrangencias(JSON.parse(data.abrangencia || '[]'));
+
+      const orcamentos_temp = JSON.parse(data.orcamento || JSON.stringify(orcamentos));
+      setOrcamentos(orcamentos_temp);
+
+      const despesas_temp = JSON.parse(data.recursos_proprios || JSON.stringify(despesas));
+      setDespesas(despesas_temp.map((item) => (
+        (item.titulo == 'Diárias') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.diarias))) })
+          : (item.titulo == 'Hospedagem/Alimentação') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.hospedagem_alimentacao))) })
+            : (item.titulo == 'Material de Consumo') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.materiais_consumo))) })
+              : (item.titulo == 'Passagens') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.passagens))) })
+                : (item.titulo == 'Outros Serviços de Terceiros') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.servicos_terceiros))) })
+                  : (item.titulo == 'Equipamentos e Material Permanente') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.materiais_permanentes_equipamentos))) })
+                    : (item.titulo == 'Pessoal') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.pessoal))) })
+                      : (item.titulo == 'Bolsas') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.bolsas))) })
+                        : (item.titulo == 'Encargos') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.encargos))) })
+                          : item
+      )));
+
+      setRecursos(JSON.parse(data.recursos_solicitados_outros || '[]'));
+      if (data.membros.length > 0) {
+        setMembros(data.membros.map((item) => ({ label: item.name, value: JSON.stringify(item) })));
+      }
+      setAtividades(data.atividades);
+
+      setPlano({
+        resumo: data.resumo || '',
+        palavras_chave: data.palavras_chave || '',
+        informacoes_relevantes_para_avaliacao: data.informacoes_relevantes_para_avaliacao || '',
+        experiencia_coordenador: data.experiencia_coordenador || '',
+        sintese_projeto: data.sintese_projeto || '',
+        objetivos_gerais: data.objetivos_gerais || '',
+        objetivos_especificos: data.objetivos_especificos || '',
+        metodologia: data.metodologia || '',
+        resultados_esperados: data.resultados_esperados || '',
+        impactos_esperados: data.impactos_esperados || '',
+        riscos_atividades: data.riscos_atividades || '',
+        referencia_bibliografica: data.referencia_bibliografica || '',
+        estado_arte: data.estado_arte || '',
+      });
+
+      api.get(`configurations`, {
+        params: {
+          edital_id: edital,
+        },
+      }).then(({ data: configuration }) => {
+        setConfigurations({ ...configuration, plano_trabalho: JSON.parse(configuration.plano_trabalho) });
+
+        if (data.files.length == 0) {
+          setFiles(configuration.files.map((item) => ({
+            id: item.id,
+            title: item.title,
+            file: item,
+            configuration_document_id: item.id,
+            url_document: item.url,
+            url_attachment: null,
+          })));
+        }
+
+        setLoading(false);
+        setInitialLoading(false);
+      });
+    }).catch((error) => {
+      api.get(`configurations`, {
+        params: {
+          edital_id: edital,
+        },
+      }).then(({ data }) => {
+        setConfigurations({ ...data, plano_trabalho: JSON.parse(data.plano_trabalho) });
+        setLoading(false);
+        setInitialLoading(false);
+        setFiles(data.files.map((item) => ({
+          id: item.id,
+          title: item.title,
+          file: item,
+          configuration_document_id: item.id,
+          url_document: item.url,
+          url_attachment: null,
+        })));
+      });
+    });
+  }, [user, despesas, status, orcamentos, changeStatusEvaluator]);
+
   const changeStatus = React.useCallback(async () => {
     setStatus(!status);
+
+    // getProject();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
@@ -151,6 +304,7 @@ export const ProjectProvider = ({ children }) => {
         setOrcamentos,
         configuration,
         setConfigurations,
+        getProject,
       }}
     >
       {children}

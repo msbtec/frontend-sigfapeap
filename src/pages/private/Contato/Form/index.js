@@ -85,21 +85,21 @@ function ModalForm({
               <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
                 Projeto:
               </label>
-              <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item?.projeto?.title }} />
+              <td style={{ overflowWrap: 'break-word', marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item?.projeto?.title }} />
             </div>
 
             <div style={{ marginBottom: 20 }}>
               <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
                 Assunto:
               </label>
-              <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item?.assunto }} />
+              <td style={{ overflowWrap: 'break-word', marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item?.assunto }} />
             </div>
 
             <div style={{ marginBottom: 20 }}>
               <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
                 Solicitação:
               </label>
-              <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item?.solicitacao }} />
+              <div style={{ overflowWrap: 'break-word', marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: item?.solicitacao }} />
             </div>
 
             <div>

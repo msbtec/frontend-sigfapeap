@@ -69,7 +69,7 @@ export default function Project() {
     plano, setPlano, despesas, setDespesas, recursos,
     setRecursos, abrangencias, setAbrangencias,
     orcamentos, setOrcamentos, loading: pageLoading, setLoading: setPageLoading,
-    configuration, setConfigurations, status, setStatus,
+    configuration, setConfigurations, status, setStatus, getProject: getProjectInformations,
   } = useProject();
 
   const [screen, setScreen] = useState({
@@ -114,188 +114,13 @@ export default function Project() {
   }
 
   async function getProject() {
-    setPageLoading(true);
-
-    setProject(null);
-    setMembros([{ label: user.name, value: JSON.stringify(user) }]);
-    setAtividades([]);
-    setPlano({
-      resumo: '',
-      palavras_chave: '',
-      informacoes_relevantes_para_avaliacao: '',
-      experiencia_coordenador: '',
-      sintese_projeto: '',
-      objetivos_gerais: '',
-      objetivos_especificos: '',
-      metodologia: '',
-      resultados_esperados: '',
-      impactos_esperados: '',
-      riscos_atividades: '',
-      referencia_bibliografica: '',
-      estado_arte: '',
-    });
-    setDespesas([
-      {
-        id: uuid(),
-        titulo: "Diárias",
-        valor: "R$ 0",
-      },
-      {
-        id: uuid(),
-        titulo: "Hospedagem/Alimentação",
-        valor: "R$ 0",
-      },
-      {
-        id: uuid(),
-        titulo: "Material de Consumo",
-        valor: "R$ 0",
-      },
-      {
-        id: uuid(),
-        titulo: "Passagens",
-        valor: "R$ 0",
-      },
-      {
-        id: uuid(),
-        titulo: "Pessoal",
-        valor: "R$ 0",
-      },
-      {
-        id: uuid(),
-        titulo: "Encargos",
-        valor: "R$ 0",
-      },
-      {
-        id: uuid(),
-        titulo: "Bolsas",
-        valor: "R$ 0",
-      },
-      {
-        id: uuid(),
-        titulo: "Outros Serviços de Terceiros",
-        valor: "R$ 0",
-      },
-      {
-        id: uuid(),
-        titulo: "Equipamentos e Material Permanente",
-        valor: "R$ 0",
-      },
-    ]);
-    setRecursos([]);
-    setAbrangencias([]);
-    setOrcamentos(
-      {
-        diarias: [],
-        hospedagem_alimentacao: [],
-        materiais_consumo: [],
-        passagens: [],
-        servicos_terceiros: [],
-        materiais_permanentes_equipamentos: [],
-        pessoal: [],
-        bolsas: [],
-        encargos: [],
-      },
+    getProjectInformations(
+      id,
+      coordenador,
+      setFiles,
+      setInitialLoading,
+      setProtocolo,
     );
-
-    setInitialLoading(true);
-
-    api.put(`/projects`, {
-      edital_id: id,
-      coordenador_id: coordenador,
-    }).then(({ data }) => {
-      setProject(data);
-
-      setStatus(!status);
-      changeStatus();
-
-      setFiles(data.files.map((item) => ({
-        id: item.id,
-        title: item.document.title,
-        file: item.document,
-        url_document: item.document.url,
-        url_attachment: item.url,
-      })));
-
-      setProtocolo(data.protocolo || uuid());
-      setAbrangencias(JSON.parse(data.abrangencia || '[]'));
-
-      const orcamentos_temp = JSON.parse(data.orcamento || JSON.stringify(orcamentos));
-      setOrcamentos(orcamentos_temp);
-
-      const despesas_temp = JSON.parse(data.recursos_proprios || JSON.stringify(despesas));
-      setDespesas(despesas_temp.map((item) => (
-        (item.titulo == 'Diárias') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.diarias))) })
-          : (item.titulo == 'Hospedagem/Alimentação') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.hospedagem_alimentacao))) })
-            : (item.titulo == 'Material de Consumo') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.materiais_consumo))) })
-              : (item.titulo == 'Passagens') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.passagens))) })
-                : (item.titulo == 'Outros Serviços de Terceiros') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.servicos_terceiros))) })
-                  : (item.titulo == 'Equipamentos e Material Permanente') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.materiais_permanentes_equipamentos))) })
-                    : (item.titulo == 'Pessoal') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.pessoal))) })
-                      : (item.titulo == 'Bolsas') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.bolsas))) })
-                        : (item.titulo == 'Encargos') ? ({ ...item, valor: money_mask(String(soma(orcamentos_temp.encargos))) })
-                          : item
-      )));
-
-      setRecursos(JSON.parse(data.recursos_solicitados_outros || '[]'));
-      if (data.membros.length > 0) {
-        setMembros(data.membros.map((item) => ({ label: item.name, value: JSON.stringify(item) })));
-      }
-      setAtividades(data.atividades);
-
-      setPlano({
-        resumo: data.resumo || '',
-        palavras_chave: data.palavras_chave || '',
-        informacoes_relevantes_para_avaliacao: data.informacoes_relevantes_para_avaliacao || '',
-        experiencia_coordenador: data.experiencia_coordenador || '',
-        sintese_projeto: data.sintese_projeto || '',
-        objetivos_gerais: data.objetivos_gerais || '',
-        objetivos_especificos: data.objetivos_especificos || '',
-        metodologia: data.metodologia || '',
-        resultados_esperados: data.resultados_esperados || '',
-        impactos_esperados: data.impactos_esperados || '',
-        riscos_atividades: data.riscos_atividades || '',
-        referencia_bibliografica: data.referencia_bibliografica || '',
-        estado_arte: data.estado_arte || '',
-      });
-
-      api.get(`configurations`, {
-        params: {
-          edital_id: id,
-        },
-      }).then(({ data: configuration }) => {
-        setConfigurations({ ...configuration, plano_trabalho: JSON.parse(configuration.plano_trabalho) });
-
-        if (data.files.length == 0) {
-          setFiles(configuration.files.map((item) => ({
-            id: item.id,
-            title: item.title,
-            file: item,
-            configuration_document_id: item.id,
-            url_document: item.url,
-            url_attachment: null,
-          })));
-        }
-
-        setPageLoading(false); setInitialLoading(false);
-      });
-    }).catch((error) => {
-      api.get(`configurations`, {
-        params: {
-          edital_id: id,
-        },
-      }).then(({ data }) => {
-        setConfigurations({ ...data, plano_trabalho: JSON.parse(data.plano_trabalho) });
-        setPageLoading(false); setInitialLoading(false);
-        setFiles(data.files.map((item) => ({
-          id: item.id,
-          title: item.title,
-          file: item,
-          configuration_document_id: item.id,
-          url_document: item.url,
-          url_attachment: null,
-        })));
-      });
-    });
   }
 
   useEffect(() => {
@@ -339,91 +164,6 @@ export default function Project() {
     });
   }
 
-  //   useEffect(() => {
-  //     if (configuration) {
-  //       setPageLoading(true);
-
-  //       if (screen.documents) {
-  //         if (configuration?.files?.length == 0) {
-  //         //   setPageLoading(true);
-  //         //   setTimeout(() => {
-  //           setScreen({
-  //             ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
-  //           });
-  //         //   }, 1000);
-  //         //   setTimeout(() => {
-  //         //     setPageLoading(false);
-  //         //   }, 2000);
-  //         }
-  //       }
-
-  //       if (screen.appresentation) {
-  //         if (!JSON.parse(configuration.apresentacao).isOne) {
-  //         //   setPageLoading(true);
-  //         //   setTimeout(() => {
-  //           setScreen({
-  //             ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
-  //           });
-  //         //   }, 1000);
-  //         //   setTimeout(() => {
-  //         //     setPageLoading(false);
-  //         //   }, 2000);
-  //         }
-  //       }
-
-  //       if (screen.abrangencia) {
-  //         if (!JSON.parse(configuration.abrangencia).abrangencias.abrangencia.checked) {
-  //         //   setPageLoading(true);
-  //         //   setTimeout(() => {
-  //           setScreen({
-  //             ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, orcamento: false, recursos: false,
-  //           });
-  //         //   }, 1000);
-  //         //   setTimeout(() => {
-  //         //     setPageLoading(false);
-  //         //   }, 2000);
-  //         }
-  //       }
-
-  //       if (screen.equipe) {
-  //         if (!JSON.parse(configuration.membros).equipes.equipe.checked) {
-  //         //   setPageLoading(true);
-  //         //   setTimeout(() => {
-  //           setScreen({
-  //             ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
-  //           });
-  //         //   }, 1000);
-  //         //   setTimeout(() => {
-  //         //     setPageLoading(false);
-  //         //   }, 2000);
-  //         }
-  //       }
-
-  //       if (screen.orcamento) {
-  //         if (!JSON.parse(configuration.orcamento).isOne) {
-  //         //   setPageLoading(true);
-  //         //   setTimeout(() => {
-  //           setScreen({
-  //             ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: true,
-  //           });
-  //         //   }, 1000);
-  //         //   setTimeout(() => {
-  //         //     setPageLoading(false);
-  //         //   }, 2000);
-  //         }
-  //       }
-
-  //       if (screen.recursos) {
-  //         if (!JSON.parse(configuration.orcamento).isOne && !JSON.parse(configuration.recursos_solicitados_outros).recursos.recurso.checked) {
-  //           submter();
-  //         }
-  //       }
-
-  //       setPageLoading(false);
-  //     }
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, [screen]);
-
   const handleSubmit = useCallback(
     async (data) => {
       if (coordenador != user.id || !edital?.valid || project?.submetido == 'true') {
@@ -466,21 +206,6 @@ export default function Project() {
             setLoading(false);
 
             getProject();
-
-            // setPageLoading(true);
-            // setTimeout(() => {
-            //   setScreen({
-            //     ...screen, header: false, documents: true, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
-            //   });
-            // }, 1000);
-            // setTimeout(() => {
-            //   setPageLoading(false);
-            // }, 2000);
-
-            // setPageLoading(true);
-            // setScreen({
-            //   ...screen, header: false, documents: true, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
-            // });
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -574,10 +299,6 @@ export default function Project() {
                 formData.append('file', files[i].file);
 
                 setLoading(true);
-                // api.post(`projects/documents`, formData).then(({ data }) => {
-                //   // setFiles(files.map((file) => (file.id == data.configuration_document_id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
-                //   setLoading(false);
-                // });
 
                 // eslint-disable-next-line no-await-in-loop
                 await api.post(`projects/documents`, formData);
@@ -588,10 +309,6 @@ export default function Project() {
               formData.append('file', files[i].file);
 
               setLoading(true);
-              //   api.put(`projects/documents/${files[i].id}`, formData).then(({ data }) => {
-              //     setFiles(files.map((file) => (file.id == data.id ? ({ ...file, file: { ...file.file, size: null }, url_attachment: data.url }) : file)));
-              //     setLoading(false);
-              //   });
 
               // eslint-disable-next-line no-await-in-loop
               const { data } = await api.put(`projects/documents/${files[i].id}`, formData);
@@ -600,21 +317,7 @@ export default function Project() {
             }
           }
 
-          //   setPageLoading(true);
-          //   setTimeout(() => {
-          //     setScreen({
-          //       ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
-          //     });
-          //   }, 1000);
-          //   setTimeout(() => {
-          //     setPageLoading(false);
-          //     getProject();
-          //   }, 2000);
-
-        //   setPageLoading(true);
-        //   setScreen({
-        //     ...screen, header: false, documents: false, appresentation: true, abrangencia: false, equipe: false, orcamento: false, recursos: false,
-        //   });
+          getProject();
         } else if (screen.appresentation) {
           setLoading(true);
 
@@ -639,21 +342,6 @@ export default function Project() {
             setLoading(false);
 
             getProject();
-
-            // setPageLoading(true);
-            // setTimeout(() => {
-            //   setScreen({
-            //     ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
-            //   });
-            // }, 1000);
-            // setTimeout(() => {
-            //   setPageLoading(false);
-            // }, 2000);
-
-            // setPageLoading(true);
-            // setScreen({
-            //   ...screen, header: false, documents: false, appresentation: false, abrangencia: true, equipe: false, orcamento: false, recursos: false,
-            // });
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -681,21 +369,6 @@ export default function Project() {
             setLoading(false);
 
             getProject();
-
-            // setPageLoading(true);
-            // setTimeout(() => {
-            //   setScreen({
-            //     ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, orcamento: false, recursos: false,
-            //   });
-            // }, 1000);
-            // setTimeout(() => {
-            //   setPageLoading(false);
-            // }, 2000);
-
-            // setPageLoading(true);
-            // setScreen({
-            //   ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: true, orcamento: false, recursos: false,
-            // });
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -724,18 +397,6 @@ export default function Project() {
             setLoading(false);
 
             getProject();
-
-            // setPageLoading(true);
-            // setTimeout(() => {
-            //   setScreen({
-            //     ...screen, header: true, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: false,
-            //   });
-            // }, 1000);
-            // setTimeout(() => {
-            //   setPageLoading(false);
-
-            //   submter();
-            // }, 2000);
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -770,21 +431,6 @@ export default function Project() {
             setLoading(false);
 
             getProject();
-
-            // setPageLoading(true);
-            // setTimeout(() => {
-            //   setScreen({
-            //     ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
-            //   });
-            // }, 1000);
-            // setTimeout(() => {
-            //   setPageLoading(false);
-            // }, 2000);
-
-            // setPageLoading(true);
-            // setScreen({
-            //   ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: true, recursos: false,
-            // });
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -812,21 +458,6 @@ export default function Project() {
             setLoading(false);
 
             getProject();
-
-            // setPageLoading(true);
-            // setTimeout(() => {
-            //   setScreen({
-            //     ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: true,
-            //   });
-            // }, 1000);
-            // setTimeout(() => {
-            //   setPageLoading(false);
-            // }, 2000);
-
-            // setPageLoading(true);
-            // setScreen({
-            //   ...screen, header: false, documents: false, appresentation: false, abrangencia: false, equipe: false, orcamento: false, recursos: true,
-            // });
           }).catch((error) => {
             setLoading(false);
             store.addNotification({
@@ -844,7 +475,6 @@ export default function Project() {
           });
         }
       } catch (error) {
-        console.log(error);
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
 
