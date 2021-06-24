@@ -17,12 +17,6 @@ import { useParams } from 'react-router-dom';
 import { Form as Unform } from '@unform/web';
 import { store } from 'react-notifications-component';
 
-import {
-  money_mask,
-} from '../../../utils/validations';
-import {
-  soma,
-} from '../../../utils/soma';
 import { Button } from '../../../components/Button';
 
 import { Content } from './styles';
@@ -43,6 +37,8 @@ import Orcamento from './Tabs/Orcamento';
 
 import Breadcumb from './Components/Breadcumb';
 
+import Avaliacao from './Avaliacao';
+
 import getValidationErrors from '../../../utils/getValidationErrors';
 
 import api from '../../../services/api';
@@ -58,18 +54,14 @@ export default function Project() {
 
   const { user } = useAuth();
 
-  const { changeStatus } = useEvaluator();
-
   const [OpenConfirm, setOpenConfirm] = useState(false);
   const [OpenHomologar, setOpenHomologar] = useState(false);
   const [OpenContratar, setOpencontratar] = useState(false);
 
   const {
-    project, setProject, membros, setMembros, atividades, setAtividades,
-    plano, setPlano, despesas, setDespesas, recursos,
-    setRecursos, abrangencias, setAbrangencias,
+    project, membros, atividades, plano, despesas, setDespesas, recursos, abrangencias,
     orcamentos, setOrcamentos, loading: pageLoading, setLoading: setPageLoading,
-    configuration, setConfigurations, status, setStatus, getProject: getProjectInformations,
+    configuration, getProject: getProjectInformations,
   } = useProject();
 
   const [screen, setScreen] = useState({
@@ -84,6 +76,8 @@ export default function Project() {
 
   const [initiaLoading, setInitialLoading] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  const [avaliacao, setAvaliacao] = useState(true);
 
   const [files, setFiles] = useState([]);
   const [edital, setEdital] = useState({ title: '' });
@@ -111,6 +105,7 @@ export default function Project() {
 
   function submitModalEvaluation() {
     setOpenEvaluation(!OpenEvaluation);
+    setAvaliacao(false);
   }
 
   async function getProject() {
@@ -791,13 +786,26 @@ export default function Project() {
 
   return (
     <>
-      <div className="col-12 title">
-        <h1>{edital?.title && `Projeto para ${edital.title}`}</h1>
-      </div>
+      {avaliacao
+        ? (
+          <Avaliacao
+            formRef={formRef}
+            project={project}
+            getProject={getProject}
+            isOpen={OpenEvaluation}
+            toggleModal={toggleModalEvaluation}
+            submit={submitModalEvaluation}
+            setAvaliacao={setAvaliacao}
+          />
+        ) : (
+          <>
+            <div className="col-12 title">
+              <h1>{edital?.title && `Projeto para ${edital.title}`}</h1>
+            </div>
 
-      <div>
+            <div>
 
-        {project
+              {project
       && project?.submetido == 'false' && edital?.valid && (
       <Content>
         <button
@@ -810,20 +818,20 @@ export default function Project() {
           Submeter projeto
         </button>
       </Content>
-        )}
+              )}
 
-        {edital && !edital?.valid && project?.submetido == 'false' && (
-        <Content>
-          <div style={{
-            marginBottom: 10, marginLeft: 15, marginTop: 10,
-          }}
-          >
-            <label style={{ fontSize: 18, fontWeight: 'bold', color: '#8b0000' }}>{`Projeto não pode mais ser submetido pois o edital foi finalizado em: ${moment(edital?.end).format("LL")}.`}</label>
-          </div>
-        </Content>
-        )}
+              {edital && !edital?.valid && project?.submetido == 'false' && (
+              <Content>
+                <div style={{
+                  marginBottom: 10, marginLeft: 15, marginTop: 10,
+                }}
+                >
+                  <label style={{ fontSize: 18, fontWeight: 'bold', color: '#8b0000' }}>{`Projeto não pode mais ser submetido pois o edital foi finalizado em: ${moment(edital?.end).format("LL")}.`}</label>
+                </div>
+              </Content>
+              )}
 
-        {project?.submetido == 'true'
+              {project?.submetido == 'true'
       && (
       <Content>
         <div style={{
@@ -835,105 +843,105 @@ export default function Project() {
       </Content>
       )}
 
-        {project && (coordenador == user.id) && project?.submetido == 'true' && (
-        <Content>
-          <div style={{
-            marginBottom: 10, marginLeft: 15, marginTop: 10,
-          }}
-          >
-            <label style={{ fontSize: 18, fontWeight: 'bold', color: '#080' }}>{`Situação atual: ${project.avaliacao.status}`}</label>
-          </div>
-        </Content>
-        )}
+              {project && (coordenador == user.id) && project?.submetido == 'true' && (
+              <Content>
+                <div style={{
+                  marginBottom: 10, marginLeft: 15, marginTop: 10,
+                }}
+                >
+                  <label style={{ fontSize: 18, fontWeight: 'bold', color: '#080' }}>{`Situação atual: ${project.avaliacao.status}`}</label>
+                </div>
+              </Content>
+              )}
 
-        {project && (coordenador != user.id) && (project?.avaliacao?.status == 'Não Homologado' || project?.avaliacao?.status == 'Contratado' || project?.avaliacao?.status == 'Não Contratado') && (
-        <Content>
-          <div style={{
-            marginBottom: 10, marginLeft: 15, marginTop: 10,
-          }}
-          >
-            <label style={{ fontSize: 18, fontWeight: 'bold', color: '#080' }}>{`Situação atual: ${project.avaliacao.status}`}</label>
-          </div>
-        </Content>
-        )}
+              {project && (coordenador != user.id) && (project?.avaliacao?.status == 'Não Homologado' || project?.avaliacao?.status == 'Contratado' || project?.avaliacao?.status == 'Não Contratado') && (
+              <Content>
+                <div style={{
+                  marginBottom: 10, marginLeft: 15, marginTop: 10,
+                }}
+                >
+                  <label style={{ fontSize: 18, fontWeight: 'bold', color: '#080' }}>{`Situação atual: ${project.avaliacao.status}`}</label>
+                </div>
+              </Content>
+              )}
 
-        {project && (coordenador != user.id) && user.profile.name != 'Pesquisador' && !project?.avaliacao?.enquadrado && (
-        <Content>
-          <button
-            style={{
-              marginBottom: 10, width: 180, marginLeft: 15, marginTop: 10,
-            }}
-            type="button"
-            onClick={toggleModalForm}
-          >
-            Enquadrar projeto
-          </button>
-        </Content>
-        )}
+              {project && (coordenador != user.id) && user.profile.name != 'Pesquisador' && !project?.avaliacao?.enquadrado && (
+              <Content>
+                <button
+                  style={{
+                    marginBottom: 10, width: 180, marginLeft: 15, marginTop: 10,
+                  }}
+                  type="button"
+                  onClick={toggleModalForm}
+                >
+                  Enquadrar projeto
+                </button>
+              </Content>
+              )}
 
-        {project && (coordenador != user.id) && user.profile.name != 'Pesquisador' && project?.avaliacao?.status == 'Avaliação' && !project?.avaliacao?.responsavel_id && project?.avaliacao?.recomendado1 && (
-        <Content>
-          <button
-            style={{
-              marginBottom: 10, width: 200, height: 60, marginLeft: 15, marginTop: 10,
-            }}
-            type="button"
-            onClick={toggleModalForm}
-          >
-            Delegar Avaliador Especialista
-          </button>
-        </Content>
-        )}
+              {project && (coordenador != user.id) && user.profile.name != 'Pesquisador' && project?.avaliacao?.status == 'Avaliação' && !project?.avaliacao?.responsavel_id && project?.avaliacao?.recomendado1 && (
+              <Content>
+                <button
+                  style={{
+                    marginBottom: 10, width: 200, height: 60, marginLeft: 15, marginTop: 10,
+                  }}
+                  type="button"
+                  onClick={toggleModalForm}
+                >
+                  Delegar Avaliador Especialista
+                </button>
+              </Content>
+              )}
 
-        {project && (coordenador != user.id) && user.profile.name != 'Pesquisador' && (project?.avaliacao?.status == 'Não Homologado' || project?.avaliacao?.status == 'Homologação') && (
-        <Content>
-          <button
-            style={{
-              marginBottom: 10, width: 200, marginLeft: 15, marginTop: 10,
-            }}
-            type="button"
-            onClick={toggleModalHomologar}
-          >
-            Homologar projeto
-          </button>
-        </Content>
-        )}
+              {project && (coordenador != user.id) && user.profile.name != 'Pesquisador' && (project?.avaliacao?.status == 'Não Homologado' || project?.avaliacao?.status == 'Homologação') && (
+              <Content>
+                <button
+                  style={{
+                    marginBottom: 10, width: 200, marginLeft: 15, marginTop: 10,
+                  }}
+                  type="button"
+                  onClick={toggleModalHomologar}
+                >
+                  Homologar projeto
+                </button>
+              </Content>
+              )}
 
-        {project && (coordenador != user.id) && user.profile.name != 'Pesquisador' && (project?.avaliacao?.status == 'Homologado' || project?.avaliacao?.status == 'Não Contratado') && (
-        <Content>
-          <button
-            style={{
-              marginBottom: 10, width: 200, marginLeft: 15, marginTop: 10,
-            }}
-            type="button"
-            onClick={toggleModalContratar}
-          >
-            Contratar projeto
-          </button>
-        </Content>
-        )}
+              {project && (coordenador != user.id) && user.profile.name != 'Pesquisador' && (project?.avaliacao?.status == 'Homologado' || project?.avaliacao?.status == 'Não Contratado') && (
+              <Content>
+                <button
+                  style={{
+                    marginBottom: 10, width: 200, marginLeft: 15, marginTop: 10,
+                  }}
+                  type="button"
+                  onClick={toggleModalContratar}
+                >
+                  Contratar projeto
+                </button>
+              </Content>
+              )}
 
-        {project && (project?.avaliacao.responsavel_id == user.id) && (
-        <Content>
-          <button
-            style={{
-              marginBottom: 10, width: 180, marginLeft: 15, marginTop: 10,
-            }}
-            type="button"
-            onClick={toggleModalEvaluation}
-          >
-            Avaliar projeto
-          </button>
-        </Content>
-        )}
-      </div>
+              {project && (project?.avaliacao.responsavel_id == user.id) && (
+              <Content>
+                <button
+                  style={{
+                    marginBottom: 10, width: 180, marginLeft: 15, marginTop: 10,
+                  }}
+                  type="button"
+                  onClick={() => setAvaliacao(true)}
+                >
+                  Avaliar projeto
+                </button>
+              </Content>
+              )}
+            </div>
 
-      <div className="col-12 px-0">
-        <Card className="red">
-          <div className="card-body">
-            <Breadcumb project={project} screen={screen} setScreen={setScreen} setPageLoading={setPageLoading} />
+            <div className="col-12 px-0">
+              <Card className="red">
+                <div className="card-body">
+                  <Breadcumb project={project} screen={screen} setScreen={setScreen} setPageLoading={setPageLoading} />
 
-            {!initiaLoading
+                  {!initiaLoading
             && (
             <Unform initialData={project} ref={formRef} onSubmit={handleSubmit}>
               <Content>
@@ -995,32 +1003,34 @@ export default function Project() {
               )}
             </Unform>
             )}
-          </div>
-        </Card>
-      </div>
+                </div>
+              </Card>
+            </div>
 
-      <Suspense fallback={null}>
-        <ModalProvider>
-          <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
-          <ModalHomologar isOpen={OpenHomologar} project={project} toggleModal={toggleModalHomologar} submit={submitModalHomologar} />
-          <ModalContratar isOpen={OpenContratar} toggleModal={toggleModalContratar} submit={submitModalContratar} />
-          <ModalForm
-            project={project}
-            getProject={getProject}
-            isOpen={OpenForm}
-            toggleModal={toggleModalForm}
-            submit={submitModalForm}
-          />
-          <ModalEvaluation
-            formRef={formRef}
-            project={project}
-            getProject={getProject}
-            isOpen={OpenEvaluation}
-            toggleModal={toggleModalEvaluation}
-            submit={submitModalEvaluation}
-          />
-        </ModalProvider>
-      </Suspense>
+            <Suspense fallback={null}>
+              <ModalProvider>
+                <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
+                <ModalHomologar isOpen={OpenHomologar} project={project} toggleModal={toggleModalHomologar} submit={submitModalHomologar} />
+                <ModalContratar isOpen={OpenContratar} toggleModal={toggleModalContratar} submit={submitModalContratar} />
+                <ModalForm
+                  project={project}
+                  getProject={getProject}
+                  isOpen={OpenForm}
+                  toggleModal={toggleModalForm}
+                  submit={submitModalForm}
+                />
+                <ModalEvaluation
+                  formRef={formRef}
+                  project={project}
+                  getProject={getProject}
+                  isOpen={OpenEvaluation}
+                  toggleModal={toggleModalEvaluation}
+                  submit={submitModalEvaluation}
+                />
+              </ModalProvider>
+            </Suspense>
+          </>
+        )}
     </>
   );
 }
