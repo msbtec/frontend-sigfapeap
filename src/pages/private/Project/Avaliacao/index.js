@@ -31,21 +31,21 @@ export default function Avaliacao({
 
   const recomendacoes = [
     {
-      value: true,
+      value: 'RECOMENDADO',
       label: 'RECOMENDADO',
     },
     {
-      value: false,
+      value: 'RECOMENDADO, COM AJUSTES',
       label: 'RECOMENDADO, COM AJUSTES',
     },
     {
-      value: false,
+      value: 'NÃO RECOMENDADO',
       label: 'NÃO RECOMENDADO',
     },
   ];
 
   const [recomendado, setRecomendado] = useState({
-    value: true,
+    value: 'RECOMENDADO',
     label: 'RECOMENDADO',
   });
 
@@ -157,7 +157,7 @@ export default function Avaliacao({
                     </div>
 
                     <div>
-                      <Input formRef={formRef} name="note" type="number" required original title="Nota" />
+                      <Input formRef={formRef} name="note" type="number" step="any" required original title="Nota" />
 
                       <label
                         style={{

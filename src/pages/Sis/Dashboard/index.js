@@ -33,7 +33,7 @@ export default function Dashboard() {
   const { review } = useProject();
 
   const {
-    getRequests, requests, getRequestsUrgentes, requestsUrgentes,
+    getRequests, requests, getRequestsUrgentes, requestsUrgentes, notResponding,
   } = useContact();
 
   const [notices, setNotices] = React.useState([]);
@@ -77,7 +77,7 @@ export default function Dashboard() {
     loadNotices(0);
     loadPublishes(0);
 
-    getRequestsUrgentes(undefined, 'Todos');
+    getRequests(undefined, 'Todos');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -242,9 +242,9 @@ export default function Dashboard() {
             <div className="row">
               <div className="col">
                 <div className="title">Solicitações Relevantes</div>
-                <div className="number pulsate">{requestsUrgentes.length}</div>
+                <div className="number pulsate">{notResponding}</div>
               </div>
-              <div className={`${requestsUrgentes.length > 0 ? 'col-auto fa-blink' : 'col-auto'}`}>
+              <div className={`${notResponding > 0 ? 'col-auto fa-blink' : 'col-auto'}`}>
                 <FiMessageCircle size="3em" color="#080" />
               </div>
             </div>

@@ -23,7 +23,6 @@ import { Content } from './styles';
 
 import { useAuth } from '../../../hooks/auth';
 import { useProject } from '../../../hooks/project';
-import { useEvaluator } from '../../../hooks/evaluators';
 
 import { Card } from '../../../components/Card';
 
@@ -38,6 +37,7 @@ import Orcamento from './Tabs/Orcamento';
 import Breadcumb from './Components/Breadcumb';
 
 import Avaliacao from './Avaliacao';
+import Homologacao from './Homologacao';
 
 import getValidationErrors from '../../../utils/getValidationErrors';
 
@@ -78,6 +78,7 @@ export default function Project() {
   const [loading, setLoading] = useState(false);
 
   const [avaliacao, setAvaliacao] = useState(false);
+  const [homologacao, setHomologacao] = useState(false);
 
   const [files, setFiles] = useState([]);
   const [edital, setEdital] = useState({ title: '' });
@@ -522,6 +523,7 @@ export default function Project() {
         },
       });
 
+      setHomologacao(false);
       setOpenHomologar(!OpenHomologar);
       getProject();
     });
@@ -797,6 +799,14 @@ export default function Project() {
             submit={submitModalEvaluation}
             setAvaliacao={setAvaliacao}
           />
+        ) : homologacao ? (
+          <Homologacao
+            isOpen={OpenHomologar}
+            project={project}
+            toggleModal={toggleModalHomologar}
+            submit={submitModalHomologar}
+            setHomologacao={setHomologacao}
+          />
         ) : (
           <>
             <div className="col-12 title">
@@ -900,7 +910,7 @@ export default function Project() {
                     marginBottom: 10, width: 200, marginLeft: 15, marginTop: 10,
                   }}
                   type="button"
-                  onClick={toggleModalHomologar}
+                  onClick={() => setHomologacao(true)}
                 >
                   Homologar projeto
                 </button>

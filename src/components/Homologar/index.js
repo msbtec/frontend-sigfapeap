@@ -69,7 +69,7 @@ function Confirm({
 
             <p>
               <h4 style={{ marginRight: 5 }}>Recomendado:</h4>
-              <label dangerouslySetInnerHTML={{ __html: project?.avaliacao?.recomendado1 == "true" ? "SIM" : "NÃO" }} />
+              <label dangerouslySetInnerHTML={{ __html: project?.avaliacao?.recomendado1 }} />
             </p>
           </div>
 
@@ -94,7 +94,7 @@ function Confirm({
 
             <p>
               <h4 style={{ marginRight: 5 }}>Recomendado:</h4>
-              <label dangerouslySetInnerHTML={{ __html: project?.avaliacao?.recomendado2 == "true" ? "SIM" : "NÃO" }} />
+              <label dangerouslySetInnerHTML={{ __html: project?.avaliacao?.recomendado2 }} />
             </p>
           </div>
         </div>
