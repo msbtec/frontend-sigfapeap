@@ -116,7 +116,14 @@ function ModalForm({
                 style={{ borderColor: "rgb(153, 153, 153)", padding: 10 }}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                maxLength={255}
               />
+              <span style={{
+                display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
+              }}
+              >
+                {`${description.length}/255 caracteres`}
+              </span>
             </div>
 
             <div style={{ marginBottom: 10 }} className="input-block">

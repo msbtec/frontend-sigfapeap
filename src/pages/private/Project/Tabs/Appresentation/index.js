@@ -29,6 +29,12 @@ export default function Appresentation() {
             // }
           }}
         />
+        <span style={{
+          display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
+        }}
+        >
+          {`${String(plano.resumo).replace(/<.*?>/g, '').length}/5000 caracteres`}
+        </span>
       </div>
       )}
 
@@ -49,6 +55,12 @@ export default function Appresentation() {
             // }
           }}
         />
+        <span style={{
+          display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
+        }}
+        >
+          {`${String(plano.palavras_chave).replace(/<.*?>/g, '').length}/200 caracteres`}
+        </span>
       </div>
       )}
 
@@ -69,6 +81,12 @@ export default function Appresentation() {
             // }
           }}
         />
+        <span style={{
+          display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
+        }}
+        >
+          {`${String(plano.informacoes_relevantes_para_avaliacao).replace(/<.*?>/g, '').length}/3000 caracteres`}
+        </span>
       </div>
       )}
 
@@ -89,6 +107,12 @@ export default function Appresentation() {
             // }
           }}
         />
+        <span style={{
+          display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
+        }}
+        >
+          {`${String(plano.experiencia_coordenador).replace(/<.*?>/g, '').length}/3000 caracteres`}
+        </span>
       </div>
       )}
 
@@ -109,6 +133,12 @@ export default function Appresentation() {
             // }
           }}
         />
+        <span style={{
+          display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
+        }}
+        >
+          {`${String(plano.sintese_projeto).replace(/<.*?>/g, '').length}/5000 caracteres`}
+        </span>
       </div>
       )}
 
@@ -129,6 +159,12 @@ export default function Appresentation() {
             // }
           }}
         />
+        <span style={{
+          display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
+        }}
+        >
+          {`${String(plano.objetivos_gerais).replace(/<.*?>/g, '').length}/1000 caracteres`}
+        </span>
       </div>
       )}
 
@@ -149,6 +185,12 @@ export default function Appresentation() {
             // }
           }}
         />
+        <span style={{
+          display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
+        }}
+        >
+          {`${String(plano.objetivos_especificos).replace(/<.*?>/g, '').length}/3000 caracteres`}
+        </span>
       </div>
       )}
 
@@ -169,6 +211,12 @@ export default function Appresentation() {
             // }
           }}
         />
+        <span style={{
+          display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
+        }}
+        >
+          {`${String(plano.estado_arte).replace(/<.*?>/g, '').length}/15000 caracteres`}
+        </span>
       </div>
       )}
 
@@ -189,6 +237,12 @@ export default function Appresentation() {
             // }
           }}
         />
+        <span style={{
+          display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
+        }}
+        >
+          {`${String(plano.metodologia).replace(/<.*?>/g, '').length}/15000 caracteres`}
+        </span>
       </div>
       )}
 
@@ -209,6 +263,12 @@ export default function Appresentation() {
             // }
           }}
         />
+        <span style={{
+          display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
+        }}
+        >
+          {`${String(plano.resultados_esperados).replace(/<.*?>/g, '').length}/5000 caracteres`}
+        </span>
       </div>
       )}
 
@@ -229,6 +289,12 @@ export default function Appresentation() {
             // }
           }}
         />
+        <span style={{
+          display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
+        }}
+        >
+          {`${String(plano.impactos_esperados).replace(/<.*?>/g, '').length}/5000 caracteres`}
+        </span>
       </div>
       )}
 
@@ -249,6 +315,12 @@ export default function Appresentation() {
             // }
           }}
         />
+        <span style={{
+          display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
+        }}
+        >
+          {`${String(plano.riscos_atividades).replace(/<.*?>/g, '').length}/3000 caracteres`}
+        </span>
       </div>
       )}
 
@@ -269,6 +341,12 @@ export default function Appresentation() {
             // }
           }}
         />
+        <span style={{
+          display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
+        }}
+        >
+          {`${String(plano.referencia_bibliografica).replace(/<.*?>/g, '').length}/5000 caracteres`}
+        </span>
       </div>
       )}
     </Form>

@@ -77,7 +77,7 @@ export default function Project() {
   const [initiaLoading, setInitialLoading] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const [avaliacao, setAvaliacao] = useState(true);
+  const [avaliacao, setAvaliacao] = useState(false);
 
   const [files, setFiles] = useState([]);
   const [edital, setEdital] = useState({ title: '' });
