@@ -13,6 +13,7 @@ import { FiLink, FiTrash } from 'react-icons/fi';
 import { store } from 'react-notifications-component';
 
 import { Card } from '../../../components/Card';
+import { Button } from '../../../components/Button';
 import { Table } from '../../../components/Table';
 
 import { useEvaluator } from "../../../hooks/evaluators";
@@ -30,6 +31,8 @@ export default function Avaliadores() {
   const [notice, setNotice] = useState(null);
 
   const [OpenNotice, setOpenNotice] = useState(false);
+
+  const [avaliador, setAvaliador] = useState(false);
 
   const { programs } = useProgram();
 
@@ -104,81 +107,86 @@ export default function Avaliadores() {
 
   return (
     <>
-      <div className="col-12 title">
-        <h1>Avaliadores do Programa</h1>
-      </div>
-      <div className="col-12 px-0">
-        <Card className="red">
-          <div className="card-title">
+      {!avaliador ? (
+        <>
+          <div className="col-12 title">
+            <h1>Avaliadores do Projeto</h1>
+          </div>
+          <div className="col-12 px-0">
+            <Card className="red">
+              {/* <div className="card-title">
             <h3>
               {programs.length > 0 && programs.filter((item) => item.id == id)[0].title}
             </h3>
-          </div>
-          {/* <div className="card-title">
-            <Button
-              onClick={() => {
-                toggleModalNotice();
-              }}
-              className="primary"
-            >
-              Cadastrar Chamada Pública
-            </Button>
           </div> */}
-          <div className="card-body">
-            <Table>
-              <thead>
-                <tr>
-                  <th className="col-1">#</th>
-                  <th className="col-4">Nome</th>
-                  <th className="col-3">Email</th>
-                  <th className="col-2">Currículo</th>
-                  <th className="col-2">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selected?.evaluators?.map((item, index) => (
-                  <tr>
-                    <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.name }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.email }</td>
-                    <td style={{ textAlign: 'center' }}><FiLink style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => validURL(item.curriculum) && window.open(item.curriculum, '_blank')} /></td>
-                    <td style={{ textAlign: 'center' }}>
-                      <button
-                        data-tip="Remover avaliador"
-                        onClick={() => {
-                          setNotice(item);
-                          toggleModalConfirm();
-                        }}
-                        className="eraser"
-                      >
-                        <FiTrash />
-                      </button>
-                      <ReactTooltip />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+              <div className="card-title">
+                <Button
+                  onClick={() => {
+                    setAvaliador(true);
+                  }}
+                  className="primary"
+                >
+                  Adicionar avaliador
+                </Button>
+              </div>
+              <div className="card-body">
+                <Table>
+                  <thead>
+                    <tr>
+                      <th className="col-1">#</th>
+                      <th className="col-4">Nome</th>
+                      <th className="col-3">Email</th>
+                      <th className="col-2">Currículo</th>
+                      <th className="col-2">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selected?.evaluators?.map((item, index) => (
+                      <tr>
+                        <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
+                        <td style={{ textAlign: 'center' }}>{ item.name }</td>
+                        <td style={{ textAlign: 'center' }}>{ item.email }</td>
+                        <td style={{ textAlign: 'center' }}><FiLink style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => validURL(item.curriculum) && window.open(item.curriculum, '_blank')} /></td>
+                        <td style={{ textAlign: 'center' }}>
+                          <button
+                            data-tip="Remover avaliador"
+                            onClick={() => {
+                              setNotice(item);
+                              toggleModalConfirm();
+                            }}
+                            className="eraser"
+                          >
+                            <FiTrash />
+                          </button>
+                          <ReactTooltip />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+            </Card>
           </div>
-        </Card>
-      </div>
 
-      <Suspense fallback={null}>
-        <ModalProvider>
-          <ModalConfirm
-            isOpen={OpenConfirm}
-            toggleModal={toggleModalConfirm}
-            submit={submitModalConfirm}
-          />
-          <ModalNotice
-            isOpen={OpenNotice}
-            toggleModal={toggleModalNotice}
-            id={id}
-            submit={submitModalNotice}
-          />
-        </ModalProvider>
-      </Suspense>
-
+          <Suspense fallback={null}>
+            <ModalProvider>
+              <ModalConfirm
+                isOpen={OpenConfirm}
+                toggleModal={toggleModalConfirm}
+                submit={submitModalConfirm}
+              />
+              <ModalNotice
+                isOpen={OpenNotice}
+                toggleModal={toggleModalNotice}
+                id={id}
+                submit={submitModalNotice}
+              />
+            </ModalProvider>
+          </Suspense>
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 }

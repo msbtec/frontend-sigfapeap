@@ -120,9 +120,9 @@ export default function Submetidos() {
                     <td style={{ textAlign: 'center' }}>{ item.title }</td>
                     <td style={{ textAlign: 'center' }}>
                       <button
-                        data-tip="Adicionar Avaliador"
+                        data-tip="Avaliadores"
                         onClick={() => {
-                        //   history.push(`/avaliador/projeto/${item.id}`);
+                          history.push(`avaliadores/${item.id}`);
                         }}
                         className="edit"
                       >
