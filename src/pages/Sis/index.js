@@ -43,6 +43,7 @@ const Atividades = lazy(() => import('../private/Atividades'));
 const Tarefas = lazy(() => import('../private/Tarefas'));
 const Contato = lazy(() => import('../private/Contato'));
 const Submetidos = lazy(() => import('../private/Submetidos'));
+const EnviarSolicitacao = lazy(() => import('../private/EnviarSolicitacao'));
 
 export default function Sis() {
   const { user } = useAuth();
@@ -206,6 +207,7 @@ export default function Sis() {
                   <Route exact path="/avaliadores" component={Evaluator} />
                   <Route exact path="/pesquisadores" component={Researcher} />
                   <Route exact path="/documentos" component={Documentos} />
+                  <Route exact path="/documentos/:id/solicitacao" component={EnviarSolicitacao} />
                   <Route exact path="/arquivos" component={Arquivos} />
                   <Route exact path="/publicacoes" component={Publicacoes} />
                   <Route exact path="/avaliacoes" component={ProjetosAvaliacao} />

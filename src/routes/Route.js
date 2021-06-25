@@ -40,7 +40,7 @@ export default function RouteWrapper({
   if (rest.path === '/pesquisadores') {
     path = "Pesquisadores";
   }
-  if (rest.path === '/documentos') {
+  if (rest.path === '/documentos' || rest.path === '/documentos/:id/solicitacao' || rest.path === '/solicitacoes') {
     path = "Documentos";
   }
   if (rest.path === '/arquivos') {
@@ -55,9 +55,9 @@ export default function RouteWrapper({
   if (rest.path === '/atividades' || rest.path === '/tarefas/:atividade') {
     path = "Atividades";
   }
-  if (rest.path === '/solicitacoes') {
-    path = "Solicitações";
-  }
+  //   if (rest.path === '/solicitacoes') {
+  //     path = "Solicitações";
+  //   }
   if (rest.path === '/submetidos') {
     path = "Submetidos";
   }

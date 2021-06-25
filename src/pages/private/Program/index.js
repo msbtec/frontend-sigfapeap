@@ -120,7 +120,7 @@ export default function Program() {
                     {/* <td style={{ textAlign: 'center' }}>{ item.avaliation }</td> */}
                     {/* <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25,width: 25, cursor:'pointer'}} onClick={() => window.open(item.url,'_blank')} /></td> */}
                     <td style={{ textAlign: 'center' }}>
-                      {user.profile.name != 'Pesquisador'
+                      {/* {user.profile.name != 'Pesquisador'
                     && (
                     <button
                       data-tip="Avaliadores"
@@ -131,7 +131,7 @@ export default function Program() {
                     >
                       <FiUserPlus />
                     </button>
-                    )}
+                    )} */}
                       <button
                         data-tip="Visualizar chamadas públicas"
                         onClick={() => {

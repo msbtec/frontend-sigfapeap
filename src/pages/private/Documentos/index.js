@@ -8,6 +8,8 @@ import { ModalProvider } from 'styled-react-modal';
 
 import { FiEdit, FiTrash, FiDownload } from 'react-icons/fi';
 
+import { useHistory } from 'react-router-dom';
+
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 import { Button } from '../../../components/Button';
@@ -25,6 +27,8 @@ export default function Documentos() {
 
   const { documents, erase } = useDocument();
   const { user } = useAuth();
+
+  const history = useHistory();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Documentos';
@@ -61,10 +65,13 @@ export default function Documentos() {
           <div className="card-title">
             <h3>Listagem de documentos</h3>
           </div>
-          {user.profile.name != 'Pesquisador'
-          && (
+
           <div className="card-title">
+            <div style={{ display: 'flex' }}>
+              {user.profile.name != 'Pesquisador'
+          && (
             <Button
+              style={{ marginRight: 10 }}
               onClick={() => {
                 setSelected(null);
                 toggleModalForm();
@@ -72,18 +79,28 @@ export default function Documentos() {
               className="primary"
             >
               Cadastrar documento
-
             </Button>
-          </div>
           )}
+
+              <Button
+                onClick={() => {
+                  history.push('solicitacoes');
+                }}
+                className="primary"
+              >
+                Solicitações
+              </Button>
+            </div>
+          </div>
+
           <div className="card-body">
             <Table>
               <thead>
                 <tr>
                   <th className="col-1">#</th>
-                  <th className={user.profile.name != 'Pesquisador' ? "col-7" : "col-9"}>Nome</th>
+                  <th className="col-7">Nome</th>
                   <th className="col-2">Anexo</th>
-                  {user.profile.name != 'Pesquisador' && <th className="col-2">Ações</th>}
+                  <th className="col-2">Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -117,6 +134,25 @@ export default function Documentos() {
                           <FiTrash />
                         </button>
                       </td>
+
+                      <ReactTooltip />
+                    </>
+                    )}
+                    {user.profile.name == 'Pesquisador'
+                    && (
+                    <>
+                      <td style={{ textAlign: 'center' }}>
+                        <button
+                          data-tip="Enviar solicitação"
+                          onClick={() => {
+                            history.push(`documentos/${item.id}/solicitacao`);
+                          }}
+                          className="edit"
+                        >
+                          <FiEdit />
+                        </button>
+                      </td>
+                      <ReactTooltip />
                     </>
                     )}
                   </tr>
@@ -133,8 +169,6 @@ export default function Documentos() {
           <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
         </ModalProvider>
       </Suspense>
-
-      <ReactTooltip />
     </>
   );
 }

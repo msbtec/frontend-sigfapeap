@@ -6,8 +6,6 @@ import ReactTooltip from 'react-tooltip';
 
 import { ModalProvider } from 'styled-react-modal';
 
-import { useParams } from 'react-router-dom';
-
 import moment from 'moment';
 
 import { FiEdit, FiTrash } from 'react-icons/fi';
@@ -15,13 +13,14 @@ import { AiOutlineCloseCircle } from 'react-icons/ai';
 
 import { store } from 'react-notifications-component';
 import { Form } from './Form2';
-import { Button } from '../../../components/Button';
 
 import { Card } from '../../../components/Card';
 import { Table } from '../../../components/Table';
 
 import { useAuth } from '../../../hooks/auth';
 import { useContact } from '../../../hooks/contact';
+
+import Resposta from './ResponderSolicitacao';
 
 import api from '../../../services/api';
 
@@ -37,6 +36,8 @@ export default function Documentos() {
 
   const { user } = useAuth();
   const { requests, getRequests, status } = useContact();
+
+  const [resposta, setResposta] = useState(false);
 
   const prioridade = 'Todos'; // useParams();
 
@@ -68,7 +69,8 @@ export default function Documentos() {
   async function toggleModalForm() {
     ModalForm = await lazy(() => import("./Form"));
 
-    setOpenForm(!OpenForm);
+    // setOpenForm(!OpenForm);
+    setResposta(!resposta);
   }
 
   async function toggleModalConfirm() {
@@ -84,6 +86,7 @@ export default function Documentos() {
 
   function submitModalForm() {
     setOpenForm(!OpenForm);
+    setResposta(!resposta);
     getRequests(undefined, prioridade);
   }
 
@@ -123,15 +126,17 @@ export default function Documentos() {
 
   return (
     <>
-      <div className="col-12 title">
-        <h1>Solicitações</h1>
-      </div>
-      <div className="col-12 px-0">
-        <Card className="red">
-          <div className="card-title">
-            <h3>Listagem de solicitações</h3>
+      {!resposta ? (
+        <>
+          <div className="col-12 title">
+            <h1>Solicitações</h1>
+          </div>
+          <div className="col-12 px-0">
+            <Card className="red">
+              <div className="card-title">
+                <h3>Listagem de solicitações</h3>
 
-            {user.profile.name != 'Pesquisador'
+                {user.profile.name != 'Pesquisador'
           && (
           <Form>
             <div style={{ marginBottom: 10 }} className="input-block">
@@ -140,9 +145,9 @@ export default function Documentos() {
             <AiOutlineCloseCircle data-tip="Limpar Filtro" size={32} style={{ marginLeft: 10, color: "#48465b", cursor: 'pointer' }} onClick={() => setDate("")} />
           </Form>
           )}
-          </div>
+              </div>
 
-          {user.profile.name == 'Pesquisador'
+              {/* {user.profile.name == 'Pesquisador'
             && (
             <div className="card-title">
               <div style={{ display: 'flex' }}>
@@ -158,36 +163,36 @@ export default function Documentos() {
                 </Button>
               </div>
             </div>
-            )}
+            )} */}
 
-          <div className="card-body">
-            <Table>
-              <thead>
-                <tr>
-                  <th className="col-1">#</th>
-                  <th className="col-3">Assunto</th>
-                  <th className="col-2">Prioridade</th>
-                  <th className="col-3">Protocolo</th>
-                  <th className="col-1">Data</th>
-                  {/* <th className="col-2">Coordenador</th> */}
-                  {/* <th className={user.profile.name == 'Pesquisador' ? "col-2" : "col-4"}>Solicitação</th> */}
-                  {/* {user.profile.name == 'Pesquisador' && <th className="col-2">Resposta</th>} */}
-                  <th className="col-2">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {requests.map((item, index) => (
-                  <tr>
-                    <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.assunto }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.prioridade }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.protocolo }</td>
-                    <td style={{ textAlign: 'center' }}>{ moment(item.date_beggin).format("L") }</td>
-                    {/* <td style={{ textAlign: 'center' }}>{ item.projeto.coordenador.name }</td> */}
-                    {/* <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: largeName(item.solicitacao) }} /> */}
-                    {/* {user.profile.name == 'Pesquisador' && <td style={{ marginTop: 10, textAlign: 'center', color: item.resposta ? "#080" : "#F00" }} dangerouslySetInnerHTML={{ __html: item.resposta ? largeName(item.resposta) : "Aguardando Resposta" }} />} */}
-                    <td style={{ textAlign: 'center' }}>
-                      {user.profile.name != 'Pesquisador'
+              <div className="card-body">
+                <Table>
+                  <thead>
+                    <tr>
+                      <th className="col-1">#</th>
+                      <th className="col-3">Assunto</th>
+                      <th className="col-2">Prioridade</th>
+                      <th className="col-3">Protocolo</th>
+                      <th className="col-1">Data</th>
+                      {/* <th className="col-2">Coordenador</th> */}
+                      {/* <th className={user.profile.name == 'Pesquisador' ? "col-2" : "col-4"}>Solicitação</th> */}
+                      {/* {user.profile.name == 'Pesquisador' && <th className="col-2">Resposta</th>} */}
+                      <th className="col-2">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {requests.map((item, index) => (
+                      <tr>
+                        <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
+                        <td style={{ textAlign: 'center' }}>{ item.assunto }</td>
+                        <td style={{ textAlign: 'center' }}>{ item.prioridade }</td>
+                        <td style={{ textAlign: 'center' }}>{ item.protocolo }</td>
+                        <td style={{ textAlign: 'center' }}>{ moment(item.date_beggin).format("L") }</td>
+                        {/* <td style={{ textAlign: 'center' }}>{ item.projeto.coordenador.name }</td> */}
+                        {/* <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: largeName(item.solicitacao) }} /> */}
+                        {/* {user.profile.name == 'Pesquisador' && <td style={{ marginTop: 10, textAlign: 'center', color: item.resposta ? "#080" : "#F00" }} dangerouslySetInnerHTML={{ __html: item.resposta ? largeName(item.resposta) : "Aguardando Resposta" }} />} */}
+                        <td style={{ textAlign: 'center' }}>
+                          {user.profile.name != 'Pesquisador'
                     && !item.resposta && (
                       <button
                         data-tip="Responder Solicitação"
@@ -199,39 +204,43 @@ export default function Documentos() {
                       >
                         <FiEdit />
                       </button>
-                      )}
+                          )}
 
-                      {!item.resposta
-                    && (
-                      <button
-                        data-tip="Cancelar Solicitação"
-                        onClick={() => {
-                          setSelected(item);
-                          toggleModalConfirm();
-                        }}
-                        className="eraser"
-                      >
-                        <FiTrash />
-                      </button>
-                    )}
+                          {!item.resposta && (
+                          <button
+                            data-tip="Cancelar Solicitação"
+                            onClick={() => {
+                              setSelected(item);
+                              toggleModalConfirm();
+                            }}
+                            className="eraser"
+                          >
+                            <FiTrash />
+                          </button>
+                          )}
 
-                      <ReactTooltip />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+                          <ReactTooltip />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+            </Card>
           </div>
-        </Card>
-      </div>
 
-      <Suspense fallback={null}>
-        <ModalProvider>
-          <ModalRequest isOpen={OpenRequest} toggleModal={toggleModalRequest} submit={submitModalRequest} />
-          <ModalForm isOpen={OpenForm} toggleModal={toggleModalForm} item={selected} submit={submitModalForm} />
-          <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
-        </ModalProvider>
-      </Suspense>
+          <Suspense fallback={null}>
+            <ModalProvider>
+              <ModalRequest isOpen={OpenRequest} toggleModal={toggleModalRequest} submit={submitModalRequest} />
+              <ModalForm isOpen={OpenForm} toggleModal={toggleModalForm} item={selected} submit={submitModalForm} />
+              <ModalConfirm isOpen={OpenConfirm} toggleModal={toggleModalConfirm} submit={submitModalConfirm} />
+            </ModalProvider>
+          </Suspense>
+        </>
+      ) : (
+        <Resposta isOpen={OpenForm} toggleModal={toggleModalForm} item={selected} submit={submitModalForm} />
+      )}
+
     </>
   );
 }

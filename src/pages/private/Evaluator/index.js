@@ -85,7 +85,7 @@ export default function Avaliadores() {
                     <td style={{ textAlign: 'center' }}>{ item.cpf }</td>
                     <td style={{ textAlign: 'center' }}>{ item.email }</td>
                     <td style={{ textAlign: 'center' }}>
-                      <button
+                      {/* <button
                         data-tip="Adicionar programa(s)"
                         onClick={() => {
                           setSelected(item);
@@ -94,7 +94,7 @@ export default function Avaliadores() {
                         className="edit"
                       >
                         <FiFolderPlus />
-                      </button>
+                      </button> */}
                       <button
                         data-tip="Remover do banco de avaliadores"
                         onClick={() => {

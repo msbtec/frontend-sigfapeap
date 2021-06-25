@@ -27,7 +27,11 @@ export default function Atividades() {
   useEffect(() => {
     document.title = 'SIGFAPEAP - Atividades';
 
-    api.get(`user/${user.profile.name == 'Administrador' ? 0 : user.id}/projects`).then(({ data }) => {
+    api.get(`user/${user.profile.name == 'Administrador' ? 0 : user.id}/projects`, {
+      params: {
+        contratado: true,
+      },
+    }).then(({ data }) => {
       if (data.length > 0) {
         setProjects(data.map((item) => ({ label: item.title, value: item.id, coordenador_id: item.coordenador_id })));
         setSelectedProject({ label: data[0].title, value: data[0].id, coordenador_id: data[0].coordenador_id });

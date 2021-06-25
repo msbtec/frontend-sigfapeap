@@ -90,6 +90,18 @@ function ModalForm({
 
             <div style={{ marginBottom: 20 }}>
               <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
+                Documento:
+              </label>
+              <td style={{ overflowWrap: 'break-word', marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item?.documento?.title }} />
+              <div>
+                <td style={{ marginTop: 10, textAlign: 'center' }}>
+                  <a className="url" href={item?.documento?.url} target="_blank">{item?.documento?.name}</a>
+                </td>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: 20 }}>
+              <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
                 Assunto:
               </label>
               <td style={{ overflowWrap: 'break-word', marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item?.assunto }} />
@@ -99,7 +111,7 @@ function ModalForm({
               <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
                 Solicitação:
               </label>
-              <div style={{ overflowWrap: 'break-word', marginTop: 10, textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: item?.solicitacao }} />
+              <div style={{ overflowWrap: 'break-word', textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: item?.solicitacao }} />
             </div>
 
             <div>

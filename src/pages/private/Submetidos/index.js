@@ -5,7 +5,7 @@ import React, {
 import ReactTooltip from 'react-tooltip';
 import SelectMultiple from "react-select";
 
-import { FiEdit } from 'react-icons/fi';
+import { FiEdit, FiUserPlus } from 'react-icons/fi';
 
 import { useHistory } from 'react-router-dom';
 
@@ -119,6 +119,15 @@ export default function Submetidos() {
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.title }</td>
                     <td style={{ textAlign: 'center' }}>
+                      <button
+                        data-tip="Adicionar Avaliador"
+                        onClick={() => {
+                        //   history.push(`/avaliador/projeto/${item.id}`);
+                        }}
+                        className="edit"
+                      >
+                        <FiUserPlus />
+                      </button>
                       <button
                         data-tip="Exibir Detalhes"
                         onClick={() => {

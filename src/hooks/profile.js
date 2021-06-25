@@ -58,10 +58,10 @@ export const ProfileProvider = ({ children }) => {
       label: 'Atividades',
       value: 'Atividades',
     },
-    {
-      label: 'Solicitações',
-      value: 'Solicitações',
-    },
+    // {
+    //   label: 'Solicitações',
+    //   value: 'Solicitações',
+    // },
     {
       label: 'Avaliações',
       value: 'Avaliações',

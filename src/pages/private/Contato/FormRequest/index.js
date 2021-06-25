@@ -49,11 +49,7 @@ function ModalForm({
   useEffect(() => {
     document.title = 'SIGFAPEAP - Atividades';
 
-    api.get(`user/${user.profile.name == 'Administrador' ? 0 : user.id}/projects`, {
-      params: {
-        submetido: true,
-      },
-    }).then(({ data }) => {
+    api.get(`user/${user.profile.name == 'Administrador' ? 0 : user.id}/projects`).then(({ data }) => {
       if (data.length > 0) {
         const filter = data.filter((item) => item.coordenador_id == user.id);
         if (filter.length > 0) {
