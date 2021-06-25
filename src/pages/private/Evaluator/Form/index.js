@@ -16,7 +16,7 @@ import Input from '../../../../components/Input';
 import { useEvaluator } from '../../../../hooks/evaluators';
 
 import { StyledModal } from './styles';
-import api from '~/services/api';
+import api from '../../../../services/api';
 
 function ModalForm({
   isOpen, toggleModal, item, submit,

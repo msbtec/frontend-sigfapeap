@@ -4,6 +4,8 @@ import React, {
 
 import ReactTooltip from 'react-tooltip';
 
+import ReactPaginate from 'react-paginate';
+
 import { ModalProvider } from 'styled-react-modal';
 
 import { FiTrash, FiFolderPlus, FiUserPlus } from 'react-icons/fi';
@@ -23,7 +25,9 @@ export default function Avaliadores() {
   const [OpenConfirm, setOpenConfirm] = useState(false);
   const [selected, setSelected] = useState(null);
 
-  const { evaluators, erase } = useEvaluator();
+  const {
+    evaluators, page, totalPages, loadEvaluators, erase,
+  } = useEvaluator();
 
   useEffect(() => {
     document.title = 'SIGFAPEAP - Avaliadores';
@@ -111,6 +115,21 @@ export default function Avaliadores() {
               </tbody>
             </Table>
           </div>
+
+          <ReactPaginate
+            previousLabel="anterior"
+            nextLabel="próximo"
+            breakLabel="..."
+            breakClassName="break-me"
+            pageCount={totalPages}
+            marginPagesDisplayed={4}
+            pageRangeDisplayed={5}
+            forcePage={page - 1}
+            onPageChange={(page) => { loadEvaluators(page.selected); }}
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+            activeClassName="active"
+          />
         </Card>
       </div>
 

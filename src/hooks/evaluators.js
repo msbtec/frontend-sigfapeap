@@ -27,12 +27,21 @@ export const EvaluatorProvider = ({ children }) => {
 
   const [evaluations, setEvaluations] = useState([]);
 
-  async function loadEvaluators() {
-    api.get(`evaluators`).then(({ data }) => {
-      setEvaluators(data.map((item) => ({
-        ...item,
-        programs: item.programs.map((program) => ({ label: program.title, value: program.id })),
-      })));
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
+  async function loadEvaluators(page = 0) {
+    api.get(`evaluators`, {
+      params: {
+        page: page + 1,
+      },
+    }).then(({ data }) => {
+      //   setEvaluators(data.map((item) => ({
+      //     ...item,
+      //     programs: item.programs.map((program) => ({ label: program.title, value: program.id })),
+      //   })));
+      setTotalPages(data.lastPage);
+      setEvaluators(data.data);
     });
   }
 
@@ -101,6 +110,8 @@ export const EvaluatorProvider = ({ children }) => {
         setEvaluations,
         status,
         changeStatus,
+        totalPages,
+        page,
       }}
     >
       {children}
