@@ -13,7 +13,7 @@ import { useResearcher } from '../../hooks/researcher';
 import { useSearch } from '../../hooks/search';
 import api from '../../services/api';
 
-function Filters({ filters, setFilters }) {
+function Filters({ filters, setFilters, only }) {
   const { setUsers, setTotalPages } = useResearcher();
   const { searches } = useSearch();
 
@@ -100,6 +100,9 @@ function Filters({ filters, setFilters }) {
             setFilters({ ...filters, page: 1, nameOrCpf: String(e.target.value).toUpperCase() });
           }}
         />
+
+        {!only
+        && (
         <div style={{
           marginTop: 10, display: "flex", flexDirection: 'row',
         }}
@@ -171,6 +174,7 @@ function Filters({ filters, setFilters }) {
           </Button>
           )}
         </div>
+        )}
 
         {loading && <div style={{ marginTop: 20 }} />}
         {loading && <ReactLoading type="bars" height="5%" width="5%" color="#3699ff" />}

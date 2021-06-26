@@ -30,7 +30,7 @@ export default function Avaliadores() {
   const [evaluators, setEvaluators] = useState([]);
   const [evaluator, setEvaluator] = useState([]);
 
-  const [avaliador, setAvaliador] = useState(false);
+  const [avaliador, setAvaliador] = useState(true);
 
   const { id } = useParams();
 
