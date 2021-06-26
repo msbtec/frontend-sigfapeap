@@ -127,7 +127,7 @@ function ModalForm({
 
   useEffect(() => {
     if (project?.edital_id) {
-      api.get(`/evaluators/program/${project.edital_id}`).then(({ data }) => {
+      api.get(`/evaluators/project/${project.id}`).then(({ data }) => {
         if (data.length > 0) {
           const filter = data.filter((item) => item.id != project.coordenador.id);
           if (filter.length > 0) {
