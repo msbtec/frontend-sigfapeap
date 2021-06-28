@@ -8,6 +8,8 @@ import { ModalProvider } from 'styled-react-modal';
 
 import moment from 'moment';
 
+import SelectMultiple from "react-select";
+
 import { FiEdit, FiTrash } from 'react-icons/fi';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 
@@ -43,22 +45,35 @@ export default function Documentos() {
 
   const [date, setDate] = useState("");
 
+  const [menuOpen, setMenuOpen] = React.useState(false);
+
+  const [projects, setProjects] = useState([{ label: 'Todos', value: 'Todos' }]);
+  const [selectedProject, setSelectedProject] = useState(
+    { label: 'Todos', value: 'Todos' },
+  );
+
   useEffect(() => {
     document.title = 'SIGFAPEAP - Solicitações';
 
-    getRequests(undefined, prioridade);
+    api.get(`user/${user.profile.name == 'Administrador' ? 0 : user.id}/projects`).then(({ data }) => {
+      if (data.length > 0) {
+        setProjects([...projects, ...data.map((item) => ({ label: item.title, value: item.id, coordenador_id: item.coordenador_id }))]);
+      }
+    });
+
+    getRequests(undefined, prioridade, "Todos");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    getRequests(undefined, prioridade);
+    getRequests(undefined, prioridade, selectedProject);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, prioridade]);
+  }, [status, prioridade, selectedProject]);
 
   useEffect(() => {
-    getRequests(date, prioridade);
+    getRequests(date, prioridade, selectedProject);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date, prioridade]);
+  }, [date, prioridade, selectedProject]);
 
   async function toggleModalRequest() {
     ModalRequest = await lazy(() => import("./FormRequest"));
@@ -81,13 +96,13 @@ export default function Documentos() {
 
   function submitModalRequest() {
     setOpenRequest(!OpenRequest);
-    getRequests(undefined, prioridade);
+    getRequests(undefined, prioridade, selectedProject);
   }
 
   function submitModalForm() {
     setOpenForm(!OpenForm);
     setResposta(!resposta);
-    getRequests(undefined, prioridade);
+    getRequests(undefined, prioridade, selectedProject);
   }
 
   function submitModalConfirm() {
@@ -98,7 +113,7 @@ export default function Documentos() {
     formData.append("solicitacao", selected.solicitacao);
 
     api.put(`contacts/${selected.id}`, formData).then(({ data }) => {
-      getRequests(undefined, prioridade);
+      getRequests(undefined, prioridade, selectedProject);
 
       store.addNotification({
         message: `Resposta enviada com sucesso!`,
@@ -137,33 +152,53 @@ export default function Documentos() {
                 <h3>Listagem de solicitações</h3>
 
                 {user.profile.name != 'Pesquisador'
-          && (
-          <Form>
-            <div style={{ marginBottom: 10 }} className="input-block">
-              <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-            </div>
-            <AiOutlineCloseCircle data-tip="Limpar Filtro" size={32} style={{ marginLeft: 10, color: "#48465b", cursor: 'pointer' }} onClick={() => setDate("")} />
-          </Form>
-          )}
+                    && (
+                    <Form>
+                      <div style={{ marginBottom: 10 }} className="input-block">
+                        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+                      </div>
+                      <AiOutlineCloseCircle data-tip="Limpar Filtro" size={32} style={{ marginLeft: 10, color: "#48465b", cursor: 'pointer' }} onClick={() => setDate("")} />
+                    </Form>
+                    )}
               </div>
 
-              {/* {user.profile.name == 'Pesquisador'
-            && (
-            <div className="card-title">
-              <div style={{ display: 'flex' }}>
-                <Button
-                  style={{ marginRight: 10 }}
-                  onClick={() => {
-                    setSelected(null);
-                    toggleModalRequest();
+              <div className="col-12 px-0" style={{ marginTop: 20, marginBottom: 20 }}>
+                <SelectMultiple
+                  maxMenuHeight={150}
+                  onMenuOpen={() => setMenuOpen(true)}
+                  onMenuClose={() => setMenuOpen(false)}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
+                  placeholder="Projeto"
+                  value={selectedProject}
+                  noOptionsMessage={({ inputValue }) => "Sem opções"}
+                  options={projects}
+                  onChange={(values) => setSelectedProject(values)}
+                  theme={(theme) => ({
+                    ...theme,
+                    borderRadius: 5,
+                    colors: {
+                      ...theme.colors,
+                      primary25: "#080",
+                      primary: "#dee2e6",
+                    },
+                  })}
+                  styles={{
+                    option: (provided, state) => ({
+                      ...provided,
+                      color: state.isSelected ? "#fff" : "rgb(102,102,102)",
+                      backgroundColor: state.isSelected ? "rgb(102,102,102)" : "#fff",
+
+                      ":active": {
+                        ...provided[":active"],
+                        backgroundColor: !state.isDisabled && "#dee2e6",
+                      },
+                    }),
                   }}
-                  className="primary"
-                >
-                  Nova Solicitação
-                </Button>
+                />
+
+                {menuOpen && <div style={{ marginTop: 200 }} />}
               </div>
-            </div>
-            )} */}
 
               <div className="card-body">
                 <Table>
@@ -174,9 +209,6 @@ export default function Documentos() {
                       <th className="col-2">Prioridade</th>
                       <th className="col-3">Protocolo</th>
                       <th className="col-1">Data</th>
-                      {/* <th className="col-2">Coordenador</th> */}
-                      {/* <th className={user.profile.name == 'Pesquisador' ? "col-2" : "col-4"}>Solicitação</th> */}
-                      {/* {user.profile.name == 'Pesquisador' && <th className="col-2">Resposta</th>} */}
                       <th className="col-2">Ações</th>
                     </tr>
                   </thead>
@@ -188,9 +220,6 @@ export default function Documentos() {
                         <td style={{ textAlign: 'center' }}>{ item.prioridade }</td>
                         <td style={{ textAlign: 'center' }}>{ item.protocolo }</td>
                         <td style={{ textAlign: 'center' }}>{ moment(item.date_beggin).format("L") }</td>
-                        {/* <td style={{ textAlign: 'center' }}>{ item.projeto.coordenador.name }</td> */}
-                        {/* <td style={{ marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: largeName(item.solicitacao) }} /> */}
-                        {/* {user.profile.name == 'Pesquisador' && <td style={{ marginTop: 10, textAlign: 'center', color: item.resposta ? "#080" : "#F00" }} dangerouslySetInnerHTML={{ __html: item.resposta ? largeName(item.resposta) : "Aguardando Resposta" }} />} */}
                         <td style={{ textAlign: 'center' }}>
                           {user.profile.name != 'Pesquisador'
                     && !item.resposta && (

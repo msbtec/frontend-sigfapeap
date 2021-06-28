@@ -21,13 +21,14 @@ export const ContactProvider = ({ children }) => {
 
   const { user } = useAuth();
 
-  async function getRequests(date = undefined, prioridade = 'Todos') {
+  async function getRequests(date = undefined, prioridade = 'Todos', selectedProject = "Todos") {
     setLoading(true);
     api.get(`contacts`, {
       params: {
         user_id: user?.profile?.name == 'Pesquisador' ? user?.id : undefined,
         date,
         prioridade: user?.profile?.name == 'Pesquisador' ? "Todos" : prioridade,
+        selectedProject: selectedProject == 'Todos' ? 0 : selectedProject.value,
       },
     }).then(({ data }) => {
       setRequests(data);

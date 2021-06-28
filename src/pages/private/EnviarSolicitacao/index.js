@@ -268,7 +268,7 @@ export default function EnviarSolicitacao() {
                           <sup style={{ color: "#f00" }}>*</sup>
                         </label>
                         <div style={{ marginBottom: 5 }} />
-                        <label style={{ borderColor: errorFile ? "#f00" : "#dee2e6" }} className="file-input">
+                        <label style={{ borderColor: errorFile ? "rgb(197, 48, 48)" : "#dee2e6" }} className="file-input">
                           <input
                             type="file"
                             placeholder="Arquivo"
@@ -314,7 +314,7 @@ export default function EnviarSolicitacao() {
                     <button type="submit" className="submit">
                       <FiCheckCircle />
                       {' '}
-                      Salvar
+                      Enviar
                     </button>
                   </div>
                 </StyledModal>

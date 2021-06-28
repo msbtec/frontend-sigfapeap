@@ -77,7 +77,7 @@ export default function Dashboard() {
     loadNotices(0);
     loadPublishes(0);
 
-    getRequests(undefined, 'Todos');
+    getRequests(undefined, 'Todos', 'Todos');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
