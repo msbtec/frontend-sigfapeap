@@ -5,19 +5,35 @@ import React, {
 import ReactLoading from "react-loading";
 import api from '../../services/api';
 
+import { useRequest } from '../../hooks/request';
+
 import { Form } from '../Form';
 
 function Filters({
-  filters, setFilters, setEvaluators, only,
+  filters, setFilters, setEvaluators, only, avaliadores,
 }) {
   const [loading, setLoading] = useState(true);
 
+  const { requests } = useRequest();
+
   async function search() {
+    const users_unavailable = requests.map((item) => item.usuario.id).concat(avaliadores.map((item) => Number(item.id)));
+
     setLoading(true);
     api.post(`users/search`, {
       params: filters,
     }).then(({ data }) => {
-      setEvaluators(data.data);
+      //   setEvaluators(data.data);
+
+      const users = data.data;
+      const result = [];
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < users.length; i++) {
+        if (!users_unavailable.includes(Number(users[i].id))) {
+          result.push(users[i]);
+        }
+      }
+      setEvaluators(result);
 
       setLoading(false);
     });

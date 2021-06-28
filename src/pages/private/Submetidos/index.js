@@ -119,15 +119,18 @@ export default function Submetidos() {
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.title }</td>
                     <td style={{ textAlign: 'center' }}>
-                      <button
-                        data-tip="Avaliadores"
-                        onClick={() => {
-                          history.push(`avaliadores/${item.id}`);
-                        }}
-                        className="edit"
-                      >
-                        <FiUserPlus />
-                      </button>
+                      {user.profile.name != 'Pesquisador'
+                        && (
+                        <button
+                          data-tip="Avaliadores"
+                          onClick={() => {
+                            history.push(`avaliadores/${item.id}`);
+                          }}
+                          className="edit"
+                        >
+                          <FiUserPlus />
+                        </button>
+                        )}
                       <button
                         data-tip="Exibir Detalhes"
                         onClick={() => {

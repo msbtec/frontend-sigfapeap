@@ -8,6 +8,7 @@ import { store } from 'react-notifications-component';
 
 import * as Yup from 'yup';
 
+import { useHistory } from 'react-router-dom';
 import Input from '../../../../components/Input';
 
 import { StyledModal } from './styles';
@@ -17,9 +18,13 @@ import { Form } from '../../../../components/Form';
 import getValidationErrors from '../../../../utils/getValidationErrors';
 import api from '../../../../services/api';
 
-export default function Solicitacao({ project, evaluator, setSolicitacao }) {
+export default function Solicitacao({
+  project, evaluator, setSolicitacao,
+}) {
   const formRef = useRef(null);
   const reference = useRef(null);
+
+  const history = useHistory();
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorSubject, setErrorSubject] = useState('');
@@ -66,10 +71,14 @@ export default function Solicitacao({ project, evaluator, setSolicitacao }) {
             animationIn: ['animate__animated', 'animate__fadeIn'],
             animationOut: ['animate__animated', 'animate__fadeOut'],
             dismiss: {
-              duration: 5000,
+              duration: 3000,
               onScreen: true,
             },
           });
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
         });
       } catch (error) {
         if (error instanceof Yup.ValidationError) {

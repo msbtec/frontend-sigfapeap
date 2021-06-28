@@ -9,6 +9,8 @@ import { store } from 'react-notifications-component';
 import { Card } from '../../../../components/Card';
 import { Form } from '../../../../components/Form';
 
+import { useAuth } from '../../../../hooks/auth';
+
 import api from '../../../../services/api';
 
 import { StyledModal } from './styles';
@@ -17,6 +19,8 @@ export default function Atividades({
   setSolicitacao, item,
 }) {
   const reference = useRef(null);
+
+  const { user } = useAuth();
 
   function handleSubmit(status) {
     try {
@@ -76,23 +80,26 @@ export default function Atividades({
             </div>
           </div>
 
-          <StyledModal>
-            <div className="modal-footer">
-              <button type="button" className="close" onClick={() => setSolicitacao(false)}>
-                Voltar
-              </button>
-              <button onClick={() => handleSubmit("ACEITA")} className="submit">
-                <FiCheckCircle />
-                {' '}
-                Aceitar
-              </button>
-              <button onClick={() => handleSubmit("RECUSADA")} className="refuse">
-                <FiCheckCircle />
-                {' '}
-                Recusar
-              </button>
-            </div>
-          </StyledModal>
+          {user.profile.name == 'Pesquisador'
+            && (
+            <StyledModal>
+              <div className="modal-footer">
+                <button type="button" className="close" onClick={() => setSolicitacao(false)}>
+                  Voltar
+                </button>
+                <button onClick={() => handleSubmit("ACEITA")} className="submit">
+                  <FiCheckCircle />
+                  {' '}
+                  Aceitar
+                </button>
+                <button onClick={() => handleSubmit("RECUSADA")} className="refuse">
+                  <FiCheckCircle />
+                  {' '}
+                  Recusar
+                </button>
+              </div>
+            </StyledModal>
+            )}
         </Card>
       </div>
     </>
