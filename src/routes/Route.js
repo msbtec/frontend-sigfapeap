@@ -49,7 +49,7 @@ export default function RouteWrapper({
   if (rest.path === '/publicacoes') {
     path = "Publicações";
   }
-  if (rest.path === '/avaliacoes') {
+  if (rest.path === '/avaliacoes' || rest.path === '/avaliacao/solicitacoes') {
     path = "Avaliações";
   }
   if (rest.path === '/atividades' || rest.path === '/tarefas/:atividade') {

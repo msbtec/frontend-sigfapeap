@@ -16,6 +16,7 @@ import { useProgram } from '../../../hooks/program';
 import { useProject } from '../../../hooks/project';
 import { useEvaluator } from '../../../hooks/evaluators';
 import { useContact } from '../../../hooks/contact';
+import { useRequest } from '../../../hooks/request';
 
 import { Card, CardDashboard } from '../../../components/Card';
 import { Table } from '../../../components/Table';
@@ -29,6 +30,8 @@ export default function Dashboard() {
   const { users: researches } = useResearcher();
   const { programs, status } = useProgram();
   const { evaluators, evaluations } = useEvaluator();
+
+  const { requests: solicitacoesAvaliacao } = useRequest();
 
   const { review } = useProject();
 
@@ -252,6 +255,28 @@ export default function Dashboard() {
         </CardDashboard>
       </div>
       )}
+
+      <div className="col-3 px-0">
+        <CardDashboard
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            history.push('avaliacao/solicitacoes');
+          }}
+          className="green"
+        >
+          <div className="card-body">
+            <div className="row">
+              <div className="col">
+                <div className="title">Solicitações para Avaliação</div>
+                <div className="number pulsate">{solicitacoesAvaliacao.length}</div>
+              </div>
+              <div className={`${solicitacoesAvaliacao.length > 0 ? 'col-auto fa-blink' : 'col-auto'}`}>
+                <FiMessageCircle size="3em" color="#080" />
+              </div>
+            </div>
+          </div>
+        </CardDashboard>
+      </div>
 
       {publishes.length > 0 && user.profile.name == 'Pesquisador'
       && (

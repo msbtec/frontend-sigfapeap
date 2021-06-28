@@ -163,6 +163,17 @@ export default function Documentos() {
               </div>
 
               <div className="col-12 px-0" style={{ marginTop: 20, marginBottom: 20 }}>
+                <label
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: '#626262',
+                  }}
+                  className="required"
+                >
+                  Projeto
+                </label>
+                <div style={{ marginTop: 5 }} />
                 <SelectMultiple
                   maxMenuHeight={150}
                   onMenuOpen={() => setMenuOpen(true)}

@@ -14,7 +14,7 @@ import api from '../../../../services/api';
 
 import Solicitacao from '../Solicitação';
 
-export default function EnviarSolicitacao({ setAvaliador }) {
+export default function EnviarSolicitacao({ project, setAvaliador }) {
   const [filters, setFilters] = useState({
     page: 1,
     type_personal: null,
@@ -25,6 +25,8 @@ export default function EnviarSolicitacao({ setAvaliador }) {
   });
 
   const [evaluators, setEvaluators] = useState([]);
+
+  const [evaluator, setEvaluator] = useState(null);
 
   const [solicitacao, setSolicitacao] = useState(false);
 
@@ -75,7 +77,10 @@ export default function EnviarSolicitacao({ setAvaliador }) {
                         <td style={{ textAlign: 'center' }}>
                           <button
                             data-tip="Enviar Solicitação"
-                            onClick={() => setSolicitacao(true)}
+                            onClick={() => {
+                              setEvaluator(item);
+                              setSolicitacao(true);
+                            }}
                             className="edit"
                           >
                             <FiEdit />
@@ -101,7 +106,7 @@ export default function EnviarSolicitacao({ setAvaliador }) {
           </div>
         </>
       ) : (
-        <Solicitacao setSolicitacao={setSolicitacao} />
+        <Solicitacao project={project} evaluator={evaluator} setSolicitacao={setSolicitacao} />
       )}
     </>
   );

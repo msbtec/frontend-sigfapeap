@@ -169,7 +169,7 @@ export default function Avaliadores() {
           </Suspense>
         </>
       ) : (
-        <Avaliador setAvaliador={setAvaliador} />
+        <Avaliador project={project} setAvaliador={setAvaliador} />
       )}
     </>
   );

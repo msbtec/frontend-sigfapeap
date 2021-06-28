@@ -2,8 +2,6 @@ import React, { useCallback, useRef, useState } from 'react';
 
 import { FiFile, FiCheckCircle } from 'react-icons/fi';
 
-import ReactTooltip from 'react-tooltip';
-
 import { Form as Unform } from '@unform/web';
 
 import { store } from 'react-notifications-component';
@@ -17,8 +15,9 @@ import { Card } from '../../../../components/Card';
 import { Form } from '../../../../components/Form';
 
 import getValidationErrors from '../../../../utils/getValidationErrors';
+import api from '../../../../services/api';
 
-export default function Solicitacao({ setSolicitacao }) {
+export default function Solicitacao({ project, evaluator, setSolicitacao }) {
   const formRef = useRef(null);
   const reference = useRef(null);
 
@@ -49,6 +48,29 @@ export default function Solicitacao({ setSolicitacao }) {
         if (!description) {
           throw 'Campo obrigatório';
         }
+
+        const formData = new FormData();
+        formData.append('assunto', data.title);
+        formData.append('solicitacao', description);
+        formData.append('project_id', project.id);
+        formData.append('user_id', evaluator.id);
+
+        api.post('requests', formData).then(({ data }) => {
+          setSolicitacao(false);
+
+          store.addNotification({
+            message: `Solicitação enviada com sucesso!`,
+            type: 'success',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+          });
+        });
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
@@ -57,7 +79,7 @@ export default function Solicitacao({ setSolicitacao }) {
         }
       }
     },
-    [formRef, description],
+    [formRef, description, project, evaluator, setSolicitacao],
   );
 
   return (

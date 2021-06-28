@@ -243,7 +243,7 @@ export default function EnviarSolicitacao() {
                       <Input formRef={formRef} name="assunto" required original title="Assunto" />
 
                       <div className="input-block">
-                        <label style={{ marginBottom: 10 }}>
+                        <label>
                           Solicitação
                         </label>
 
