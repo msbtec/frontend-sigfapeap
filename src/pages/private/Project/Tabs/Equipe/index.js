@@ -12,6 +12,8 @@ import { useResearcher } from '../../../../../hooks/researcher';
 import { useAuth } from '../../../../../hooks/auth';
 import { useProject } from '../../../../../hooks/project';
 
+import Search from './Search';
+
 import api from '../../../../../services/api';
 
 let ModalForm = () => <></>;
@@ -61,8 +63,9 @@ export default function Header() {
 
   return (
     <Form>
-      <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Membros do Projeto</label>
+      <Search membros={membros} setMembros={setMembros} />
 
+      <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Membros do Projeto</label>
       <div style={{ marginTop: 20 }} />
       <SelectMultiple
         maxMenuHeight={150}
@@ -121,7 +124,7 @@ export default function Header() {
             <tr>
               <td style={{ textAlign: 'center' }}>{JSON.parse(item.value).name}</td>
               <td style={{ textAlign: 'center' }}>{JSON.parse(item.value)?.foundation?.name}</td>
-              <td style={{ textAlign: 'center' }}>{JSON.parse(item.value).id == user.id ? 'Coordenador(a)' : 'Pesquisador(a)'}</td>
+              <td style={{ textAlign: 'center' }}>{JSON.parse(item.value).id == user.id ? 'Coordenador(a)' : JSON.parse(item.value).funcao}</td>
             </tr>
           ))}
         </tbody>

@@ -129,6 +129,10 @@ export default function Sis() {
           }
         }
       });
+
+      socket.subscribeToChannel('request', 'new-request', (data) => {
+        setNewRequests(data);
+      });
     }
 
     if (user.profile.name == 'Administrador') {
@@ -172,10 +176,6 @@ export default function Sis() {
     // socket.subscribeToChannel('project', 'new-project', (data) => {
     //   setNewProject(data);
     // });
-
-    socket.subscribeToChannel('request', 'new-request', (data) => {
-      setNewRequests(data);
-    });
 
     socket.subscribeToChannel('project', 'update-project', (data) => {
       setNewProject(data);
