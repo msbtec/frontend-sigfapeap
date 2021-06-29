@@ -65,12 +65,12 @@ export default function Project() {
   } = useProject();
 
   const [screen, setScreen] = useState({
-    header: false,
+    header: true,
     appresentation: false,
     documents: false,
     abrangencia: false,
     recursos: false,
-    equipe: true,
+    equipe: false,
     orcamento: false,
   });
 
@@ -416,7 +416,7 @@ export default function Project() {
           const formData = new FormData();
           formData.append('edital_id', id);
           formData.append('coordenador_id', user.id);
-          formData.append('membros', membros.map((item) => String(JSON.parse(item.value).id)));
+          formData.append('membros', membros.map((item) => String(`${JSON.parse(item.value).id} - ${JSON.parse(item.value).funcao || "Coordenador(a)"}`)));
           formData.append('atividades', JSON.stringify(filter.map((item) => ({
             ...item,
             participantes: item.participantes.map((participante) => (String(JSON.parse(participante.value).id))).join(","),

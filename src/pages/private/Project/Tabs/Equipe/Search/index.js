@@ -22,6 +22,7 @@ export default function Search({ membros, setMembros }) {
   const { user } = useAuth();
 
   const [cpf, setCPF] = useState('');
+  const [cpf_err, setCPF_err] = useState('');
 
   async function addMembro(item) {
     const filter = membros.filter((subitem) => JSON.parse(subitem.value).id == item.id);
@@ -68,6 +69,7 @@ export default function Search({ membros, setMembros }) {
         <input
           placeholder="CPF"
           value={cpf}
+          style={{ borderColor: cpf_err ? "#c53030" : "#ccc" }}
           onChange={(e) => {
             const formatted = cpf_mask(e.target.value);
             setCPF(formatted);
@@ -84,12 +86,26 @@ export default function Search({ membros, setMembros }) {
           }}
           type="text"
         />
+        <sup style={{ color: '#c53030', marginTop: 5 }}>
+          {cpf_err}
+        </sup>
       </div>
 
       <button
         style={{ marginBottom: 20, width: 100 }}
         type="button"
-        onClick={() => getUsers()}
+        onClick={() => {
+          if (String(cpf) != "") {
+            if (String(cpf).length < 14) {
+              setCPF_err('Preencha corretamente o CPF');
+            } else {
+              setCPF_err('');
+              getUsers();
+            }
+          } else {
+            setCPF_err('Campo obrigatório');
+          }
+        }}
       >
         Buscar
       </button>
