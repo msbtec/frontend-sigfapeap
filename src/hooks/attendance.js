@@ -37,7 +37,7 @@ export const AttendanceProvider = ({ children }) => {
   useEffect(() => {
     getRequests();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, status]);
 
   const changeStatus = useCallback(async () => {
     getRequests();
