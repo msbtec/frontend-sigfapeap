@@ -4,6 +4,8 @@ import React, {
 
 import ReactTooltip from 'react-tooltip';
 
+import { store } from 'react-notifications-component';
+
 import {
   FiUserPlus,
 } from 'react-icons/fi';
@@ -22,7 +24,24 @@ export default function Search({ membros, setMembros }) {
   const [cpf, setCPF] = useState('');
 
   async function addMembro(item) {
-    setMembros([...membros, { value: JSON.stringify(item), label: item.name }]);
+    const filter = membros.filter((subitem) => JSON.parse(subitem.value).id == item.id);
+
+    if (filter.length == 0) {
+      setMembros([...membros, { value: JSON.stringify(item), label: item.name }]);
+    } else {
+      store.addNotification({
+        message: `Usuário já está inserido no projeto!`,
+        type: 'danger',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+    }
   }
 
   async function getUsers() {
