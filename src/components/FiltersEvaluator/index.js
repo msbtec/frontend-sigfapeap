@@ -10,7 +10,7 @@ import { useRequest } from '../../hooks/request';
 import { Form } from '../Form';
 
 function Filters({
-  filters, setFilters, setEvaluators, only, avaliadores,
+  project, filters, setFilters, setEvaluators, only, avaliadores,
 }) {
   const [loading, setLoading] = useState(true);
 
@@ -30,7 +30,9 @@ function Filters({
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < users.length; i++) {
         if (!users_unavailable.includes(Number(users[i].id))) {
-          result.push(users[i]);
+          if (Number(users[i].id) != Number(project.coordenador_id)) {
+            result.push(users[i]);
+          }
         }
       }
       setEvaluators(result);

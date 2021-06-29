@@ -17,6 +17,7 @@ import { ArchiveProvider } from "./archive";
 import { ContactProvider } from "./contact";
 import { PublishProvider } from "./publish";
 import { RequestProvider } from "./request";
+import { AttendanceProvider } from "./attendance";
 
 const AppProvider = ({ children }) => (
   <AuthProvider>
@@ -34,9 +35,11 @@ const AppProvider = ({ children }) => (
                           <EvaluatorProvider>
                             <ProjectProvider>
                               <ContactProvider>
-                                <RequestProvider>
-                                  {children}
-                                </RequestProvider>
+                                <AttendanceProvider>
+                                  <RequestProvider>
+                                    {children}
+                                  </RequestProvider>
+                                </AttendanceProvider>
                               </ContactProvider>
                             </ProjectProvider>
                           </EvaluatorProvider>

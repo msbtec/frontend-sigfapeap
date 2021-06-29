@@ -6,6 +6,7 @@ import { FiCheckCircle } from 'react-icons/fi';
 
 import { store } from 'react-notifications-component';
 
+import { useHistory } from 'react-router-dom';
 import { Card } from '../../../../components/Card';
 import { Form } from '../../../../components/Form';
 
@@ -19,6 +20,8 @@ export default function Atividades({
   setSolicitacao, item,
 }) {
   const reference = useRef(null);
+
+  const history = useHistory();
 
   const { user } = useAuth();
 
@@ -72,11 +75,25 @@ export default function Atividades({
               <td style={{ overflowWrap: 'break-word', marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item?.solicitacao }} />
             </div>
 
-            <div style={{ marginBottom: 20 }}>
+            {/* <div style={{ marginBottom: 20 }}>
               <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
                 Projeto:
               </label>
               <td style={{ overflowWrap: 'break-word', marginTop: 10, textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: item?.projeto?.title }} />
+            </div> */}
+
+            <div>
+              <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
+                Projeto:
+              </label>
+              <td style={{ marginTop: 10, textAlign: 'center' }}>
+                <a className="url" href={`/projeto/${item?.projeto?.edital_id}/${item?.projeto?.coordenador_id}`}>{item?.projeto?.title}</a>
+                {/* <button onClick={() => history.push(`/projeto/${item?.project?.edital_id}/${item?.project?.coordenador_id}`)} className="submit">
+                  <FiCheckCircle />
+                  {' '}
+                  Visualizar
+                </button> */}
+              </td>
             </div>
           </div>
 

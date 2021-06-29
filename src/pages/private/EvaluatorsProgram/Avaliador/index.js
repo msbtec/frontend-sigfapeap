@@ -49,7 +49,9 @@ export default function EnviarSolicitacao({
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < users.length; i++) {
         if (!users_unavailable.includes(Number(users[i].id))) {
-          result.push(users[i]);
+          if (Number(users[i].id) != Number(project.coordenador_id)) {
+            result.push(users[i]);
+          }
         }
       }
 
@@ -72,7 +74,7 @@ export default function EnviarSolicitacao({
           <div className="col-12 px-0">
             <Card className="red">
               <div className="card-body">
-                <FiltersEvaluator avaliadores={avaliadores} filters={filters} setFilters={setFilters} setEvaluators={setEvaluators} only />
+                <FiltersEvaluator project={project} avaliadores={avaliadores} filters={filters} setFilters={setFilters} setEvaluators={setEvaluators} only />
 
                 <Table>
                   <thead>

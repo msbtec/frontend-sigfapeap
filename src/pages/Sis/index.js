@@ -15,6 +15,8 @@ import { useProject } from '../../hooks/project';
 import { useProgram } from '../../hooks/program';
 import { useContact } from '../../hooks/contact';
 import { useEvaluator } from '../../hooks/evaluators';
+import { useAttendance } from '../../hooks/attendance';
+import { useRequest } from '../../hooks/request';
 
 import Sidebar from './Sidebar';
 import { Wrap, Main, NavBar } from './styles';
@@ -53,12 +55,18 @@ export default function Sis() {
 
   const { changeStatus: changeStatusRequest } = useContact();
 
+  const { changeStatus: changeStatusAttendance } = useAttendance();
+
   const { loading, changeStatus: changeStatusProject } = useProject();
 
   const { changeStatus: changeStatusEvaluation } = useEvaluator();
 
+  const { changeStatus: changeStatusRequests } = useRequest();
+
   const [data, setData] = useState(null);
   const [newRequest, setNewRequest] = useState(null);
+  const [newRequests, setNewRequests] = useState(null);
+  const [newAttendance, setNewAttendance] = useState(null);
   const [newProject, setNewProject] = useState(null);
   const [newEvaluation, setNewEvaluation] = useState(null);
 
@@ -101,6 +109,26 @@ export default function Sis() {
           }
         }
       });
+
+      socket.subscribeToChannel('attendance', 'response-attendance', (data) => {
+        setNewAttendance(data);
+        if (moment(data.created_at).isBefore(data.updated_at)) {
+          if (user.id == data.user_id) {
+            store.addNotification({
+              message: `Solicitação Respondida!`,
+              type: 'success',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+          }
+        }
+      });
     }
 
     if (user.profile.name == 'Administrador') {
@@ -119,11 +147,35 @@ export default function Sis() {
           },
         });
       });
+
+      socket.subscribeToChannel('attendance', 'new-attendance', (data) => {
+        setNewAttendance(data);
+        store.addNotification({
+          message: `Nova Solicitação Recebida!`,
+          type: 'success',
+          insert: 'top',
+          container: 'top-right',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
+      });
+
+      socket.subscribeToChannel('request', 'response-request', (data) => {
+        setNewRequests(data);
+      });
     }
 
     // socket.subscribeToChannel('project', 'new-project', (data) => {
     //   setNewProject(data);
     // });
+
+    socket.subscribeToChannel('request', 'new-request', (data) => {
+      setNewRequests(data);
+    });
 
     socket.subscribeToChannel('project', 'update-project', (data) => {
       setNewProject(data);
@@ -148,6 +200,16 @@ export default function Sis() {
     changeStatusRequest();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newRequest]);
+
+  React.useEffect(() => {
+    changeStatusRequests();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newRequests]);
+
+  React.useEffect(() => {
+    changeStatusAttendance();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newAttendance]);
 
   React.useEffect(() => {
     changeStatusProject();
