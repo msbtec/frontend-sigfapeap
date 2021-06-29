@@ -55,9 +55,9 @@ export default function RouteWrapper({
   if (rest.path === '/atividades' || rest.path === '/tarefas/:atividade') {
     path = "Atividades";
   }
-  //   if (rest.path === '/solicitacoes') {
-  //     path = "Solicitações";
-  //   }
+  if (rest.path === '/atendimentos') {
+    path = "Fale Conosco";
+  }
   if (rest.path === '/submetidos') {
     path = "Submetidos";
   }

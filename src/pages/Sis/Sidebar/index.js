@@ -11,6 +11,7 @@ import { useAuth } from '../../../hooks/auth';
 import { useContact } from '../../../hooks/contact';
 import { useProject } from '../../../hooks/project';
 import { useEvaluator } from '../../../hooks/evaluators';
+import { useAttendance } from '../../../hooks/attendance';
 
 import Logo from '../../../assets/img/logo.png';
 
@@ -20,6 +21,8 @@ function Sidebar({
   const { user, signOut } = useAuth();
 
   const { notResponding } = useContact();
+
+  const { notResponding: notRespondingAttendance } = useAttendance();
 
   const { evaluations } = useEvaluator();
 
@@ -232,8 +235,38 @@ function Sidebar({
       });
     }
 
+    if (profiles.includes('Fale Conosco')) {
+      my_profiles.push({
+        name:
+  <div style={{
+    display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: -4,
+  }}
+  >
+    <h1 style={{ fontWeight: '500', color: '#a2a3b7', fontSize: 13 }}>
+      Fale Conosco
+    </h1>
+    {notRespondingAttendance > 0
+      && (
+      <div style={{
+        backgroundColor: "#080", paddingLeft: 10, paddingRight: 10, paddingBottom: 2, paddingTop: 4, borderRadius: 5, marginLeft: 10, justifyContent: 'center', alignItems: 'center',
+      }}
+      >
+        <h3 style={{
+          color: "#fff", fontSize: 13,
+        }}
+        >
+          {notRespondingAttendance}
+        </h3>
+      </div>
+      )}
+  </div>,
+        icon: <BsFillChatDotsFill />,
+        path: '/atendimentos',
+      });
+    }
+
     dispatch(toggleItem(my_profiles));
-  }, [user, review, evaluations, dispatch, notResponding]);
+  }, [user, review, evaluations, dispatch, notResponding, notRespondingAttendance]);
 
   return (
 

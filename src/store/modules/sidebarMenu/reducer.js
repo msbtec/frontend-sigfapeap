@@ -92,6 +92,11 @@ const INITIAL_STATE = {
       icon: <FiGrid />,
       path: '/solicitacoes',
     },
+    {
+      name: 'Fale Conosco',
+      icon: <FiGrid />,
+      path: '/atendimentos',
+    },
   ],
 };
 

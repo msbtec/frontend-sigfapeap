@@ -22,7 +22,7 @@ export const AttendanceProvider = ({ children }) => {
 
   async function getRequests(date = undefined) {
     setLoading(true);
-    api.get(`contacts`, {
+    api.get(`attendances`, {
       params: {
         user_id: user?.profile?.name == 'Pesquisador' ? user?.id : undefined,
         date,
