@@ -167,7 +167,7 @@ export default function Documentos() {
                   <th className="col-1">#</th>
                   <th className="col-3">Assunto</th>
                   <th className="col-3">Solicitação</th>
-                  <th className="col-3">Resposta</th>
+                  <th className="col-3">Protocolo</th>
                   <th className="col-1">Data</th>
                   <th className="col-2">Ações</th>
                 </tr>
