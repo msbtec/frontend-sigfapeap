@@ -7,7 +7,7 @@ import ReactTooltip from 'react-tooltip';
 import { store } from 'react-notifications-component';
 
 import {
-  FiUserPlus,
+  FiUserPlus, FiLink,
 } from 'react-icons/fi';
 import { Form } from '../../../../../../components/Form';
 import { Table } from '../../../../../../components/Table';
@@ -56,6 +56,17 @@ export default function Search({ membros, setMembros }) {
       const result = users.filter((item) => item.id != user.id);
       setUsers(result);
     });
+  }
+
+  function validURL(term) {
+    // eslint-disable-next-line no-useless-escape
+    const re = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?|magnet:\?xt=urn:btih:/;
+
+    if (re.test(term)) {
+      return true;
+    }
+
+    return false;
   }
 
   return (
@@ -114,8 +125,9 @@ export default function Search({ membros, setMembros }) {
         <thead>
           <tr>
             <th className="col-4">Nome</th>
-            <th className="col-4">Instituição</th>
-            <th className="col-2">Função</th>
+            <th className="col-1">Currículo</th>
+            <th className="col-2">CPF</th>
+            <th className="col-3">Função</th>
             <th className="col-2">Ação</th>
           </tr>
         </thead>
@@ -123,7 +135,8 @@ export default function Search({ membros, setMembros }) {
           {users.map((item) => (
             <tr>
               <td style={{ textAlign: 'center' }}>{item.name}</td>
-              <td style={{ textAlign: 'center' }}>{item?.foundation?.name}</td>
+              <td style={{ textAlign: 'center' }}><FiLink style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => validURL(item.curriculum) && window.open(item.curriculum, '_blank')} /></td>
+              <td style={{ textAlign: 'center' }}>{item?.cpf}</td>
               <td style={{ textAlign: 'center' }}>
                 <div>
                   <input
