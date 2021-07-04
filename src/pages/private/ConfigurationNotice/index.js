@@ -13,12 +13,13 @@ import { store } from 'react-notifications-component';
 import { useParams } from 'react-router-dom';
 import { FiFile, FiTrash } from 'react-icons/fi';
 import { AiOutlineFilePdf } from 'react-icons/ai';
-import { FaEye } from 'react-icons/fa';
+import {
+  money_mask,
+} from '../../../utils/validations';
 import { Content } from './styles';
 import { Button } from '../../../components/Button';
 
 import { Form } from '../../../components/Form';
-import Input from '../../../components/Input';
 import { Card } from '../../../components/Card';
 
 import getValidationErrors from '../../../utils/getValidationErrors';
@@ -32,6 +33,7 @@ export default function ConfigurationNotice() {
 
   const { id } = useParams();
 
+  const [personalFiles, setPersonalFiles] = useState([]);
   const [files, setFiles] = useState([]);
 
   const [anexo, setAnexo] = useState(null);
@@ -39,14 +41,14 @@ export default function ConfigurationNotice() {
     titulo_projeto: { checked: true, value: 0 },
     coordenador: { checked: true, value: 0 },
     email: { checked: true, value: 0 },
-    faixa_valor: { checked: true, value: 0 },
+    faixa_valor: { checked: true, value: [] },
     tema_interesse: { checked: true, value: 0 },
     instituicao: { checked: true, value: 0 },
     unidade_executora: { checked: true, value: 0 },
     linha_pesquisa: { checked: true, value: 0 },
     inicio_previsto: { checked: true, value: 0 },
     duracao: { checked: true, value: 0 },
-    cotacao_moeda_estrangeira: { checked: true, value: 0 },
+    cotacao_moeda_estrangeira: { checked: true, value: [] },
   });
 
   const [orcamentos, setOrcamentos] = useState({
@@ -57,7 +59,7 @@ export default function ConfigurationNotice() {
     servicos_terceiros: { checked: true, value: 0 },
     materiais_equipamentos: { checked: true, value: 0 },
     pessoal: { checked: true, value: 0 },
-    bolsas: { checked: true, value: 0 },
+    bolsas: { checked: true, value: [] },
     encargos: { checked: true, value: 0 },
   });
 
@@ -91,6 +93,7 @@ export default function ConfigurationNotice() {
 
   const [loadingHeader, setLoadingHeader] = useState(false);
   const [loadingDocuments, setLoadingDocuments] = useState(false);
+  const [loadingPersonalDocuments, setLoadingPersonalDocuments] = useState(false);
   const [loadingApresentacao, setLoadingApresentacao] = useState(false);
   const [loadingOrcamento, setLoadingOrcamento] = useState(false);
   const [loadingAbrangencia, setLoadingAbrangencia] = useState(false);
@@ -104,6 +107,7 @@ export default function ConfigurationNotice() {
       },
     }).then(({ data }) => {
       setFields(JSON.parse(data.plano_trabalho).fields);
+      setPersonalFiles(JSON.parse(data.plano_trabalho).documentos_pessoais);
       setApresentacao(JSON.parse(data.apresentacao).apresentacao);
       setOrcamentos(JSON.parse(data.orcamento).orcamentos);
       setAbrangencias(JSON.parse(data.abrangencia).abrangencias);
@@ -138,7 +142,9 @@ export default function ConfigurationNotice() {
         }
 
         api.post(`configurations`, {
-          plano_trabalho: JSON.stringify({ ...data, fields, isOne }),
+          plano_trabalho: JSON.stringify({
+            ...data, fields, documentos_pessoais: personalFiles, isOne,
+          }),
           file_id: id,
         }).then(({ data }) => {
           setLoadingHeader(false);
@@ -209,6 +215,46 @@ export default function ConfigurationNotice() {
       }
     }
   }
+
+  const handleSubmitPersonalDocuments = useCallback(
+    async (data) => {
+      try {
+        formRef.current.setErrors({});
+
+        setLoadingPersonalDocuments(true);
+
+        api.post(`configurations`, {
+          plano_trabalho: JSON.stringify({ fields, documentos_pessoais: personalFiles }),
+          file_id: id,
+        }).then(({ data }) => {
+          setLoadingPersonalDocuments(false);
+
+          getConfigurations();
+
+          store.addNotification({
+            message: `Chamada Pública configurada com sucesso!`,
+            type: 'success',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+          });
+        }).finally(() => {});
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
+
+          formRef.current.setErrors(errors);
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fields, personalFiles, id],
+  );
 
   // eslint-disable-next-line consistent-return
   async function handleUpdateDocuments(id, title, file) {
@@ -518,6 +564,83 @@ export default function ConfigurationNotice() {
                       setFields={setFields}
                       title="Faixa de valor"
                     />
+
+                    {fields.faixa_valor.checked
+                    && (
+                    <div style={{
+                      display: "flex", flexDirection: "column",
+                    }}
+                    >
+                        {fields.faixa_valor.value.map((item, i) => (
+                          <div style={{
+                            display: "flex", flexDirection: "row", alignItems: 'center', justifyContent: 'center',
+                          }}
+                          >
+                            <div className="input-block">
+                              <label className="required">Mínimo</label>
+                              <input
+                                onChange={(e) => setFields({
+                                  ...fields,
+                                  faixa_valor: {
+                                    ...fields.faixa_valor,
+                                    value: fields.faixa_valor.value.map((field) => (field.id == item.id ? ({
+                                      ...field, min: money_mask(e.target.value),
+                                    }) : field)),
+                                  },
+                                })}
+                                value={item.min}
+                                type="text"
+                              />
+                            </div>
+
+                            <div style={{ marginBottom: 15, marginLeft: 10 }} className="input-block">
+                              <label className="required">Máximo</label>
+                              <input
+                                onChange={(e) => setFields({
+                                  ...fields,
+                                  faixa_valor: {
+                                    ...fields.faixa_valor,
+                                    value: fields.faixa_valor.value.map((field) => (field.id == item.id ? ({
+                                      ...field, max: money_mask(e.target.value),
+                                    }) : field)),
+                                  },
+                                })}
+                                value={item.max}
+                                type="text"
+                              />
+                            </div>
+
+                            <Content>
+                              <button
+                                style={{ width: 50, marginTop: 25, marginLeft: 10 }}
+                                type="button"
+                                onClick={() => {
+                                  if (i == fields.faixa_valor.value.length - 1) {
+                                    setFields({
+                                      ...fields,
+                                      faixa_valor: {
+                                        ...fields.faixa_valor,
+                                        value: [...fields.faixa_valor.value, {
+                                          id: uuid(),
+                                          min: 'R$ 0,00',
+                                          max: 'R$ 0,00',
+                                        }],
+                                      },
+                                    });
+                                  } else {
+                                    const result = fields.faixa_valor.value;
+                                    result.splice(i, 1);
+                                    setFields({ ...fields, faixa_valor: { ...fields.faixa_valor, value: result } });
+                                  }
+                                }}
+                              >
+                                {(i == fields.faixa_valor.value.length - 1) ? '+' : '-'}
+                              </button>
+                            </Content>
+                          </div>
+                        ))}
+                    </div>
+                    )}
                   </div>
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
@@ -539,16 +662,6 @@ export default function ConfigurationNotice() {
                       title="Instituição Executora"
                     />
                   </div>
-
-                  {/* <div style={{ marginRight: 10, marginBottom: 20 }}>
-                    <Checkbox
-                      onChange={() => setFields({ ...fields, unidade_executora: { ...fields.unidade_executora, checked: !fields.unidade_executora.checked } })}
-                      checked={fields.unidade_executora.checked}
-                      fields={fields}
-                      setFields={setFields}
-                      title="Unidade Executora"
-                    />
-                  </div> */}
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>
                     <Checkbox
@@ -578,16 +691,20 @@ export default function ConfigurationNotice() {
                       setFields={setFields}
                       title="Cotação da Moeda Estrangeira"
                     />
+
+                    {fields.cotacao_moeda_estrangeira.checked
+                    && (
+                    <div className="input-block">
+                      <label className="required">Valor</label>
+                      <input
+                        onChange={(e) => setFields({ ...fields, cotacao_moeda_estrangeira: { ...fields.cotacao_moeda_estrangeira, value: money_mask(e.target.value) } })}
+                        value={fields.cotacao_moeda_estrangeira.value}
+                        type="text"
+                      />
+                    </div>
+                    )}
                   </div>
                 </div>
-
-                {/* <h3 style={{ color: '#48465b' }}>Anexo</h3>
-
-                <Input formRef={formRef} name="name" original title="Nome" />
-
-                <Input formRef={formRef} name="size" type="number" original title="Tamanho máximo (Mb)" />
-
-                <Input formRef={formRef} name="quantity" type="number" original title="Número máximo" /> */}
 
                 <div className="modal-footer">
                   {loadingHeader ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
@@ -605,7 +722,72 @@ export default function ConfigurationNotice() {
 
         <Card className="red">
           <div className="card-title">
-            <h3>Documentos</h3>
+            <h3>Documentos Pessoais</h3>
+          </div>
+          <div className="card-body">
+            <Unform ref={formRef} onSubmit={handleSubmitPersonalDocuments}>
+              <Form ref={formRef} onSubmit={handleSubmitPersonalDocuments}>
+                <div>
+                  {personalFiles.map((item, index) => (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                      <div style={{ marginBottom: 10 }} className="input-block">
+                        <label className="required">Título</label>
+                        <input
+                          value={item.title}
+                          onChange={(e) => {
+                            setPersonalFiles(personalFiles.map((file, subindex) => (index == subindex ? ({ ...file, title: e.target.value }) : file)));
+                          }}
+                          type="text"
+                        />
+                      </div>
+
+                      <div style={{ display: 'flex' }}>
+                        <FiTrash
+                          onClick={() => {
+                            setPersonalFiles(personalFiles.filter((file) => file.id !== item.id));
+                          }}
+                          style={{
+                            fontSize: 25, marginTop: 10, marginLeft: 20, marginRight: 20, cursor: 'pointer',
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+
+                  <Content>
+                    <button
+                      style={{ marginTop: 20, marginBottom: 20, width: 210 }}
+                      type="button"
+                      onClick={() => {
+                        setPersonalFiles([...personalFiles, {
+                          id: uuid(),
+                          title: '',
+                        }]);
+                      }}
+                    >
+                      Adicionar documento
+                    </button>
+                  </Content>
+                </div>
+
+                <div className="modal-footer">
+                  {loadingPersonalDocuments ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
+                    <Button
+                      type="submit"
+                      className="primary"
+                    >
+                      Salvar
+                    </Button>
+                  )}
+                </div>
+              </Form>
+            </Unform>
+          </div>
+        </Card>
+
+        <Card className="red">
+          <div className="card-title">
+            <h3>Outros documentos</h3>
           </div>
           <div className="card-body">
             <Form>
@@ -720,16 +902,6 @@ export default function ConfigurationNotice() {
                   </button>
                 </Content>
               </div>
-
-              {/* <div className="modal-footer">
-                {loadingDocuments ? (<ReactLoading type="spin" height="50px" width="50px" color="#3699ff" />) : (
-                  <Button
-                    className="primary"
-                  >
-                    Salvar
-                  </Button>
-                )}
-              </div> */}
             </Form>
           </div>
         </Card>
@@ -973,6 +1145,101 @@ export default function ConfigurationNotice() {
                       setFields={setOrcamentos}
                       title="Bolsas"
                     />
+
+                    {orcamentos.bolsas.checked
+                    && (
+                    <div style={{
+                      display: "flex", flexDirection: "column",
+                    }}
+                    >
+                        {orcamentos.bolsas.value.map((item, i) => (
+                          <div style={{
+                            display: "flex", flexDirection: "row", alignItems: 'center', justifyContent: 'center',
+                          }}
+                          >
+                            <div className="input-block">
+                              <label className="required">Título</label>
+                              <input
+                                onChange={(e) => setOrcamentos({
+                                  ...orcamentos,
+                                  bolsas: {
+                                    ...orcamentos.bolsas,
+                                    value: orcamentos.bolsas.value.map((field) => (field.id == item.id ? ({
+                                      ...field, title: e.target.value,
+                                    }) : field)),
+                                  },
+                                })}
+                                value={item.title}
+                                type="text"
+                              />
+                            </div>
+
+                            <div style={{ marginBottom: 15, marginLeft: 10 }} className="input-block">
+                              <label className="required">Mínimo</label>
+                              <input
+                                onChange={(e) => setOrcamentos({
+                                  ...orcamentos,
+                                  bolsas: {
+                                    ...orcamentos.bolsas,
+                                    value: orcamentos.bolsas.value.map((field) => (field.id == item.id ? ({
+                                      ...field, min: money_mask(e.target.value),
+                                    }) : field)),
+                                  },
+                                })}
+                                value={item.min}
+                                type="text"
+                              />
+                            </div>
+
+                            <div style={{ marginBottom: 15, marginLeft: 10 }} className="input-block">
+                              <label className="required">Máximo</label>
+                              <input
+                                onChange={(e) => setOrcamentos({
+                                  ...orcamentos,
+                                  bolsas: {
+                                    ...orcamentos.bolsas,
+                                    value: orcamentos.bolsas.value.map((field) => (field.id == item.id ? ({
+                                      ...field, max: money_mask(e.target.value),
+                                    }) : field)),
+                                  },
+                                })}
+                                value={item.max}
+                                type="text"
+                              />
+                            </div>
+
+                            <Content>
+                              <button
+                                style={{ width: 50, marginTop: 25, marginLeft: 10 }}
+                                type="button"
+                                onClick={() => {
+                                  if (i == orcamentos.bolsas.value.length - 1) {
+                                    setOrcamentos({
+                                      ...orcamentos,
+                                      bolsas: {
+                                        ...orcamentos.bolsas,
+                                        value: [...orcamentos.bolsas.value, {
+                                          id: uuid(),
+                                          title: '',
+                                          min: 'R$ 0,00',
+                                          max: 'R$ 0,00',
+                                        }],
+                                      },
+                                    });
+                                  } else {
+                                    const result = orcamentos.bolsas.value;
+                                    result.splice(i, 1);
+                                    setOrcamentos({ ...orcamentos, bolsas: { ...orcamentos.bolsas, value: result } });
+                                  }
+                                }}
+                              >
+                                {(i == orcamentos.bolsas.value.length - 1) ? '+' : '-'}
+                              </button>
+                            </Content>
+                          </div>
+                        ))}
+                    </div>
+                    )}
                   </div>
 
                   <div style={{ marginRight: 10, marginBottom: 20 }}>

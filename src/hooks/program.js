@@ -7,8 +7,8 @@ import React, {
 } from 'react';
 
 import { store } from 'react-notifications-component';
+import { uuid } from 'uuidv4';
 import api from '../services/api';
-import socket from '../services/socket';
 
 const ProgramContext = createContext({});
 
@@ -73,15 +73,23 @@ export const ProgramProvider = ({ children }) => {
           titulo_projeto: { checked: true, value: 0 },
           coordenador: { checked: true, value: 0 },
           email: { checked: true, value: 0 },
-          faixa_valor: { checked: true, value: 0 },
+          faixa_valor: {
+            checked: true,
+            value: [{
+              id: uuid(),
+              min: 'R$ 0,00',
+              max: 'R$ 0,00',
+            }],
+          },
           tema_interesse: { checked: true, value: 0 },
           instituicao: { checked: true, value: 0 },
           unidade_executora: { checked: true, value: 0 },
           linha_pesquisa: { checked: true, value: 0 },
           inicio_previsto: { checked: true, value: 0 },
           duracao: { checked: true, value: 0 },
-          cotacao_moeda_estrangeira: { checked: true, value: 0 },
+          cotacao_moeda_estrangeira: { checked: true, value: 'R$ 0,00' },
         },
+        documentos_pessoais: [],
       }),
       apresentacao: JSON.stringify({
         apresentacao: {
@@ -109,7 +117,17 @@ export const ProgramProvider = ({ children }) => {
           servicos_terceiros: { checked: true, value: 0 },
           materiais_equipamentos: { checked: true, value: 0 },
           pessoal: { checked: true, value: 0 },
-          bolsas: { checked: true, value: 0 },
+          bolsas: {
+            checked: true,
+            value: [
+              {
+                id: uuid(),
+                title: 'Bolsa',
+                min: 'R$ 0,00',
+                max: 'R$ 0,00',
+              },
+            ],
+          },
           encargos: { checked: true, value: 0 },
         },
       }),
