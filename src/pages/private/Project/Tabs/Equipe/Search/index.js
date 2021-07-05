@@ -121,6 +121,7 @@ export default function Search({ membros, setMembros }) {
         Buscar
       </button>
 
+      {users.length > 0 && (
       <Table style={{ marginTop: 20 }}>
         <thead>
           <tr>
@@ -179,6 +180,7 @@ export default function Search({ membros, setMembros }) {
           ))}
         </tbody>
       </Table>
+      )}
     </Form>
   );
 }

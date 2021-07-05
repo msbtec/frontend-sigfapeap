@@ -1,15 +1,7 @@
 import React from 'react';
 
-import { FiFile, FiTrash } from 'react-icons/fi';
-import { FaEye } from 'react-icons/fa';
-import { AiOutlineFilePdf } from 'react-icons/ai';
-
-import { store } from 'react-notifications-component';
-
-import { uuid } from 'uuidv4';
 import { Form } from '../../../../../components/Form';
 import Input from '../../../../../components/Input';
-import api from '../../../../../services/api';
 
 import { useAuth } from '../../../../../hooks/auth';
 
@@ -17,15 +9,11 @@ import { useAuth } from '../../../../../hooks/auth';
 import { useProject } from '../../../../../hooks/project';
 
 export default function Header({
-  formRef, invalid, protocolo, edital, files, setFiles,
+  formRef, protocolo, edital,
 }) {
   const { user } = useAuth();
 
   const { configuration, project } = useProject();
-
-  async function deleteFile(id) {
-    api.delete(`attachments/${id}`).then(({ data }) => {});
-  }
 
   return (
     <Form>
@@ -52,10 +40,19 @@ export default function Header({
         <input value={user.profile.name != 'Pesquisador' ? project.coordenador.email : user.email} type="text" disabled />
       </div>
 
-      {/* <Input formRef={formRef} name="email" title="E-mail"  original /> */}
+      {/* {configuration.plano_trabalho.fields.faixa_valor.checked
+      && <Input formRef={formRef} name="faixa_value" title="Faixa de valor" original />} */}
 
-      {configuration.plano_trabalho.fields.faixa_valor.checked
-      && <Input formRef={formRef} name="faixa_value" title="Faixa de valor" original />}
+      {configuration.plano_trabalho.fields.duracao.checked
+      && (
+      <Input
+        formRef={formRef}
+        name="faixa_value"
+        title="Faixa de valor"
+        select={configuration.plano_trabalho.fields.faixa_valor.value.map((item) => ({ id: `${item.min} a ${item.max}`, name: `${item.min} a ${item.max}` }))}
+        original
+      />
+      )}
 
       {configuration.plano_trabalho.fields.tema_interesse.checked
       && <Input formRef={formRef} name="theme" title="Tema de interesse" original />}
@@ -63,82 +60,22 @@ export default function Header({
       {configuration.plano_trabalho.fields.instituicao.checked
       && <Input formRef={formRef} name="institution" title="Instituição executora" original />}
 
-      {/* {configuration.plano_trabalho.fields.unidade_executora.checked
-      && <Input formRef={formRef} name="unity_execution" title="Unidade executora" original />} */}
-
       {configuration.plano_trabalho.fields.inicio_previsto.checked
       && <Input formRef={formRef} name="beggin_prevision" title="Início previsto" type="date" original />}
 
       {configuration.plano_trabalho.fields.duracao.checked
       && <Input formRef={formRef} name="duration" title="Duração" select={[{ id: "6", name: "6 Meses" }, { id: "12", name: "12 Meses" }, { id: "18", name: "18 Meses" }, { id: "24", name: "24 Meses" }]} original />}
 
+      {/* {configuration.plano_trabalho.fields.cotacao_moeda_estrangeira.checked
+      && <Input formRef={formRef} name="money_foreign" title="Cotação da Moeda Estrangeira" original />} */}
+
       {configuration.plano_trabalho.fields.cotacao_moeda_estrangeira.checked
-      && <Input formRef={formRef} name="money_foreign" title="Cotação da Moeda Estrangeira" original />}
-
-      {/* {files.map((item, index) => (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div style={{ marginBottom: 10 }} className="input-block">
-            <label className="required">Título</label>
-            <input defaultValue={`${item.title}`} type="text" disabled />
-          </div>
-
-          <AiOutlineFilePdf
-            onClick={() => item.file.name && window.open(item.file.url || window.URL.createObjectURL(item.file), '__blank')}
-            style={{
-              fontSize: 55, marginTop: 10, marginLeft: 10, marginRight: project?.submetido != "true" ? 0 : 20, cursor: 'pointer',
-            }}
-          />
-
-          <div className="input-block" style={{ marginLeft: 10, marginBottom: 25 }}>
-            <label htmlFor="email">
-              Anexo
-            </label>
-            <div style={{ marginBottom: 5 }} />
-            <label className="file-input">
-              <input
-                type="file"
-                placeholder="Arquivo"
-                accept=".pdf"
-                onChange={(e) => {
-                  if (e.target.files.length > 0) {
-                    if (e.target.files[0].size / 1000000 > Number(configuration.plano_trabalho.size)) {
-                      store.addNotification({
-                        message: `Seu arquivo: ${e.target.files[0].name} é muito grande! Max:${configuration.plano_trabalho.size}MB`,
-                        type: 'danger',
-                        insert: 'top',
-                        container: 'top-right',
-                        animationIn: ['animate__animated', 'animate__fadeIn'],
-                        animationOut: ['animate__animated', 'animate__fadeOut'],
-                        dismiss: {
-                          duration: 5000,
-                          onScreen: true,
-                        },
-                      });
-                    } else {
-                      setFiles(files.map((file, subindex) => (index == subindex ? ({ ...file, title: item.title, file: e.target.files[0] }) : file)));
-                    }
-                  }
-                }}
-              />
-              <div className="text">
-                {files.length > 0 ? files[index].file.url ? 'Selecione anexo' : files[index].file.name : 'Selecione anexo'}
-              </div>
-              <div className="icon">
-                <FiFile />
-              </div>
-            </label>
-          </div>
-
-          <div style={{ display: 'flex' }}>
-            <AiOutlineFilePdf
-              onClick={() => item.file.name && window.open(item.file.url || window.URL.createObjectURL(item.file), '__blank')}
-              style={{
-                fontSize: 25, marginTop: 10, marginLeft: 10, marginRight: 10, cursor: 'pointer',
-              }}
-            />
-          </div>
-        </div>
-      ))} */}
+            && (
+            <div style={{ marginBottom: 10 }} className="input-block">
+              <label className="required">Cotação da Moeda Estrangeira</label>
+              <input value={configuration.plano_trabalho.fields.cotacao_moeda_estrangeira.value} type="text" disabled />
+            </div>
+            )}
     </Form>
   );
 }

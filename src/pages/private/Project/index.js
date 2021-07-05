@@ -174,7 +174,7 @@ export default function Project() {
             faixa_value: configuration.plano_trabalho.fields.faixa_valor.checked ? Yup.string().required('Campo obrigatório') : undefined,
             institution: configuration.plano_trabalho.fields.instituicao.checked ? Yup.string().required('Campo obrigatório') : undefined,
             beggin_prevision: configuration.plano_trabalho.fields.inicio_previsto.checked ? Yup.string().required('Campo obrigatório') : undefined,
-            money_foreign: configuration.plano_trabalho.fields.cotacao_moeda_estrangeira.checked ? Yup.string().required('Campo obrigatório') : undefined,
+            // money_foreign: configuration.plano_trabalho.fields.cotacao_moeda_estrangeira.checked ? Yup.string().required('Campo obrigatório') : undefined,
             theme: configuration.plano_trabalho.fields.tema_interesse.checked ? Yup.string().required('Campo obrigatório') : undefined,
           });
 
@@ -196,7 +196,7 @@ export default function Project() {
           formData.append('unity_execution', data.unity_execution || "");
           formData.append('beggin_prevision', data.beggin_prevision || "");
           formData.append('duration', data.duration || "");
-          formData.append('money_foreign', data.money_foreign || "");
+          formData.append('money_foreign', configuration.plano_trabalho.fields.cotacao_moeda_estrangeira.value || "");
 
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);

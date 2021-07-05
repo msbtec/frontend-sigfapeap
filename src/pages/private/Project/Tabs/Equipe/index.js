@@ -2,7 +2,9 @@ import React, {
   Suspense, lazy, useState, useEffect,
 } from 'react';
 
-import { FiTrash } from 'react-icons/fi';
+import ReactTooltip from 'react-tooltip';
+
+import { FiTrash, FiLink, FiUserMinus } from 'react-icons/fi';
 
 import SelectMultiple from "react-select";
 import { ModalProvider } from 'styled-react-modal';
@@ -61,13 +63,29 @@ export default function Header() {
     }
   }, [atividades]);
 
+  function validURL(term) {
+    // eslint-disable-next-line no-useless-escape
+    const re = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?|magnet:\?xt=urn:btih:/;
+
+    if (re.test(term)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  async function removeMembro(item) {
+    const filter = membros.filter((subitem) => JSON.parse(subitem.value).id != JSON.parse(item.value).id);
+    setMembros(filter);
+  }
+
   return (
     <Form>
       <Search membros={membros} setMembros={setMembros} />
 
       <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Membros do Projeto</label>
       <div style={{ marginTop: 20 }} />
-      <SelectMultiple
+      {/* <SelectMultiple
         maxMenuHeight={150}
         isMulti
         className="basic-multi-select"
@@ -109,22 +127,42 @@ export default function Header() {
             },
           }),
         }}
-      />
+      /> */}
 
       <Table style={{ marginTop: 20 }}>
         <thead>
           <tr>
             <th className="col-4">Nome</th>
-            <th className="col-4">Instituição</th>
-            <th className="col-4">Função</th>
+            <th className="col-1">Currículo</th>
+            <th className="col-2">CPF</th>
+            <th className="col-3">Função</th>
+            <th className="col-2">Ação</th>
           </tr>
         </thead>
         <tbody>
           {membros.map((item) => (
             <tr>
-              <td style={{ textAlign: 'center' }}>{JSON.parse(item.value).name}</td>
-              <td style={{ textAlign: 'center' }}>{JSON.parse(item.value)?.foundation?.name}</td>
+              <td style={{ textAlign: 'center' }}>{JSON.parse(item.value)?.name}</td>
+              <td style={{ textAlign: 'center' }}><FiLink style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => validURL(JSON.parse(item.value)?.curriculum) && window.open(JSON.parse(item.value)?.curriculum, '_blank')} /></td>
+              <td style={{ textAlign: 'center' }}>{JSON.parse(item.value)?.cpf}</td>
               <td style={{ textAlign: 'center' }}>{JSON.parse(item.value).id == user.id ? 'Coordenador(a)' : JSON.parse(item.value).funcao}</td>
+              <td style={{ textAlign: 'center' }}>
+                {JSON.parse(item.value).id != user.id && (
+                <button
+                  data-tip="Remover Membro"
+                  onClick={() => removeMembro(item)}
+                  className="close"
+                  type="button"
+                  style={{ width: 30, height: 30 }}
+                >
+                  <FiUserMinus />
+                </button>
+                )}
+                <ReactTooltip />
+              </td>
+              {/* <td style={{ textAlign: 'center' }}>{JSON.parse(item.value).name}</td>
+              <td style={{ textAlign: 'center' }}>{JSON.parse(item.value)?.foundation?.name}</td>
+              <td style={{ textAlign: 'center' }}>{JSON.parse(item.value).id == user.id ? 'Coordenador(a)' : JSON.parse(item.value).funcao}</td> */}
             </tr>
           ))}
         </tbody>

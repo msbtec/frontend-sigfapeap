@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 
 import { Form as Unform } from '@unform/web';
 
-import { FiCheckCircle, FiX } from 'react-icons/fi';
+import { FiCheckCircle, FiX, FiFile } from 'react-icons/fi';
 
 import SelectMultiple from "react-select";
 import { Card } from '../../../../components/Card';
@@ -28,6 +28,9 @@ export default function Avaliacao({
   const [menuOpen, setMenuOpen] = useState(false);
 
   const [description, setDescription] = useState("");
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [errorFile, setErrorFile] = useState('');
 
   const recomendacoes = [
     {
@@ -62,23 +65,40 @@ export default function Avaliacao({
           abortEarly: false,
         });
 
-        let params = {};
+        const params = new FormData();
+
         if (project.avaliacao.avaliador2_id == null) {
-          params = {
-            id: project.avaliacao.id,
-            analise1: description == "" ? "<p>SEM DESCRIÇÃO</p>" : description,
-            nota1: data.note,
-            recomendado1: recomendado.value,
-            responsavel_id: null,
-          };
+          //   params = {
+          //     id: project.avaliacao.id,
+          //     analise1: description == "" ? "<p>SEM DESCRIÇÃO</p>" : description,
+          //     nota1: data.note,
+          //     recomendado1: recomendado.value,
+          //     responsavel_id: null,
+          //   };
+
+          params.append("id", project.avaliacao.id);
+          params.append("analise1", description == "" ? "<p>SEM DESCRIÇÃO</p>" : description);
+          params.append("nota1", data.note);
+          params.append("recomendado1", recomendado.value);
+        //   params.append("responsavel_id", null);
         } else {
-          params = {
-            id: project.avaliacao.id,
-            analise2: description == "" ? "<p>SEM DESCRIÇÃO</p>" : description,
-            nota2: data.note,
-            recomendado2: recomendado.value,
-            responsavel_id: null,
-          };
+          //   params = {
+          //     id: project.avaliacao.id,
+          //     analise2: description == "" ? "<p>SEM DESCRIÇÃO</p>" : description,
+          //     nota2: data.note,
+          //     recomendado2: recomendado.value,
+          //     responsavel_id: null,
+          //   };
+
+          params.append("id", project.avaliacao.id);
+          params.append("analise2", description == "" ? "<p>SEM DESCRIÇÃO</p>" : description);
+          params.append("nota2", data.note);
+          params.append("recomendado2", recomendado.value);
+        //   params.append("responsavel_id", null);
+        }
+
+        if (selectedFile) {
+          params.append("file", selectedFile);
         }
 
         api.post(`evaluations`, params).then(({ data }) => {
@@ -121,7 +141,7 @@ export default function Avaliacao({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [project, recomendado, description],
+    [project, recomendado, description, selectedFile],
   );
 
   return (
@@ -138,7 +158,7 @@ export default function Avaliacao({
                 <div className="modal-body" ref={reference}>
                   <div>
                     <div style={{ marginBottom: 10 }} className="input-block">
-                      <label style={{ marginBottom: 10 }}>
+                      <label>
                         Descrição
                       </label>
                       <textarea
@@ -158,6 +178,51 @@ export default function Avaliacao({
 
                     <div>
                       <Input formRef={formRef} name="note" type="number" step="any" required original title="Nota" />
+
+                      <div style={{ marginBottom: 10 }} className="input-block">
+                        <label htmlFor="email">
+                          Anexo
+                          {' '}
+                          {/* <sup style={{ color: "#f00" }}>* Tamanho máximo 3MB</sup> */}
+                        </label>
+                        <div style={{ marginBottom: 5 }} />
+                        <label style={{ borderColor: errorFile ? "#f00" : "#dee2e6" }} className="file-input">
+                          <input
+                            type="file"
+                            placeholder="Arquivo"
+                            accept=".pdf"
+                            onChange={(e) => {
+                              if (e.target.files.length > 0) {
+                                if (e.target.files[0].size / 1000000 > 3) {
+                                  store.addNotification({
+                                    message: `Seu arquivo: ${e.target.files[0].name} é muito grande! Max:${3}MB`,
+                                    type: 'danger',
+                                    insert: 'top',
+                                    container: 'top-right',
+                                    animationIn: ['animate__animated', 'animate__fadeIn'],
+                                    animationOut: ['animate__animated', 'animate__fadeOut'],
+                                    dismiss: {
+                                      duration: 5000,
+                                      onScreen: true,
+                                    },
+                                  });
+                                } else {
+                                  setSelectedFile(e.target.files[0]);
+                                }
+                              }
+                            }}
+                          />
+                          <div className="text">
+                            { selectedFile ? selectedFile.name : 'Selecione um arquivo' }
+                          </div>
+                          <div className="icon">
+                            <FiFile />
+                          </div>
+                        </label>
+                        <sup style={{ color: '#c53030', marginTop: 5 }}>
+                          {errorFile}
+                        </sup>
+                      </div>
 
                       <label
                         style={{
