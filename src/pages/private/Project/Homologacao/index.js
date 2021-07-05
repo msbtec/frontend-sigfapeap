@@ -39,25 +39,34 @@ export default function Homologacao({
         <Card className="red">
           <div>
             <div>
-              <div style={{ maxHeight: 400 }}>
+              <div>
                 <div style={{
                   backgroundColor: "#eeeeee", padding: 10, borderRadius: 5, margin: 20,
                 }}
                 >
-                  <p>
+                  <p style={{ marginBottom: 10 }}>
                     <h4 style={{ marginRight: 5 }}>Avaliador 1:</h4>
                     <label dangerouslySetInnerHTML={{ __html: project?.avaliacao?.avaliador1?.name }} />
                   </p>
 
-                  <p>
+                  <p style={{ marginBottom: 10 }}>
                     <h4>Avaliação:</h4>
                     <p style={{ textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: project?.avaliacao?.analise1 }} />
                   </p>
 
-                  <p>
+                  <p style={{ marginBottom: 10 }}>
                     <h4 style={{ marginRight: 5 }}>Nota:</h4>
                     <label dangerouslySetInnerHTML={{ __html: project?.avaliacao?.nota1 }} />
                   </p>
+
+                  <div style={{ marginBottom: 10 }}>
+                    <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
+                      Anexo:
+                    </label>
+                    <td style={{ marginTop: 10, textAlign: 'center' }}>
+                      <a className="url" href={project?.avaliacao?.file1 ? project?.avaliacao?.url1 : null} target="_blank">{project?.avaliacao?.file1 ? project?.avaliacao?.name1 : "Sem Anexo"}</a>
+                    </td>
+                  </div>
 
                   <p>
                     <h4 style={{ marginRight: 5 }}>Recomendado:</h4>
@@ -69,20 +78,29 @@ export default function Homologacao({
                   backgroundColor: "#eeeeee", padding: 10, borderRadius: 5, margin: 20,
                 }}
                 >
-                  <p>
+                  <p style={{ marginBottom: 10 }}>
                     <h4 style={{ marginRight: 5 }}>Avaliador 2:</h4>
                     <label dangerouslySetInnerHTML={{ __html: project?.avaliacao?.avaliador2?.name }} />
                   </p>
 
-                  <p>
+                  <p style={{ marginBottom: 10 }}>
                     <h4>Avaliação:</h4>
                     <p style={{ textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: project?.avaliacao?.analise2 }} />
                   </p>
 
-                  <p>
+                  <p style={{ marginBottom: 10 }}>
                     <h4 style={{ marginRight: 5 }}>Nota:</h4>
                     <label dangerouslySetInnerHTML={{ __html: project?.avaliacao?.nota2 }} />
                   </p>
+
+                  <div style={{ marginBottom: 10 }}>
+                    <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
+                      Anexo:
+                    </label>
+                    <td style={{ marginTop: 10, textAlign: 'center' }}>
+                      <a className="url" href={project?.avaliacao?.file2 ? project?.avaliacao?.url2 : null} target="_blank">{project?.avaliacao?.file2 ? project?.avaliacao?.name2 : "Sem Anexo"}</a>
+                    </td>
+                  </div>
 
                   <p>
                     <h4 style={{ marginRight: 5 }}>Recomendado:</h4>

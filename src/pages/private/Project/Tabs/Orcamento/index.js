@@ -52,10 +52,10 @@ export default function Orcamento() {
       <Pessoal />
       )}
 
-      {JSON.parse(configuration.orcamento).orcamentos.bolsas.checked
+      {/* {JSON.parse(configuration.orcamento).orcamentos.bolsas.checked
       && (
       <Bolsa />
-      )}
+      )} */}
 
       {JSON.parse(configuration.orcamento).orcamentos.encargos.checked
       && (

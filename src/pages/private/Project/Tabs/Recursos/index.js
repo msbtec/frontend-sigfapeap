@@ -46,7 +46,8 @@ export default function Recursos() {
             </tr>
           </thead>
           <tbody>
-            {despesas.map((item) => (
+            {despesas.map((item) => (item.titulo != 'Bolsas'
+              && (
               <tr>
                 <td style={{ textAlign: 'center' }}>{item.titulo}</td>
                 <td style={{ textAlign: 'center' }}>
@@ -56,6 +57,7 @@ export default function Recursos() {
                 </div> */}
                 </td>
               </tr>
+              )
             ))}
           </tbody>
         </Table>

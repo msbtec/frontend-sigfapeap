@@ -41,6 +41,14 @@ import Homologacao from './Homologacao';
 
 import getValidationErrors from '../../../utils/getValidationErrors';
 
+import {
+  getValue,
+} from '../../../utils/soma';
+
+import {
+  money_mask,
+} from '../../../utils/validations';
+
 import api from '../../../services/api';
 
 let ModalConfirm = () => <></>;
@@ -158,6 +166,17 @@ export default function Project() {
 
       getProject();
     });
+  }
+
+  function soma(array) {
+    return array.length > 0 ? array.reduce((accumulator, currentValue) => accumulator + getValue(currentValue.valor), 0).toFixed(2) : '0';
+  }
+
+  function price_to_number(v) {
+    if (!v) { return 0; }
+    v = v.split('.').join('');
+    v = v.split(',').join('.');
+    return Number(v.replace(/[^0-9.]/g, ""));
   }
 
   const handleSubmit = useCallback(
@@ -389,6 +408,25 @@ export default function Project() {
           formData.append('recursos_proprios', JSON.stringify(despesas));
           formData.append('recursos_solicitados_outros', JSON.stringify(recursos));
 
+          if ((price_to_number(money_mask(String(soma(despesas)))) + price_to_number(money_mask(String(soma(recursos))))) > price_to_number(String(project.faixa_value).split('a')[1].trim())) {
+            store.addNotification({
+              message: `Despesas estão ultrapassando o valor total da faixa de valor!`,
+              type: 'danger',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+
+            setLoading(false);
+
+            return null;
+          }
+
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
 
@@ -449,6 +487,28 @@ export default function Project() {
           formData.append('edital_id', id);
           formData.append('coordenador_id', user.id);
           formData.append('orcamento', JSON.stringify(orcamentos));
+
+          // console.log(price_to_number(money_mask(String(soma(despesas)))));
+          // console.log(price_to_number(String(project.faixa_value).split('a')[1].trim()));
+
+          if (price_to_number(money_mask(String(soma(despesas)))) > price_to_number(String(project.faixa_value).split('a')[1].trim())) {
+            store.addNotification({
+              message: `Despesas estão ultrapassando o valor total da faixa de valor!`,
+              type: 'danger',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+
+            setLoading(false);
+
+            return null;
+          }
 
           api.post(`projects`, formData).then(({ data }) => {
             setLoading(false);
