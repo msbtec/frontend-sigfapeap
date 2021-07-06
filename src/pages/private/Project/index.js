@@ -73,12 +73,12 @@ export default function Project() {
   } = useProject();
 
   const [screen, setScreen] = useState({
-    header: false,
+    header: true,
     appresentation: false,
     documents: false,
     abrangencia: false,
     recursos: false,
-    equipe: true,
+    equipe: false,
     orcamento: false,
   });
 
