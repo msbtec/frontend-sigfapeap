@@ -220,7 +220,7 @@ export default function Header() {
         </tbody>
       </Table>
 
-      <div style={{ marginTop: 100 }} />
+      <div style={{ marginTop: 50 }} />
       <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Cronograma</label>
 
       <Table style={{ marginTop: 20 }}>
@@ -236,7 +236,7 @@ export default function Header() {
           {atividades.map((item, index) => (
             <tr>
               <td style={{ textAlign: 'center' }}>{`A-${index + 1}`}</td>
-              {Array(Number(project.duration)).fill("").map((subitem, index) => (((Number(index + 1) >= Number(item.beggin)) && (Number(index + 1) <= Number(item.end))) ? <td style={{ textAlign: 'center' }}>X</td> : <td style={{ textAlign: 'center' }} />
+              {Array(Number(project.duration)).fill("").map((subitem, subindex) => (((Number(subindex + 1) >= Number(item.beggin)) && (Number(subindex + 1) < Number(Number(item.beggin) + Number(item.end)))) ? <td style={{ textAlign: 'center' }}>X</td> : <td style={{ textAlign: 'center' }} />
               ))}
             </tr>
           ))}
