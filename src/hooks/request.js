@@ -14,6 +14,7 @@ const RequestContext = createContext({});
 export const RequestProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [requests, setRequests] = useState([]);
+  const [requestsPendentes, setRequestsPendentes] = useState([]);
   const [status, setStatus] = useState(false);
 
   const { user } = useAuth();
@@ -26,6 +27,7 @@ export const RequestProvider = ({ children }) => {
       },
     }).then(({ data }) => {
       setRequests(data);
+      setRequestsPendentes(data.filter((item) => item.status == 'PENDENTE'));
       setLoading(false);
     });
   }
@@ -48,6 +50,7 @@ export const RequestProvider = ({ children }) => {
         loading,
         requests,
         getRequests,
+        requestsPendentes,
         status,
         changeStatus,
       }}

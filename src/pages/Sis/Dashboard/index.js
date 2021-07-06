@@ -31,7 +31,7 @@ export default function Dashboard() {
   const { programs, status } = useProgram();
   const { evaluators, evaluations } = useEvaluator();
 
-  const { requests: solicitacoesAvaliacao } = useRequest();
+  const { requestsPendentes: solicitacoesAvaliacao } = useRequest();
 
   const { review } = useProject();
 

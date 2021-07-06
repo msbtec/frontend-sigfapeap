@@ -178,7 +178,7 @@ export default function Search({ membros, setMembros }) {
                     value={item.funcao}
                   >
                     {JSON.parse(configuration.orcamento).orcamentos.bolsas.value.map((bolsa) => (
-                      <option value={bolsa.id}>{bolsa.title}</option>
+                      <option value={`Bolsista (${bolsa.title} - ${bolsa.min} a ${bolsa.max})`}>{`Bolsista (${bolsa.title} - ${bolsa.min} a ${bolsa.max})`}</option>
                     ))}
                   </select>
                 </div> */}

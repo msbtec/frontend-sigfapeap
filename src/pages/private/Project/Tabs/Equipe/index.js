@@ -81,7 +81,10 @@ export default function Header() {
 
   return (
     <Form>
+      {project?.submetido != 'true'
+      && (
       <Search membros={membros} setMembros={setMembros} />
+      )}
 
       <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Membros do Projeto</label>
       <div style={{ marginTop: 20 }} />
@@ -212,6 +215,29 @@ export default function Header() {
               <td style={{ textAlign: 'center' }}>{item?.participantes?.map((participante) => String(participante.name)).join(", ")}</td>
               <td style={{ textAlign: 'center' }}>{item?.responsavel?.name}</td>
               {project?.submetido != 'true' && <td style={{ textAlign: 'center' }}><FiTrash onClick={() => setAtividades(atividades.filter((atividade) => atividade.id !== item.id))} style={{ fontSize: 20, cursor: 'pointer' }} /></td>}
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+
+      <div style={{ marginTop: 100 }} />
+      <label style={{ fontSize: 18, fontWeight: 'bold', color: '#444444' }}>Cronograma</label>
+
+      <Table style={{ marginTop: 20 }}>
+        <thead>
+          <tr>
+            <th className="col-1">A/M</th>
+            {Array(Number(project.duration)).fill("").map((item, index) => (
+              <th className="col-1">{`${index + 1}`.padStart(2, '0')}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {atividades.map((item, index) => (
+            <tr>
+              <td style={{ textAlign: 'center' }}>{`A-${index + 1}`}</td>
+              {Array(Number(project.duration)).fill("").map((subitem, index) => (((Number(index + 1) >= Number(item.beggin)) && (Number(index + 1) <= Number(item.end))) ? <td style={{ textAlign: 'center' }}>X</td> : <td style={{ textAlign: 'center' }} />
+              ))}
             </tr>
           ))}
         </tbody>
