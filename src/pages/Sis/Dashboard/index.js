@@ -111,7 +111,13 @@ export default function Dashboard() {
       {user.profile.name != 'Pesquisador'
       && (
       <div className="col-3 px-0">
-        <CardDashboard className="blue">
+        <CardDashboard
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            history.push('usuarios');
+          }}
+          className="blue"
+        >
           <div className="card-body">
             <div className="row">
               <div className="col">
@@ -130,7 +136,13 @@ export default function Dashboard() {
       {user.profile.name != 'Pesquisador'
       && (
       <div className="col-3 px-0">
-        <CardDashboard className="blue">
+        <CardDashboard
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            history.push('pesquisadores');
+          }}
+          className="blue"
+        >
           <div className="card-body">
             <div className="row">
               <div className="col">
@@ -149,7 +161,13 @@ export default function Dashboard() {
       {user.profile.name != 'Pesquisador'
       && (
       <div className="col-3 px-0">
-        <CardDashboard className="blue">
+        <CardDashboard
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            history.push('avaliadores');
+          }}
+          className="blue"
+        >
           <div className="card-body">
             <div className="row">
               <div className="col">
@@ -166,7 +184,13 @@ export default function Dashboard() {
       )}
 
       <div className="col-3 px-0">
-        <CardDashboard className="green">
+        <CardDashboard
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            history.push('programas');
+          }}
+          className="green"
+        >
           <div className="card-body">
             <div className="row">
               <div className="col">
