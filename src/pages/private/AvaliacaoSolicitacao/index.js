@@ -44,8 +44,9 @@ export default function Arquivos() {
                   <thead>
                     <tr>
                       <th className="col-1">#</th>
-                      <th className="col-3">Assunto</th>
-                      <th className="col-4">Solicitação</th>
+                      <th className="col-2">Assunto</th>
+                      <th className="col-3">Solicitação</th>
+                      <th className="col-2">Status</th>
                       <th className="col-2">Anexo</th>
                       <th className="col-2">Ações</th>
                     </tr>
@@ -56,6 +57,7 @@ export default function Arquivos() {
                         <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                         <td style={{ textAlign: 'center' }}>{ item.assunto }</td>
                         <td style={{ textAlign: 'center' }}>{ item.solicitacao }</td>
+                        <td style={{ textAlign: 'center', color: item.status == 'PENDENTE' ? '#ffd700' : item.status == 'RECUSADA' ? '#f00' : '#080' }}>{ item.status }</td>
                         <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => item.file && window.open(item.url, '_blank')} /></td>
                         <td style={{ textAlign: 'center' }}>
                           <button

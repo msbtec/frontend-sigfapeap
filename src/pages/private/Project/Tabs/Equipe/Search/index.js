@@ -12,6 +12,7 @@ import {
 import { Form } from '../../../../../../components/Form';
 import { Table } from '../../../../../../components/Table';
 import { useAuth } from '../../../../../../hooks/auth';
+import { useProject } from '../../../../../../hooks/project';
 
 import { cpf_mask } from '../../../../../../utils/validations';
 
@@ -20,6 +21,8 @@ import api from '../../../../../../services/api';
 export default function Search({ membros, setMembros }) {
   const [users, setUsers] = useState([]);
   const { user } = useAuth();
+
+  const { configuration } = useProject();
 
   const [cpf, setCPF] = useState('');
   const [cpf_err, setCPF_err] = useState('');
@@ -163,6 +166,22 @@ export default function Search({ membros, setMembros }) {
                     type="text"
                   />
                 </div>
+                {/* <div>
+                  <select
+                    style={{
+                      padding: 5, borderRadius: 5, borderWidth: 1, borderStyle: 'solid', borderColor: '#dee2e6',
+                    }}
+                    onChange={(e) => {
+                      setUsers(users.map((subitem) => (item.id == subitem.id
+                        ? ({ ...subitem, funcao: e.target.value }) : subitem)));
+                    }}
+                    value={item.funcao}
+                  >
+                    {JSON.parse(configuration.orcamento).orcamentos.bolsas.value.map((bolsa) => (
+                      <option value={bolsa.id}>{bolsa.title}</option>
+                    ))}
+                  </select>
+                </div> */}
               </td>
               <td style={{ textAlign: 'center' }}>
                 <button

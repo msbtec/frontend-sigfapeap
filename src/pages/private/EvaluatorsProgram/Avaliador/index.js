@@ -37,32 +37,37 @@ export default function EnviarSolicitacao({
   const [solicitacao, setSolicitacao] = useState(false);
 
   async function search() {
-    const users_unavailable = requests.map((item) => item.usuario.id).concat(avaliadores.map((item) => Number(item.id)));
+    if (project) {
+      const users_unavailable1 = requests.map((item) => item.usuario.id).concat(avaliadores.map((item) => Number(item.id)));
+      const users_unavailable2 = project.membros.map((item) => item.id).concat(avaliadores.map((item) => Number(item.id)));
 
-    api.post(`users/search`, {
-      params: filters,
-    }).then(({ data }) => {
-      const users = data.data;
+      const users_unavailable = users_unavailable1.concat(users_unavailable2);
 
-      const result = [];
+      api.post(`users/search`, {
+        params: filters,
+      }).then(({ data }) => {
+        const users = data.data;
 
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < users.length; i++) {
-        if (!users_unavailable.includes(Number(users[i].id))) {
-          if (Number(users[i].id) != Number(project.coordenador_id)) {
-            result.push(users[i]);
+        const result = [];
+
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0; i < users.length; i++) {
+          if (!users_unavailable.includes(Number(users[i].id))) {
+            if (Number(users[i].id) != Number(project.coordenador_id)) {
+              result.push(users[i]);
+            }
           }
         }
-      }
 
-      setEvaluators(result);
-    });
+        setEvaluators(result);
+      });
+    }
   }
 
   useEffect(() => {
     search();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [project]);
 
   return (
     <>
