@@ -43,6 +43,7 @@ export default function EnviarSolicitacao() {
   const [errorFile, setErrorFile] = useState('');
 
   const [projects, setProjects] = useState([]);
+  const [errorSubject, setErrorSubject] = useState('');
   const [selectedProject, setSelectedProject] = useState(null);
 
   const [prioridades, setPrioridades] = useState([
@@ -80,6 +81,12 @@ export default function EnviarSolicitacao() {
           assunto: Yup.string().required('Campo obrigatório'),
         });
 
+        if (!description) {
+          setErrorSubject('Campo obrigatório');
+        } else {
+          setErrorSubject('');
+        }
+
         if (!selectedFile) {
           setErrorFile('Campo obrigatório');
         } else {
@@ -89,6 +96,10 @@ export default function EnviarSolicitacao() {
         await schema.validate(data, {
           abortEarly: false,
         });
+
+        if (!description) {
+          throw 'Campo obrigatório';
+        }
 
         if (selectedFile) {
           const formData = new FormData();
@@ -245,21 +256,28 @@ export default function EnviarSolicitacao() {
                       <div className="input-block">
                         <label>
                           Solicitação
+                          <sup style={{ color: "#f00" }}>*</sup>
                         </label>
 
                         <textarea
                           rows={5}
-                          style={{ borderColor: "rgb(153, 153, 153)", padding: 10 }}
+                        //   style={{ borderColor: "rgb(153, 153, 153)", padding: 10 }}
+                          style={{ borderColor: errorSubject ? "rgb(197, 48, 48)" : "rgb(153, 153, 153)", padding: 10 }}
                           value={description}
                           onChange={(e) => setDescription(e.target.value)}
                           maxLength={255}
                         />
-                        <span style={{
-                          display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
-                        }}
-                        >
-                          {`${description.length}/255 caracteres`}
-                        </span>
+                        <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
+                          <sup style={{ color: 'rgb(197, 48, 48)', marginTop: 5 }}>
+                            {errorSubject}
+                          </sup>
+                          <span style={{
+                            color: '#626262', justifyContent: 'flex-end', fontSize: 11,
+                          }}
+                          >
+                            {`${description.length}/255 caracteres`}
+                          </span>
+                        </div>
                       </div>
 
                       <div style={{ marginBottom: 10 }} className="input-block">

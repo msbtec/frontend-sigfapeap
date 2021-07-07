@@ -32,6 +32,7 @@ function ModalForm({
 
   const { user } = useAuth();
 
+  const [errorSubject, setErrorSubject] = useState('');
   const [description, setDescription] = useState("");
 
   useEffect(() => {
@@ -47,9 +48,19 @@ function ModalForm({
           assunto: Yup.string().required('Campo obrigatório'),
         });
 
+        if (!description) {
+          setErrorSubject('Campo obrigatório');
+        } else {
+          setErrorSubject('');
+        }
+
         await schema.validate(data, {
           abortEarly: false,
         });
+
+        if (!description) {
+          throw 'Campo obrigatório';
+        }
 
         const formData = new FormData();
         formData.append("assunto", data.assunto);
@@ -111,20 +122,27 @@ function ModalForm({
             <div className="input-block">
               <label>
                 Solicitação
+                <sup style={{ color: "#f00" }}>*</sup>
               </label>
               <textarea
                 rows={5}
-                style={{ borderColor: "rgb(153, 153, 153)", padding: 10 }}
+                // style={{ borderColor: "rgb(153, 153, 153)", padding: 10 }}
+                style={{ borderColor: errorSubject ? "rgb(197, 48, 48)" : "rgb(153, 153, 153)", padding: 10 }}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 maxLength={255}
               />
-              <span style={{
-                display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
-              }}
-              >
-                {`${description.length}/255 caracteres`}
-              </span>
+              <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
+                <sup style={{ color: 'rgb(197, 48, 48)', marginTop: 5 }}>
+                  {errorSubject}
+                </sup>
+                <span style={{
+                  color: '#626262', justifyContent: 'flex-end', fontSize: 11,
+                }}
+                >
+                  {`${description.length}/255 caracteres`}
+                </span>
+              </div>
             </div>
 
             <div style={{ marginBottom: 10 }} className="input-block">

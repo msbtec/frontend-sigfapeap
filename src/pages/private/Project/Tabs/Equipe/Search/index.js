@@ -55,7 +55,13 @@ export default function Search({ membros, setMembros }) {
         nameOrCpf: cpf ? String(cpf).toUpperCase() : undefined,
       },
     }).then(({ data }) => {
-      const users = data.data.map((item) => ({ ...item, funcao: 'Pesquisador(a)' }));
+      // {JSON.parse(configuration.orcamento).orcamentos.bolsas.value.map((bolsa) => (
+      //     <option value={}</option>
+      //   ))}
+
+      const bolsa = JSON.parse(configuration.orcamento).orcamentos.bolsas.value[0];
+
+      const users = data.data.map((item) => ({ ...item, funcao: `Bolsista (${bolsa.title}: ${bolsa.min} a ${bolsa.max})` }));
       const result = users.filter((item) => item.id != user.id);
       setUsers(result);
     });
@@ -142,7 +148,7 @@ export default function Search({ membros, setMembros }) {
               <td style={{ textAlign: 'center' }}><FiLink style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => validURL(item.curriculum) && window.open(item.curriculum, '_blank')} /></td>
               <td style={{ textAlign: 'center' }}>{item?.cpf}</td>
               <td style={{ textAlign: 'center' }}>
-                <div>
+                {/* <div>
                   <input
                     style={{
                       padding: 5, borderRadius: 5, borderWidth: 1, borderStyle: 'solid', borderColor: '#dee2e6',
@@ -165,8 +171,8 @@ export default function Search({ membros, setMembros }) {
                     }}
                     type="text"
                   />
-                </div>
-                {/* <div>
+                </div> */}
+                <div>
                   <select
                     style={{
                       padding: 5, borderRadius: 5, borderWidth: 1, borderStyle: 'solid', borderColor: '#dee2e6',
@@ -178,10 +184,10 @@ export default function Search({ membros, setMembros }) {
                     value={item.funcao}
                   >
                     {JSON.parse(configuration.orcamento).orcamentos.bolsas.value.map((bolsa) => (
-                      <option value={`Bolsista (${bolsa.title} - ${bolsa.min} a ${bolsa.max})`}>{`Bolsista (${bolsa.title} - ${bolsa.min} a ${bolsa.max})`}</option>
+                      <option value={`Bolsista (${bolsa.title}: ${bolsa.min} a ${bolsa.max})`}>{`Bolsista (${bolsa.title}: ${bolsa.min} a ${bolsa.max})`}</option>
                     ))}
                   </select>
-                </div> */}
+                </div>
               </td>
               <td style={{ textAlign: 'center' }}>
                 <button

@@ -4,6 +4,8 @@ import React, {
 
 import ReactTooltip from 'react-tooltip';
 
+import { store } from 'react-notifications-component';
+
 import { FiTrash, FiLink, FiUserMinus } from 'react-icons/fi';
 
 import SelectMultiple from "react-select";
@@ -75,8 +77,25 @@ export default function Header() {
   }
 
   async function removeMembro(item) {
-    const filter = membros.filter((subitem) => JSON.parse(subitem.value).id != JSON.parse(item.value).id);
-    setMembros(filter);
+    const isMembro = atividades.map((atividade) => atividade.participantes.map((participante) => Number(participante.id)).includes(JSON.parse(item.value).id));
+
+    if (!isMembro.includes(true)) {
+      const filter = membros.filter((subitem) => JSON.parse(subitem.value).id != JSON.parse(item.value).id);
+      setMembros(filter);
+    } else {
+      store.addNotification({
+        message: `Membro está incluso em atividade(s). Remova essa(s) atividade(s) antes de remover o membro!`,
+        type: 'danger',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animate__animated', 'animate__fadeIn'],
+        animationOut: ['animate__animated', 'animate__fadeOut'],
+        dismiss: {
+          duration: 8000,
+          onScreen: true,
+        },
+      });
+    }
   }
 
   return (

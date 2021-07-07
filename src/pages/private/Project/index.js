@@ -197,6 +197,25 @@ export default function Project() {
             theme: configuration.plano_trabalho.fields.tema_interesse.checked ? Yup.string().required('Campo obrigatório') : undefined,
           });
 
+          if ((price_to_number(money_mask(String(soma(despesas)))) + price_to_number(money_mask(String(soma(recursos))))) > price_to_number(String(data.faixa_value).split('a')[1].trim())) {
+            store.addNotification({
+              message: `Despesas estão ultrapassando o valor total da faixa de valor selecionada. Altere os valores dos orçamentos para continuar!`,
+              type: 'danger',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 8000,
+                onScreen: true,
+              },
+            });
+
+            setLoading(false);
+
+            return null;
+          }
+
           await schema.validate(data, {
             abortEarly: false,
           });
@@ -236,7 +255,7 @@ export default function Project() {
               },
             });
           });
-        } else if (screen.documents) {
+        } if (screen.documents) {
           if (project) {
             // eslint-disable-next-line no-plusplus
             for (let i = 0; i < files.length; i++) {
@@ -449,12 +468,38 @@ export default function Project() {
         } else if (screen.equipe) {
           setLoading(true);
 
+          // Bolsista (Bolsa Integral: R$ 400,00 a R$ 600,00)
+
+          const aux = membros.filter((item) => String(`${JSON.parse(item.value).funcao}`) != 'Coordenador(a)');
+          const result = aux.map((item) => price_to_number(String(`${JSON.parse(item.value).funcao}`).split(':')[1].trim().split('a')[1].trim()));
+
+          const total = result.reduce((total, numero) => total + numero, 0);
+
+          if ((total + price_to_number(money_mask(String(soma(despesas)))) + price_to_number(money_mask(String(soma(recursos))))) > price_to_number(String(project.faixa_value).split('a')[1].trim())) {
+            store.addNotification({
+              message: `Despesas estão ultrapassando o valor total da faixa de valor!`,
+              type: 'danger',
+              insert: 'top',
+              container: 'top-right',
+              animationIn: ['animate__animated', 'animate__fadeIn'],
+              animationOut: ['animate__animated', 'animate__fadeOut'],
+              dismiss: {
+                duration: 5000,
+                onScreen: true,
+              },
+            });
+
+            setLoading(false);
+
+            return null;
+          }
+
           const filter = atividades.filter((atividade) => isUuid(String(atividade.id)));
 
           const formData = new FormData();
           formData.append('edital_id', id);
           formData.append('coordenador_id', user.id);
-          formData.append('membros', membros.map((item) => String(`${JSON.parse(item.value).id} - ${JSON.parse(item.value).funcao || "Coordenador(a)"}`)));
+          formData.append('membros', membros.map((item) => String(`${JSON.parse(item.value).id} - ${JSON.parse(item.value).funcao || "Coordenador(a)"}`)).join("@"));
           formData.append('atividades', JSON.stringify(filter.map((item) => ({
             ...item,
             participantes: item.participantes.map((participante) => (String(JSON.parse(participante.value).id))).join(","),
