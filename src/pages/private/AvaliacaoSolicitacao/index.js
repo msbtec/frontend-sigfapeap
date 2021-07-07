@@ -27,6 +27,15 @@ export default function Arquivos() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [solicitacao]);
 
+  function largeName(value) {
+    return value.split("").length > 255
+      ? `${value
+        .split("")
+        .slice(0, 255)
+        .join("")}...`
+      : value;
+  }
+
   return (
     <>
       {!solicitacao ? (
@@ -56,9 +65,9 @@ export default function Arquivos() {
                       <tr>
                         <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
                         <td style={{ textAlign: 'center' }}>{ item.assunto }</td>
-                        <td style={{ textAlign: 'center' }}>{ item.solicitacao }</td>
+                        <td style={{ textAlign: 'center' }}>{ largeName(item.solicitacao) }</td>
                         <td style={{ textAlign: 'center', color: item.status == 'PENDENTE' ? '#ffd700' : item.status == 'RECUSADA' ? '#f00' : '#080' }}>{ item.status }</td>
-                        <td style={{ textAlign: 'center' }}><FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => item.file && window.open(item.url, '_blank')} /></td>
+                        <td style={{ textAlign: 'center' }}>{item.file ? <FiDownload style={{ height: 25, width: 25, cursor: 'pointer' }} onClick={() => item.file && window.open(item.url, '_blank')} /> : 'Sem anexo'}</td>
                         <td style={{ textAlign: 'center' }}>
                           <button
                             data-tip="Detalhes da Solicitação"

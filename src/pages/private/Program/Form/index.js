@@ -115,7 +115,7 @@ function ModalForm({
             {/* <Input formRef={formRef} name="description" required original title="Descrição" /> */}
 
             <div className="input-block">
-              <label style={{ marginBottom: 10 }}>
+              <label>
                 Descrição
               </label>
               {/* <CKEditor

@@ -31,7 +31,7 @@ function ModalForm({
         formRef.current.setErrors({});
 
         if (String(data.connection_area) == "undefined") {
-          data = { ...data, connection_area: item.connection_area };
+          data = { ...data, connection_area: item ? item.connection_area : "" };
         } else if (String(data.connection_area) == "null") {
           data = { ...data, connection_area: "" };
         }

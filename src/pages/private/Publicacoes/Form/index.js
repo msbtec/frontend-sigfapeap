@@ -29,6 +29,7 @@ function ModalForm({
   const { create, update } = usePublish();
 
   const [selectedFile, setSelectedFile] = useState(null);
+  const [errorSubject, setErrorSubject] = useState('');
   const [errorFile, setErrorFile] = useState('');
 
   const [description, setDescription] = useState(item ? item.description : '');
@@ -42,6 +43,12 @@ function ModalForm({
           title: Yup.string().required('Campo obrigatório'),
         });
 
+        if (!description) {
+          setErrorSubject('Campo obrigatório');
+        } else {
+          setErrorSubject('');
+        }
+
         if (!selectedFile && !item) {
           setErrorFile('Campo obrigatório');
         } else {
@@ -51,6 +58,10 @@ function ModalForm({
         await schema.validate(data, {
           abortEarly: false,
         });
+
+        if (!description) {
+          throw 'Campo obrigatório';
+        }
 
         if (selectedFile || item) {
           if (item) {
@@ -97,8 +108,9 @@ function ModalForm({
             {/* <Input formRef={formRef} name="description" required original title="Descrição da publicação" /> */}
 
             <div className="input-block">
-              <label style={{ marginBottom: 10 }}>
+              <label>
                 Descrição da publicação
+                <sup style={{ color: "#f00" }}>*</sup>
               </label>
               {/* <CKEditor
                 editor={ClassicEditor}
@@ -113,25 +125,32 @@ function ModalForm({
               /> */}
               <textarea
                 rows={5}
-                style={{ borderColor: "rgb(153, 153, 153)", padding: 10 }}
+                // style={{ borderColor: "rgb(153, 153, 153)", padding: 10 }}
+                style={{ borderColor: errorSubject ? "rgb(197, 48, 48)" : "rgb(153, 153, 153)", padding: 10 }}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 maxLength={255}
               />
-              <span style={{
-                display: "flex", color: '#626262', justifyContent: 'flex-end', fontSize: 11, marginBottom: -10,
-              }}
-              >
-                {`${description.length}/255 caracteres`}
-              </span>
+              <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
+                <sup style={{ color: 'rgb(197, 48, 48)', marginTop: 5 }}>
+                  {errorSubject}
+                </sup>
+                <span style={{
+                  color: '#626262', justifyContent: 'flex-end', fontSize: 11,
+                }}
+                >
+                  {`${description.length}/255 caracteres`}
+                </span>
+              </div>
             </div>
 
             <div style={{ marginBottom: 10 }} className="input-block">
               <label htmlFor="email">
                 Anexo
+                <sup style={{ color: "#f00" }}>*</sup>
               </label>
               <div style={{ marginBottom: 5 }} />
-              <label style={{ borderColor: errorFile ? "#f00" : "#dee2e6" }} className="file-input">
+              <label style={{ borderColor: errorFile ? "rgb(197, 48, 48)" : "#dee2e6" }} className="file-input">
                 <input
                   type="file"
                   placeholder="Arquivo"
@@ -165,7 +184,7 @@ function ModalForm({
                   <FiFile />
                 </div>
               </label>
-              <sup style={{ color: '#c53030', marginTop: 5 }}>
+              <sup style={{ color: 'rgb(197, 48, 48)', marginTop: 5 }}>
                 {errorFile}
               </sup>
             </div>

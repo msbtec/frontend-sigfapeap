@@ -123,6 +123,15 @@ export default function Documentos() {
     });
   }
 
+  function largeName(value) {
+    return value.split("").length > 255
+      ? `${value
+        .split("")
+        .slice(0, 255)
+        .join("")}...`
+      : value;
+  }
+
   return (
     <>
       <div className="col-12 title">
@@ -176,8 +185,8 @@ export default function Documentos() {
                 {requests.map((item, index) => (
                   <tr>
                     <td style={{ textAlign: 'center' }}>{ (index + 1) }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.assunto }</td>
-                    <td style={{ textAlign: 'center' }}>{ item.solicitacao }</td>
+                    <td style={{ textAlign: 'center' }}>{ largeName(item.assunto) }</td>
+                    <td style={{ textAlign: 'center' }}>{ largeName(item.solicitacao) }</td>
                     <td style={{ textAlign: 'center' }}>{ item.protocolo }</td>
                     <td style={{ textAlign: 'center' }}>{ moment(item.date_beggin).format("L") }</td>
                     <td style={{ textAlign: 'center' }}>

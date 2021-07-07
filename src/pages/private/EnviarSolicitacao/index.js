@@ -311,11 +311,14 @@ export default function EnviarSolicitacao() {
 
                 <StyledModal>
                   <div className="modal-footer">
+                    {selectedProject
+                    && (
                     <button type="submit" className="submit">
                       <FiCheckCircle />
                       {' '}
                       Enviar
                     </button>
+                    )}
                   </div>
                 </StyledModal>
               </Form>
