@@ -209,6 +209,8 @@ export const ProjectProvider = ({ children }) => {
       setRecursos(JSON.parse(data.recursos_solicitados_outros || '[]'));
       if (data.membros.length > 0) {
         setMembros(data.membros.map((item) => ({ label: item.name, value: JSON.stringify(item) })));
+      } else {
+        setMembros([{ label: data?.coordenador?.name, value: JSON.stringify({ ...data.coordenador, funcao: 'Coordenador(a)' }) }]);
       }
       setAtividades(data.atividades);
 

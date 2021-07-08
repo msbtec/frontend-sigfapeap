@@ -62,8 +62,8 @@ function ModalForm({
         temp.beggin = 'Campo obrigatório';
       } else if (Number(data.beggin) <= 0) {
         temp.beggin = 'Campo deve ser maior que 0';
-      } else if (Number(data.beggin) > Number(project.duration)) {
-        temp.beggin = `Campo não deve ultrapassar a duração máxima de ${project.duration} mês(es)`;
+      } else if (Number(data.beggin) > Number(project?.duration || 6)) {
+        temp.beggin = `Campo não deve ultrapassar a duração máxima de ${project?.duration || 6} mês(es)`;
       } else {
         temp.beggin = '';
       }
@@ -72,9 +72,9 @@ function ModalForm({
         temp.end = 'Campo obrigatório';
       } else if (Number(data.end) <= 0) {
         temp.end = 'Campo deve ser maior que 0';
-      } else if (Number(data.end) > Number(project.duration)) {
-        temp.end = `Campo não deve ultrapassar a duração máxima de ${project.duration} mês(es)`;
-      } else if (Number(data.end) > Number(Number(project.duration) - Number(data.beggin) + 1)) {
+      } else if (Number(data.end) > Number(project?.duration || 6)) {
+        temp.end = `Campo não deve ultrapassar a duração máxima de ${project?.duration || 6} mês(es)`;
+      } else if (Number(data.end) > Number(Number(project?.duration || 6) - Number(data.beggin) + 1)) {
         temp.end = 'Campo não deve ultrapassar a duração total';
       } else {
         temp.end = '';

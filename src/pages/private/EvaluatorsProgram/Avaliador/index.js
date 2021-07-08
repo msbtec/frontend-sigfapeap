@@ -38,7 +38,9 @@ export default function EnviarSolicitacao({
 
   async function search() {
     if (project) {
-      const users_unavailable1 = requests.map((item) => item.usuario.id).concat(avaliadores.map((item) => Number(item.id)));
+      const requests_available = requests.filter((item) => item.project_id == project.id);
+
+      const users_unavailable1 = requests_available.map((item) => item.usuario.id).concat(avaliadores.map((item) => Number(item.id)));
       const users_unavailable2 = project.membros.map((item) => item.id).concat(avaliadores.map((item) => Number(item.id)));
 
       const users_unavailable = users_unavailable1.concat(users_unavailable2);

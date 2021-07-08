@@ -154,11 +154,11 @@ export default function Header() {
       <Table style={{ marginTop: 20 }}>
         <thead>
           <tr>
-            <th className="col-4">Nome</th>
+            <th className={project?.submetido != 'true' ? "col-4" : 'col-6'}>Nome</th>
             <th className="col-1">Currículo</th>
             <th className="col-2">CPF</th>
             <th className="col-3">Função</th>
-            <th className="col-2">Ação</th>
+            {project?.submetido != 'true' && <th className="col-2">Ação</th>}
           </tr>
         </thead>
         <tbody>
@@ -169,7 +169,7 @@ export default function Header() {
               <td style={{ textAlign: 'center' }}>{JSON.parse(item.value)?.cpf}</td>
               <td style={{ textAlign: 'center' }}>{JSON.parse(item.value).id == user.id ? 'Coordenador(a)' : JSON.parse(item.value).funcao}</td>
               <td style={{ textAlign: 'center' }}>
-                {JSON.parse(item.value).id != user.id && (
+                {JSON.parse(item.value).id != user.id && project?.submetido != 'true' && (
                 <button
                   data-tip="Remover Membro"
                   onClick={() => removeMembro(item)}
@@ -246,7 +246,7 @@ export default function Header() {
         <thead>
           <tr>
             <th className="col-1">A/M</th>
-            {Array(Number(project.duration)).fill("").map((item, index) => (
+            {Array(Number(project?.duration || 6)).fill("").map((item, index) => (
               <th className="col-1">{`${index + 1}`.padStart(2, '0')}</th>
             ))}
           </tr>
@@ -255,7 +255,7 @@ export default function Header() {
           {atividades.map((item, index) => (
             <tr>
               <td style={{ textAlign: 'center' }}>{`A-${index + 1}`}</td>
-              {Array(Number(project.duration)).fill("").map((subitem, subindex) => (((Number(subindex + 1) >= Number(item.beggin)) && (Number(subindex + 1) < Number(Number(item.beggin) + Number(item.end)))) ? <td style={{ textAlign: 'center' }}>X</td> : <td style={{ textAlign: 'center' }} />
+              {Array(Number(project?.duration || 6)).fill("").map((subitem, subindex) => (((Number(subindex + 1) >= Number(item.beggin)) && (Number(subindex + 1) < Number(Number(item.beggin) + Number(item.end)))) ? <td style={{ textAlign: 'center' }}>X</td> : <td style={{ textAlign: 'center' }} />
               ))}
             </tr>
           ))}
