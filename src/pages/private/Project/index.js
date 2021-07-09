@@ -470,12 +470,19 @@ export default function Project() {
 
           // Bolsista (Bolsa Integral: R$ 400,00 a R$ 600,00)
 
+          console.log(membros);
+          console.log(String(project?.faixa_value || 'R$ 0,00 a R$0,00'));
+          console.log(despesas);
+          console.log(recursos);
+
+          console.log(price_to_number(String(project?.faixa_value || 'R$ 0,00 a R$0,00').split('a')[1].trim()));
+
           const aux = membros.filter((item) => String(`${JSON.parse(item.value).funcao}`) != 'Coordenador(a)');
           const result = aux.map((item) => price_to_number(String(`${JSON.parse(item.value).funcao}`).split(':')[1].trim().split('a')[1].trim()));
 
           const total = result.reduce((total, numero) => total + numero, 0);
 
-          if ((total + price_to_number(money_mask(String(soma(despesas)))) + price_to_number(money_mask(String(soma(recursos))))) > price_to_number(String(project.faixa_value).split('a')[1].trim())) {
+          if ((total + price_to_number(money_mask(String(soma(despesas)))) + price_to_number(money_mask(String(soma(recursos))))) > price_to_number(String(project?.faixa_value || 'R$ 0,00 a R$0,00').split('a')[1].trim())) {
             store.addNotification({
               message: `Despesas estão ultrapassando o valor total da faixa de valor!`,
               type: 'danger',

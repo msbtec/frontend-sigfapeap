@@ -32,7 +32,7 @@ export const ProjectProvider = ({ children }) => {
   const [review, setReview] = useState(0);
   const [status, setStatus] = useState(false);
 
-  const [membros, setMembros] = useState([{ label: user?.name, value: JSON.stringify(user) }]);
+  const [membros, setMembros] = useState([{ label: user?.name, value: JSON.stringify({ ...user, funcao: 'Coordenador(a)' }) }]);
   const [atividades, setAtividades] = useState([]);
 
   React.useEffect(() => {
@@ -133,7 +133,7 @@ export const ProjectProvider = ({ children }) => {
     setLoading(true);
 
     setProject(null);
-    setMembros([{ label: user.name, value: JSON.stringify(user) }]);
+    setMembros([{ label: user.name, value: JSON.stringify({ ...user, funcao: 'Coordenador(a)' }) }]);
     setAtividades([]);
     setPlano({
       resumo: '',
