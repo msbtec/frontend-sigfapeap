@@ -199,7 +199,7 @@ export default function Project() {
 
           if ((price_to_number(money_mask(String(soma(despesas)))) + price_to_number(money_mask(String(soma(recursos))))) > price_to_number(String(data.faixa_value).split('a')[1].trim())) {
             store.addNotification({
-              message: `Despesas estão ultrapassando o valor total da faixa de valor selecionada. Altere os valores dos orçamentos para continuar!`,
+              message: `Despesas estão ultrapassando o valor total da faixa de valor selecionada (${data?.faixa_value || 'R$ 0,00 a R$0,00'}). Altere os valores dos orçamentos para continuar!`,
               type: 'danger',
               insert: 'top',
               container: 'top-right',
@@ -427,9 +427,9 @@ export default function Project() {
           formData.append('recursos_proprios', JSON.stringify(despesas));
           formData.append('recursos_solicitados_outros', JSON.stringify(recursos));
 
-          if ((price_to_number(money_mask(String(soma(despesas)))) + price_to_number(money_mask(String(soma(recursos))))) > price_to_number(String(project.faixa_value).split('a')[1].trim())) {
+          if ((price_to_number(money_mask(String(soma(despesas)))) + price_to_number(money_mask(String(soma(recursos))))) > price_to_number(String(project?.faixa_value || 'R$ 0,00 a R$0,00').split('a')[1].trim())) {
             store.addNotification({
-              message: `Despesas estão ultrapassando o valor total da faixa de valor!`,
+              message: `Despesas estão ultrapassando o valor total da faixa de valor (${project?.faixa_value || 'R$ 0,00 a R$0,00'})!`,
               type: 'danger',
               insert: 'top',
               container: 'top-right',
@@ -470,13 +470,6 @@ export default function Project() {
 
           // Bolsista (Bolsa Integral: R$ 400,00 a R$ 600,00)
 
-          console.log(membros);
-          console.log(String(project?.faixa_value || 'R$ 0,00 a R$0,00'));
-          console.log(despesas);
-          console.log(recursos);
-
-          console.log(price_to_number(String(project?.faixa_value || 'R$ 0,00 a R$0,00').split('a')[1].trim()));
-
           const aux = membros.filter((item) => String(`${JSON.parse(item.value).funcao}`) != 'Coordenador(a)');
           const result = aux.map((item) => price_to_number(String(`${JSON.parse(item.value).funcao}`).split(':')[1].trim().split('a')[1].trim()));
 
@@ -484,7 +477,7 @@ export default function Project() {
 
           if ((total + price_to_number(money_mask(String(soma(despesas)))) + price_to_number(money_mask(String(soma(recursos))))) > price_to_number(String(project?.faixa_value || 'R$ 0,00 a R$0,00').split('a')[1].trim())) {
             store.addNotification({
-              message: `Despesas estão ultrapassando o valor total da faixa de valor!`,
+              message: `Despesas estão ultrapassando o valor total da faixa de valor (${project?.faixa_value || 'R$ 0,00 a R$0,00'})!`,
               type: 'danger',
               insert: 'top',
               container: 'top-right',
@@ -501,15 +494,17 @@ export default function Project() {
             return null;
           }
 
-          const filter = atividades.filter((atividade) => isUuid(String(atividade.id)));
+          // const filter = atividades.filter((atividade) => isUuid(String(atividade.id)));
+
+          console.log(atividades);
 
           const formData = new FormData();
           formData.append('edital_id', id);
           formData.append('coordenador_id', user.id);
           formData.append('membros', membros.map((item) => String(`${JSON.parse(item.value).id} - ${JSON.parse(item.value).funcao || "Coordenador(a)"}`)).join("@"));
-          formData.append('atividades', JSON.stringify(filter.map((item) => ({
+          formData.append('atividades', JSON.stringify(atividades.map((item) => ({
             ...item,
-            participantes: item.participantes.map((participante) => (String(JSON.parse(participante.value).id))).join(","),
+            participantes: item.participantes.map((participante) => (String(isUuid(String(item.id)) ? JSON.parse(participante.value).id : participante.id))).join(","),
             responsavel: String(item.responsavel.id),
           }))));
 
@@ -543,9 +538,9 @@ export default function Project() {
           // console.log(price_to_number(money_mask(String(soma(despesas)))));
           // console.log(price_to_number(String(project.faixa_value).split('a')[1].trim()));
 
-          if (price_to_number(money_mask(String(soma(despesas)))) > price_to_number(String(project.faixa_value).split('a')[1].trim())) {
+          if (price_to_number(money_mask(String(soma(despesas)))) > price_to_number(String(project?.faixa_value || 'R$ 0,00 a R$0,00').split('a')[1].trim())) {
             store.addNotification({
-              message: `Despesas estão ultrapassando o valor total da faixa de valor!`,
+              message: `Despesas estão ultrapassando o valor total da faixa de valor (${project?.faixa_value || 'R$ 0,00 a R$0,00'})!`,
               type: 'danger',
               insert: 'top',
               container: 'top-right',
