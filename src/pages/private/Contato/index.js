@@ -100,7 +100,7 @@ export default function Documentos() {
   }
 
   function submitModalForm() {
-    setOpenForm(!OpenForm);
+    // setOpenForm(!OpenForm);
     setResposta(!resposta);
     getRequests(undefined, prioridade, selectedProject);
   }
@@ -232,19 +232,19 @@ export default function Documentos() {
                         <td style={{ textAlign: 'center' }}>{ item.protocolo }</td>
                         <td style={{ textAlign: 'center' }}>{ moment(item.date_beggin).format("L") }</td>
                         <td style={{ textAlign: 'center' }}>
-                          {user.profile.name != 'Pesquisador'
-                    && !item.resposta && (
-                      <button
-                        data-tip="Responder Solicitação"
-                        onClick={() => {
-                          setSelected(item);
-                          toggleModalForm();
-                        }}
-                        className="edit"
-                      >
-                        <FiEdit />
-                      </button>
-                          )}
+                          {/* {user.profile.name != 'Pesquisador'
+                    && ( */}
+                          <button
+                            data-tip="Detalhes da Solicitação"
+                            onClick={() => {
+                              setSelected(item);
+                              toggleModalForm();
+                            }}
+                            className="edit"
+                          >
+                            <FiEdit />
+                          </button>
+                          {/* )} */}
 
                           {!item.resposta && (
                           <button

@@ -11,6 +11,8 @@ import * as Yup from 'yup';
 import { Card } from '../../../../components/Card';
 import { Form } from '../../../../components/Form';
 
+import { useAuth } from '../../../../hooks/auth';
+
 import getValidationErrors from '../../../../utils/getValidationErrors';
 
 import api from '../../../../services/api';
@@ -22,6 +24,8 @@ export default function Atividades({
 }) {
   const reference = useRef(null);
   const formRef = useRef(null);
+
+  const { user } = useAuth();
 
   const [description, setDescription] = useState("");
 
@@ -64,7 +68,7 @@ export default function Atividades({
   return (
     <>
       <div className="col-12 title" style={{ marginBottom: 10 }}>
-        <h1>Responder Solicitação</h1>
+        <h1>Detalhes da Solicitação</h1>
       </div>
 
       <div className="col-12 px-0">
@@ -106,7 +110,7 @@ export default function Atividades({
                   <div style={{ overflowWrap: 'break-word', textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: item?.solicitacao }} />
                 </div>
 
-                <div>
+                <div style={{ marginBottom: 20 }}>
                   <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
                     Anexo:
                   </label>
@@ -115,8 +119,20 @@ export default function Atividades({
                   </td>
                 </div>
 
+                {item?.resposta
+                && (
+                <div style={{ marginBottom: 20 }}>
+                  <label style={{ fontWeight: 'bold', marginBottom: 10 }}>
+                    Resposta:
+                  </label>
+                  <div style={{ overflowWrap: 'break-word', textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: item?.resposta }} />
+                </div>
+                )}
+
+                {!item?.resposta
+                && user.profile.name != 'Pesquisador' && (
                 <div className="input-block">
-                  <label style={{ marginBottom: 10 }}>
+                  <label>
                     Resposta
                   </label>
                   <textarea
@@ -133,18 +149,22 @@ export default function Atividades({
                     {`${description.length}/255 caracteres`}
                   </span>
                 </div>
+                )}
               </div>
 
-              <StyledModal>
+              <StyledModal style={{ marginLeft: -5 }}>
                 <div className="modal-footer">
                   <button type="button" className="close" onClick={toggleModal}>
                     Voltar
                   </button>
-                  <button type="submit" className="submit">
-                    <FiCheckCircle />
-                    {' '}
-                    Responder
-                  </button>
+                  {!item?.resposta
+                    && user.profile.name != 'Pesquisador' && (
+                    <button type="submit" className="submit">
+                      <FiCheckCircle />
+                        {' '}
+                      Responder
+                    </button>
+                  )}
                 </div>
               </StyledModal>
             </Form>
