@@ -52,10 +52,14 @@ export default function Avaliadores() {
   useEffect(() => {
     document.title = 'SIGFAPEAP - Chamadas Públicas';
 
-    api.get(`programs/files/${id}`).then(({ data }) => {
+    api.get(`programs/files/${id}`, {
+      params: {
+        ativo: user.profile.name != 'Pesquisador' ? undefined : 1,
+      },
+    }).then(({ data }) => {
       setSelected(data);
     });
-  }, [id, programs, status]);
+  }, [id, user, programs, status]);
 
   async function toggleModalConfirm() {
     ModalConfirm = await lazy(() => import("../../../components/Confirm"));

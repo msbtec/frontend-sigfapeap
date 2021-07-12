@@ -55,6 +55,7 @@ export default function Dashboard() {
     api.get(`programs/files`, {
       params: {
         page: page + 1,
+        ativo: 1,
       },
     }).then(({ data }) => {
       setNotices(data.data);

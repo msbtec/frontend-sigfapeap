@@ -181,7 +181,7 @@ export default function Avaliacao({
 
                       <div style={{ marginBottom: 10 }} className="input-block">
                         <label htmlFor="email">
-                          Anexo
+                          Anexo (Tamanho máximo 3MB)
                           {' '}
                           {/* <sup style={{ color: "#f00" }}>* Tamanho máximo 3MB</sup> */}
                         </label>

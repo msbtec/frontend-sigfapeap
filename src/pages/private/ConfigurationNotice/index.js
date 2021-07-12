@@ -33,6 +33,10 @@ export default function ConfigurationNotice() {
 
   const { id } = useParams();
 
+  const [edital, setEdital] = useState({
+    ativo: 1,
+  });
+
   const [personalFiles, setPersonalFiles] = useState([]);
   const [files, setFiles] = useState([]);
 
@@ -106,6 +110,7 @@ export default function ConfigurationNotice() {
         edital_id: id,
       },
     }).then(({ data }) => {
+      setEdital(data.edital);
       setFields(JSON.parse(data.plano_trabalho).fields);
       setPersonalFiles(JSON.parse(data.plano_trabalho).documentos_pessoais);
       setApresentacao(JSON.parse(data.apresentacao).apresentacao);
@@ -537,6 +542,38 @@ export default function ConfigurationNotice() {
       <div className="col-12 title">
         <h1>Configurar Chamada Pública</h1>
       </div>
+      {edital.ativo == "0"
+      && (
+      <div className="card-title">
+        <div style={{ marginLeft: 15, marginRight: 20, marginTop: 20 }}>
+          <Button
+            onClick={() => {
+              const formData = new FormData();
+              formData.append("ativo", "1");
+              api.put(`files/update/${id}`, formData).then(({ data }) => {
+                getConfigurations();
+
+                store.addNotification({
+                  message: `Chamada Pública configurada com sucesso!`,
+                  type: 'success',
+                  insert: 'top',
+                  container: 'top-right',
+                  animationIn: ['animate__animated', 'animate__fadeIn'],
+                  animationOut: ['animate__animated', 'animate__fadeOut'],
+                  dismiss: {
+                    duration: 5000,
+                    onScreen: true,
+                  },
+                });
+              });
+            }}
+            className="primary"
+          >
+            Ativar Chamada Pública
+          </Button>
+        </div>
+      </div>
+      )}
       <div className="col-12 px-0">
         <Card className="red">
           <div className="card-title">
@@ -808,7 +845,7 @@ export default function ConfigurationNotice() {
 
                     <div className="input-block" style={{ marginLeft: 10, marginBottom: 25 }}>
                       <label htmlFor="email">
-                        Anexo
+                        Anexo (Tamanho máximo 3MB)
                       </label>
                       <div style={{ marginBottom: 5 }} />
                       <label className="file-input">

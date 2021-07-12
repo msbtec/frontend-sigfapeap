@@ -32,7 +32,7 @@ export default function Header({
 
           <div className="input-block" style={{ marginLeft: 10, marginBottom: 25 }}>
             <label htmlFor="email">
-              Anexo
+              Anexo (Tamanho máximo 3MB)
             </label>
             <div style={{ marginBottom: 5 }} />
             <label className="file-input">
