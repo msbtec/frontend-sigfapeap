@@ -8,7 +8,11 @@ import { isUuid, uuid } from 'uuidv4';
 
 import ReactLoading from "react-loading";
 
+import ReactTooltip from 'react-tooltip';
+
 import { ModalProvider } from 'styled-react-modal';
+
+import { FiDownloadCloud } from 'react-icons/fi';
 
 import moment from 'moment';
 
@@ -893,6 +897,56 @@ export default function Project() {
     }
   }
 
+  function download(url, filename) {
+    fetch(url).then((t) => t.blob().then((b) => {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(b);
+      a.setAttribute("download", filename);
+      a.click();
+    }));
+  }
+
+  async function generatePDF() {
+    store.addNotification({
+      message: `Exportação do projeto iniciada. Aguarde um momento!`,
+      type: 'success',
+      insert: 'top',
+      container: 'top-right',
+      animationIn: ['animate__animated', 'animate__fadeIn'],
+      animationOut: ['animate__animated', 'animate__fadeOut'],
+      dismiss: {
+        duration: 5000,
+        onScreen: true,
+      },
+    });
+
+    api
+      .post(`/projects/reports/${project.id}`)
+      .then((response) => {
+        // window.open(response.data.url, "_blank");
+        download(
+          response.data.url,
+          String(response.data.url)
+            .split("/")
+            .pop(),
+        );
+      })
+      .catch((error) => {
+        store.addNotification({
+          message: `Erro ao Baixar Projeto!`,
+          type: 'danger',
+          insert: 'top',
+          container: 'top-right',
+          animationIn: ['animate__animated', 'animate__fadeIn'],
+          animationOut: ['animate__animated', 'animate__fadeOut'],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
+      });
+  }
+
   return (
     <>
       {avaliacao
@@ -917,7 +971,13 @@ export default function Project() {
         ) : (
           <>
             <div className="col-12 title">
-              <h1>{edital?.title && `Projeto para ${edital.title}`}</h1>
+              <h1>
+                {edital?.title && `Projeto para ${edital.title}`}
+                {' '}
+                {project && <FiDownloadCloud data-tip="Baixar Projeto" onClick={generatePDF} style={{ fontSize: 20, cursor: 'pointer' }} />}
+              </h1>
+
+              {project && <ReactTooltip />}
             </div>
 
             <div>
